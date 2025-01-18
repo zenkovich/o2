@@ -7,58 +7,58 @@ using namespace o2;
 
 namespace o2
 {
-	FORWARD_CLASS_REF(WidgetDragHandle);
+    FORWARD_CLASS_REF(WidgetDragHandle);
 }
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(BorderIProperty);
+    FORWARD_CLASS_REF(BorderIProperty);
 
-	// -----------------------------
-	// Editor of image slices widget
-	// -----------------------------
-	class ImageSlicesEditorWidget : public Widget
-	{
-	public:
-		// Default constructor
-		ImageSlicesEditorWidget(RefCounter* refCounter);
+    // -----------------------------
+    // Editor of image slices widget
+    // -----------------------------
+    class ImageSlicesEditorWidget : public Widget
+    {
+    public:
+        // Default constructor
+        ImageSlicesEditorWidget(RefCounter* refCounter);
 
-		// Default copy-constructor
-		ImageSlicesEditorWidget(RefCounter* refCounter, const ImageSlicesEditorWidget& other);
+        // Default copy-constructor
+        ImageSlicesEditorWidget(RefCounter* refCounter, const ImageSlicesEditorWidget& other);
 
-		// Copy operator
-		ImageSlicesEditorWidget& operator=(const ImageSlicesEditorWidget& other);
+        // Copy operator
+        ImageSlicesEditorWidget& operator=(const ImageSlicesEditorWidget& other);
 
-		// Sets image and property
-		void Setup(const AssetRef<ImageAsset>& image, const Ref<BorderIProperty>& borderProperty);
+        // Sets image and property
+        void Setup(const AssetRef<ImageAsset>& image, const Ref<BorderIProperty>& borderProperty);
 
-		// Returns create menu category in editor
-		static String GetCreateMenuCategory();
+        // Returns create menu category in editor
+        static String GetCreateMenuCategory();
 
         SERIALIZABLE(ImageSlicesEditorWidget);
         CLONEABLE_REF(ImageSlicesEditorWidget);
 
-	public:
-		// --------------------
-		// Image preview widget
-		// --------------------
-		class PreviewImage : public Image
-		{
-		public:
-			// Default constructor
-			PreviewImage(RefCounter* refCounter);
+    public:
+        // --------------------
+        // Image preview widget
+        // --------------------
+        class PreviewImage : public Image
+        {
+        public:
+            // Default constructor
+            PreviewImage(RefCounter* refCounter);
 
-			// Sets texture filter to nearest and draws it
-			void Draw() override;
+            // Sets texture filter to nearest and draws it
+            void Draw() override;
 
-			// Returns create menu category in editor
-			static String GetCreateMenuCategory();
+            // Returns create menu category in editor
+            static String GetCreateMenuCategory();
 
             SERIALIZABLE(PreviewImage);
             CLONEABLE_REF(PreviewImage);
-		};
+        };
 
-	private:
+    private:
         Ref<PreviewImage> mPreviewImage;     // Image preview widget
         Ref<Image>        mPreviewImageBack; // Image preview background with chessmate pattern
 
@@ -71,25 +71,25 @@ namespace Editor
 
         Ref<BorderIProperty> mBorderProperty; // Image borders property
 
-	protected:
-		// Initializes image preview widgets and border handles
-		void InitializeImagePreview();
+    protected:
+        // Initializes image preview widgets and border handles
+        void InitializeImagePreview();
 
-		// Initializes image slices handles
-		void InitializeSliceHandles();
+        // Initializes image slices handles
+        void InitializeSliceHandles();
 
-		// Fits image by size
-		void FitImage();
+        // Fits image by size
+        void FitImage();
 
-		// Updates borders anchors layouts
-		void UpdateBordersAnchors();
+        // Updates borders anchors layouts
+        void UpdateBordersAnchors();
 
-		// Updates targets assets borders values by floored mBordersSmoothValue
-		void UpdateBordersValue();
+        // Updates targets assets borders values by floored mBordersSmoothValue
+        void UpdateBordersValue();
 
-		// Creates grid sprite
-		Ref<Sprite> CreateGridSprite();
-	};
+        // Creates grid sprite
+        Ref<Sprite> CreateGridSprite();
+    };
 }
 // --- META ---
 

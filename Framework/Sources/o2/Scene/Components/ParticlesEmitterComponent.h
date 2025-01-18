@@ -6,22 +6,22 @@
 
 namespace o2
 {
-	// ---------------------------
-	// Particles emitter component
-	// ---------------------------
+    // ---------------------------
+    // Particles emitter component
+    // ---------------------------
     class ParticlesEmitterComponent: public Component, public ParticlesEmitter
     {
     public:
-		// Default constructor
+        // Default constructor
         ParticlesEmitterComponent();
 
-		// Copy constructor
+        // Copy constructor
         ParticlesEmitterComponent(const ParticlesEmitterComponent& other);
 
-		// Destructor
+        // Destructor
         ~ParticlesEmitterComponent();
 
-		// Assign operator
+        // Assign operator
         ParticlesEmitterComponent& operator=(const ParticlesEmitterComponent& other);
 
         // Updates component
@@ -37,18 +37,18 @@ namespace o2
         static String GetCategory();
 
         // Returns name of component icon
-		static String GetIcon();
+        static String GetIcon();
 
-		// Dynamic cast to RefCounterable via Component
-		static Ref<RefCounterable> CastToRefCounterable(const Ref<ParticlesEmitterComponent>& ref);
+        // Dynamic cast to RefCounterable via Component
+        static Ref<RefCounterable> CastToRefCounterable(const Ref<ParticlesEmitterComponent>& ref);
 
         SERIALIZABLE(ParticlesEmitterComponent);
-		CLONEABLE_REF(ParticlesEmitterComponent);
-		REF_COUNTERABLE_IMPL(Component, ParticlesEmitter);
+        CLONEABLE_REF(ParticlesEmitterComponent);
+        REF_COUNTERABLE_IMPL(Component, ParticlesEmitter);
 
-	protected:
-		// Draw particle system
-		void OnDraw() override;
+    protected:
+        // Draw particle system
+        void OnDraw() override;
 
         // Called when actor's transform was changed
         void OnTransformUpdated() override;

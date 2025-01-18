@@ -8,57 +8,57 @@
 
 namespace Editor
 {
-	IWidgetLayerLayoutViewer::IWidgetLayerLayoutViewer()
-	{
-		PushEditorScopeOnStack scope;
+    IWidgetLayerLayoutViewer::IWidgetLayerLayoutViewer()
+    {
+        PushEditorScopeOnStack scope;
 
-		mSpoiler = o2UI.CreateWidget<SpoilerWithHead>();
+        mSpoiler = o2UI.CreateWidget<SpoilerWithHead>();
 
-		mSpoiler->borderBottom = 5;
-		mSpoiler->SetCaption("Transform");
-		mSpoiler->GetIcon()->SetImageName("ui/UI4_transform_icon_white.png");
+        mSpoiler->borderBottom = 5;
+        mSpoiler->SetCaption("Transform");
+        mSpoiler->GetIcon()->SetImageName("ui/UI4_transform_icon_white.png");
 
-		mSpoiler->SetExpanded(true);
-	}
+        mSpoiler->SetExpanded(true);
+    }
 
-	IWidgetLayerLayoutViewer::~IWidgetLayerLayoutViewer()
-	{}
+    IWidgetLayerLayoutViewer::~IWidgetLayerLayoutViewer()
+    {}
 
-	Ref<Widget> IWidgetLayerLayoutViewer::GetWidget() const
-	{
-		return mSpoiler;
-	}
+    Ref<Widget> IWidgetLayerLayoutViewer::GetWidget() const
+    {
+        return mSpoiler;
+    }
 
-	void IWidgetLayerLayoutViewer::Expand()
-	{
-		mSpoiler->Expand();
-	}
+    void IWidgetLayerLayoutViewer::Expand()
+    {
+        mSpoiler->Expand();
+    }
 
-	void IWidgetLayerLayoutViewer::Collapse()
-	{
-		mSpoiler->Collapse();
-	}
+    void IWidgetLayerLayoutViewer::Collapse()
+    {
+        mSpoiler->Collapse();
+    }
 
-	void IWidgetLayerLayoutViewer::Refresh()
-	{}
+    void IWidgetLayerLayoutViewer::Refresh()
+    {}
 
-	void IWidgetLayerLayoutViewer::SetPropertiesEnabled(bool enabled)
-	{
-		if (mPropertiesEnabled == enabled)
-			return;
+    void IWidgetLayerLayoutViewer::SetPropertiesEnabled(bool enabled)
+    {
+        if (mPropertiesEnabled == enabled)
+            return;
 
-		mPropertiesEnabled = enabled;
+        mPropertiesEnabled = enabled;
 
-		if (mPropertiesEnabled)
-			OnPropertiesEnabled();
-		else
-			OnPropertiesDisabled();
-	}
+        if (mPropertiesEnabled)
+            OnPropertiesEnabled();
+        else
+            OnPropertiesDisabled();
+    }
 
-	bool IWidgetLayerLayoutViewer::IsPropertiesEnabled() const
-	{
-		return mPropertiesEnabled;
-	}
+    bool IWidgetLayerLayoutViewer::IsPropertiesEnabled() const
+    {
+        return mPropertiesEnabled;
+    }
 
 }
 // --- META ---

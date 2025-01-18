@@ -162,7 +162,7 @@ namespace o2
 
             mCurrentDrawTexture = texture;
             mCurrentPrimitiveType = primitiveType;
-			mCurrentBlendMode = blendMode;
+            mCurrentBlendMode = blendMode;
         }
 
         PlatformUploadBuffers(vertices, verticesCount, indexes, indexesCount);
@@ -1081,34 +1081,34 @@ namespace o2
 
     void Render::DrawMeshWire(Mesh* mesh, const Color4& color /*= Color4::White()*/)
     {
-		DrawMeshBufferWire(mesh->vertices, mesh->vertexCount, mesh->indexes, mesh->polyCount, color);
+        DrawMeshBufferWire(mesh->vertices, mesh->vertexCount, mesh->indexes, mesh->polyCount, color);
     }
 
-	void Render::DrawMeshBufferWire(Vertex* vertices, UInt verticesCount, VertexIndex* indexes, UInt elementsCount, 
+    void Render::DrawMeshBufferWire(Vertex* vertices, UInt verticesCount, VertexIndex* indexes, UInt elementsCount, 
                                     const Color4& color /*= Color4::White()*/)
-	{
-		auto dcolor = color.ABGR();
+    {
+        auto dcolor = color.ABGR();
 
-		for (UInt i = 0; i < elementsCount; i++)
-		{
-			Vertex v[] =
-			{
+        for (UInt i = 0; i < elementsCount; i++)
+        {
+            Vertex v[] =
+            {
                 vertices[indexes[i*3]],
                 vertices[indexes[i*3 + 1]],
                 vertices[indexes[i*3 + 2]],
                 vertices[indexes[i*3]]
-			};
+            };
 
-			v[0].color = dcolor;
-			v[1].color = dcolor;
-			v[2].color = dcolor;
-			v[3].color = dcolor;
+            v[0].color = dcolor;
+            v[1].color = dcolor;
+            v[2].color = dcolor;
+            v[3].color = dcolor;
 
-			DrawPolyLine(v, 4);
-		}
-	}
+            DrawPolyLine(v, 4);
+        }
+    }
 
-	void Render::DrawPolyLine(Vertex* vertices, int count, float width /*= 1.0f*/)
+    void Render::DrawPolyLine(Vertex* vertices, int count, float width /*= 1.0f*/)
     {
         DrawBuffer(PrimitiveType::Line, vertices, count, mHardLinesIndexData, count - 1, mSolidLineTexture, BlendMode::Normal);
     }

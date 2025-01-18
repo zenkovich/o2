@@ -51,12 +51,12 @@ namespace o2
 
             WeakRef<ContextMenuItem> widget; // Widget of this item
 
-		public:
-			// Default constructor
-			Item(RefCounter* refCounter);
+        public:
+            // Default constructor
+            Item(RefCounter* refCounter);
 
-			// Copy constructor
-			Item(RefCounter* refCounter, const Item& other);
+            // Copy constructor
+            Item(RefCounter* refCounter, const Item& other);
 
             // Constructor from text
             Item(RefCounter* refCounter, const WString& text, const Vector<Ref<Item>>& subItems, const WString& group = "",
@@ -229,8 +229,8 @@ namespace o2
         int mMaxVisibleItems = 100; // Maximum visible items @SERIALIZABLE
 
         bool         mSearchEnabled = false; // Is search enabled
-		Ref<Widget>  mSearchPanel;           // Widget with search edit box and icon
-		Ref<EditBox> mSearchEditBox;         // Search input text box
+        Ref<Widget>  mSearchPanel;           // Widget with search edit box and icon
+        Ref<EditBox> mSearchEditBox;         // Search input text box
         String       mSearchText;            // Search text used to filter items
 
         Vector<Ref<Item>>   mItems;              // Items list

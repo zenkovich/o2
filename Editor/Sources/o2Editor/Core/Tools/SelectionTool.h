@@ -6,78 +6,78 @@ using namespace o2;
 
 namespace o2
 {
-	class Sprite;
-	class SceneEditableObject;
+    class Sprite;
+    class SceneEditableObject;
 }
 
 namespace Editor
 {
-	// ---------------------
-	// Editor selection tool
-	// ---------------------
-	class SelectionTool: public IEditTool
-	{
-	public:
-		// Default constructor
-		SelectionTool();
+    // ---------------------
+    // Editor selection tool
+    // ---------------------
+    class SelectionTool: public IEditTool
+    {
+    public:
+        // Default constructor
+        SelectionTool();
 
-		// Destructor
-		~SelectionTool();
+        // Destructor
+        ~SelectionTool();
 
-		IOBJECT(SelectionTool);
+        IOBJECT(SelectionTool);
 
-	protected:
-		Ref<Sprite> mSelectionSprite; // Selection frame sprite
+    protected:
+        Ref<Sprite> mSelectionSprite; // Selection frame sprite
 
-		Vector<Ref<SceneEditableObject>> mCurrentSelectingObjects; // Current selecting objects (when cursor pressed, but not released yet)
-		Vector<Ref<SceneEditableObject>> mBeforeSelectingObjects;  // Before selection objects array
+        Vector<Ref<SceneEditableObject>> mCurrentSelectingObjects; // Current selecting objects (when cursor pressed, but not released yet)
+        Vector<Ref<SceneEditableObject>> mBeforeSelectingObjects;  // Before selection objects array
 
-		Vec2F mPressPoint;				 // Press point before selecting
-		bool  mSelectingObjects = false; // Is selecting objects now
+        Vec2F mPressPoint;                 // Press point before selecting
+        bool  mSelectingObjects = false; // Is selecting objects now
 
-	protected:
-		// Returns toggle in menu panel icon name
-		String GetPanelIcon() const override;
+    protected:
+        // Returns toggle in menu panel icon name
+        String GetPanelIcon() const override;
 
-		// Returns shortcut keys for toggle
-		ShortcutKeys GetShortcut() const override;
+        // Returns shortcut keys for toggle
+        ShortcutKeys GetShortcut() const override;
 
-		// Draws tool
-		void DrawScene() override;
+        // Draws tool
+        void DrawScene() override;
 
-		// Draws tool
-		void DrawScreen() override;
+        // Draws tool
+        void DrawScreen() override;
 
-		// Updates tool
-		void Update(float dt) override;
+        // Updates tool
+        void Update(float dt) override;
 
-		// Called when tool was enabled
-		void OnEnabled() override;
+        // Called when tool was enabled
+        void OnEnabled() override;
 
-		// Called when tool was disabled
-		void OnDisabled() override;
+        // Called when tool was disabled
+        void OnDisabled() override;
 
-		// Called when objects selection was changed
-		void OnObjectsSelectionChanged(const Vector<Ref<SceneEditableObject>>& objects) override;
+        // Called when objects selection was changed
+        void OnObjectsSelectionChanged(const Vector<Ref<SceneEditableObject>>& objects) override;
 
-		// Called when cursor pressed on this
-		void OnCursorPressed(const Input::Cursor& cursor) override;
+        // Called when cursor pressed on this
+        void OnCursorPressed(const Input::Cursor& cursor) override;
 
-		// Called when cursor released (only when cursor pressed this at previous time)
-		void OnCursorReleased(const Input::Cursor& cursor) override;
+        // Called when cursor released (only when cursor pressed this at previous time)
+        void OnCursorReleased(const Input::Cursor& cursor) override;
 
-		// Called when cursor pressing was broken (when scrolled scroll area or some other)
-		void OnCursorPressBreak(const Input::Cursor& cursor) override;
+        // Called when cursor pressing was broken (when scrolled scroll area or some other)
+        void OnCursorPressBreak(const Input::Cursor& cursor) override;
 
-		// Called when cursor stay down during frame
-		void OnCursorStillDown(const Input::Cursor& cursor) override;
+        // Called when cursor stay down during frame
+        void OnCursorStillDown(const Input::Cursor& cursor) override;
 
-		// Called when cursor moved on this (or moved outside when this was pressed)
-		void OnCursorMoved(const Input::Cursor& cursor) override;
+        // Called when cursor moved on this (or moved outside when this was pressed)
+        void OnCursorMoved(const Input::Cursor& cursor) override;
 
-		// Called when key was pressed
-		void OnKeyPressed(const Input::Key& key) override;
-	};
+        // Called when key was pressed
+        void OnKeyPressed(const Input::Key& key) override;
+    };
 
 }
 // --- META ---

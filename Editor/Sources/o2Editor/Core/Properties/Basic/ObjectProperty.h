@@ -8,113 +8,113 @@ using namespace o2;
 
 namespace o2
 {
-	class Spoiler;
+    class Spoiler;
 }
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(IObjectPropertiesViewer);
+    FORWARD_CLASS_REF(IObjectPropertiesViewer);
 
-	// ----------------------
-	// Editor object property
-	// ----------------------
-	class ObjectProperty: public IPropertyField
-	{
-	public:
-		// Default constructor
-		ObjectProperty(RefCounter* refCounter);
+    // ----------------------
+    // Editor object property
+    // ----------------------
+    class ObjectProperty: public IPropertyField
+    {
+    public:
+        // Default constructor
+        ObjectProperty(RefCounter* refCounter);
 
-		// Copy constructor
-		ObjectProperty(RefCounter* refCounter, const ObjectProperty& other);
+        // Copy constructor
+        ObjectProperty(RefCounter* refCounter, const ObjectProperty& other);
 
-		// Copy operator
-		ObjectProperty& operator=(const ObjectProperty& other);
+        // Copy operator
+        ObjectProperty& operator=(const ObjectProperty& other);
 
-		// Sets fields
-		void SetValueAndPrototypeProxy(const TargetsVec& targets) override;
+        // Sets fields
+        void SetValueAndPrototypeProxy(const TargetsVec& targets) override;
 
-		// Updates and checks value
-		void Refresh() override;
+        // Updates and checks value
+        void Refresh() override;
 
-		// Returns editing by this field type
-		const Type* GetValueType() const override;
+        // Returns editing by this field type
+        const Type* GetValueType() const override;
 
-		// Returns editing by this field type by static function, can't be changed during runtime
-		static const Type* GetValueTypeStatic();
+        // Returns editing by this field type by static function, can't be changed during runtime
+        static const Type* GetValueTypeStatic();
 
-		// Specializes field info, processing attributes
-		void SetFieldInfo(const FieldInfo* fieldInfo) override;
+        // Specializes field info, processing attributes
+        void SetFieldInfo(const FieldInfo* fieldInfo) override;
 
-		// Sets property caption
-		void SetCaption(const WString& text) override;
+        // Sets property caption
+        void SetCaption(const WString& text) override;
 
-		// Returns property caption
-		WString GetCaption() const override;
+        // Returns property caption
+        WString GetCaption() const override;
 
-		// Adds remove button
-		Ref<Button> GetRemoveButton() override;
+        // Adds remove button
+        Ref<Button> GetRemoveButton() override;
 
-		// Expands property fields
-		void Expand();
+        // Expands property fields
+        void Expand();
 
-		// Collapses property field
-		void Collapse();
+        // Collapses property field
+        void Collapse();
 
-		// Sets properties expanding
-		void SetExpanded(bool expanded);
+        // Sets properties expanding
+        void SetExpanded(bool expanded);
 
-		// Returns is properties expanded
-		bool IsExpanded() const;
+        // Returns is properties expanded
+        bool IsExpanded() const;
 
-		SERIALIZABLE(ObjectProperty);
+        SERIALIZABLE(ObjectProperty);
         CLONEABLE_REF(ObjectProperty);
 
-	protected:
-		struct TargetObjectData
-		{
-			Ref<IAbstractValueProxy> proxy;
-			IObject* data = nullptr;
-			bool isCreated = false;
+    protected:
+        struct TargetObjectData
+        {
+            Ref<IAbstractValueProxy> proxy;
+            IObject* data = nullptr;
+            bool isCreated = false;
 
-			bool operator==(const TargetObjectData& other) const { return proxy == other.proxy; }
+            bool operator==(const TargetObjectData& other) const { return proxy == other.proxy; }
 
-			void Refresh();
-			void SetValue();
-		};
+            void Refresh();
+            void SetValue();
+        };
 
-	protected:							     								    
-		Vector<Pair<TargetObjectData, TargetObjectData>> mTargetObjects; // Target objects
+    protected:                                                                     
+        Vector<Pair<TargetObjectData, TargetObjectData>> mTargetObjects; // Target objects
 
-		Ref<IObjectPropertiesViewer> mObjectViewer; // Object properties viewer
+        Ref<IObjectPropertiesViewer> mObjectViewer; // Object properties viewer
 
-		bool mNoHeader = false;          // Is no header attribute exists
-		bool mExpanded = false;          // True when must be expanded after creating object viewer
+        bool mNoHeader = false;          // Is no header attribute exists
+        bool mExpanded = false;          // True when must be expanded after creating object viewer
 
-		WString mCaption; // Property caption
+        WString mCaption; // Property caption
 
-	protected:
-		// Called when property puts in buffer. Here you can release your shared resources
-		void OnFreeProperty() override;
+    protected:
+        // Called when property puts in buffer. Here you can release your shared resources
+        void OnFreeProperty() override;
 
-		// Enable viewer event function
-		void OnPropertyEnabled() override;
+        // Enable viewer event function
+        void OnPropertyEnabled() override;
 
-		// Disable viewer event function
-		void OnPropertyDisabled() override;
+        // Disable viewer event function
+        void OnPropertyDisabled() override;
 
-		// Searches controls widgets and layers and initializes them
-		void InitializeControls();
+        // Searches controls widgets and layers and initializes them
+        void InitializeControls();
 
-		// Checks viewer type, creates new if needed
-		void CheckViewer();
+        // Checks viewer type, creates new if needed
+        void CheckViewer();
 
-		// Returns object target data from proxy. Creates copy of object when it is property proxy, or gets pointer from pointer proxy
-		TargetObjectData GetObjectFromProxy(const Ref<IAbstractValueProxy>& proxy);
+        // Returns object target data from proxy. Creates copy of object when it is property proxy, or gets pointer from pointer proxy
+        TargetObjectData GetObjectFromProxy(const Ref<IAbstractValueProxy>& proxy);
 
-		// Called when some property changed, sets value via proxy
-		void OnPropertyChanged(const String& path, const Vector<DataDocument>& before, 
-							   const Vector<DataDocument>& after);
-	};
+        // Called when some property changed, sets value via proxy
+        void OnPropertyChanged(const String& path, const Vector<DataDocument>& before, 
+                               const Vector<DataDocument>& after);
+    };
 }
 // --- META ---
 

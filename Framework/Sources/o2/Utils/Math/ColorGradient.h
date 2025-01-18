@@ -147,14 +147,14 @@ namespace o2
         SERIALIZABLE(ColorGradient);
 
     public:
-		// ---------
-		// Color key
-		// ---------
+        // ---------
+        // Color key
+        // ---------
         class Key: public ISerializable
         {
         public:
-			UInt64 uid;             // Random unique id @SERIALIZABLE
-			Color4 color;           // Value @SERIALIZABLE
+            UInt64 uid;             // Random unique id @SERIALIZABLE
+            Color4 color;           // Value @SERIALIZABLE
             float  position = 0.0f; // Position @SERIALIZABLE
 
         public:
@@ -162,7 +162,7 @@ namespace o2
             Key();
 
             // Constructor from value and position
-			Key(const Color4& value, float position);
+            Key(const Color4& value, float position);
 
             // Copy-constructor
             Key(const Key& other);

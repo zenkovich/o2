@@ -6,60 +6,60 @@ using namespace o2;
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(AnimationWindow);
+    FORWARD_CLASS_REF(AnimationWindow);
 
-	// ---------------------------------
-	// Curves sheet. Shows curves editor
-	// ---------------------------------
-	class CurvesSheet : public Widget
-	{
-	public:
-		// Default constructor
+    // ---------------------------------
+    // Curves sheet. Shows curves editor
+    // ---------------------------------
+    class CurvesSheet : public Widget
+    {
+    public:
+        // Default constructor
         CurvesSheet(RefCounter* refCounter);
 
-		// Copy-constructor
+        // Copy-constructor
         CurvesSheet(RefCounter* refCounter, const CurvesSheet& other);
 
-		// Destructor
-		~CurvesSheet();
+        // Destructor
+        ~CurvesSheet();
 
-		// Copy-operator
-		CurvesSheet& operator=(const CurvesSheet& other);
+        // Copy-operator
+        CurvesSheet& operator=(const CurvesSheet& other);
 
-		// Sets animation and updates tree structure
-		void SetAnimation(const Ref<AnimationClip>& animation);
+        // Sets animation and updates tree structure
+        void SetAnimation(const Ref<AnimationClip>& animation);
 
-		// Generates new color for curves and transfers to the tree
-		void UpdateCurvesColors();
+        // Generates new color for curves and transfers to the tree
+        void UpdateCurvesColors();
 
-		// Called when animation changed, checks count of animation tracks, updates curves
-		void OnAnimationChanged();
+        // Called when animation changed, checks count of animation tracks, updates curves
+        void OnAnimationChanged();
 
-		// Returns create menu category in editor
-		static String GetCreateMenuCategory();
+        // Returns create menu category in editor
+        static String GetCreateMenuCategory();
 
         SERIALIZABLE(CurvesSheet);
         CLONEABLE_REF(CurvesSheet);
 
-	private:
-		Ref<CurvesEditor> mCurvesEditor; // Curves editor
+    private:
+        Ref<CurvesEditor> mCurvesEditor; // Curves editor
 
-		WeakRef<AnimationWindow> mAnimationWindow; // Animation window
+        WeakRef<AnimationWindow> mAnimationWindow; // Animation window
 
-		bool mEditorViewLock = false; // It is used to prevent handling editor's camera, when timeline view changing 
+        bool mEditorViewLock = false; // It is used to prevent handling editor's camera, when timeline view changing 
 
-	private:
-		// Initializes curves edit widget
-		void InitializeControls();
+    private:
+        // Initializes curves edit widget
+        void InitializeControls();
 
-		// Called when timeline view has changed, updates horizontal view position and scale
-		void SetCameraAsTimelineView();
+        // Called when timeline view has changed, updates horizontal view position and scale
+        void SetCameraAsTimelineView();
 
-		// Called when curve editor view has changed, updates timeline scroll position
-		void OnEditorViewChanged();
+        // Called when curve editor view has changed, updates timeline scroll position
+        void OnEditorViewChanged();
 
-		friend class AnimationWindow;
-	};
+        friend class AnimationWindow;
+    };
 }
 // --- META ---
 

@@ -7,132 +7,132 @@
 
 namespace Editor
 {
-	TagsProperty::TagsProperty(RefCounter* refCounter):
-		TPropertyField<TagGroup>(refCounter)
-	{}
+    TagsProperty::TagsProperty(RefCounter* refCounter):
+        TPropertyField<TagGroup>(refCounter)
+    {}
 
-	TagsProperty::TagsProperty(RefCounter* refCounter, const TagsProperty& other) :
-		TPropertyField<TagGroup>(refCounter, other)
-	{
-		InitializeControls();
-	}
+    TagsProperty::TagsProperty(RefCounter* refCounter, const TagsProperty& other) :
+        TPropertyField<TagGroup>(refCounter, other)
+    {
+        InitializeControls();
+    }
 
-	TagsProperty& TagsProperty::operator=(const TagsProperty& other)
-	{
-		TPropertyField<TagGroup>::operator=(other);
-		InitializeControls();
-		return *this;
-	}
+    TagsProperty& TagsProperty::operator=(const TagsProperty& other)
+    {
+        TPropertyField<TagGroup>::operator=(other);
+        InitializeControls();
+        return *this;
+    }
 
-	void TagsProperty::InitializeControls()
-	{
-		mEditBox = FindChildByType<EditBox>();
-		if (mEditBox)
-		{
-			mTagsContext = FindChildByType<ContextMenu>();
-			if (!mTagsContext)
-			{
-				mTagsContext = o2UI.CreateWidget<ContextMenu>();
-				AddChild(mTagsContext);
-			}
+    void TagsProperty::InitializeControls()
+    {
+        mEditBox = FindChildByType<EditBox>();
+        if (mEditBox)
+        {
+            mTagsContext = FindChildByType<ContextMenu>();
+            if (!mTagsContext)
+            {
+                mTagsContext = o2UI.CreateWidget<ContextMenu>();
+                AddChild(mTagsContext);
+            }
 
-			mTagsContext->SetMaxItemsVisible(10);
-			mEditBox->AddChild(mTagsContext);
+            mTagsContext->SetMaxItemsVisible(10);
+            mEditBox->AddChild(mTagsContext);
 
-			mEditBox->onFocused = [&]() { UpdateContextData(""); };
-			mEditBox->onChangeCompleted = THIS_FUNC(OnEditBoxChangeCompleted);
-			mEditBox->onChanged = THIS_FUNC(OnEditBoxChanged);
-			mEditBox->text = "--";
-		}
-	}
+            mEditBox->onFocused = [&]() { UpdateContextData(""); };
+            mEditBox->onChangeCompleted = THIS_FUNC(OnEditBoxChangeCompleted);
+            mEditBox->onChanged = THIS_FUNC(OnEditBoxChanged);
+            mEditBox->text = "--";
+        }
+    }
 
-	void TagsProperty::UpdateValueView()
-	{}
+    void TagsProperty::UpdateValueView()
+    {}
 
-	void TagsProperty::UpdateContextData(const WString& filter)
-	{
-		if (mPushingTag)
-			return;
+    void TagsProperty::UpdateContextData(const WString& filter)
+    {
+        if (mPushingTag)
+            return;
 
-		mTagsContext->RemoveAllItems();
-		mTagsContext->Show(mEditBox->layout->GetWorldLeftBottom());
+        mTagsContext->RemoveAllItems();
+        mTagsContext->Show(mEditBox->layout->GetWorldLeftBottom());
 
-		for (auto& tag : o2Scene.GetTags())
-		{
-			if (filter.IsEmpty() || tag->GetName().CountOf(filter) > 0)
-				mTagsContext->AddItem(tag->GetName(), [=]() { PushTag(tag->GetName()); });
-		}
-	}
+        for (auto& tag : o2Scene.GetTags())
+        {
+            if (filter.IsEmpty() || tag->GetName().CountOf(filter) > 0)
+                mTagsContext->AddItem(tag->GetName(), [=]() { PushTag(tag->GetName()); });
+        }
+    }
 
-	void TagsProperty::SetCommonValue(const TagGroup& value)
-	{
-		mCommonValue = value;
-		mValuesDifferent = false;
+    void TagsProperty::SetCommonValue(const TagGroup& value)
+    {
+        mCommonValue = value;
+        mValuesDifferent = false;
 
-		WString res;
-		for (auto& tag : mCommonValue.GetTagsNames())
-			res += tag + " ";
+        WString res;
+        for (auto& tag : mCommonValue.GetTagsNames())
+            res += tag + " ";
 
-		mPushingTag = true;
-		mEditBox->text = res;
-		mPushingTag = false;
+        mPushingTag = true;
+        mEditBox->text = res;
+        mPushingTag = false;
 
-		OnValueChanged();
-	}
+        OnValueChanged();
+    }
 
-	void TagsProperty::OnEditBoxChanged(const WString& text)
-	{
-		if (mPushingTag || !mEditBox->IsFocused())
-			return;
+    void TagsProperty::OnEditBoxChanged(const WString& text)
+    {
+        if (mPushingTag || !mEditBox->IsFocused())
+            return;
 
-		WString lastTagText;
+        WString lastTagText;
 
-		int spacePos = text.FindLast(" ");
-		if (spacePos < 0)
-			lastTagText = text;
-		else
-			lastTagText = text.SubStr(spacePos + 1);
+        int spacePos = text.FindLast(" ");
+        if (spacePos < 0)
+            lastTagText = text;
+        else
+            lastTagText = text.SubStr(spacePos + 1);
 
-		UpdateContextData(lastTagText);
-	}
+        UpdateContextData(lastTagText);
+    }
 
-	void TagsProperty::OnEditBoxChangeCompleted(const WString& text)
-	{
-		SetTags(text);
-	}
+    void TagsProperty::OnEditBoxChangeCompleted(const WString& text)
+    {
+        SetTags(text);
+    }
 
-	void TagsProperty::SetTags(const WString &text)
-	{
-		auto tagsNames = text.Split(" ");
+    void TagsProperty::SetTags(const WString &text)
+    {
+        auto tagsNames = text.Split(" ");
 
-		TagGroup tagsValue;
+        TagGroup tagsValue;
 
-		for (auto& tagName : tagsNames)
-		{
-			if (!tagName.IsEmpty())
-				tagsValue.AddTag(tagName);
-		}
+        for (auto& tagName : tagsNames)
+        {
+            if (!tagName.IsEmpty())
+                tagsValue.AddTag(tagName);
+        }
 
-		SetValueByUser(tagsValue);
-	}
+        SetValueByUser(tagsValue);
+    }
 
-	void TagsProperty::PushTag(String name)
-	{
-		String editText = (WString)mEditBox->text;
+    void TagsProperty::PushTag(String name)
+    {
+        String editText = (WString)mEditBox->text;
 
-		int spaceIdx = editText.FindLast(" ");
-		if (spaceIdx >= 0)
-			editText = editText.SubStr(0, spaceIdx);
-		else
-			editText = "";
+        int spaceIdx = editText.FindLast(" ");
+        if (spaceIdx >= 0)
+            editText = editText.SubStr(0, spaceIdx);
+        else
+            editText = "";
 
-		if (!editText.IsEmpty())
-			editText += " ";
+        if (!editText.IsEmpty())
+            editText += " ";
 
-		editText += name;
+        editText += name;
 
-		SetTags(editText);
-	}
+        SetTags(editText);
+    }
 }
 
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::TagGroup>);

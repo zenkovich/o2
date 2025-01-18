@@ -15,7 +15,7 @@ namespace o2
     class SpineAsset : public AssetWithDefaultMeta<SpineAsset>
     {
     public:
-		PROPERTIES(SpineAsset);
+        PROPERTIES(SpineAsset);
 
     public:
         // Default constructor
@@ -30,11 +30,11 @@ namespace o2
         // Check equals operator
         SpineAsset& operator=(const SpineAsset& asset);
 
-		// Returns spine skeleton data
-		spine::SkeletonData* GetSpineSkeletonData();
+        // Returns spine skeleton data
+        spine::SkeletonData* GetSpineSkeletonData();
 
-		// Returns spine animation state data
-		spine::AnimationStateData* GetSpineAnimationStateData();
+        // Returns spine animation state data
+        spine::AnimationStateData* GetSpineAnimationStateData();
 
         // Returns extensions string
         static Vector<String> GetFileExtensions();
@@ -42,12 +42,12 @@ namespace o2
         // Returns editor sorting weight
         static int GetEditorSorting() { return 96; }
 
-		SERIALIZABLE(SpineAsset);
-		CLONEABLE_REF(SpineAsset);
+        SERIALIZABLE(SpineAsset);
+        CLONEABLE_REF(SpineAsset);
 
     protected:
-		spine::SkeletonData*       mSkeletonData = nullptr;       // Spine skeleton data
-		spine::AnimationStateData* mAnimationStateData = nullptr; // Spine animation state data
+        spine::SkeletonData*       mSkeletonData = nullptr;       // Spine skeleton data
+        spine::AnimationStateData* mAnimationStateData = nullptr; // Spine animation state data
 
     protected:
         // Loads asset data, using DataValue and serialization

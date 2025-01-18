@@ -7,120 +7,120 @@
 
 namespace o2
 {    
-	class AnimationGraphState;
-	FORWARD_CLASS_REF(AnimationStateGraphAsset);
+    class AnimationGraphState;
+    FORWARD_CLASS_REF(AnimationStateGraphAsset);
 
-	// -------------------------
-	// Transition between states
-	// -------------------------
-	class AnimationGraphTransition : public ISerializable, public RefCounterable, public ICloneableRef
-	{
-	public:
-		float duration = 0.0f;          // Duration of transition @SERIALIZABLE
-		float beginTimeRange = 0.0f;    // Begin time range of transition @SERIALIZABLE
-		float endTimeRange = 1.0f;      // End time range of transition @SERIALIZABLE
-		bool  backwardAvailable = true; // Is backward transition available @SERIALIZABLE
+    // -------------------------
+    // Transition between states
+    // -------------------------
+    class AnimationGraphTransition : public ISerializable, public RefCounterable, public ICloneableRef
+    {
+    public:
+        float duration = 0.0f;          // Duration of transition @SERIALIZABLE
+        float beginTimeRange = 0.0f;    // Begin time range of transition @SERIALIZABLE
+        float endTimeRange = 1.0f;      // End time range of transition @SERIALIZABLE
+        bool  backwardAvailable = true; // Is backward transition available @SERIALIZABLE
 
-		Ref<Curve> curve; // Curve of transition @SERIALIZABLE
+        Ref<Curve> curve; // Curve of transition @SERIALIZABLE
 
-	public:
-		// Sets destination state
-		void SetDestinationState(const Ref<AnimationGraphState>& state);
+    public:
+        // Sets destination state
+        void SetDestinationState(const Ref<AnimationGraphState>& state);
 
-		// Returns destination state
-		Ref<AnimationGraphState> GetDestinationState() const;
+        // Returns destination state
+        Ref<AnimationGraphState> GetDestinationState() const;
 
-		// Returns source state
-		Ref<AnimationGraphState> GetSourceState() const;
+        // Returns source state
+        Ref<AnimationGraphState> GetSourceState() const;
 
-		SERIALIZABLE(AnimationGraphTransition);
-		CLONEABLE_REF(AnimationGraphTransition);
+        SERIALIZABLE(AnimationGraphTransition);
+        CLONEABLE_REF(AnimationGraphTransition);
 
-	protected:
-		UID mDestinationState; // To state UID @SERIALIZABLE
+    protected:
+        UID mDestinationState; // To state UID @SERIALIZABLE
 
-		WeakRef<AnimationGraphState> mSourceStateRef;      // From state reference (owner)
-		WeakRef<AnimationGraphState> mDestinationStateRef; // To state reference
+        WeakRef<AnimationGraphState> mSourceStateRef;      // From state reference (owner)
+        WeakRef<AnimationGraphState> mDestinationStateRef; // To state reference
 
-	protected:
-		// Sets state and initializes references
-		void SetState(const Ref<AnimationGraphState>& state);
+    protected:
+        // Sets state and initializes references
+        void SetState(const Ref<AnimationGraphState>& state);
 
-		friend class AnimationGraphState;
-	};
+        friend class AnimationGraphState;
+    };
 
-	// ---------------------------------------------------------------
-	// Animation state. Can contain multiple animations and blend them
-	// ---------------------------------------------------------------
-	class AnimationGraphState : public ISerializable, public RefCounterable, public ICloneableRef
-	{
-	public:
-		// ---------------------------------------------------------------
-		// Single animation from state. Contains animation name and weight
-		// ---------------------------------------------------------------
-		struct Animation : public ISerializable, public RefCounterable
-		{
-			String name;          // Name of animation @SERIALIZABLE
-			float  weight = 1.0f; // Weight of animation @SERIALIZABLE
+    // ---------------------------------------------------------------
+    // Animation state. Can contain multiple animations and blend them
+    // ---------------------------------------------------------------
+    class AnimationGraphState : public ISerializable, public RefCounterable, public ICloneableRef
+    {
+    public:
+        // ---------------------------------------------------------------
+        // Single animation from state. Contains animation name and weight
+        // ---------------------------------------------------------------
+        struct Animation : public ISerializable, public RefCounterable
+        {
+            String name;          // Name of animation @SERIALIZABLE
+            float  weight = 1.0f; // Weight of animation @SERIALIZABLE
 
-			SERIALIZABLE(Animation);
+            SERIALIZABLE(Animation);
 
-		protected:
-			Ref<IAnimationState> mState; // Animation state
-		};
+        protected:
+            Ref<IAnimationState> mState; // Animation state
+        };
 
-	public:
-		String name; // Name of state @SERIALIZABLE
+    public:
+        String name; // Name of state @SERIALIZABLE
 
-	public:
-		// Returns UID of state
-		UID GetUID() const;
+    public:
+        // Returns UID of state
+        UID GetUID() const;
 
-		// Returns animation by name
-		Ref<Animation> GetAnimation(const String& name);
+        // Returns animation by name
+        Ref<Animation> GetAnimation(const String& name);
 
-		// Adds animation to state
-		Ref<Animation> AddAnimation(const String& name);
+        // Adds animation to state
+        Ref<Animation> AddAnimation(const String& name);
 
-		// Removes animation from state
-		void RemoveAnimation(const String& name);
+        // Removes animation from state
+        void RemoveAnimation(const String& name);
 
-		// Removes animation from state
-		void RemoveAnimation(const Ref<Animation>& animation);
+        // Removes animation from state
+        void RemoveAnimation(const Ref<Animation>& animation);
 
-		// Returns animations
-		const Vector<Ref<Animation>>& GetAnimations() const;
+        // Returns animations
+        const Vector<Ref<Animation>>& GetAnimations() const;
 
-		// Adds transition to state
-		Ref<AnimationGraphTransition> AddTransition(const Ref<AnimationGraphState>& destinationState);
+        // Adds transition to state
+        Ref<AnimationGraphTransition> AddTransition(const Ref<AnimationGraphState>& destinationState);
 
-		// Removes transition from state
-		void RemoveTransition(const Ref<AnimationGraphTransition>& transition);
+        // Removes transition from state
+        void RemoveTransition(const Ref<AnimationGraphTransition>& transition);
 
-		// Returns transitions
-		const Vector<Ref<AnimationGraphTransition>>& GetTransitions() const;
+        // Returns transitions
+        const Vector<Ref<AnimationGraphTransition>>& GetTransitions() const;
 
-		SERIALIZABLE(AnimationGraphState);
-		CLONEABLE_REF(AnimationGraphState);
+        SERIALIZABLE(AnimationGraphState);
+        CLONEABLE_REF(AnimationGraphState);
 
-	protected:
-		UID mUID; // UID of state @SERIALIZABLE
+    protected:
+        UID mUID; // UID of state @SERIALIZABLE
 
-		Vector<Ref<Animation>>  mAnimations;  // Animations @SERIALIZABLE @EDITOR_PROPERTY @INVOKE_ON_CHANGE(ReinitAnimations)
-		Vector<Ref<AnimationGraphTransition>> mTransitions; // Transitions @SERIALIZABLE @EDITOR_PROPERTY @INVOKE_ON_CHANGE(ReinitTransitions)
+        Vector<Ref<Animation>>  mAnimations;  // Animations @SERIALIZABLE @EDITOR_PROPERTY @INVOKE_ON_CHANGE(ReinitAnimations)
+        Vector<Ref<AnimationGraphTransition>> mTransitions; // Transitions @SERIALIZABLE @EDITOR_PROPERTY @INVOKE_ON_CHANGE(ReinitTransitions)
 
-		WeakRef<AnimationStateGraphAsset> mGraph; // Graph reference
+        WeakRef<AnimationStateGraphAsset> mGraph; // Graph reference
 
-	protected:
-		// Reinitializes transitions
-		void ReinitTransitions();
+    protected:
+        // Reinitializes transitions
+        void ReinitTransitions();
 
-		// Sets graph and initializes references
-		void SetGraph(const Ref<AnimationStateGraphAsset>& graph);
+        // Sets graph and initializes references
+        void SetGraph(const Ref<AnimationStateGraphAsset>& graph);
 
-		friend class AnimationGraphTransition;
-		friend class AnimationStateGraphAsset;
-	};
+        friend class AnimationGraphTransition;
+        friend class AnimationStateGraphAsset;
+    };
 }
 // --- META ---
 

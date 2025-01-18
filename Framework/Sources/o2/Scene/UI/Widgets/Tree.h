@@ -41,13 +41,13 @@ namespace o2
 
     public:
         // Default constructor
-		explicit Tree(RefCounter* refCounter);
+        explicit Tree(RefCounter* refCounter);
 
-		// Copy-constructor
-		Tree(RefCounter* refCounter, const Tree& other);
+        // Copy-constructor
+        Tree(RefCounter* refCounter, const Tree& other);
 
-		// Copy-constructor
-		Tree(const Tree& other);
+        // Copy-constructor
+        Tree(const Tree& other);
 
         // Destructor
         ~Tree();

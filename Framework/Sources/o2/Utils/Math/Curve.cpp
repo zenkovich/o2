@@ -83,7 +83,7 @@ namespace o2
         if (keyLeftIdx < 0)
             return 0.0f;
 
-		const Key& leftKey = mKeys[keyLeftIdx];
+        const Key& leftKey = mKeys[keyLeftIdx];
         const Key& rightKey = mKeys[keyRightIdx];
 
         int segLeftIdx = 0;
@@ -97,16 +97,16 @@ namespace o2
         const ApproximationValue& segTopLeft = rightKey.mApproxTopValues[segLeftIdx];
         const ApproximationValue& segTopRight = rightKey.mApproxTopValues[segRightIdx];
 
-		const ApproximationValue& segBottomLeft = rightKey.mApproxBottomValues[segLeftIdx];
-		const ApproximationValue& segBottomRight = rightKey.mApproxBottomValues[segRightIdx];
+        const ApproximationValue& segBottomLeft = rightKey.mApproxBottomValues[segLeftIdx];
+        const ApproximationValue& segBottomRight = rightKey.mApproxBottomValues[segRightIdx];
 
         float dist = segTopRight.position - segTopLeft.position;
         float coef = (position - segTopLeft.position) / dist;
 
-		float topSegValue = Math::Lerp(segTopLeft.value, segTopRight.value, coef);
-		float bottomSegValue = Math::Lerp(segBottomLeft.value, segBottomRight.value, coef);
+        float topSegValue = Math::Lerp(segTopLeft.value, segTopRight.value, coef);
+        float bottomSegValue = Math::Lerp(segBottomLeft.value, segBottomRight.value, coef);
 
-		return Math::Lerp(topSegValue, bottomSegValue, randomRangeCoef);
+        return Math::Lerp(topSegValue, bottomSegValue, randomRangeCoef);
     }
 
     void Curve::BeginKeysBatchChange()
@@ -654,10 +654,10 @@ namespace o2
                 res.top = Math::Max(key.mApproxTopValues[i].value, res.top);
                 res.bottom = Math::Min(key.mApproxTopValues[i].value, res.bottom);
 
-				res.left = Math::Min(key.mApproxBottomValues[i].position, res.left);
-				res.right = Math::Max(key.mApproxBottomValues[i].position, res.right);
-				res.top = Math::Max(key.mApproxBottomValues[i].value, res.top);
-				res.bottom = Math::Min(key.mApproxBottomValues[i].value, res.bottom);
+                res.left = Math::Min(key.mApproxBottomValues[i].position, res.left);
+                res.right = Math::Max(key.mApproxBottomValues[i].position, res.right);
+                res.top = Math::Max(key.mApproxBottomValues[i].value, res.top);
+                res.bottom = Math::Min(key.mApproxBottomValues[i].value, res.bottom);
             }
         }
 
@@ -735,38 +735,38 @@ namespace o2
             if (leftSupport.x < leftKey.position - rightKey.position && leftSupport.x != 0.0f)
                 leftSupport *= (leftKey.position - rightKey.position) / leftSupport.x;
 
-			float leftHalfRange = leftKey.valueRange * 0.5f;
-			float rightHalfRange = rightKey.valueRange * 0.5f;
+            float leftHalfRange = leftKey.valueRange * 0.5f;
+            float rightHalfRange = rightKey.valueRange * 0.5f;
 
             Vec2F leftOriginTop(leftKey.position, leftKey.value + leftHalfRange);
             Vec2F rightOriginTop(rightKey.position, rightKey.value + rightHalfRange);
             Vec2F leftSupportTop = leftOriginTop + rightSupport;
             Vec2F rightSupportTop = rightOriginTop + leftSupport;
 
-			Vec2F leftOriginBottom(leftKey.position, leftKey.value - leftHalfRange);
-			Vec2F rightOriginBottom(rightKey.position, rightKey.value - rightHalfRange);
-			Vec2F leftSupportBottom = leftOriginBottom + rightSupport;
-			Vec2F rightSupportBottom = rightOriginBottom + leftSupport;
+            Vec2F leftOriginBottom(leftKey.position, leftKey.value - leftHalfRange);
+            Vec2F rightOriginBottom(rightKey.position, rightKey.value - rightHalfRange);
+            Vec2F leftSupportBottom = leftOriginBottom + rightSupport;
+            Vec2F rightSupportBottom = rightOriginBottom + leftSupport;
 
             rightKey.mApproxValuesBounds.Set(leftOriginTop, leftOriginTop);
             for (int j = 0; j < Key::mApproxValuesCount; j++)
             {
                 float coef = (float)j / (float)(Key::mApproxValuesCount - 1);
                 Vec2F pointTop = Bezier(leftOriginTop, leftSupportTop, rightSupportTop, rightOriginTop, coef);
-				Vec2F pointBottom = Bezier(leftOriginBottom, leftSupportBottom, rightSupportBottom, rightOriginBottom, coef);
+                Vec2F pointBottom = Bezier(leftOriginBottom, leftSupportBottom, rightSupportBottom, rightOriginBottom, coef);
 
                 rightKey.mApproxTopValues[j] = pointTop;
-				rightKey.mApproxBottomValues[j] = pointBottom;
+                rightKey.mApproxBottomValues[j] = pointBottom;
 
                 rightKey.mApproxValuesBounds.left = Math::Min(rightKey.mApproxValuesBounds.left, pointTop.x);
                 rightKey.mApproxValuesBounds.right = Math::Max(rightKey.mApproxValuesBounds.right, pointTop.x);
                 rightKey.mApproxValuesBounds.top = Math::Max(rightKey.mApproxValuesBounds.top, pointTop.y);
                 rightKey.mApproxValuesBounds.bottom = Math::Min(rightKey.mApproxValuesBounds.bottom, pointTop.y);
 
-				rightKey.mApproxValuesBounds.left = Math::Min(rightKey.mApproxValuesBounds.left, pointBottom.x);
-				rightKey.mApproxValuesBounds.right = Math::Max(rightKey.mApproxValuesBounds.right, pointBottom.x);
-				rightKey.mApproxValuesBounds.top = Math::Max(rightKey.mApproxValuesBounds.top, pointBottom.y);
-				rightKey.mApproxValuesBounds.bottom = Math::Min(rightKey.mApproxValuesBounds.bottom, pointBottom.y);
+                rightKey.mApproxValuesBounds.left = Math::Min(rightKey.mApproxValuesBounds.left, pointBottom.x);
+                rightKey.mApproxValuesBounds.right = Math::Max(rightKey.mApproxValuesBounds.right, pointBottom.x);
+                rightKey.mApproxValuesBounds.top = Math::Max(rightKey.mApproxValuesBounds.top, pointBottom.y);
+                rightKey.mApproxValuesBounds.bottom = Math::Min(rightKey.mApproxValuesBounds.bottom, pointBottom.y);
             }
         }
 
@@ -868,7 +868,7 @@ namespace o2
         rightSupportPosition(other.rightSupportPosition), supportsType(other.supportsType), mApproxValuesBounds(other.mApproxValuesBounds)
     {
         memcpy(mApproxTopValues, other.mApproxTopValues, mApproxValuesCount * sizeof(ApproximationValue));
-		memcpy(mApproxBottomValues, other.mApproxBottomValues, mApproxValuesCount * sizeof(ApproximationValue));
+        memcpy(mApproxBottomValues, other.mApproxBottomValues, mApproxValuesCount * sizeof(ApproximationValue));
     }
 
     Curve::Key::operator float() const
@@ -881,12 +881,12 @@ namespace o2
         return mApproxTopValues;
     }
 
-	const ApproximationValue* Curve::Key::GetBottomApproximatedPoints() const
-	{
+    const ApproximationValue* Curve::Key::GetBottomApproximatedPoints() const
+    {
         return mApproxBottomValues;
-	}
+    }
 
-	int Curve::Key::GetApproximatedPointsCount() const
+    int Curve::Key::GetApproximatedPointsCount() const
     {
         return mApproxValuesCount;
     }
@@ -906,7 +906,7 @@ namespace o2
     {
         uid = other.uid;
         value = other.value;
-		valueRange = other.valueRange;
+        valueRange = other.valueRange;
         position = other.position;
         leftSupportValue = other.leftSupportValue;
         leftSupportPosition = other.leftSupportPosition;
@@ -916,7 +916,7 @@ namespace o2
         mApproxValuesBounds = other.mApproxValuesBounds;
 
         memcpy(mApproxTopValues, other.mApproxTopValues, mApproxValuesCount * sizeof(Vec2F));
-		memcpy(mApproxBottomValues, other.mApproxBottomValues, mApproxValuesCount * sizeof(Vec2F));
+        memcpy(mApproxBottomValues, other.mApproxBottomValues, mApproxValuesCount * sizeof(Vec2F));
 
         return *this;
     }

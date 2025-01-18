@@ -27,7 +27,7 @@ namespace o2
         UInt vertexCount; // Current vertices count
         UInt polyCount;   // Current polygons in mesh
 
-		BlendMode blendMode; // Blend mode
+        BlendMode blendMode; // Blend mode
 
     public:
         // Constructor

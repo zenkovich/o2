@@ -5,99 +5,99 @@
 
 namespace o2
 {
-	void AnimationGraphTransition::SetDestinationState(const Ref<AnimationGraphState>& state)
-	{
-		mDestinationState = state->GetUID();
-		mDestinationStateRef = state;
-	}
+    void AnimationGraphTransition::SetDestinationState(const Ref<AnimationGraphState>& state)
+    {
+        mDestinationState = state->GetUID();
+        mDestinationStateRef = state;
+    }
 
-	Ref<AnimationGraphState> AnimationGraphTransition::GetDestinationState() const
-	{
-		return mDestinationStateRef.Lock();
-	}
+    Ref<AnimationGraphState> AnimationGraphTransition::GetDestinationState() const
+    {
+        return mDestinationStateRef.Lock();
+    }
 
-	Ref<AnimationGraphState> AnimationGraphTransition::GetSourceState() const
-	{
-		return mSourceStateRef.Lock();
-	}
+    Ref<AnimationGraphState> AnimationGraphTransition::GetSourceState() const
+    {
+        return mSourceStateRef.Lock();
+    }
 
-	void AnimationGraphTransition::SetState(const Ref<AnimationGraphState>& state)
-	{
-		mSourceStateRef = state;
+    void AnimationGraphTransition::SetState(const Ref<AnimationGraphState>& state)
+    {
+        mSourceStateRef = state;
 
-		if (state && state->mGraph)
-			mDestinationStateRef = state->mGraph.Lock()->GetState(mDestinationState);
-	}
+        if (state && state->mGraph)
+            mDestinationStateRef = state->mGraph.Lock()->GetState(mDestinationState);
+    }
 
-	UID AnimationGraphState::GetUID() const
-	{
-		return mUID;
-	}
+    UID AnimationGraphState::GetUID() const
+    {
+        return mUID;
+    }
 
-	Ref<AnimationGraphState::Animation> AnimationGraphState::GetAnimation(const String& name)
-	{
-		for (auto& animation : mAnimations)
-		{
-			if (animation->name == name)
-				return animation;
-		}
+    Ref<AnimationGraphState::Animation> AnimationGraphState::GetAnimation(const String& name)
+    {
+        for (auto& animation : mAnimations)
+        {
+            if (animation->name == name)
+                return animation;
+        }
 
-		return nullptr;
-	}
+        return nullptr;
+    }
 
-	Ref<AnimationGraphState::Animation> AnimationGraphState::AddAnimation(const String& name)
-	{
-		auto animation = mmake<Animation>();
-		animation->name = name;
-		mAnimations.Add(animation);
+    Ref<AnimationGraphState::Animation> AnimationGraphState::AddAnimation(const String& name)
+    {
+        auto animation = mmake<Animation>();
+        animation->name = name;
+        mAnimations.Add(animation);
 
-		return animation;
-	}
+        return animation;
+    }
 
-	void AnimationGraphState::RemoveAnimation(const String& name)
-	{
-		RemoveAnimation(GetAnimation(name));
-	}
+    void AnimationGraphState::RemoveAnimation(const String& name)
+    {
+        RemoveAnimation(GetAnimation(name));
+    }
 
-	void AnimationGraphState::RemoveAnimation(const Ref<Animation>& animation)
-	{
-		mAnimations.Remove(animation);
-	}
+    void AnimationGraphState::RemoveAnimation(const Ref<Animation>& animation)
+    {
+        mAnimations.Remove(animation);
+    }
 
-	const Vector<Ref<AnimationGraphState::Animation>>& AnimationGraphState::GetAnimations() const
-	{
-		return mAnimations;
-	}
+    const Vector<Ref<AnimationGraphState::Animation>>& AnimationGraphState::GetAnimations() const
+    {
+        return mAnimations;
+    }
 
-	Ref<AnimationGraphTransition> AnimationGraphState::AddTransition(const Ref<AnimationGraphState>& destinationState)
-	{
-		auto transition = mmake<AnimationGraphTransition>();
-		transition->SetDestinationState(destinationState);
-		transition->SetState(Ref(this));
-		return transition;
-	}
+    Ref<AnimationGraphTransition> AnimationGraphState::AddTransition(const Ref<AnimationGraphState>& destinationState)
+    {
+        auto transition = mmake<AnimationGraphTransition>();
+        transition->SetDestinationState(destinationState);
+        transition->SetState(Ref(this));
+        return transition;
+    }
 
-	void AnimationGraphState::RemoveTransition(const Ref<AnimationGraphTransition>& transition)
-	{
-		mTransitions.Remove(transition);
-	}
+    void AnimationGraphState::RemoveTransition(const Ref<AnimationGraphTransition>& transition)
+    {
+        mTransitions.Remove(transition);
+    }
 
-	const Vector<Ref<AnimationGraphTransition>>& AnimationGraphState::GetTransitions() const
-	{
-		return mTransitions;
-	}
+    const Vector<Ref<AnimationGraphTransition>>& AnimationGraphState::GetTransitions() const
+    {
+        return mTransitions;
+    }
 
-	void AnimationGraphState::ReinitTransitions()
-	{
-		for (auto& transition : mTransitions)
-			transition->SetState(Ref(this));
-	}
+    void AnimationGraphState::ReinitTransitions()
+    {
+        for (auto& transition : mTransitions)
+            transition->SetState(Ref(this));
+    }
 
-	void AnimationGraphState::SetGraph(const Ref<AnimationStateGraphAsset>& graph)
-	{
-		mGraph = graph;
-		ReinitTransitions();
-	}
+    void AnimationGraphState::SetGraph(const Ref<AnimationStateGraphAsset>& graph)
+    {
+        mGraph = graph;
+        ReinitTransitions();
+    }
 
 }
 // --- META ---

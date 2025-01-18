@@ -224,13 +224,13 @@ namespace o2
         Ref<_type> FindChildByType(bool searchInChildren = true) const;
 
         // Returns children array @SCRIPTABLE
-		const Vector<Ref<Actor>>& GetChildren() const;
+        const Vector<Ref<Actor>>& GetChildren() const;
 
         // Returns all children actors with their children
-		virtual void GetAllChildrenActors(Vector<Ref<Actor>>& actors);
+        virtual void GetAllChildrenActors(Vector<Ref<Actor>>& actors);
 
-		// Removes child and destroys him if needed @SCRIPTABLE
-		void RemoveChild(const Ref<Actor>& actor, bool withEvent = true);
+        // Removes child and destroys him if needed @SCRIPTABLE
+        void RemoveChild(const Ref<Actor>& actor, bool withEvent = true);
 
         // Removes and destroys all childs @SCRIPTABLE
         void RemoveAllChildren();
@@ -245,8 +245,8 @@ namespace o2
         // Adds new component
         Ref<Component> AddComponent(const Ref<Component>& component);
 
-		// Removes component @SCRIPTABLE
-		void RemoveComponent(const Ref<Component>& component);
+        // Removes component @SCRIPTABLE
+        void RemoveComponent(const Ref<Component>& component);
 
         // Removes all components @SCRIPTABLE
         void RemoveAllComponents();
@@ -437,8 +437,8 @@ namespace o2
         // Called when actor will be destroyed
         virtual void OnDestroy();
 
-		// Called when actor is drawing
-		virtual void OnDraw();
+        // Called when actor is drawing
+        virtual void OnDraw();
 
         // Called on update with frame dt
         virtual void OnUpdate(float dt);
@@ -490,9 +490,9 @@ namespace o2
         Function<void(bool)>       onEnableChanged;         // Enable changing event @EDITOR_IGNORE
         Function<void()>           onChanged;               // Something in actor change event @EDITOR_IGNORE
         Function<void(Ref<Actor>)> onParentChanged;         // Actor change parent event @EDITOR_IGNORE
-		Function<void()>           onChildHierarchyChanged; // Actor childs hierarchy change event @EDITOR_IGNORE
-		Function<void(bool)>       onLockChanged;           // Locking changing event @EDITOR_IGNORE
-		Function<void()>           onNameChanged;           // Name changing event @EDITOR_IGNORE
+        Function<void()>           onChildHierarchyChanged; // Actor childs hierarchy change event @EDITOR_IGNORE
+        Function<void(bool)>       onLockChanged;           // Locking changing event @EDITOR_IGNORE
+        Function<void()>           onNameChanged;           // Name changing event @EDITOR_IGNORE
 
     public:
         struct MakePrototypeCloneVisitor: SourceToTargetMapCloneVisitor

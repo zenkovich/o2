@@ -6,82 +6,82 @@
 
 namespace Editor
 {
-	ActionsList::~ActionsList()
-	{}
+    ActionsList::~ActionsList()
+    {}
 
-	int ActionsList::GetUndoActionsCount() const
-	{
-		return mActions.Count();
-	}
+    int ActionsList::GetUndoActionsCount() const
+    {
+        return mActions.Count();
+    }
 
-	int ActionsList::GetRedoActionsCount() const
-	{
-		return mForwardActions.Count();
-	}
+    int ActionsList::GetRedoActionsCount() const
+    {
+        return mForwardActions.Count();
+    }
 
-	String ActionsList::GetLastActionName() const
-	{
-		if (mActions.Count() > 0)
-			return mActions.Last()->GetName();
+    String ActionsList::GetLastActionName() const
+    {
+        if (mActions.Count() > 0)
+            return mActions.Last()->GetName();
 
-		return "";
-	}
+        return "";
+    }
 
-	String ActionsList::GetNextForwardActionName() const
-	{
-		if (mForwardActions.Count() > 0)
-			return mForwardActions.Last()->GetName();
+    String ActionsList::GetNextForwardActionName() const
+    {
+        if (mForwardActions.Count() > 0)
+            return mForwardActions.Last()->GetName();
 
-		return "";
-	}
+        return "";
+    }
 
-	void ActionsList::UndoAction()
-	{
-		if (mActions.Count() > 0)
-		{
-			mActions.Last()->Undo();
-			mForwardActions.Add(mActions.PopBack());
-		}
-	}
+    void ActionsList::UndoAction()
+    {
+        if (mActions.Count() > 0)
+        {
+            mActions.Last()->Undo();
+            mForwardActions.Add(mActions.PopBack());
+        }
+    }
 
-	void ActionsList::RedoAction()
-	{
-		if (mForwardActions.Count() > 0)
-		{
-			mForwardActions.Last()->Redo();
-			mActions.Add(mForwardActions.PopBack());
-		}
-	}
+    void ActionsList::RedoAction()
+    {
+        if (mForwardActions.Count() > 0)
+        {
+            mForwardActions.Last()->Redo();
+            mActions.Add(mForwardActions.PopBack());
+        }
+    }
 
-	void ActionsList::DoneAction(const Ref<IAction>& action)
-	{
-		mActions.Add(action);
+    void ActionsList::DoneAction(const Ref<IAction>& action)
+    {
+        mActions.Add(action);
 
-		mForwardActions.Clear();
-	}
+        mForwardActions.Clear();
+    }
 
-	void ActionsList::DoneActorPropertyChangeAction(const String& path, const Vector<DataDocument>& prevValue,
-													const Vector<DataDocument>& newValue)
-	{
-		auto action = mmake<PropertyChangeAction>(o2EditorSceneScreen.GetSelectedObjects(), path, prevValue, newValue);
+    void ActionsList::DoneActorPropertyChangeAction(const String& path, const Vector<DataDocument>& prevValue,
+                                                    const Vector<DataDocument>& newValue)
+    {
+        auto action = mmake<PropertyChangeAction>(o2EditorSceneScreen.GetSelectedObjects(), path, prevValue, newValue);
 
-		DoneAction(action);
-	}
+        DoneAction(action);
+    }
 
-	void ActionsList::ResetUndoActions()
-	{
-		mActions.Clear();
-		mForwardActions.Clear();
-	}
+    void ActionsList::ResetUndoActions()
+    {
+        mActions.Clear();
+        mForwardActions.Clear();
+    }
 
-	const Vector<Ref<IAction>> ActionsList::GetUndoActions() const
-	{
-		return mActions;
-	}
+    const Vector<Ref<IAction>> ActionsList::GetUndoActions() const
+    {
+        return mActions;
+    }
 
-	const Vector<Ref<IAction>> ActionsList::GetRedoActions() const
-	{
-		return mForwardActions;
-	}
+    const Vector<Ref<IAction>> ActionsList::GetRedoActions() const
+    {
+        return mForwardActions;
+    }
 
 }

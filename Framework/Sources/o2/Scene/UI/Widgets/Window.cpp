@@ -228,8 +228,8 @@ namespace o2
         mBackCursorArea->isUnderPoint = [&](const Vec2F& point) { return true; };
         mBackCursorArea->interactable = false;
 
-		mWindowCursorArea = mmake<CursorEventsArea>();
-		mWindowCursorArea->isUnderPoint = [&](const Vec2F& point) { return IsUnderPoint(point); };
+        mWindowCursorArea = mmake<CursorEventsArea>();
+        mWindowCursorArea->isUnderPoint = [&](const Vec2F& point) { return IsUnderPoint(point); };
 
         mHeadDragHandle = mmake<CursorEventsArea>();
         mHeadDragHandle->isUnderPoint = [&](const Vec2F& point) { return mHeadDragAreaRect.IsInside(point); };
@@ -375,8 +375,8 @@ namespace o2
     }
 
     void Window::RestoreControls()
-	{
-		auto closeBtn = DynamicCast<Button>(mInternalWidgets.FindOrDefault(
+    {
+        auto closeBtn = DynamicCast<Button>(mInternalWidgets.FindOrDefault(
             [](auto& x) { return x->GetName() == "closeButton" && x->GetType() == TypeOf(Button); }));
 
         if (closeBtn)

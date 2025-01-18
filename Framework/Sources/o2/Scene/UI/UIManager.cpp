@@ -35,9 +35,9 @@
 
 namespace o2
 {
-	DECLARE_SINGLETON(UIManager);
+    DECLARE_SINGLETON(UIManager);
 
-	FORWARD_REF_IMPL(Button);
+    FORWARD_REF_IMPL(Button);
     FORWARD_REF_IMPL(CustomDropDown);
     FORWARD_REF_IMPL(CustomList);
     FORWARD_REF_IMPL(DropDown);

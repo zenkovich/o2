@@ -25,8 +25,8 @@ namespace o2
         // Check equals operator
         SpineAtlasAsset& operator=(const SpineAtlasAsset& asset);
 
-		// Returns spine atlas
-		spine::Atlas* GetSpineAtlas();
+        // Returns spine atlas
+        spine::Atlas* GetSpineAtlas();
 
         // Returns extensions string
         static Vector<String> GetFileExtensions();
@@ -38,7 +38,7 @@ namespace o2
         CLONEABLE_REF(SpineAtlasAsset);
 
     protected:
-		spine::Atlas* mAtlas = nullptr; // Spine atlas
+        spine::Atlas* mAtlas = nullptr; // Spine atlas
 
     protected:
         // Loads asset data, using DataValue and serialization

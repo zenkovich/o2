@@ -10,74 +10,74 @@ using namespace o2;
 
 namespace o2
 {
-	class Actor;
-	class Button;
-	class Component;
-	class Widget;
+    class Actor;
+    class Button;
+    class Component;
+    class Widget;
 }
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(SpoilerWithHead);
+    FORWARD_CLASS_REF(SpoilerWithHead);
 
-	// ---------------------------------------
-	// Editor actor component viewer interface
-	// ---------------------------------------
-	class IActorComponentViewer: public IObject, virtual public RefCounterable
-	{
-	public:
-		// Default constructor. Initializes data widget
-		IActorComponentViewer();
+    // ---------------------------------------
+    // Editor actor component viewer interface
+    // ---------------------------------------
+    class IActorComponentViewer: public IObject, virtual public RefCounterable
+    {
+    public:
+        // Default constructor. Initializes data widget
+        IActorComponentViewer();
 
-		// Virtual destructor
-		virtual ~IActorComponentViewer();
+        // Virtual destructor
+        virtual ~IActorComponentViewer();
 
-		// Sets target actors
-		virtual void SetTargetComponents(const Vector<Ref<Component>>& components);
+        // Sets target actors
+        virtual void SetTargetComponents(const Vector<Ref<Component>>& components);
 
-		// Returns viewing component type 
-		virtual const Type* GetComponentType() const { return nullptr; }
+        // Returns viewing component type 
+        virtual const Type* GetComponentType() const { return nullptr; }
 
-		// Returns data widget
-		virtual Ref<Widget> GetWidget() const;
+        // Returns data widget
+        virtual Ref<Widget> GetWidget() const;
 
-		// Expands view
-		void Expand();
+        // Expands view
+        void Expand();
 
-		// Collapse view
-		void Collapse();
+        // Collapse view
+        void Collapse();
 
-		// Updates all component values
-		virtual void Refresh();
+        // Updates all component values
+        virtual void Refresh();
 
-		// Sets viewer enabled
-		void SetPropertiesEnabled(bool enabled);
+        // Sets viewer enabled
+        void SetPropertiesEnabled(bool enabled);
 
-		// Returns is viewer enabled
-		bool IsPropertiesEnabled() const;
+        // Returns is viewer enabled
+        bool IsPropertiesEnabled() const;
 
-		IOBJECT(IActorComponentViewer);
+        IOBJECT(IActorComponentViewer);
 
-	protected:
-		Vector<Ref<Component>> mTargetComponents; // Target components
+    protected:
+        Vector<Ref<Component>> mTargetComponents; // Target components
 
-		Ref<SpoilerWithHead> mSpoiler;      // Component's spoiler
-		Ref<Button>          mRemoveButton; // Remove component button
+        Ref<SpoilerWithHead> mSpoiler;      // Component's spoiler
+        Ref<Button>          mRemoveButton; // Remove component button
 
-		bool mPropertiesEnabled = false; // Is viewer enabled 
+        bool mPropertiesEnabled = false; // Is viewer enabled 
 
-	protected:
-		// Removes target components
-		void RemoveTargetComponents();
+    protected:
+        // Removes target components
+        void RemoveTargetComponents();
 
-		// Enable viewer event function
-		virtual void OnPropertiesEnabled() {}
+        // Enable viewer event function
+        virtual void OnPropertiesEnabled() {}
 
-		// Disable viewer event function
-		virtual void OnPropertiesDisabled() {}
+        // Disable viewer event function
+        virtual void OnPropertiesDisabled() {}
 
-		friend class ActorViewer;
-	};
+        friend class ActorViewer;
+    };
 }
 // --- META ---
 

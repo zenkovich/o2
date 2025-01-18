@@ -23,40 +23,40 @@ namespace o2
     class ParticlesEmitter: public IRectDrawable, public IAnimation
     {
     public:
-		PROPERTIES(ParticlesEmitter);
+        PROPERTIES(ParticlesEmitter);
 
         PROPERTY(float, duration, SetDuration, GetDuration); // Animation duration property @RANGE(0, 5)
 
-		PROPERTY(Ref<ParticleSource>, particlesSource, SetParticlesSource, GetParticlesSource); // Particles source property @EXPANDED_BY_DEFAULT @DONT_DELETE @DEFAULT_TYPE(o2::SingleSpriteParticleSource) @GROUP("Emission")
+        PROPERTY(Ref<ParticleSource>, particlesSource, SetParticlesSource, GetParticlesSource); // Particles source property @EXPANDED_BY_DEFAULT @DONT_DELETE @DEFAULT_TYPE(o2::SingleSpriteParticleSource) @GROUP("Emission")
 
-		PROPERTY(Ref<ParticlesEmitterShape>, shape, SetShape, GetShape);                    // Emitting shape property @EXPANDED_BY_DEFAULT @DONT_DELETE @DEFAULT_TYPE(o2::CircleParticlesEmitterShape) @GROUP("Emission")
-		PROPERTY(bool, emitFromShell, SetParticlesEmitFromShell, IsParticlesEmitFromShell); // Emitting particles from shell of shape property @GROUP("Emission")
-        		
-		PROPERTY(float, particlesPerSecond, SetParticlesPerSecond, GetParticlesPerSecond); // Amount of particles emitting in one second property @RANGE(0, 100) @GROUP("Emission")
+        PROPERTY(Ref<ParticlesEmitterShape>, shape, SetShape, GetShape);                    // Emitting shape property @EXPANDED_BY_DEFAULT @DONT_DELETE @DEFAULT_TYPE(o2::CircleParticlesEmitterShape) @GROUP("Emission")
+        PROPERTY(bool, emitFromShell, SetParticlesEmitFromShell, IsParticlesEmitFromShell); // Emitting particles from shell of shape property @GROUP("Emission")
+                
+        PROPERTY(float, particlesPerSecond, SetParticlesPerSecond, GetParticlesPerSecond); // Amount of particles emitting in one second property @RANGE(0, 100) @GROUP("Emission")
         PROPERTY(int, maxParticles, SetMaxParticles, GetMaxParticles);                     // Number of maximum particles in emitter property @GROUP("Emission")
-		PROPERTY(float, emissionDuration, SetEmissionDuration, GetEmissionDuration);       // Emitting particles duration in seconds property @RANGE(0, 10) @GROUP("Emission")
-		PROPERTY(float, particlesLifetime, SetParticlesLifetime, GetParticlesLifetime);    // Particles lifetime in seconds property @RANGE(0, 10) @GROUP("Emission")
+        PROPERTY(float, emissionDuration, SetEmissionDuration, GetEmissionDuration);       // Emitting particles duration in seconds property @RANGE(0, 10) @GROUP("Emission")
+        PROPERTY(float, particlesLifetime, SetParticlesLifetime, GetParticlesLifetime);    // Particles lifetime in seconds property @RANGE(0, 10) @GROUP("Emission")
 
-		PROPERTY(bool, particlesRelative, SetParticlesRelativity, IsParticlesRelative); // Is particles relative to emitter @GROUP("Emission")
+        PROPERTY(bool, particlesRelative, SetParticlesRelativity, IsParticlesRelative); // Is particles relative to emitter @GROUP("Emission")
 
-		PROPERTY(float, emittingCoefficient, SetEmittingCoef, GetEmittingCoef); // Particles emitting coefficient property (0...1) @RANGE(0, 1) @GROUP("Emission")
+        PROPERTY(float, emittingCoefficient, SetEmittingCoef, GetEmittingCoef); // Particles emitting coefficient property (0...1) @RANGE(0, 1) @GROUP("Emission")
 
-		PROPERTY(float, prewarmTime, SetPrewarmTime, GetPrewarmTime); // Emitting particles prewarm time property @RANGE(0, 1) @GROUP("Emission")
-		
-		PROPERTY(float, initialAngle, SetInitialAngle, GetInitialAngle);                // Emitting particle angle property in degrees @RANGE(0, 360) @GROUP("Initial parameters") @NAME("Angle")
-		PROPERTY(float, initialAngleRange, SetInitialAngleRange, GetInitialAngleRange); // Emitting particle angle range property in degrees @RANGE(0, 360) @GROUP("Initial parameters") @NAME("Angle range")
-		
-		PROPERTY(float, initialSize, SetInitialSize, GetInitialSize);                // Emitting particle size property @RANGE(0, 3) @GROUP("Initial parameters") @NAME("Size")
-		PROPERTY(float, initialSizeRange, SetInitialSizeRange, GetInitialSizeRange); // Emitting particle size range property @RANGE(0, 2) @GROUP("Initial parameters") @NAME("Size range")
-
-		PROPERTY(float, initialWidthScale, SetInitialWidthScale, GetInitialWidthScale);                // Emitting particle width scale property @RANGE(0, 3) @GROUP("Initial parameters") @NAME("Width scale")
-		PROPERTY(float, initialWidthScaleRange, SetInitialWidthScaleRange, GetInitialWidthScaleRange); // Emitting particle width scale range property @RANGE(0, 2) @GROUP("Initial parameters") @NAME("Width scale range")
-		
-		PROPERTY(float, initialSpeed, SetInitialSpeed, GetInitialSpeed);                // Emitting particle angle speed property in degrees/sec @RANGE(0, 360) @GROUP("Initial parameters") @NAME("Speed")
-		PROPERTY(float, initialSpeedRange, SetInitialSpeedRange, GetInitialSpeedRange); // Emitting particle angle speed range in degrees/sec @RANGE(0, 360) @GROUP("Initial parameters") @NAME("Speed range")
+        PROPERTY(float, prewarmTime, SetPrewarmTime, GetPrewarmTime); // Emitting particles prewarm time property @RANGE(0, 1) @GROUP("Emission")
         
-		PROPERTY(float, initialAngleSpeed, SetInitialAngleSpeed, GetInitialAngleSpeed);                // Emitting particle speed property @RANGE(0, 720) @GROUP("Initial parameters") @NAME("Angle speed")
-		PROPERTY(float, initialAngleSpeedRange, SetInitialAngleSpeedRange, GetInitialAngleSpeedRange); // Emitting particle speed range @RANGE(0, 720) @GROUP("Initial parameters") @NAME("Angle speed range")
+        PROPERTY(float, initialAngle, SetInitialAngle, GetInitialAngle);                // Emitting particle angle property in degrees @RANGE(0, 360) @GROUP("Initial parameters") @NAME("Angle")
+        PROPERTY(float, initialAngleRange, SetInitialAngleRange, GetInitialAngleRange); // Emitting particle angle range property in degrees @RANGE(0, 360) @GROUP("Initial parameters") @NAME("Angle range")
+        
+        PROPERTY(float, initialSize, SetInitialSize, GetInitialSize);                // Emitting particle size property @RANGE(0, 3) @GROUP("Initial parameters") @NAME("Size")
+        PROPERTY(float, initialSizeRange, SetInitialSizeRange, GetInitialSizeRange); // Emitting particle size range property @RANGE(0, 2) @GROUP("Initial parameters") @NAME("Size range")
+
+        PROPERTY(float, initialWidthScale, SetInitialWidthScale, GetInitialWidthScale);                // Emitting particle width scale property @RANGE(0, 3) @GROUP("Initial parameters") @NAME("Width scale")
+        PROPERTY(float, initialWidthScaleRange, SetInitialWidthScaleRange, GetInitialWidthScaleRange); // Emitting particle width scale range property @RANGE(0, 2) @GROUP("Initial parameters") @NAME("Width scale range")
+        
+        PROPERTY(float, initialSpeed, SetInitialSpeed, GetInitialSpeed);                // Emitting particle angle speed property in degrees/sec @RANGE(0, 360) @GROUP("Initial parameters") @NAME("Speed")
+        PROPERTY(float, initialSpeedRange, SetInitialSpeedRange, GetInitialSpeedRange); // Emitting particle angle speed range in degrees/sec @RANGE(0, 360) @GROUP("Initial parameters") @NAME("Speed range")
+        
+        PROPERTY(float, initialAngleSpeed, SetInitialAngleSpeed, GetInitialAngleSpeed);                // Emitting particle speed property @RANGE(0, 720) @GROUP("Initial parameters") @NAME("Angle speed")
+        PROPERTY(float, initialAngleSpeedRange, SetInitialAngleSpeedRange, GetInitialAngleSpeedRange); // Emitting particle speed range @RANGE(0, 720) @GROUP("Initial parameters") @NAME("Angle speed range")
        
         PROPERTY(float, moveDirection, SetEmitParticlesMoveDirection, GetEmitParticlesMoveDirection);                // Emitting particle moving direction in degrees @RANGE(0, 360) @GROUP("Initial parameters")
         PROPERTY(float, moveDirectionRange, SetEmitParticlesMoveDirectionRange, GetEmitParticlesMoveDirectionRange); // Emitting particle moving direction range in degrees property @RANGE(0, 360) @GROUP("Initial parameters")
@@ -86,20 +86,20 @@ namespace o2
         // Stops playing
         void Stop();
 
-		// Sets duration of emitter (emission duration + particles lifetime)
-		void SetDuration(float duration);
+        // Sets duration of emitter (emission duration + particles lifetime)
+        void SetDuration(float duration);
 
-		// Returns duration (emission duration + particles lifetime)
-		float GetDuration() const override;
+        // Returns duration (emission duration + particles lifetime)
+        float GetDuration() const override;
 
-		// Sets time of emitter
-		void SetTime(float time) override;
+        // Sets time of emitter
+        void SetTime(float time) override;
 
         // Sets particles source
-		void SetParticlesSource(const Ref<ParticleSource>& source);
+        void SetParticlesSource(const Ref<ParticleSource>& source);
 
-		// Returns particles source
-		const Ref<ParticleSource>& GetParticlesSource() const;
+        // Returns particles source
+        const Ref<ParticleSource>& GetParticlesSource() const;
 
         // Sets particles emitting coefficient (0...1)
         void SetEmittingCoef(float coef);
@@ -150,17 +150,17 @@ namespace o2
         // Is particles relative to emitter
         bool IsParticlesRelative() const;
 
-		// Sets particles emit from shell
-		void SetParticlesEmitFromShell(bool fromShell);
+        // Sets particles emit from shell
+        void SetParticlesEmitFromShell(bool fromShell);
 
-		// Is particles emit from shell
-		bool IsParticlesEmitFromShell() const;
+        // Is particles emit from shell
+        bool IsParticlesEmitFromShell() const;
 
-		// Sets emitting particles duration in seconds
-		void SetEmissionDuration(float duration);
+        // Sets emitting particles duration in seconds
+        void SetEmissionDuration(float duration);
 
-		// Returns emitting particles duration in seconds
-		float GetEmissionDuration() const;
+        // Returns emitting particles duration in seconds
+        float GetEmissionDuration() const;
 
         // Sets particles lifetime in seconds
         void SetParticlesLifetime(float lifetime);
@@ -174,11 +174,11 @@ namespace o2
         // Returns number of particles emitting per second
         float GetParticlesPerSecond() const;
 
-		// Sets emitting particles prewarm time
-		void SetPrewarmTime(float time);
+        // Sets emitting particles prewarm time
+        void SetPrewarmTime(float time);
 
-		// Returns emitting particles prewarm time
-		float GetPrewarmTime() const;
+        // Returns emitting particles prewarm time
+        float GetPrewarmTime() const;
 
         // Sets emitting particles rotation angle in degrees
         void SetInitialAngle(float angle);
@@ -204,17 +204,17 @@ namespace o2
         // Returns emitting particles size range
         float GetInitialSizeRange() const;
 
-		// Sets emitting particles width scale
-		void SetInitialWidthScale(float scale);
+        // Sets emitting particles width scale
+        void SetInitialWidthScale(float scale);
 
-		// Returns emitting particles width scale
-		float GetInitialWidthScale() const;
+        // Returns emitting particles width scale
+        float GetInitialWidthScale() const;
 
-		// Sets emitting particles width scale range
-		void SetInitialWidthScaleRange(float scaleRange);
+        // Sets emitting particles width scale range
+        void SetInitialWidthScaleRange(float scaleRange);
 
-		// Returns emitting particles width scale range
-		float GetInitialWidthScaleRange() const;
+        // Returns emitting particles width scale range
+        float GetInitialWidthScaleRange() const;
 
         // Sets emitting particles angle speed in degrees/sec
         void SetInitialAngleSpeed(float speed);
@@ -250,24 +250,24 @@ namespace o2
         void SetEmitParticlesMoveDirectionRange(float directionRange);
 
         // Returns emitting particles moving direction angle range in degrees
-		float GetEmitParticlesMoveDirectionRange() const;
+        float GetEmitParticlesMoveDirectionRange() const;
 
-		// Dynamic cast to RefCounterable via IAnimation
-		static Ref<RefCounterable> CastToRefCounterable(const Ref<ParticlesEmitter>& ref);
+        // Dynamic cast to RefCounterable via IAnimation
+        static Ref<RefCounterable> CastToRefCounterable(const Ref<ParticlesEmitter>& ref);
 
         SERIALIZABLE(ParticlesEmitter);
         CLONEABLE_REF(ParticlesEmitter);
 
         REF_COUNTERABLE_IMPL(IRectDrawable, IAnimation);
 
-	protected:
-		Ref<ParticleSource> mParticlesSource = mmake<SingleSpriteParticleSource>(); // Source of particles @SERIALIZABLE 
+    protected:
+        Ref<ParticleSource> mParticlesSource = mmake<SingleSpriteParticleSource>(); // Source of particles @SERIALIZABLE 
 
-		Ref<ParticlesContainer> mParticlesContainer; // Particles container, stores and updates particles, created from particles source
+        Ref<ParticlesContainer> mParticlesContainer; // Particles container, stores and updates particles, created from particles source
 
         Ref<ParticlesEmitterShape> mShape = nullptr; // Particles emitting shape @SERIALIZABLE 
 
-		bool mEmitParticlesFromShell = false; // Emitting particles from shell of shape @SERIALIZABLE
+        bool mEmitParticlesFromShell = false; // Emitting particles from shell of shape @SERIALIZABLE
 
         Vector<Ref<ParticlesEffect>> mEffects; // Particles effect @SERIALIZABLE @EDITOR_PROPERTY @EXPANDED_BY_DEFAULT @DONT_DELETE @INVOKE_ON_CHANGED(OnEffectsListChanged)
                                                                          
@@ -276,14 +276,14 @@ namespace o2
         float mEmittingCoefficient = 1.0f; // Emitting particles number coefficient (0...1) @SERIALIZABLE
         bool  mIsParticlesRelative = true; // Is particles relative to emitter or global @SERIALIZABLE
 
-		float mEmissionDuration = 0.1f; // Emission duration in seconds @SERIALIZABLE
+        float mEmissionDuration = 0.1f; // Emission duration in seconds @SERIALIZABLE
                                                                   
-		float mParticlesLifetime = 0.5f;      // Particles lifetime in seconds @SERIALIZABLE
-		float mParticlesLifetimeRange = 0.0f; // Particles lifetime range in seconds @SERIALIZABLE
+        float mParticlesLifetime = 0.5f;      // Particles lifetime in seconds @SERIALIZABLE
+        float mParticlesLifetimeRange = 0.0f; // Particles lifetime range in seconds @SERIALIZABLE
         float mEmitParticlesPerSecond = 10;   // Number of particles emitting in one second @SERIALIZABLE
 
-		float mPrewarmTime = 0.0f;    // Particles prewarm time (updates particles before start) @SERIALIZABLE
-		float mPrewarmTimeout = 0.0f; // Particles prewarm timeout. Starts from prewarm time and decreases to 0
+        float mPrewarmTime = 0.0f;    // Particles prewarm time (updates particles before start) @SERIALIZABLE
+        float mPrewarmTimeout = 0.0f; // Particles prewarm timeout. Starts from prewarm time and decreases to 0
                                                           
         float mInitialAngle = 0;          // Emitting particles angle in degrees @SERIALIZABLE
         float mInitialAngleRange = 45.0f; // Emitting particles angle in degrees randomize range @SERIALIZABLE
@@ -291,8 +291,8 @@ namespace o2
         float mInitialSize = 1.0f;      // Emitting particles size @SERIALIZABLE
         float mInitialSizeRange = 0.3f; // Emitting particles size randomize range @SERIALIZABLE
 
-		float mInitialWidthScale = 1.0f;  // Emitting particles width scale @SERIALIZABLE
-		float mInitialWidthScaleRange = 0; // Emitting particles width scale randomize range @SERIALIZABLE
+        float mInitialWidthScale = 1.0f;  // Emitting particles width scale @SERIALIZABLE
+        float mInitialWidthScaleRange = 0; // Emitting particles width scale randomize range @SERIALIZABLE
                                                         
         float mInitialSpeed = 10;      // Emitting particles speed @SERIALIZABLE
         float mInitialSpeedRangle = 5; // Emitting particles speed range @SERIALIZABLE
@@ -303,30 +303,30 @@ namespace o2
         float mInitialAngleSpeed = 0;      // Emitting particles angle speed in degrees/sec
         float mInitialAngleSpeedRange = 0; // Emitting particles angle speed range in degrees/sec
 
-		float            mEmitTimeBuffer = 0;    // Emitting next particle time buffer
-		Vector<Particle> mParticles;             // Working particles
-		Vector<int>      mDeadParticles;         // Dead particles indexes
-		int              mNumAliveParticles = 0; // Count of current alive particles
-		Basis            mLastTransform;         // Last transformation
+        float            mEmitTimeBuffer = 0;    // Emitting next particle time buffer
+        Vector<Particle> mParticles;             // Working particles
+        Vector<int>      mDeadParticles;         // Dead particles indexes
+        int              mNumAliveParticles = 0; // Count of current alive particles
+        Basis            mLastTransform;         // Last transformation
 
-	protected:
-		// Called when blend mode was changed
-		void BlendModeChanged() override;
+    protected:
+        // Called when blend mode was changed
+        void BlendModeChanged() override;
 
         // Beginning serialization callback
         void OnSerialize(DataValue& node) const override;
 
-		// Completion deserialization callback, initializes particles container
-		void OnDeserialized(const DataValue& node) override;
+        // Completion deserialization callback, initializes particles container
+        void OnDeserialized(const DataValue& node) override;
 
-		// Beginning serialization delta callback
-		void OnSerializeDelta(DataValue& node, const IObject& origin) const override;
+        // Beginning serialization delta callback
+        void OnSerializeDelta(DataValue& node, const IObject& origin) const override;
 
-		// Completion deserialization delta callback
-		void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;
+        // Completion deserialization delta callback
+        void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;
 
-		// Checks is particles container initialized
-		void CreateParticlesContainer();
+        // Checks is particles container initialized
+        void CreateParticlesContainer();
 
         // Emits particles hen updating
         void UpdateEmitting(float dt);
@@ -335,15 +335,15 @@ namespace o2
         void UpdateEffects(float dt);
 
         // Updates particles
-		void UpdateParticles(float dt);
+        void UpdateParticles(float dt);
         
         // Called when basis was changed, updates particles positions from last transform
-		void BasisChanged() override;
+        void BasisChanged() override;
 
-		// Called when effects list changed, updates emitter reference in effects
-		void OnEffectsListChanged();
+        // Called when effects list changed, updates emitter reference in effects
+        void OnEffectsListChanged();
 
-		// Called when something changed, invalidates baked frames when particles paused
+        // Called when something changed, invalidates baked frames when particles paused
         void OnChanged();
 
         friend class ParticlesEffect;
@@ -351,45 +351,45 @@ namespace o2
 
 #if IS_EDITOR
     public:
-		// Sets particles pause for editor
+        // Sets particles pause for editor
         void SetParticlesPause(bool paused);
 
     protected:
         struct BakedFrame
         {
-			Vector<Particle> particles;             // Baked particles frame
-			Vector<int>      deadParticles;         // Dead particles indexes
-			int              numAliveParticles = 0; // Count of current alive particles
-			float            emitTimeBuffer = 0;    // Emitting next particle time buffer
+            Vector<Particle> particles;             // Baked particles frame
+            Vector<int>      deadParticles;         // Dead particles indexes
+            int              numAliveParticles = 0; // Count of current alive particles
+            float            emitTimeBuffer = 0;    // Emitting next particle time buffer
 
-			bool operator==(const BakedFrame& other) const { return false; }
+            bool operator==(const BakedFrame& other) const { return false; }
         };
 
     protected:
-		static int mBakedFPS; // Baked particles frames per second
+        static int mBakedFPS; // Baked particles frames per second
 
-		Vector<BakedFrame> mBakedFrames; // Baked particles frames for editor
+        Vector<BakedFrame> mBakedFrames; // Baked particles frames for editor
 
-		size_t mRandomSeed = 0; // Random seed for particles emitting
+        size_t mRandomSeed = 0; // Random seed for particles emitting
 
-		bool mIsUpdating = false;      // Is updating particles now. Used to detect separated Evaluate calls when time changed
-		bool mParticlesPaused = false; // Is particles paused for editor
+        bool mIsUpdating = false;      // Is updating particles now. Used to detect separated Evaluate calls when time changed
+        bool mParticlesPaused = false; // Is particles paused for editor
 
-	protected:
-		// Invalidates baked frames
-		void InvalidateBakedFrames();
+    protected:
+        // Invalidates baked frames
+        void InvalidateBakedFrames();
 
-		// Called when updated or time changed, updates baked particles for editor
-		void Evaluate() override;
+        // Called when updated or time changed, updates baked particles for editor
+        void Evaluate() override;
 
-		// Returns baked frame index by time
-		int GetBakedFrameIndex(float time) const;
+        // Returns baked frame index by time
+        int GetBakedFrameIndex(float time) const;
 
-		// Checks that baked enough frames
-		void CheckBakedFrames(int maxFrameIdx);
+        // Checks that baked enough frames
+        void CheckBakedFrames(int maxFrameIdx);
 
-		// Restores baked frame by index
-		void RestoreBakedFrame(int frameIdx);
+        // Restores baked frame by index
+        void RestoreBakedFrame(int frameIdx);
 #endif
     };
 

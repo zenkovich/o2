@@ -40,8 +40,8 @@ namespace o2
 
         ACCESSOR(Ref<Widget>, childWidget, String, GetChildWidget, GetAllChilds);                // Widget child accessor by path like "child/subchild/somechild"
         ACCESSOR(Ref<Widget>, internalWidget, String, GetInternalWidget, GetAllInternalWidgets); // Widget internals accessor by path like "child/subchild/somechild"
-		ACCESSOR(Ref<WidgetLayer>, layer, String, GetLayer, GetAllLayers);                       // Widget layer accessor by path like "layer/sublayer/target"
-		ACCESSOR(Ref<WidgetState>, state, String, GetStateObject, GetAllStates);                 // Widget state accessor by name
+        ACCESSOR(Ref<WidgetLayer>, layer, String, GetLayer, GetAllLayers);                       // Widget layer accessor by path like "layer/sublayer/target"
+        ACCESSOR(Ref<WidgetState>, state, String, GetStateObject, GetAllStates);                 // Widget state accessor by name
 
     public:
         WidgetLayout* const layout; // Widget layout @EDITOR_IGNORE

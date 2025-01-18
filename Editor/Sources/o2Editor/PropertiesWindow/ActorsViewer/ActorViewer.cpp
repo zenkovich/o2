@@ -24,317 +24,317 @@
 
 namespace Editor
 {
-	ActorViewer::ActorViewer(RefCounter* refCounter):
-		IPropertiesViewer(refCounter)
-	{
-		PushEditorScopeOnStack scope;
+    ActorViewer::ActorViewer(RefCounter* refCounter):
+        IPropertiesViewer(refCounter)
+    {
+        PushEditorScopeOnStack scope;
 
-		// Create viewers
-		mHeaderViewer = mmake<DefaultActorHeaderViewer>();
-		mTransformViewer = mmake<DefaultActorTransformViewer>();
-		mDefaultComponentViewer = mmake<DefaultActorComponentViewer>();
-		mDefaultActorPropertiesViewer = mmake<DefaultActorPropertiesViewer>();
+        // Create viewers
+        mHeaderViewer = mmake<DefaultActorHeaderViewer>();
+        mTransformViewer = mmake<DefaultActorTransformViewer>();
+        mDefaultComponentViewer = mmake<DefaultActorComponentViewer>();
+        mDefaultActorPropertiesViewer = mmake<DefaultActorPropertiesViewer>();
 
-		// Create available component and actors viewers
-		auto componentsViewersTypes = TypeOf(IActorComponentViewer).GetDerivedTypes();
-		for (auto& type : componentsViewersTypes)
-		{
-			if (type->GetName().Contains("TActorComponentViewer"))
-				continue;
+        // Create available component and actors viewers
+        auto componentsViewersTypes = TypeOf(IActorComponentViewer).GetDerivedTypes();
+        for (auto& type : componentsViewersTypes)
+        {
+            if (type->GetName().Contains("TActorComponentViewer"))
+                continue;
 
-			mAvailableComponentsViewers.Add(DynamicCast<IActorComponentViewer>(type->CreateSampleRef()));
-		}
+            mAvailableComponentsViewers.Add(DynamicCast<IActorComponentViewer>(type->CreateSampleRef()));
+        }
 
-		auto actorPropertiessViewersTypes = TypeOf(IActorPropertiesViewer).GetDerivedTypes();
-		for (auto& type : actorPropertiessViewersTypes)
-			mAvailableActorPropertiesViewers.Add(DynamicCast<IActorPropertiesViewer>(type->CreateSampleRef()));
+        auto actorPropertiessViewersTypes = TypeOf(IActorPropertiesViewer).GetDerivedTypes();
+        for (auto& type : actorPropertiessViewersTypes)
+            mAvailableActorPropertiesViewers.Add(DynamicCast<IActorPropertiesViewer>(type->CreateSampleRef()));
 
-		// Initialize content widget and viewers layout
-		mContentWidget = mmake<Widget>();
-		mContentWidget->name = "content";
-		*mContentWidget->layout = WidgetLayout::BothStretch();
+        // Initialize content widget and viewers layout
+        mContentWidget = mmake<Widget>();
+        mContentWidget->name = "content";
+        *mContentWidget->layout = WidgetLayout::BothStretch();
 
-		auto scrollArea = o2UI.CreateScrollArea("backless");
-		scrollArea->SetViewLayout(Layout::BothStretch(0, 0, 15, 0));
-		scrollArea->SetClippingLayout(Layout::BothStretch());
-		scrollArea->SetEnableScrollsHiding(false);
-		scrollArea->name = "actors scroll area";
-		*scrollArea->layout = WidgetLayout::BothStretch(0, 40, 0, 0);
-		mContentWidget->AddChild(scrollArea);
+        auto scrollArea = o2UI.CreateScrollArea("backless");
+        scrollArea->SetViewLayout(Layout::BothStretch(0, 0, 15, 0));
+        scrollArea->SetClippingLayout(Layout::BothStretch());
+        scrollArea->SetEnableScrollsHiding(false);
+        scrollArea->name = "actors scroll area";
+        *scrollArea->layout = WidgetLayout::BothStretch(0, 40, 0, 0);
+        mContentWidget->AddChild(scrollArea);
 
-		mViewersLayout = o2UI.CreateVerLayout();
-		mViewersLayout->name = "viewers layout";
-		mViewersLayout->spacing = 0.0f;
-		mViewersLayout->border = BorderF();
-		mViewersLayout->expandHeight = false;
-		mViewersLayout->expandWidth = true;
-		mViewersLayout->fitByChildren = true;
-		mViewersLayout->baseCorner = BaseCorner::Top;
-		*mViewersLayout->layout = WidgetLayout::BothStretch();
-		scrollArea->AddChild(mViewersLayout);
+        mViewersLayout = o2UI.CreateVerLayout();
+        mViewersLayout->name = "viewers layout";
+        mViewersLayout->spacing = 0.0f;
+        mViewersLayout->border = BorderF();
+        mViewersLayout->expandHeight = false;
+        mViewersLayout->expandWidth = true;
+        mViewersLayout->fitByChildren = true;
+        mViewersLayout->baseCorner = BaseCorner::Top;
+        *mViewersLayout->layout = WidgetLayout::BothStretch();
+        scrollArea->AddChild(mViewersLayout);
 
-		// Initialize add component panel
-		mAddComponentPanel = mmake<AddComponentPanel>(Ref(this));
-		mAddComponentPanel->name = "add component";
-		*mAddComponentPanel->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 40, 0);
-		mContentWidget->AddChild(mAddComponentPanel);
+        // Initialize add component panel
+        mAddComponentPanel = mmake<AddComponentPanel>(Ref(this));
+        mAddComponentPanel->name = "add component";
+        *mAddComponentPanel->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 40, 0);
+        mContentWidget->AddChild(mAddComponentPanel);
 
-		auto addComponentAnim = AnimationClip::EaseInOut<float>("child/add component/layout/offsetTop",
-																40, 400, 0.4f);
+        auto addComponentAnim = AnimationClip::EaseInOut<float>("child/add component/layout/offsetTop",
+                                                                40, 400, 0.4f);
 
-		*addComponentAnim->AddTrack<float>("child/actors scroll area/layout/offsetBottom") =
-			AnimationTrack<float>::EaseInOut(40, 400, 0.4f);
+        *addComponentAnim->AddTrack<float>("child/actors scroll area/layout/offsetBottom") =
+            AnimationTrack<float>::EaseInOut(40, 400, 0.4f);
 
-		mContentWidget->AddState("add component", addComponentAnim);
+        mContentWidget->AddState("add component", addComponentAnim);
 
-		mAddComponentPanel->onCursorReleased = [&](auto curs) { mContentWidget->SetState("add component", true); };
-		mAddComponentPanel->onCursorPressedOutside = [&](auto curs) { mContentWidget->SetState("add component", false); };
+        mAddComponentPanel->onCursorReleased = [&](auto curs) { mContentWidget->SetState("add component", true); };
+        mAddComponentPanel->onCursorPressedOutside = [&](auto curs) { mContentWidget->SetState("add component", false); };
 
-		o2Scene.onObjectsChanged += THIS_FUNC(OnSceneObjectsChanged);
-	}
+        o2Scene.onObjectsChanged += THIS_FUNC(OnSceneObjectsChanged);
+    }
 
-	ActorViewer::~ActorViewer()
-	{
-		o2Scene.onObjectsChanged -= THIS_FUNC(OnSceneObjectsChanged);
-	}
+    ActorViewer::~ActorViewer()
+    {
+        o2Scene.onObjectsChanged -= THIS_FUNC(OnSceneObjectsChanged);
+    }
 
-	const Type* ActorViewer::GetViewingObjectType() const
-	{
-		return &TypeOf(Actor);
-	}
+    const Type* ActorViewer::GetViewingObjectType() const
+    {
+        return &TypeOf(Actor);
+    }
 
-	void ActorViewer::SetActorHeaderViewer(const Ref<IActorHeaderViewer>& viewer)
-	{
-		mHeaderViewer = viewer;
-	}
+    void ActorViewer::SetActorHeaderViewer(const Ref<IActorHeaderViewer>& viewer)
+    {
+        mHeaderViewer = viewer;
+    }
 
-	void ActorViewer::SetActorTransformViewer(const Ref<IActorTransformViewer>& viewer)
-	{
-		mTransformViewer = viewer;
-	}
+    void ActorViewer::SetActorTransformViewer(const Ref<IActorTransformViewer>& viewer)
+    {
+        mTransformViewer = viewer;
+    }
 
-	void ActorViewer::AddComponentViewerType(const Ref<IActorComponentViewer>& viewer)
-	{
-		mAvailableComponentsViewers.Add(viewer);
-	}
+    void ActorViewer::AddComponentViewerType(const Ref<IActorComponentViewer>& viewer)
+    {
+        mAvailableComponentsViewers.Add(viewer);
+    }
 
-	void ActorViewer::AddActorPropertiesViewerType(const Ref<IActorPropertiesViewer>& viewer)
-	{
-		mAvailableActorPropertiesViewers.Add(viewer);
-	}
+    void ActorViewer::AddActorPropertiesViewerType(const Ref<IActorPropertiesViewer>& viewer)
+    {
+        mAvailableActorPropertiesViewers.Add(viewer);
+    }
 
-	void ActorViewer::Refresh()
-	{
-		PushEditorScopeOnStack scope;
+    void ActorViewer::Refresh()
+    {
+        PushEditorScopeOnStack scope;
 
-		if (mTargetActors.IsEmpty())
-			return;
+        if (mTargetActors.IsEmpty())
+            return;
 
-		auto currentComponentGroups = GetGroupedComponents();
-		if (mComponentGroupsTypes != currentComponentGroups)
-		{
-			SetTargets(mTargetActors.DynamicCast<IObject*>());
-			return;
-		}
+        auto currentComponentGroups = GetGroupedComponents();
+        if (mComponentGroupsTypes != currentComponentGroups)
+        {
+            SetTargets(mTargetActors.DynamicCast<IObject*>());
+            return;
+        }
 
-		for (auto& viewer : mComponentsViewers)
-			viewer->Refresh();
+        for (auto& viewer : mComponentsViewers)
+            viewer->Refresh();
 
-		if (mActorPropertiesViewer)
-			mActorPropertiesViewer->Refresh();
+        if (mActorPropertiesViewer)
+            mActorPropertiesViewer->Refresh();
 
-		mTransformViewer->Refresh();
-		mHeaderViewer->Refresh();
-	}
+        mTransformViewer->Refresh();
+        mHeaderViewer->Refresh();
+    }
 
-	void ActorViewer::OnSceneObjectsChanged(const Vector<Ref<SceneEditableObject>>& objects)
-	{
-		Refresh();
-	}
+    void ActorViewer::OnSceneObjectsChanged(const Vector<Ref<SceneEditableObject>>& objects)
+    {
+        Refresh();
+    }
 
-	void ActorViewer::SetTargets(const Vector<IObject*>& targets)
-	{
-		PushEditorScopeOnStack scope;
+    void ActorViewer::SetTargets(const Vector<IObject*>& targets)
+    {
+        PushEditorScopeOnStack scope;
 
-		mTargetActors = targets.Convert<Actor*>([](auto x) { return dynamic_cast<Actor*>(x); });
+        mTargetActors = targets.Convert<Actor*>([](auto x) { return dynamic_cast<Actor*>(x); });
 
-		// clear 
-		mViewersLayout->RemoveAllChildren();
+        // clear 
+        mViewersLayout->RemoveAllChildren();
 
-		// rebuild
-		Vector<Ref<Widget>> viewersWidgets;
-		viewersWidgets.Add(mHeaderViewer->GetWidget());
-		mHeaderViewer->SetTargetActors(mTargetActors);
+        // rebuild
+        Vector<Ref<Widget>> viewersWidgets;
+        viewersWidgets.Add(mHeaderViewer->GetWidget());
+        mHeaderViewer->SetTargetActors(mTargetActors);
 
-		viewersWidgets.Add(mTransformViewer->GetWidget());
-		mTransformViewer->SetTargetActors(mTargetActors);
+        viewersWidgets.Add(mTransformViewer->GetWidget());
+        mTransformViewer->SetTargetActors(mTargetActors);
 
-		SetTargetsActorProperties(targets, viewersWidgets);
-		SetTargetsComponents(targets, viewersWidgets);
-		mViewersLayout->AddChildren(DynamicCastVector<Actor>(viewersWidgets));
-	}
+        SetTargetsActorProperties(targets, viewersWidgets);
+        SetTargetsComponents(targets, viewersWidgets);
+        mViewersLayout->AddChildren(DynamicCastVector<Actor>(viewersWidgets));
+    }
 
-	void ActorViewer::SetTargetsActorProperties(const Vector<IObject*>& targets, Vector<Ref<Widget>>& viewersWidgets)
-	{
-		PushEditorScopeOnStack scope;
+    void ActorViewer::SetTargetsActorProperties(const Vector<IObject*>& targets, Vector<Ref<Widget>>& viewersWidgets)
+    {
+        PushEditorScopeOnStack scope;
 
-		const Type* type = &mTargetActors[0]->GetType();
-		bool isAllSameType = mTargetActors.All([&](Actor* x) { return &x->GetType() == type; });
+        const Type* type = &mTargetActors[0]->GetType();
+        bool isAllSameType = mTargetActors.All([&](Actor* x) { return &x->GetType() == type; });
 
-		if (!isAllSameType)
-			return;
+        if (!isAllSameType)
+            return;
 
-		bool usingDefaultViewer = false;
+        bool usingDefaultViewer = false;
 
-		auto viewerSample = mAvailableActorPropertiesViewers.FindOrDefault([&](auto& x) {
-			return x->GetActorType() == type;
+        auto viewerSample = mAvailableActorPropertiesViewers.FindOrDefault([&](auto& x) {
+            return x->GetActorType() == type;
         });
 
-		if (!viewerSample)
-		{
-			viewerSample = mDefaultActorPropertiesViewer;
-			usingDefaultViewer = true;
-		}
+        if (!viewerSample)
+        {
+            viewerSample = mDefaultActorPropertiesViewer;
+            usingDefaultViewer = true;
+        }
 
-		if (!mActorPropertiesViewersPool.ContainsKey(type))
-		{
-			PushEditorScopeOnStack scope;
+        if (!mActorPropertiesViewersPool.ContainsKey(type))
+        {
+            PushEditorScopeOnStack scope;
 
-			auto newViewer = DynamicCast<IActorPropertiesViewer>(viewerSample->GetType().CreateSampleRef());
+            auto newViewer = DynamicCast<IActorPropertiesViewer>(viewerSample->GetType().CreateSampleRef());
 
-			if (usingDefaultViewer)
-				DynamicCast<DefaultActorPropertiesViewer>(newViewer)->SpecializeActorType(type);
+            if (usingDefaultViewer)
+                DynamicCast<DefaultActorPropertiesViewer>(newViewer)->SpecializeActorType(type);
 
-			mActorPropertiesViewersPool.Add(type, newViewer);
-		}
+            mActorPropertiesViewersPool.Add(type, newViewer);
+        }
 
-		auto propertiesViewer = mActorPropertiesViewersPool[type];
+        auto propertiesViewer = mActorPropertiesViewersPool[type];
 
-		propertiesViewer->SetTargetActors(mTargetActors);
+        propertiesViewer->SetTargetActors(mTargetActors);
 
-		if (!propertiesViewer->IsEmpty())
-			viewersWidgets.Add(propertiesViewer->GetWidget());
+        if (!propertiesViewer->IsEmpty())
+            viewersWidgets.Add(propertiesViewer->GetWidget());
 
-		mActorPropertiesViewer = propertiesViewer;
-	}
+        mActorPropertiesViewer = propertiesViewer;
+    }
 
-	Vector<Pair<const Type*, Vector<Ref<Component>>>> ActorViewer::GetGroupedComponents() const
-	{
-		Vector<Pair<const Type*, Vector<Ref<Component>>>> res;
+    Vector<Pair<const Type*, Vector<Ref<Component>>>> ActorViewer::GetGroupedComponents() const
+    {
+        Vector<Pair<const Type*, Vector<Ref<Component>>>> res;
 
-		for (auto& actor : mTargetActors)
-		{
-			Map<const Type*, int> offsets;
-			for (auto& component : actor->GetComponents())
-			{
-				auto type = &component->GetType();
-				auto offset = offsets[type];
-				offsets[type]++;
+        for (auto& actor : mTargetActors)
+        {
+            Map<const Type*, int> offsets;
+            for (auto& component : actor->GetComponents())
+            {
+                auto type = &component->GetType();
+                auto offset = offsets[type];
+                offsets[type]++;
 
-				Vector<Ref<Component>>* list = nullptr;
-				for (int i = 0; i < res.Count(); i++)
-				{
-					if (res[i].first == type)
-					{
-						if (offset == 0)
-						{
-							list = &res[i].second;
-							break;
-						}
-						else
-							offset--;
-					}
-				}
+                Vector<Ref<Component>>* list = nullptr;
+                for (int i = 0; i < res.Count(); i++)
+                {
+                    if (res[i].first == type)
+                    {
+                        if (offset == 0)
+                        {
+                            list = &res[i].second;
+                            break;
+                        }
+                        else
+                            offset--;
+                    }
+                }
 
-				if (!list)
-				{
-					res.Add({ type, {} });
-					list = &res.Last().second;
-				}
+                if (!list)
+                {
+                    res.Add({ type, {} });
+                    list = &res.Last().second;
+                }
 
-				list->Add(component);
-			}
-		}
+                list->Add(component);
+            }
+        }
 
-		return res;
-	}
+        return res;
+    }
 
-	void ActorViewer::SetTargetsComponents(const Vector<IObject*>& targets, Vector<Ref<Widget>>& viewersWidgets)
-	{
-		PushEditorScopeOnStack scope;
+    void ActorViewer::SetTargetsComponents(const Vector<IObject*>& targets, Vector<Ref<Widget>>& viewersWidgets)
+    {
+        PushEditorScopeOnStack scope;
 
-		auto lastComponentViewers = mComponentsViewers;
+        auto lastComponentViewers = mComponentsViewers;
 
-		Vector<Ref<IActorComponentViewer>> enableComponentViewers;
+        Vector<Ref<IActorComponentViewer>> enableComponentViewers;
 
-		for (auto& viewer : mComponentsViewers)
-			mComponentViewersPool[viewer->GetComponentType()].Add(viewer);
+        for (auto& viewer : mComponentsViewers)
+            mComponentViewersPool[viewer->GetComponentType()].Add(viewer);
 
-		mComponentsViewers.Clear();
+        mComponentsViewers.Clear();
 
-		mComponentGroupsTypes = GetGroupedComponents();
-		for (auto& pair : mComponentGroupsTypes)
-		{
-			auto componentType = pair.first;
-			auto viewerSample = mAvailableComponentsViewers.FindOrDefault([&](auto& x) {
-				return x->GetComponentType() == componentType; });
+        mComponentGroupsTypes = GetGroupedComponents();
+        for (auto& pair : mComponentGroupsTypes)
+        {
+            auto componentType = pair.first;
+            auto viewerSample = mAvailableComponentsViewers.FindOrDefault([&](auto& x) {
+                return x->GetComponentType() == componentType; });
 
-			if (!viewerSample)
-				viewerSample = mDefaultComponentViewer;
+            if (!viewerSample)
+                viewerSample = mDefaultComponentViewer;
 
-			if (!mComponentViewersPool.ContainsKey(componentType) || mComponentViewersPool[componentType].IsEmpty())
-			{
-				if (!mComponentViewersPool.ContainsKey(componentType))
-					mComponentViewersPool.Add(componentType, {});
+            if (!mComponentViewersPool.ContainsKey(componentType) || mComponentViewersPool[componentType].IsEmpty())
+            {
+                if (!mComponentViewersPool.ContainsKey(componentType))
+                    mComponentViewersPool.Add(componentType, {});
 
-				auto newViewer = DynamicCast<IActorComponentViewer>(viewerSample->GetType().CreateSampleRef());
+                auto newViewer = DynamicCast<IActorComponentViewer>(viewerSample->GetType().CreateSampleRef());
 
-				mComponentViewersPool[componentType].Add(newViewer);
-			}
+                mComponentViewersPool[componentType].Add(newViewer);
+            }
 
-			auto componentViewer = mComponentViewersPool[componentType].PopBack();
+            auto componentViewer = mComponentViewersPool[componentType].PopBack();
 
-			viewersWidgets.Add(componentViewer->GetWidget());
-			mComponentsViewers.Add(componentViewer);
+            viewersWidgets.Add(componentViewer->GetWidget());
+            mComponentsViewers.Add(componentViewer);
 
-			componentViewer->SetTargetComponents(pair.second);
+            componentViewer->SetTargetComponents(pair.second);
 
-			if (lastComponentViewers.Contains(componentViewer))
-				lastComponentViewers.Remove(componentViewer);
-			else
-				enableComponentViewers.Add(componentViewer);
-		}
+            if (lastComponentViewers.Contains(componentViewer))
+                lastComponentViewers.Remove(componentViewer);
+            else
+                enableComponentViewers.Add(componentViewer);
+        }
 
-		for (auto& viewer : lastComponentViewers)
-			viewer->SetPropertiesEnabled(false);
+        for (auto& viewer : lastComponentViewers)
+            viewer->SetPropertiesEnabled(false);
 
-		for (auto& viewer : enableComponentViewers)
-			viewer->SetPropertiesEnabled(true);
-	}
+        for (auto& viewer : enableComponentViewers)
+            viewer->SetPropertiesEnabled(true);
+    }
 
-	void ActorViewer::OnPropertiesEnabled()
-	{
-		mHeaderViewer->SetPropertiesEnabled(true);
-		mTransformViewer->SetPropertiesEnabled(true);
+    void ActorViewer::OnPropertiesEnabled()
+    {
+        mHeaderViewer->SetPropertiesEnabled(true);
+        mTransformViewer->SetPropertiesEnabled(true);
 
-		if (mActorPropertiesViewer)
-			mActorPropertiesViewer->SetPropertiesEnabled(true);
+        if (mActorPropertiesViewer)
+            mActorPropertiesViewer->SetPropertiesEnabled(true);
 
-		mComponentsViewers.ForEach([](auto x) { x->SetPropertiesEnabled(true); });
-	}
+        mComponentsViewers.ForEach([](auto x) { x->SetPropertiesEnabled(true); });
+    }
 
-	void ActorViewer::OnPropertiesDisabled()
-	{
-		mHeaderViewer->SetPropertiesEnabled(false);
-		mTransformViewer->SetPropertiesEnabled(false);
+    void ActorViewer::OnPropertiesDisabled()
+    {
+        mHeaderViewer->SetPropertiesEnabled(false);
+        mTransformViewer->SetPropertiesEnabled(false);
 
-		if (mActorPropertiesViewer)
-			mActorPropertiesViewer->SetPropertiesEnabled(false);
+        if (mActorPropertiesViewer)
+            mActorPropertiesViewer->SetPropertiesEnabled(false);
 
-		mComponentsViewers.ForEach([](auto x) { x->SetPropertiesEnabled(false); });
+        mComponentsViewers.ForEach([](auto x) { x->SetPropertiesEnabled(false); });
 
-		mTargetActors.Clear();
-	}
+        mTargetActors.Clear();
+    }
 
 }
 // --- META ---

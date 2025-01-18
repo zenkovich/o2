@@ -10,18 +10,18 @@ namespace o2
     {}
 
     AnimationSubTrack::AnimationSubTrack(const AnimationSubTrack& other):
-		IAnimationTrack(other), mSubTrackBeginTime(other.mSubTrackBeginTime), mSubTrackDuration(other.mSubTrackDuration),
-		mSubTrackBeginOffset(other.mSubTrackBeginOffset), mSubTrackEndOffset(other.mSubTrackEndOffset)
-	{}
+        IAnimationTrack(other), mSubTrackBeginTime(other.mSubTrackBeginTime), mSubTrackDuration(other.mSubTrackDuration),
+        mSubTrackBeginOffset(other.mSubTrackBeginOffset), mSubTrackEndOffset(other.mSubTrackEndOffset)
+    {}
 
     AnimationSubTrack& AnimationSubTrack::operator=(const AnimationSubTrack& other)
     {
         IAnimationTrack::operator=(other);
 
-		mSubTrackBeginTime = other.mSubTrackBeginTime;
-		mSubTrackDuration = other.mSubTrackDuration;
-		mSubTrackBeginOffset = other.mSubTrackBeginOffset;
-		mSubTrackEndOffset = other.mSubTrackEndOffset;
+        mSubTrackBeginTime = other.mSubTrackBeginTime;
+        mSubTrackDuration = other.mSubTrackDuration;
+        mSubTrackBeginOffset = other.mSubTrackBeginOffset;
+        mSubTrackEndOffset = other.mSubTrackEndOffset;
 
         onKeysChanged();
 
@@ -38,48 +38,48 @@ namespace o2
         return mmake<Player>();
     }
 
-	void AnimationSubTrack::SetBeginTime(float beginTime)
-	{
-		mSubTrackBeginTime = beginTime;
+    void AnimationSubTrack::SetBeginTime(float beginTime)
+    {
+        mSubTrackBeginTime = beginTime;
 
-		onKeysChanged();
-	}
+        onKeysChanged();
+    }
 
-	float AnimationSubTrack::GetBeginTime() const
-	{
-		return mSubTrackBeginTime;
-	}
+    float AnimationSubTrack::GetBeginTime() const
+    {
+        return mSubTrackBeginTime;
+    }
 
-	float AnimationSubTrack::GetSubTrackDuration() const
-	{
-		return mSubTrackDuration;
-	}
+    float AnimationSubTrack::GetSubTrackDuration() const
+    {
+        return mSubTrackDuration;
+    }
 
-	void AnimationSubTrack::SetSubTrackBeginOffset(float offset)
-	{
-		mSubTrackBeginOffset = offset;
+    void AnimationSubTrack::SetSubTrackBeginOffset(float offset)
+    {
+        mSubTrackBeginOffset = offset;
 
-		onKeysChanged();
-	}
+        onKeysChanged();
+    }
 
-	float AnimationSubTrack::GetSubTrackBeginOffset() const
-	{
-		return mSubTrackBeginOffset;
-	}
+    float AnimationSubTrack::GetSubTrackBeginOffset() const
+    {
+        return mSubTrackBeginOffset;
+    }
 
-	void AnimationSubTrack::SetSubTrackEndOffset(float offset)
-	{
-		mSubTrackEndOffset = offset;
+    void AnimationSubTrack::SetSubTrackEndOffset(float offset)
+    {
+        mSubTrackEndOffset = offset;
 
-		onKeysChanged();
-	}
+        onKeysChanged();
+    }
 
-	float AnimationSubTrack::GetSubTrackEndOffset() const
-	{
-		return mSubTrackEndOffset;
-	}
+    float AnimationSubTrack::GetSubTrackEndOffset() const
+    {
+        return mSubTrackEndOffset;
+    }
 
-	void AnimationSubTrack::OnDeserialized(const DataValue& node)
+    void AnimationSubTrack::OnDeserialized(const DataValue& node)
     {}
 
     AnimationSubTrack::Player::Player():
@@ -92,7 +92,7 @@ namespace o2
     void AnimationSubTrack::Player::SetTarget(IAnimation* value)
     {
         mTarget = value;
-		mTarget->SetSubControlled(true);
+        mTarget->SetSubControlled(true);
 
         mTargetDelegate.Clear();
 
@@ -101,12 +101,12 @@ namespace o2
 
     void AnimationSubTrack::Player::SetTarget(IAnimation* value, const Function<void()>& changeEvent)
     {
-		mTarget = value;
-		mTarget->SetSubControlled(true);
+        mTarget = value;
+        mTarget->SetSubControlled(true);
 
         mTargetDelegate = changeEvent;
 
-		UpdateSubTrackDuration();
+        UpdateSubTrackDuration();
     }
 
     void AnimationSubTrack::Player::SetTargetDelegate(const Function<void()>& changeEvent)
@@ -120,10 +120,10 @@ namespace o2
         IPlayer::SetTrack(track);
     }
 
-	void* AnimationSubTrack::Player::AdjustTargetType(void* target, const Type& type)
-	{
-		if (type == TypeOf(IAnimation))
-			return target;
+    void* AnimationSubTrack::Player::AdjustTargetType(void* target, const Type& type)
+    {
+        if (type == TypeOf(IAnimation))
+            return target;
 
         const Type* originalType = &type;
         if (originalType->GetUsage() == Type::Usage::StringAccessor)
@@ -135,21 +135,21 @@ namespace o2
         }
         else if (originalType->GetUsage() == Type::Usage::Reference)
         {
-			auto refType = dynamic_cast<const ReferenceType*>(originalType);
+            auto refType = dynamic_cast<const ReferenceType*>(originalType);
             target = refType->GetObjectRawPtr(target);
             originalType = refType->GetBaseType();
         }
 
-		if (auto objectOriginalType = dynamic_cast<const ObjectType*>(originalType))
-		{
+        if (auto objectOriginalType = dynamic_cast<const ObjectType*>(originalType))
+        {
             IObject* iobject = objectOriginalType->DynamicCastToIObject(target);
-			return dynamic_cast<IAnimation*>(iobject);
-		}
+            return dynamic_cast<IAnimation*>(iobject);
+        }
 
         return nullptr;
-	}
+    }
 
-	const Ref<AnimationSubTrack>& AnimationSubTrack::Player::GetTrackT() const
+    const Ref<AnimationSubTrack>& AnimationSubTrack::Player::GetTrackT() const
     {
         return mTrack;
     }
@@ -164,7 +164,7 @@ namespace o2
         SetTarget((IAnimation*)target, changeEvent);
     }
 
-	void AnimationSubTrack::Player::SetTargetProxy(const Ref<IAbstractValueProxy>& targetProxy)
+    void AnimationSubTrack::Player::SetTargetProxy(const Ref<IAbstractValueProxy>& targetProxy)
     {}
 
     void AnimationSubTrack::Player::SetTrack(const Ref<IAnimationTrack>& track)
@@ -187,7 +187,7 @@ namespace o2
             if (mTime >= mTrack->mSubTrackBeginTime + mTrack->mSubTrackBeginOffset &&
                 mTime <= mTrack->mSubTrackBeginTime + mTrack->mSubTrackDuration - mTrack->mSubTrackEndOffset)
             {
-				float subTrackTime = mTime - mTrack->mSubTrackBeginTime;
+                float subTrackTime = mTime - mTrack->mSubTrackBeginTime;
                 mTarget->SetTime(subTrackTime);
             }
         }
@@ -200,11 +200,11 @@ namespace o2
         state->mOwner.Lock()->RegSubTrack(Ref(this), path, state);
     }
 
-	void AnimationSubTrack::Player::UpdateSubTrackDuration()
-	{
-		if (mTrack && mTarget)
+    void AnimationSubTrack::Player::UpdateSubTrackDuration()
+    {
+        if (mTrack && mTarget)
             mTrack->mSubTrackDuration = mTarget->GetDuration();
-	}
+    }
 
 }
 // --- META ---

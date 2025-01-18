@@ -10,64 +10,64 @@ using namespace o2;
 
 namespace o2
 {
-	class Window;
+    class Window;
 }
 
 namespace Editor
 {
     FORWARD_CLASS_REF(CurvesEditor);
 
-	// --------------------
-	// Curve editing dialog
-	// --------------------
-	class CurveEditorDlg: public Singleton<CurveEditorDlg>, public CursorEventsListener
-	{
-	public:
-		// Default constructor
+    // --------------------
+    // Curve editing dialog
+    // --------------------
+    class CurveEditorDlg: public Singleton<CurveEditorDlg>, public CursorEventsListener
+    {
+    public:
+        // Default constructor
         CurveEditorDlg(RefCounter* refCounter);
 
-		// Destructor
-		~CurveEditorDlg();
+        // Destructor
+        ~CurveEditorDlg();
 
-		// Shows editor dialog
-		static void Show(const Function<void()>& onChanged, const Function<void()>& onCompleted = {});
+        // Shows editor dialog
+        static void Show(const Function<void()>& onChanged, const Function<void()>& onCompleted = {});
 
-		// Adds editing curve with color. If color is default it will be randomized
-		static void AddEditingCurve(const String& id, const Ref<Curve>& curve, const Color4& color = Color4::Green());
+        // Adds editing curve with color. If color is default it will be randomized
+        static void AddEditingCurve(const String& id, const Ref<Curve>& curve, const Color4& color = Color4::Green());
 
-		// Removed curve from editing
-		static void RemoveEditingCurve(const Ref<Curve>& curve);
+        // Removed curve from editing
+        static void RemoveEditingCurve(const Ref<Curve>& curve);
 
-		// Removed curve from editing
-		static void RemoveEditingCurve(const String& id);
+        // Removed curve from editing
+        static void RemoveEditingCurve(const String& id);
 
-		// Removes all editing curves
-		static void RemoveAllEditingCurves();
+        // Removes all editing curves
+        static void RemoveAllEditingCurves();
 
-		// Adds curves range with color. It can't be edited, just a solid color between curves
-		static void AddCurvesRange(const Ref<Curve>& curveA, const Ref<Curve>& curveB, const Color4& color = Color4::Green());
+        // Adds curves range with color. It can't be edited, just a solid color between curves
+        static void AddCurvesRange(const Ref<Curve>& curveA, const Ref<Curve>& curveB, const Color4& color = Color4::Green());
 
-		// Removes curve range
+        // Removes curve range
         static void RemoveCurvesRange(const Ref<Curve>& curveA, const Ref<Curve>& curveB);
 
         REF_COUNTERABLE_IMPL(Singleton<CurveEditorDlg>, CursorEventsListener);
 
-	protected:
-		Function<void()> mOnChangedCallback;         // On changed callback
-		Function<void()> mOnChangeCompletedCallback; // On change completed callback
+    protected:
+        Function<void()> mOnChangedCallback;         // On changed callback
+        Function<void()> mOnChangeCompletedCallback; // On change completed callback
 
-		Ref<o2::Window>   mWindow;       // Dialog window
-		Ref<CurvesEditor> mEditorWidget; // Curves editor widget
+        Ref<o2::Window>   mWindow;       // Dialog window
+        Ref<CurvesEditor> mEditorWidget; // Curves editor widget
 
-	protected:
-		// Called when hiding, calls completed callback
-		void OnHide();
+    protected:
+        // Called when hiding, calls completed callback
+        void OnHide();
 
-		// Initialize controls
-		void InitializeControls();
+        // Initialize controls
+        void InitializeControls();
 
-		// Called when cursor was pressed outside, closed dialog
-		void OnCursorPressedOutside();
-	};
-	 
+        // Called when cursor was pressed outside, closed dialog
+        void OnCursorPressedOutside();
+    };
+     
 }

@@ -4,18 +4,18 @@
 
 namespace o2
 {
-	class GroupAttribute : public IAttribute
-	{
-		ATTRIBUTE_COMMENT_DEFINITION("GROUP");
-		ATTRIBUTE_SHORT_DEFINITION("GROUP_ATTRIBUTE");
+    class GroupAttribute : public IAttribute
+    {
+        ATTRIBUTE_COMMENT_DEFINITION("GROUP");
+        ATTRIBUTE_SHORT_DEFINITION("GROUP_ATTRIBUTE");
 
-	public:
-		String name;
+    public:
+        String name;
 
-	public:
-		GroupAttribute() {}
-		GroupAttribute(const char* name) :name(name) {}
-	};
+    public:
+        GroupAttribute() {}
+        GroupAttribute(const char* name) :name(name) {}
+    };
 
 #define GROUP_ATTRIBUTE(NAME) \
     template AddAttribute<o2::GroupAttribute>(NAME)

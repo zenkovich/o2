@@ -5,70 +5,70 @@
 
 namespace o2
 {
-	class SceneLayer;
-	class DropDown;
+    class SceneLayer;
+    class DropDown;
 }
 
 namespace Editor
 {
-	// -------------------------
-	// Editor layer property box
-	// -------------------------
-	class SceneLayerRefProperty: public TPropertyField<Ref<SceneLayer>>
-	{
-	public:
-		Function<void()> onSelectedInheritedValue; // Called when selected "Inherit from parent" value
+    // -------------------------
+    // Editor layer property box
+    // -------------------------
+    class SceneLayerRefProperty: public TPropertyField<Ref<SceneLayer>>
+    {
+    public:
+        Function<void()> onSelectedInheritedValue; // Called when selected "Inherit from parent" value
 
-	public:
-		// Default constructor
-		SceneLayerRefProperty(RefCounter* refCounter);
+    public:
+        // Default constructor
+        SceneLayerRefProperty(RefCounter* refCounter);
 
-		// Copy constructor
-		SceneLayerRefProperty(RefCounter* refCounter, const SceneLayerRefProperty& other);
+        // Copy constructor
+        SceneLayerRefProperty(RefCounter* refCounter, const SceneLayerRefProperty& other);
 
-		// Copy operator
-		SceneLayerRefProperty& operator=(const SceneLayerRefProperty& other);
+        // Copy operator
+        SceneLayerRefProperty& operator=(const SceneLayerRefProperty& other);
 
-		// Sets selected "Inherit from parent" value
-		void SetSelectedInheritedValue(bool inherited);
+        // Sets selected "Inherit from parent" value
+        void SetSelectedInheritedValue(bool inherited);
 
-		// Returns is selected "Inherit from parent" value
-		bool IsSelectedInheritedValue() const;
+        // Returns is selected "Inherit from parent" value
+        bool IsSelectedInheritedValue() const;
 
-		// Sets use "Inherit from parent" value
-		void SetUseInheritedValue(bool use);
+        // Sets use "Inherit from parent" value
+        void SetUseInheritedValue(bool use);
 
-		// Returns is used "Inherit from parent" value
-		bool IsUseInheritedValue() const;
+        // Returns is used "Inherit from parent" value
+        bool IsUseInheritedValue() const;
 
-		SERIALIZABLE(SceneLayerRefProperty);
+        SERIALIZABLE(SceneLayerRefProperty);
         CLONEABLE_REF(SceneLayerRefProperty);
 
-	protected:		       
-		Ref<DropDown> mDropDown;              // Layer name dropdown
-		bool          mUpdatingValue = false; // Is dropdown value updating and we don't we don't check selection
+    protected:               
+        Ref<DropDown> mDropDown;              // Layer name dropdown
+        bool          mUpdatingValue = false; // Is dropdown value updating and we don't we don't check selection
 
-		bool mUseInheritedValue = false;      // Is used "Inherit from parent" value
-		bool mSelectedInheritedValue = false; // Is selected "Inherit from parent" value
+        bool mUseInheritedValue = false;      // Is used "Inherit from parent" value
+        bool mSelectedInheritedValue = false; // Is selected "Inherit from parent" value
 
-		String mInheritFromParentName = "Inherit from parent"; // Name of "Inherit from parent" value
+        String mInheritFromParentName = "Inherit from parent"; // Name of "Inherit from parent" value
 
-	protected:
-		// Updates value view
-		void UpdateValueView() override;
+    protected:
+        // Updates value view
+        void UpdateValueView() override;
 
-		// Searches controls widgets and layers and initializes them
-		void InitializeControls();
+        // Searches controls widgets and layers and initializes them
+        void InitializeControls();
 
-		// Updates layer list to actual list of layers on scene
-		void UpdateLayersList();
+        // Updates layer list to actual list of layers on scene
+        void UpdateLayersList();
 
-		// Selects layer
-		void SelectLayer(const WString& name);
+        // Selects layer
+        void SelectLayer(const WString& name);
 
-		// Is required refresh view every time
-		bool IsAlwaysRefresh() const override;
-	};
+        // Is required refresh view every time
+        bool IsAlwaysRefresh() const override;
+    };
 }
 // --- META ---
 

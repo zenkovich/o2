@@ -45,10 +45,10 @@ namespace o2
         return nullptr;
     }
 
-	void BaseActorLinkRef::Set(Actor* actor)
-	{}
+    void BaseActorLinkRef::Set(Actor* actor)
+    {}
 
-	void BaseActorLinkRef::Destroy()
+    void BaseActorLinkRef::Destroy()
     {
         o2Scene.DestroyActor(Ref(Get()));
     }

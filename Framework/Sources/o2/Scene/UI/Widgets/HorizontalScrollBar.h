@@ -106,8 +106,8 @@ namespace o2
         float mScrollHandleSize = 0.2f;      // Scroll handle size (in value range) @SERIALIZABLE
         float mScrollhandleMinPxSize = 5.0f; // Minimal scroll size in pixels @SERIALIZABLE
 
-		float            mPressHandleOffset = 0.0f; // Value offset when handle was pressed
-		bool             mHandlePressed = false;    // True, when handle was pressed
+        float            mPressHandleOffset = 0.0f; // Value offset when handle was pressed
+        bool             mHandlePressed = false;    // True, when handle was pressed
         Ref<WidgetLayer> mHandleLayer;              // Handle layer
 
         Ref<WidgetLayer> mBackLayer; // Background layer

@@ -14,72 +14,72 @@ using namespace o2;
 
 namespace o2
 {
-	class Spoiler;
-	class Button;
+    class Spoiler;
+    class Button;
 }
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(SceneDragHandle);
+    FORWARD_CLASS_REF(SceneDragHandle);
 
-	struct SkeletonTool;
-	FORWARD_REF(SkeletonTool);
+    struct SkeletonTool;
+    FORWARD_REF(SkeletonTool);
 
-	// ------------------------------
-	// Skinning Mesh component viewer
-	// ------------------------------
-	class SkinningMeshComponentViewer: public TObjectPropertiesViewer<SkinningMeshComponent>
-	{
-	public:
-		// Default constructor
-		SkinningMeshComponentViewer();
+    // ------------------------------
+    // Skinning Mesh component viewer
+    // ------------------------------
+    class SkinningMeshComponentViewer: public TObjectPropertiesViewer<SkinningMeshComponent>
+    {
+    public:
+        // Default constructor
+        SkinningMeshComponentViewer();
 
-		// Destructor
-		~SkinningMeshComponentViewer();
+        // Destructor
+        ~SkinningMeshComponentViewer();
 
-		// Copy operator
-		SkinningMeshComponentViewer& operator=(const SkinningMeshComponentViewer& other);
+        // Copy operator
+        SkinningMeshComponentViewer& operator=(const SkinningMeshComponentViewer& other);
 
-		IOBJECT(SkinningMeshComponentViewer);
+        IOBJECT(SkinningMeshComponentViewer);
 
-	protected:
-		Ref<SplineTool>              mSplineTool;        // Spline tool
-		Ref<CustomFrameTool>         mFrameTool;         // Mapping frame tool
-		Ref<MeshTopologyTool>        mTopologyTool;      // Mesh topology tool
-		Ref<SkeletonTool>            mSkeletonTool;      // Shared skeleton tool
-		Ref<SkinningMeshEditorLayer> mFrameTetxureLayer; // Frame texture drawing layer
+    protected:
+        Ref<SplineTool>              mSplineTool;        // Spline tool
+        Ref<CustomFrameTool>         mFrameTool;         // Mapping frame tool
+        Ref<MeshTopologyTool>        mTopologyTool;      // Mesh topology tool
+        Ref<SkeletonTool>            mSkeletonTool;      // Shared skeleton tool
+        Ref<SkinningMeshEditorLayer> mFrameTetxureLayer; // Frame texture drawing layer
 
-		Ref<Button> mFitAndCenterButton; // Fit and centerize button
-		Ref<Button> mEditSkeletonButton; // Enable/disable skeleton editing button
-		Ref<Button> mReskinButton;       // Resets mesh skinning and updates bones transforms
+        Ref<Button> mFitAndCenterButton; // Fit and centerize button
+        Ref<Button> mEditSkeletonButton; // Enable/disable skeleton editing button
+        Ref<Button> mReskinButton;       // Resets mesh skinning and updates bones transforms
 
-		bool mEditingSkeleton = false; // It editing skeleton enabled
+        bool mEditingSkeleton = false; // It editing skeleton enabled
 
-	protected:
-		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
-		void RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
+    protected:
+        // Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
+        void RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 
-		// Called when viewer is refreshed
-		void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
+        // Called when viewer is refreshed
+        void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 
-		// Enable viewer event function
-		void OnPropertiesEnabled() override;
+        // Enable viewer event function
+        void OnPropertiesEnabled() override;
 
-		// Disable viewer event function
-		void OnPropertiesDisabled() override;
+        // Disable viewer event function
+        void OnPropertiesDisabled() override;
 
-		// Called when button pressed
-		void FitAndCenterize();
+        // Called when button pressed
+        void FitAndCenterize();
 
-		// Called when edit skeleton pressed
-		void OnEditSkeletonPressed();
+        // Called when edit skeleton pressed
+        void OnEditSkeletonPressed();
 
-		// Called when reskin pressed
-		void OnReskinPressed();
+        // Called when reskin pressed
+        void OnReskinPressed();
 
-		// Updates the caption on the skeleton edit button depending on whether it is enabled or not
-		void UpdateEditSkeletonButtonCaption();
-	};
+        // Updates the caption on the skeleton edit button depending on whether it is enabled or not
+        void UpdateEditSkeletonButtonCaption();
+    };
 }
 // --- META ---
 

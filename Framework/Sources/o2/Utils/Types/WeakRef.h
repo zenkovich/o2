@@ -89,16 +89,16 @@ namespace o2
         template<typename _other_type>
         friend class Ref;
 
-		template<typename _to_type, typename _from_type>
+        template<typename _to_type, typename _from_type>
         friend WeakRef<_to_type> DynamicWeakCast(const WeakRef<_from_type>& from);
-	};
+    };
 
-	// Dynamic cast from one weak reference type to another
-	template<typename _to_type, typename _from_type>
+    // Dynamic cast from one weak reference type to another
+    template<typename _to_type, typename _from_type>
     WeakRef<_to_type> DynamicWeakCast(const WeakRef<_from_type>& from)
-	{
-		return WeakRef<_to_type>(dynamic_cast<_to_type*>(const_cast<_from_type*>(from.mPtr)));
-	}
+    {
+        return WeakRef<_to_type>(dynamic_cast<_to_type*>(const_cast<_from_type*>(from.mPtr)));
+    }
 
     template<typename _type>
     WeakRef<_type>::WeakRef() = default;

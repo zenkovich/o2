@@ -129,11 +129,11 @@ namespace o2
         // Constructor with actor pointer
         explicit LinkRef(_actor_type* ptr);
 
-		// Copy constructor from other reference
-		LinkRef(const Ref<_actor_type>& other);
+        // Copy constructor from other reference
+        LinkRef(const Ref<_actor_type>& other);
 
-		// Move constructor from other reference
-		LinkRef(Ref<_actor_type>&& other);
+        // Move constructor from other reference
+        LinkRef(Ref<_actor_type>&& other);
 
         // Copy constructor from other actor reference
         template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, _actor_type*>::value>::type>
@@ -157,12 +157,12 @@ namespace o2
 
         // Copy operator from other actor reference
         template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, _actor_type*>::value>::type>
-		LinkRef<_actor_type>& operator=(const LinkRef<_other_type>& other);
+        LinkRef<_actor_type>& operator=(const LinkRef<_other_type>& other);
 
-		// Move operator from other actor reference
-		LinkRef<_actor_type>& operator=(Ref<_actor_type>&& other);
+        // Move operator from other actor reference
+        LinkRef<_actor_type>& operator=(Ref<_actor_type>&& other);
 
-		// Move operator from nullptr
+        // Move operator from nullptr
         LinkRef<_actor_type>& operator=(std::nullptr_t);
 
         // Less operator
@@ -175,7 +175,7 @@ namespace o2
         explicit operator bool() const;
 
         // Returns actor reference
-		operator Ref<_actor_type>() const;
+        operator Ref<_actor_type>() const;
 
         // Returns actor reference
         _actor_type& operator*() const;
@@ -244,7 +244,7 @@ namespace o2
             FUNCTION().PUBLIC().SIGNATURE(const Type&, GetActorType);
             FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetActorTypeStatic);
         }
-	};
+    };
 
     template<typename _actor_type>
     LinkRef<_actor_type, ENABLE_ACTOR>::LinkRef()
@@ -260,15 +260,15 @@ namespace o2
         mRef(ptr)
     {}
 
-	template<typename _actor_type>
-	LinkRef<_actor_type, ENABLE_ACTOR>::LinkRef(const Ref<_actor_type>&other) :
-		mRef(other)
-	{}
+    template<typename _actor_type>
+    LinkRef<_actor_type, ENABLE_ACTOR>::LinkRef(const Ref<_actor_type>&other) :
+        mRef(other)
+    {}
 
-	template<typename _actor_type>
-	LinkRef<_actor_type, ENABLE_ACTOR>::LinkRef(Ref<_actor_type> && other) :
-		mRef(std::move(other))
-	{}
+    template<typename _actor_type>
+    LinkRef<_actor_type, ENABLE_ACTOR>::LinkRef(Ref<_actor_type> && other) :
+        mRef(std::move(other))
+    {}
 
     template<typename _actor_type>
     template<typename _other_type, typename _enable>
@@ -312,21 +312,21 @@ namespace o2
     {
         mRef = other.mRef;
         return *this;
-	}
+    }
 
-	template<typename _actor_type>
-	LinkRef<_actor_type>& LinkRef<_actor_type, ENABLE_ACTOR>::operator=(Ref<_actor_type>&& other)
-	{
-		mRef = std::move(other);
-		return *this;
-	}
+    template<typename _actor_type>
+    LinkRef<_actor_type>& LinkRef<_actor_type, ENABLE_ACTOR>::operator=(Ref<_actor_type>&& other)
+    {
+        mRef = std::move(other);
+        return *this;
+    }
 
-	template<typename _actor_type>
-	LinkRef<_actor_type>& LinkRef<_actor_type, ENABLE_ACTOR>::operator=(std::nullptr_t)
-	{
-		mRef = nullptr;
-		return *this;
-	}
+    template<typename _actor_type>
+    LinkRef<_actor_type>& LinkRef<_actor_type, ENABLE_ACTOR>::operator=(std::nullptr_t)
+    {
+        mRef = nullptr;
+        return *this;
+    }
 
     template<typename _actor_type>
     bool LinkRef<_actor_type, ENABLE_ACTOR>::operator<(const LinkRef<_actor_type>& other) const
@@ -344,13 +344,13 @@ namespace o2
     LinkRef<_actor_type, ENABLE_ACTOR>::operator bool() const
     {
         return IsValid();
-	}
+    }
 
-	template<typename _actor_type>
+    template<typename _actor_type>
     LinkRef<_actor_type, ENABLE_ACTOR>::operator Ref<_actor_type>() const
-	{
-		return mRef;
-	}
+    {
+        return mRef;
+    }
 
     template<typename _actor_type>
     _actor_type& LinkRef<_actor_type, ENABLE_ACTOR>::operator*() const
@@ -374,19 +374,19 @@ namespace o2
     const _actor_type* LinkRef<_actor_type, ENABLE_ACTOR>::Get() const
     {
         return mRef.Get();
-	}
+    }
 
-	template<typename _actor_type>
-	Ref<_actor_type>& LinkRef<_actor_type, ENABLE_ACTOR>::GetRef()
-	{
+    template<typename _actor_type>
+    Ref<_actor_type>& LinkRef<_actor_type, ENABLE_ACTOR>::GetRef()
+    {
         return mRef;
-	}
+    }
 
-	template<typename _actor_type>
-	const Ref<_actor_type>& LinkRef<_actor_type, ENABLE_ACTOR>::GetRef() const
-	{
+    template<typename _actor_type>
+    const Ref<_actor_type>& LinkRef<_actor_type, ENABLE_ACTOR>::GetRef() const
+    {
         return mRef;
-	}
+    }
 
     template<typename _actor_type>
     void LinkRef<_actor_type, ENABLE_ACTOR>::Set(Actor* actor)

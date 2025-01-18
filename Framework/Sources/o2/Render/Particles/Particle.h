@@ -8,20 +8,20 @@ namespace o2
     class Particle
     {
     public:
-		int index = 0; // Index of particle in container
+        int index = 0; // Index of particle in container
 
-		Vec2F position; // Position of particle center
-		Vec2F velocity; // Particle velocity
+        Vec2F position; // Position of particle center
+        Vec2F velocity; // Particle velocity
 
-		float angle = 0;      // Particle angle in radians
-		float angleSpeed = 0; // Angle speed in radians/sec
+        float angle = 0;      // Particle angle in radians
+        float angleSpeed = 0; // Angle speed in radians/sec
 
-		Vec2F size; // Size of particle
+        Vec2F size; // Size of particle
 
         Color4 color; // Particle's color
 
-		float timeLeft = 0; // Estimate life time
-		float lifetime = 0; // Total life time
+        float timeLeft = 0; // Estimate life time
+        float lifetime = 0; // Total life time
 
         bool alive = false; // Is particle alive
 

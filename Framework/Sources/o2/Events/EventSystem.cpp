@@ -18,14 +18,14 @@ namespace o2
 {
 #undef DrawText
 
-	DECLARE_SINGLETON(EventSystem);
+    DECLARE_SINGLETON(EventSystem);
 
-	FORWARD_REF_IMPL(ApplicationEventsListener);
-	FORWARD_REF_IMPL(CursorAreaEventsListener);
-	FORWARD_REF_IMPL(CursorEventsListener);
-	FORWARD_REF_IMPL(DragableObject);
-	FORWARD_REF_IMPL(KeyboardEventsListener);
-	FORWARD_REF_IMPL(ShortcutKeysListenersManager);
+    FORWARD_REF_IMPL(ApplicationEventsListener);
+    FORWARD_REF_IMPL(CursorAreaEventsListener);
+    FORWARD_REF_IMPL(CursorEventsListener);
+    FORWARD_REF_IMPL(DragableObject);
+    FORWARD_REF_IMPL(KeyboardEventsListener);
+    FORWARD_REF_IMPL(ShortcutKeysListenersManager);
 
     EventSystem::EventSystem(RefCounter* refCounter):
         Singleton<EventSystem>(refCounter)
@@ -287,11 +287,11 @@ namespace o2
 
     void EventSystem::RemoveCursorAreaEventsListenersLayer(const WeakRef<CursorAreaEventListenersLayer>& layer)
     {
-		mInstance->mCursorAreaEventsListenersLayers.Remove(layer);
+        mInstance->mCursorAreaEventsListenersLayers.Remove(layer);
     }
 
-	void EventSystem::DrawnCursorAreaListener(const Ref<CursorAreaEventsListener>& listener)
-	{
+    void EventSystem::DrawnCursorAreaListener(const Ref<CursorAreaEventsListener>& listener)
+    {
         if (!IsSingletonInitialzed())
             return;
 

@@ -8,66 +8,66 @@
 
 namespace Editor
 {
-	IActorPropertiesViewer::IActorPropertiesViewer()
-	{
-		PushEditorScopeOnStack scope;
+    IActorPropertiesViewer::IActorPropertiesViewer()
+    {
+        PushEditorScopeOnStack scope;
 
-		mSpoiler = o2UI.CreateWidget<SpoilerWithHead>();
+        mSpoiler = o2UI.CreateWidget<SpoilerWithHead>();
 
-		mSpoiler->expandHeight = false;
-		mSpoiler->expandWidth = true;
-		mSpoiler->fitByChildren = true;
-		mSpoiler->borderBottom = 5;
-		mSpoiler->SetCaption("Transform");
-		mSpoiler->GetIcon()->SetImageName("ui/UI4_component_icon.png");
-		mSpoiler->GetIcon()->layout->center -= Vec2F(2, 0);
+        mSpoiler->expandHeight = false;
+        mSpoiler->expandWidth = true;
+        mSpoiler->fitByChildren = true;
+        mSpoiler->borderBottom = 5;
+        mSpoiler->SetCaption("Transform");
+        mSpoiler->GetIcon()->SetImageName("ui/UI4_component_icon.png");
+        mSpoiler->GetIcon()->layout->center -= Vec2F(2, 0);
 
-		mSpoiler->SetExpanded(true);
-	}
+        mSpoiler->SetExpanded(true);
+    }
 
-	IActorPropertiesViewer::~IActorPropertiesViewer()
-	{}
+    IActorPropertiesViewer::~IActorPropertiesViewer()
+    {}
 
-	Ref<Widget> IActorPropertiesViewer::GetWidget() const
-	{
-		return mSpoiler;
-	}
+    Ref<Widget> IActorPropertiesViewer::GetWidget() const
+    {
+        return mSpoiler;
+    }
 
-	void IActorPropertiesViewer::Expand()
-	{
-		mSpoiler->Expand();
-	}
+    void IActorPropertiesViewer::Expand()
+    {
+        mSpoiler->Expand();
+    }
 
-	void IActorPropertiesViewer::Collapse()
-	{
-		mSpoiler->Collapse();
-	}
+    void IActorPropertiesViewer::Collapse()
+    {
+        mSpoiler->Collapse();
+    }
 
-	void IActorPropertiesViewer::Refresh()
-	{}
+    void IActorPropertiesViewer::Refresh()
+    {}
 
-	bool IActorPropertiesViewer::IsEmpty() const
-	{
-		return true;
-	}
+    bool IActorPropertiesViewer::IsEmpty() const
+    {
+        return true;
+    }
 
-	void IActorPropertiesViewer::SetPropertiesEnabled(bool enabled)
-	{
-		if (mPropertiesEnabled == enabled)
-			return;
+    void IActorPropertiesViewer::SetPropertiesEnabled(bool enabled)
+    {
+        if (mPropertiesEnabled == enabled)
+            return;
 
-		mPropertiesEnabled = enabled;
+        mPropertiesEnabled = enabled;
 
-		if (mPropertiesEnabled)
-			OnPropertiesEnabled();
-		else
-			OnPropertiesDisabled();
-	}
+        if (mPropertiesEnabled)
+            OnPropertiesEnabled();
+        else
+            OnPropertiesDisabled();
+    }
 
-	bool IActorPropertiesViewer::IsPropertiesEnabled() const
-	{
-		return mPropertiesEnabled;
-	}
+    bool IActorPropertiesViewer::IsPropertiesEnabled() const
+    {
+        return mPropertiesEnabled;
+    }
 
 }
 // --- META ---

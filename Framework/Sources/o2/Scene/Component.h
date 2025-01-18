@@ -21,14 +21,14 @@ namespace o2 {
         // Default constructor
         Component();
 
-		// Default constructor with ref counter
-		explicit Component(RefCounter* refCounter);
+        // Default constructor with ref counter
+        explicit Component(RefCounter* refCounter);
 
         // Copy-constructor
         Component(const Component& other);
 
-		// Copy-constructor with ref counter
-		Component(RefCounter* refCounter, const Component& other);
+        // Copy-constructor with ref counter
+        Component(RefCounter* refCounter, const Component& other);
 
         // Virtual destructor
         virtual ~Component();
@@ -155,8 +155,8 @@ namespace o2 {
         // Updates component
         virtual void OnUpdate(float dt) {}
 
-		// Draws component
-		virtual void OnDraw() {}
+        // Draws component
+        virtual void OnDraw() {}
 
         // Updates component with fixed delta time
         virtual void OnFixedUpdate(float dt) {}

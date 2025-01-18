@@ -7,11 +7,11 @@ using namespace o2;
 
 namespace Editor
 {
-	// -----------------------------
-	// Basic editor window interface
-	// -----------------------------
-	class IEditorWindow: public IObject, public RefCounterable
-	{
+    // -----------------------------
+    // Basic editor window interface
+    // -----------------------------
+    class IEditorWindow: public IObject, public RefCounterable
+    {
     public:
         // Default constructor
         IEditorWindow();
@@ -25,48 +25,48 @@ namespace Editor
         // Copy-constructor
         IEditorWindow(RefCounter* refCounter, const IEditorWindow& other);
 
-		// Virtual destructor
-		virtual ~IEditorWindow();
+        // Virtual destructor
+        virtual ~IEditorWindow();
 
-		// Sets visibility
-		virtual void SetVisible(bool visible);
+        // Sets visibility
+        virtual void SetVisible(bool visible);
 
-		// Updates window logic
-		virtual void Update(float dt);
+        // Updates window logic
+        virtual void Update(float dt);
 
-		// Draws window stuff
-		virtual void Draw();
+        // Draws window stuff
+        virtual void Draw();
 
-		// Returns is window is visible
-		bool IsVisible();
+        // Returns is window is visible
+        bool IsVisible();
 
-		// Shows window
-		void Show();
+        // Shows window
+        void Show();
 
-		// Hides window
-		void Hide();
+        // Hides window
+        void Hide();
 
-		// Returns window
-		const Ref<DockableWindow>& GetWindow() const;
+        // Returns window
+        const Ref<DockableWindow>& GetWindow() const;
 
-		IOBJECT(IEditorWindow);
+        IOBJECT(IEditorWindow);
 
-	protected:
-		Ref<DockableWindow> mWindow; // Dockable UI window 
+    protected:
+        Ref<DockableWindow> mWindow; // Dockable UI window 
 
-	protected:
-		// Called after that all windows was created
-		virtual void PostInitializeWindow() {}
+    protected:
+        // Called after that all windows was created
+        virtual void PostInitializeWindow() {}
 
-		// Called when editor window has opened
-		virtual void OnOpened() {}
+        // Called when editor window has opened
+        virtual void OnOpened() {}
 
-		// Called when editor window has closed
-		virtual void OnClosed() {}
+        // Called when editor window has closed
+        virtual void OnClosed() {}
 
-		friend class WindowsManager;
-		friend class WindowsLayout;
-	};
+        friend class WindowsManager;
+        friend class WindowsLayout;
+    };
 }
 // --- META ---
 

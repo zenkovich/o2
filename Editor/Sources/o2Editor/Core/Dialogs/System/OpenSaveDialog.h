@@ -6,9 +6,9 @@ using namespace o2;
 
 namespace Editor
 {
-	// Show open file dialog and returns name
-	String GetOpenFileNameDialog(const String& title, const Map<String, String>& extensions, const String& defaultPath = "");
+    // Show open file dialog and returns name
+    String GetOpenFileNameDialog(const String& title, const Map<String, String>& extensions, const String& defaultPath = "");
 
-	// Show save file dialog and returns name
-	String GetSaveFileNameDialog(const String& title, const Map<String, String>& extensions, const String& defaultPath = "");
+    // Show save file dialog and returns name
+    String GetSaveFileNameDialog(const String& title, const Map<String, String>& extensions, const String& defaultPath = "");
 }

@@ -14,12 +14,12 @@ namespace o2
         EventSystem::UnregKeyboardListener(this);
     }
 
-	void KeyboardEventsListener::PostRefConstruct()
-	{
-		EventSystem::RegKeyboardListener(Ref(this));
-	}
+    void KeyboardEventsListener::PostRefConstruct()
+    {
+        EventSystem::RegKeyboardListener(Ref(this));
+    }
 
-	void KeyboardEventsListener::OnKeyPressed(const Input::Key& key)
+    void KeyboardEventsListener::OnKeyPressed(const Input::Key& key)
     {}
 
     void KeyboardEventsListener::OnKeyReleased(const Input::Key& key)

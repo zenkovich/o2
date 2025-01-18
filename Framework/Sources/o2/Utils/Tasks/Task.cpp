@@ -13,7 +13,7 @@ namespace o2
     }
 
     Task::Task(RefCounter* refCounter, const Task& other):
-		RefCounterable(refCounter)
+        RefCounterable(refCounter)
     {
         mId = o2Tasks.mLastTaskId++;
         o2Tasks.mTasks.Add(Ref(this));
@@ -35,11 +35,11 @@ namespace o2
         return mId;
     }
 
-	FunctionalTask::FunctionalTask(RefCounter* refCounter):
-		Task(refCounter)
-	{}
+    FunctionalTask::FunctionalTask(RefCounter* refCounter):
+        Task(refCounter)
+    {}
 
-	void FunctionalTask::Update(float dt)
+    void FunctionalTask::Update(float dt)
     {
         update(dt);
     }

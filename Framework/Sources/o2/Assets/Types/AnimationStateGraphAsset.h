@@ -27,63 +27,63 @@ namespace o2
         // Check equals operator
         AnimationStateGraphAsset& operator=(const AnimationStateGraphAsset& asset);
 
-		// Sets initial state
-		void SetInitialState(const String& name);
+        // Sets initial state
+        void SetInitialState(const String& name);
 
-		// Returns initial state
-		const String& GetInitialState() const;
+        // Returns initial state
+        const String& GetInitialState() const;
 
-		// Adds state to graph
-		void AddState(const Ref<AnimationGraphState>& state);
+        // Adds state to graph
+        void AddState(const Ref<AnimationGraphState>& state);
 
-		// Adds state to graph
-		Ref<AnimationGraphState> AddState(const String& name, const Vector<String>& animations);
+        // Adds state to graph
+        Ref<AnimationGraphState> AddState(const String& name, const Vector<String>& animations);
 
-		// Removes state from graph
-		void RemoveState(const Ref<AnimationGraphState>& state);
+        // Removes state from graph
+        void RemoveState(const Ref<AnimationGraphState>& state);
 
-		// Removes state from graph
-		void RemoveState(const String& name);
+        // Removes state from graph
+        void RemoveState(const String& name);
 
-		// Removes all states from graph
-		void RemoveAllStates();
+        // Removes all states from graph
+        void RemoveAllStates();
 
-		// Returns state by name
-		Ref<AnimationGraphState> GetState(const String& name);
+        // Returns state by name
+        Ref<AnimationGraphState> GetState(const String& name);
 
-		// Returns state by UID
-		Ref<AnimationGraphState> GetState(const UID& uid);
+        // Returns state by UID
+        Ref<AnimationGraphState> GetState(const UID& uid);
 
-		// Returns all states
-		const Vector<Ref<AnimationGraphState>>& GetStates() const;
+        // Returns all states
+        const Vector<Ref<AnimationGraphState>>& GetStates() const;
 
-		// Calculates path between two states
+        // Calculates path between two states
         Vector<Ref<AnimationGraphTransition>> CalculatePath(const Ref<AnimationGraphState>& from, const Ref<AnimationGraphState>& to);
 
         // Returns extensions string
         static Vector<String> GetFileExtensions();
 
         // Returns editor sorting weight
-		static int GetEditorSorting() { return 97; }
+        static int GetEditorSorting() { return 97; }
 
-		// Returns editor icon
-		static String GetEditorIcon() { return "ui/UI4_graph_icon.png"; }
+        // Returns editor icon
+        static String GetEditorIcon() { return "ui/UI4_graph_icon.png"; }
 
         // Is this asset type is available to create from editor's assets window
-		static bool IsAvailableToCreateFromEditor() { return true; }
+        static bool IsAvailableToCreateFromEditor() { return true; }
 
-		// Is asset reference available to contain instance inside
-		static bool IsReferenceCanOwnInstance() { return true; }
+        // Is asset reference available to contain instance inside
+        static bool IsReferenceCanOwnInstance() { return true; }
 
-		SERIALIZABLE(AnimationStateGraphAsset);
-		CLONEABLE_REF(AnimationStateGraphAsset);
+        SERIALIZABLE(AnimationStateGraphAsset);
+        CLONEABLE_REF(AnimationStateGraphAsset);
 
     protected:
-		String mInitialState; // Initial state name @SERIALIZABLE
+        String mInitialState; // Initial state name @SERIALIZABLE
 
-		Vector<Ref<AnimationGraphState>> mStates; // Animation graph states @SERIALIZABLE
+        Vector<Ref<AnimationGraphState>> mStates; // Animation graph states @SERIALIZABLE
 
-	protected:
+    protected:
         // Completion deserialization callback
         void OnDeserialized(const DataValue& node) override;
     };

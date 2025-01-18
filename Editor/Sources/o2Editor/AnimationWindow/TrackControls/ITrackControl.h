@@ -9,80 +9,80 @@ using namespace o2;
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(AnimationTimeline);
-	FORWARD_CLASS_REF(KeyHandlesSheet);
+    FORWARD_CLASS_REF(AnimationTimeline);
+    FORWARD_CLASS_REF(KeyHandlesSheet);
 
-	class ITrackControl: public Widget
-	{
-	public:
-		struct KeyHandle: public RefCounterable
-		{
-			UInt64 keyUid = 0;
+    class ITrackControl: public Widget
+    {
+    public:
+        struct KeyHandle: public RefCounterable
+        {
+            UInt64 keyUid = 0;
 
-			Ref<AnimationKeyDragHandle> handle = nullptr;
+            Ref<AnimationKeyDragHandle> handle = nullptr;
 
-		public:
-			KeyHandle() { }
-			KeyHandle(UInt64 keyUid, const Ref<AnimationKeyDragHandle>& handle): keyUid(keyUid), handle(handle) { }
+        public:
+            KeyHandle() { }
+            KeyHandle(UInt64 keyUid, const Ref<AnimationKeyDragHandle>& handle): keyUid(keyUid), handle(handle) { }
 
-			bool operator==(const KeyHandle& other) const;
-		};
+            bool operator==(const KeyHandle& other) const;
+        };
 
-	public:
-		// Default constructor
-		ITrackControl(RefCounter* refCounter);
+    public:
+        // Default constructor
+        ITrackControl(RefCounter* refCounter);
 
-		// Copy-constructor
-		ITrackControl(RefCounter* refCounter, const ITrackControl& other);
+        // Copy-constructor
+        ITrackControl(RefCounter* refCounter, const ITrackControl& other);
 
-		// Sets timeline for calculating handles positions, and  handles sheet as selecting group for handles
-		virtual void Initialize(const Ref<AnimationTimeline>& timeline, const Ref<KeyHandlesSheet>& handlesSheet);
+        // Sets timeline for calculating handles positions, and  handles sheet as selecting group for handles
+        virtual void Initialize(const Ref<AnimationTimeline>& timeline, const Ref<KeyHandlesSheet>& handlesSheet);
 
-		// Sets Animation track, updates and creates key handles
-		virtual void SetTrack(const Ref<IAnimationTrack>& track, const Ref<IAnimationTrack::IPlayer>& player, const String& path);
+        // Sets Animation track, updates and creates key handles
+        virtual void SetTrack(const Ref<IAnimationTrack>& track, const Ref<IAnimationTrack::IPlayer>& player, const String& path);
 
-		// Updates handles position on timeline
-		virtual void UpdateHandles();
+        // Updates handles position on timeline
+        virtual void UpdateHandles();
 
-		// Returns key handles list
-		virtual Vector<Ref<KeyHandle>> GetKeyHandles() const;
+        // Returns key handles list
+        virtual Vector<Ref<KeyHandle>> GetKeyHandles() const;
 
-		// Returns a container of controllers that are part of a tree
-		virtual Ref<Widget> GetTreePartControls() const;
+        // Returns a container of controllers that are part of a tree
+        virtual Ref<Widget> GetTreePartControls() const;
 
-		// Sets curves edit view mode
-		virtual void SetCurveViewEnabled(bool enabled);
+        // Sets curves edit view mode
+        virtual void SetCurveViewEnabled(bool enabled);
 
-		// Sets curves view mode color
-		virtual void SetCurveViewColor(const Color4& color);
+        // Sets curves view mode color
+        virtual void SetCurveViewColor(const Color4& color);
 
-		// Sets track active when user selects it
-		virtual void SetActive(bool active);
+        // Sets track active when user selects it
+        virtual void SetActive(bool active);
 
-		// Inserts new key at time
-		virtual void InsertNewKey(float time);
+        // Inserts new key at time
+        virtual void InsertNewKey(float time);
 
-		// Called when group of keys began drag
-		virtual void BeginKeysDrag();
+        // Called when group of keys began drag
+        virtual void BeginKeysDrag();
 
-		// Called when group of keys completed drag
-		virtual void EndKeysDrag();
+        // Called when group of keys completed drag
+        virtual void EndKeysDrag();
 
-		// Serialize key with specified uid into data node
-		virtual void SerializeKey(UInt64 keyUid, DataValue& data, float relativeTime);
+        // Serialize key with specified uid into data node
+        virtual void SerializeKey(UInt64 keyUid, DataValue& data, float relativeTime);
 
-		// Deserialize key from data node and paste on track, returns key uid
-		virtual UInt64 DeserializeKey(const DataValue& data, float relativeTime, bool generateNewUid = true);
+        // Deserialize key from data node and paste on track, returns key uid
+        virtual UInt64 DeserializeKey(const DataValue& data, float relativeTime, bool generateNewUid = true);
 
-		// Removes key from track
-		virtual void DeleteKey(UInt64 keyUid);
+        // Removes key from track
+        virtual void DeleteKey(UInt64 keyUid);
 
-		// Returns create menu category in editor
-		static String GetCreateMenuCategory();
+        // Returns create menu category in editor
+        static String GetCreateMenuCategory();
 
         SERIALIZABLE(ITrackControl);
         CLONEABLE_REF(ITrackControl);
-	};
+    };
 }
 // --- META ---
 

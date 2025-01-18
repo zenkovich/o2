@@ -9,73 +9,73 @@
 namespace Editor
 {
 
-	void PropertiesContext::Invalidate()
-	{
-		targets.Clear();
-	}
+    void PropertiesContext::Invalidate()
+    {
+        targets.Clear();
+    }
 
-	void PropertiesContext::Set(const Vector<Pair<IObject*, IObject*>>& targets, bool force /*= false*/)
-	{
-		if (this->targets == targets && !force)
-		{
-			Refresh();
-			return;
-		}
+    void PropertiesContext::Set(const Vector<Pair<IObject*, IObject*>>& targets, bool force /*= false*/)
+    {
+        if (this->targets == targets && !force)
+        {
+            Refresh();
+            return;
+        }
 
-		this->targets = targets;
+        this->targets = targets;
 
-		if (targets.IsEmpty())
-			return;
+        if (targets.IsEmpty())
+            return;
 
-		for (auto& kv : properties)
-		{
-			auto fieldPointers = targets.Convert<Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>>(
-				[&](const Pair<IObject*, IObject*>& x)
-			{
-				auto fieldInfo = kv.first;
-				const Type& type = *fieldInfo->GetOwnerType();
-				const ObjectType* objType = dynamic_cast<const ObjectType*>(&type);
+        for (auto& kv : properties)
+        {
+            auto fieldPointers = targets.Convert<Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>>(
+                [&](const Pair<IObject*, IObject*>& x)
+            {
+                auto fieldInfo = kv.first;
+                const Type& type = *fieldInfo->GetOwnerType();
+                const ObjectType* objType = dynamic_cast<const ObjectType*>(&type);
 
-				if (objType == nullptr)
-					return Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>(nullptr, nullptr);
+                if (objType == nullptr)
+                    return Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>(nullptr, nullptr);
 
-				void* firstObjectPtr = objType->DynamicCastFromIObject(x.first);
-				void* secondObjectPtr = nullptr;
-				if (x.second)
-					secondObjectPtr = objType->DynamicCastFromIObject(x.second);
+                void* firstObjectPtr = objType->DynamicCastFromIObject(x.first);
+                void* secondObjectPtr = nullptr;
+                if (x.second)
+                    secondObjectPtr = objType->DynamicCastFromIObject(x.second);
 
-				Ref<IAbstractValueProxy> firstValuePtr = Ref(fieldInfo->GetType()->GetValueProxy(fieldInfo->GetValuePtrStrong(firstObjectPtr)));
-				Ref<IAbstractValueProxy> secondValuePtr = nullptr;
-				if (x.second)
-					secondValuePtr = Ref(fieldInfo->GetType()->GetValueProxy(fieldInfo->GetValuePtrStrong(secondObjectPtr)));
+                Ref<IAbstractValueProxy> firstValuePtr = Ref(fieldInfo->GetType()->GetValueProxy(fieldInfo->GetValuePtrStrong(firstObjectPtr)));
+                Ref<IAbstractValueProxy> secondValuePtr = nullptr;
+                if (x.second)
+                    secondValuePtr = Ref(fieldInfo->GetType()->GetValueProxy(fieldInfo->GetValuePtrStrong(secondObjectPtr)));
 
-				return Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>(firstValuePtr, secondValuePtr);
-			});
+                return Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>(firstValuePtr, secondValuePtr);
+            });
 
-			kv.second->SetValueAndPrototypeProxy(fieldPointers);
-		}
-	}
+            kv.second->SetValueAndPrototypeProxy(fieldPointers);
+        }
+    }
 
-	void PropertiesContext::Refresh()
-	{
-		for (auto& kv : properties)
-			kv.second->Refresh();
-	}
+    void PropertiesContext::Refresh()
+    {
+        for (auto& kv : properties)
+            kv.second->Refresh();
+    }
 
-	bool PropertiesContext::IsBuiltWIthPrivateProperties() const
-	{
-		return builtWithPrivateProperties;
-	}
+    bool PropertiesContext::IsBuiltWIthPrivateProperties() const
+    {
+        return builtWithPrivateProperties;
+    }
 
-	const Map<const FieldInfo*, Ref<IPropertyField>>& PropertiesContext::GetProperties() const
-	{
-		return properties;
-	}
+    const Map<const FieldInfo*, Ref<IPropertyField>>& PropertiesContext::GetProperties() const
+    {
+        return properties;
+    }
 
-	void PropertiesContext::SetPropertiesEnabled(bool enabled)
-	{
-		for (auto& kv : properties)
-			kv.second->SetPropertyEnabled(enabled);
-	}
+    void PropertiesContext::SetPropertiesEnabled(bool enabled)
+    {
+        for (auto& kv : properties)
+            kv.second->SetPropertyEnabled(enabled);
+    }
 
 }

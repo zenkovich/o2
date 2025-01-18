@@ -5,7 +5,7 @@
 
 namespace o2
 {
-	class ParticlesEmitter;
+    class ParticlesEmitter;
 
     // --------------------------------------
     // Particles emitter shape base interface
@@ -13,22 +13,22 @@ namespace o2
     class ParticlesEmitterShape: public ISerializable, public RefCounterable, public ICloneableRef
     {
     public:
-		// Virtual destructor
+        // Virtual destructor
         virtual ~ParticlesEmitterShape() {}
 
-		// Returns random emitting point in shape
-		virtual Vec2F GetEmittinPoint(const Basis& transform, bool fromShell);
+        // Returns random emitting point in shape
+        virtual Vec2F GetEmittinPoint(const Basis& transform, bool fromShell);
 
-		SERIALIZABLE(ParticlesEmitterShape);
+        SERIALIZABLE(ParticlesEmitterShape);
 
-	protected:
-		WeakRef<ParticlesEmitter> mEmitter; // Owning emitter
+    protected:
+        WeakRef<ParticlesEmitter> mEmitter; // Owning emitter
 
-	protected:
-		// Called  when particle effect parameters are changed, used to invalidate baked frames
-		void OnChanged();
+    protected:
+        // Called  when particle effect parameters are changed, used to invalidate baked frames
+        void OnChanged();
 
-		friend class ParticlesEmitter;
+        friend class ParticlesEmitter;
     };
 
     // ---------------------------------
@@ -37,11 +37,11 @@ namespace o2
     class CircleParticlesEmitterShape: public ParticlesEmitterShape
     {
     public:
-		// Returns random emitting point in circle
-		Vec2F GetEmittinPoint(const Basis& transform, bool fromShell) override;
+        // Returns random emitting point in circle
+        Vec2F GetEmittinPoint(const Basis& transform, bool fromShell) override;
 
-		SERIALIZABLE(CircleParticlesEmitterShape);
-		CLONEABLE_REF(CircleParticlesEmitterShape);
+        SERIALIZABLE(CircleParticlesEmitterShape);
+        CLONEABLE_REF(CircleParticlesEmitterShape);
     };
 
     // ---------------------------------
@@ -49,12 +49,12 @@ namespace o2
     // ---------------------------------
     class SquareParticlesEmitterShape: public ParticlesEmitterShape
     {
-	public:
-		// Returns random emitting point in square
-		Vec2F GetEmittinPoint(const Basis& transform, bool fromShell) override;
+    public:
+        // Returns random emitting point in square
+        Vec2F GetEmittinPoint(const Basis& transform, bool fromShell) override;
 
-		SERIALIZABLE(SquareParticlesEmitterShape);
-		CLONEABLE_REF(SquareParticlesEmitterShape);
+        SERIALIZABLE(SquareParticlesEmitterShape);
+        CLONEABLE_REF(SquareParticlesEmitterShape);
     };
 }
 // --- META ---

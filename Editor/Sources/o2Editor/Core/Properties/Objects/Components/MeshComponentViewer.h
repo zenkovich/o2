@@ -12,86 +12,86 @@ using namespace o2;
 
 namespace o2
 {
-	class Spoiler;
+    class Spoiler;
 }
 
 namespace Editor
 {
-	// ---------------------
-	// Mesh component viewer
-	// ---------------------
-	class MeshComponentViewer: public TObjectPropertiesViewer<MeshComponent>
-	{
-	public:
-		// Default constructor
-		MeshComponentViewer();
+    // ---------------------
+    // Mesh component viewer
+    // ---------------------
+    class MeshComponentViewer: public TObjectPropertiesViewer<MeshComponent>
+    {
+    public:
+        // Default constructor
+        MeshComponentViewer();
 
-		// Destructor
-		~MeshComponentViewer();
+        // Destructor
+        ~MeshComponentViewer();
 
-		// Copy operator
-		MeshComponentViewer& operator=(const MeshComponentViewer& other);
+        // Copy operator
+        MeshComponentViewer& operator=(const MeshComponentViewer& other);
 
-		IOBJECT(MeshComponentViewer);
+        IOBJECT(MeshComponentViewer);
 
-	protected:
-		// ------------------------------------
-		// Scene layer for draw texture overlay
-		// ------------------------------------
-		struct SceneLayer : public SceneEditorLayer
-		{
-			WeakRef<MeshComponentViewer> viewer;        // Reference to viewer
-			Sprite                       textureSprite; // Texture sprite
+    protected:
+        // ------------------------------------
+        // Scene layer for draw texture overlay
+        // ------------------------------------
+        struct SceneLayer : public SceneEditorLayer
+        {
+            WeakRef<MeshComponentViewer> viewer;        // Reference to viewer
+            Sprite                       textureSprite; // Texture sprite
 
-		public:
-			// Draws editor over scene
-			void DrawOverScene() override;
+        public:
+            // Draws editor over scene
+            void DrawOverScene() override;
 
-			// Updates editor
-			void Update(float dt) override;
+            // Updates editor
+            void Update(float dt) override;
 
-			// Returns order of layer
-			int GetOrder() const override;
+            // Returns order of layer
+            int GetOrder() const override;
 
-			// Returns true if layer is enabled
-			bool IsEnabled() const override;
+            // Returns true if layer is enabled
+            bool IsEnabled() const override;
 
-			// Returns name of layer
-			const String& GetName() const override;
+            // Returns name of layer
+            const String& GetName() const override;
 
-			// Returns icon name of layer
-			const String& GetIconName() const override;
+            // Returns icon name of layer
+            const String& GetIconName() const override;
 
-			// Draws mesh wire
-			void DrawMeshWire();
-		};
+            // Draws mesh wire
+            void DrawMeshWire();
+        };
 
-	protected:
-		Ref<SplineTool>       mSplineTool;        // Spline tool
-		Ref<CustomFrameTool>  mFrameTool;         // Mapping frame tool
-		Ref<MeshTopologyTool> mTopologyTool;      // Mesh topology tool
-		Ref<SceneLayer>       mFrameTetxureLayer; // Frame texture drawing layer
+    protected:
+        Ref<SplineTool>       mSplineTool;        // Spline tool
+        Ref<CustomFrameTool>  mFrameTool;         // Mapping frame tool
+        Ref<MeshTopologyTool> mTopologyTool;      // Mesh topology tool
+        Ref<SceneLayer>       mFrameTetxureLayer; // Frame texture drawing layer
 
-		WeakRef<IEditTool> mPrevSelectedTool; // Previous selected tool, for restore
+        WeakRef<IEditTool> mPrevSelectedTool; // Previous selected tool, for restore
 
-		Ref<Button> mFitAndCenterButton; // Fit and centerize button
+        Ref<Button> mFitAndCenterButton; // Fit and centerize button
 
-	protected:
-		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
-		void RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
+    protected:
+        // Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
+        void RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 
-		// Called when viewer is refreshed
-		void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
+        // Called when viewer is refreshed
+        void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 
-		// Enable viewer event function
-		void OnPropertiesEnabled() override;
+        // Enable viewer event function
+        void OnPropertiesEnabled() override;
 
-		// Disable viewer event function
-		void OnPropertiesDisabled() override;
+        // Disable viewer event function
+        void OnPropertiesDisabled() override;
 
-		// Called when button pressed
-		void FitAndCenterize();
-	};
+        // Called when button pressed
+        void FitAndCenterize();
+    };
 }
 // --- META ---
 

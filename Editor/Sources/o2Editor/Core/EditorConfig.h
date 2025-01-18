@@ -10,7 +10,7 @@ using namespace o2;
 
 namespace o2
 {
-	class Widget;
+    class Widget;
 }
 
 // Editor configuration access macros
@@ -18,84 +18,84 @@ namespace o2
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(DockWindowPlace);
+    FORWARD_CLASS_REF(DockWindowPlace);
 
-	// -------------------------
-	// Application configuration
-	// -------------------------
-	class EditorConfig : public Singleton<EditorConfig>, public ISerializable
-	{
-	public:
-		// ---------------------------
-		// Global editor configuration
-		// ---------------------------
-		class GlobalConfig : public ISerializable
-		{
-		public:
-			WindowsLayout  mDefaultLayout; // Default windows layout, using in resetting @SERIALIZABLE
+    // -------------------------
+    // Application configuration
+    // -------------------------
+    class EditorConfig : public Singleton<EditorConfig>, public ISerializable
+    {
+    public:
+        // ---------------------------
+        // Global editor configuration
+        // ---------------------------
+        class GlobalConfig : public ISerializable
+        {
+        public:
+            WindowsLayout  mDefaultLayout; // Default windows layout, using in resetting @SERIALIZABLE
 
-			Map<String, WindowsLayout> mAvailableLayouts; // Available windows layouts @SERIALIZABLE
+            Map<String, WindowsLayout> mAvailableLayouts; // Available windows layouts @SERIALIZABLE
 
-			SERIALIZABLE(GlobalConfig);
-		};
+            SERIALIZABLE(GlobalConfig);
+        };
 
-		// ----------------------------
-		// Project editor configuration
-		// ----------------------------
-		class ProjectConfig : public ISerializable
-		{
-		public:
-			Vec2I         mWindowSize = Vec2I(800, 600); // Application window size @SERIALIZABLE
-			Vec2I         mWindowPosition;               // Application window position @SERIALIZABLE
-			bool          mMaximized = true;             // Is application window is maximized @SERIALIZABLE
-			WindowsLayout mLayout;                       // Windows layout @SERIALIZABLE
-			String        mLastLoadedScene;              // Last loaded scene @SERIALIZABLE
+        // ----------------------------
+        // Project editor configuration
+        // ----------------------------
+        class ProjectConfig : public ISerializable
+        {
+        public:
+            Vec2I         mWindowSize = Vec2I(800, 600); // Application window size @SERIALIZABLE
+            Vec2I         mWindowPosition;               // Application window position @SERIALIZABLE
+            bool          mMaximized = true;             // Is application window is maximized @SERIALIZABLE
+            WindowsLayout mLayout;                       // Windows layout @SERIALIZABLE
+            String        mLastLoadedScene;              // Last loaded scene @SERIALIZABLE
 
-			SERIALIZABLE(ProjectConfig);
-		};
+            SERIALIZABLE(ProjectConfig);
+        };
 
-	public:
-		ProjectConfig projectConfig; // Project editor config
-		GlobalConfig  globalConfig;  // Global editor config for all projects
+    public:
+        ProjectConfig projectConfig; // Project editor config
+        GlobalConfig  globalConfig;  // Global editor config for all projects
 
-	public:
-		// Default constructor. Loads data and applies to application 
-		EditorConfig(RefCounter* refCounter);
+    public:
+        // Default constructor. Loads data and applies to application 
+        EditorConfig(RefCounter* refCounter);
 
-		// Destructor. Saves application configuration
-		~EditorConfig();
+        // Destructor. Saves application configuration
+        ~EditorConfig();
 
-		SERIALIZABLE(EditorConfig);
+        SERIALIZABLE(EditorConfig);
 
-	protected:
-		String mConfigPath = "../../EditorConfig.json";
-		String mGlobalConfigPath = "../../Config.json";
+    protected:
+        String mConfigPath = "../../EditorConfig.json";
+        String mGlobalConfigPath = "../../Config.json";
 
-		bool mConfigsLoaded = false; // True if configurations were loaded
+        bool mConfigsLoaded = false; // True if configurations were loaded
 
-	protected:
-		// Saves global configs
-		void SaveGlobalConfigs();
+    protected:
+        // Saves global configs
+        void SaveGlobalConfigs();
 
-		// Saves project configs
-		void SaveProjectConfigs();
+        // Saves project configs
+        void SaveProjectConfigs();
 
-		// Loads and applies configs
-		void LoadConfigs();
+        // Loads and applies configs
+        void LoadConfigs();
 
-		// Loads project configs
-		void LoadProjectConfig();
+        // Loads project configs
+        void LoadProjectConfig();
 
-		// Loads global configs
-		void LoadGlobalConfig();
+        // Loads global configs
+        void LoadGlobalConfig();
 
-		// Updates window configs
-		void OnWindowChange();
+        // Updates window configs
+        void OnWindowChange();
 
-		friend class EditorApplication;
-		friend class MenuPanel;
-		friend class WindowsManager;
-	};
+        friend class EditorApplication;
+        friend class MenuPanel;
+        friend class WindowsManager;
+    };
 }
 // --- META ---
 

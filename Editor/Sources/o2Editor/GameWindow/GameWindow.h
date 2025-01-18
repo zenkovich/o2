@@ -5,117 +5,117 @@
 
 namespace o2
 {
-	class Widget;
-	class DropDown;
+    class Widget;
+    class DropDown;
 }
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(Vec2IProperty);
+    FORWARD_CLASS_REF(Vec2IProperty);
 
-	// ---------------------------------------
-	// Game window. Draws scene, handles input
-	// ---------------------------------------
-	class GameWindow : public IEditorWindow
-	{
-	public:
-		// ----------------------------------------
-		// Game view widget, used for drawing scene
-		// ----------------------------------------
-		class GameView : public Widget
-		{
-		public:
-			bool  fixedResolution = true; // Is view resolution fixed
-			Vec2I resolution;             // View resolution
+    // ---------------------------------------
+    // Game window. Draws scene, handles input
+    // ---------------------------------------
+    class GameWindow : public IEditorWindow
+    {
+    public:
+        // ----------------------------------------
+        // Game view widget, used for drawing scene
+        // ----------------------------------------
+        class GameView : public Widget
+        {
+        public:
+            bool  fixedResolution = true; // Is view resolution fixed
+            Vec2I resolution;             // View resolution
 
-		public:
-			// Default constructor, initializes view
-			GameView(RefCounter* refCounter);
+        public:
+            // Default constructor, initializes view
+            GameView(RefCounter* refCounter);
 
-			// Draws view
-			void Draw() override;
+            // Draws view
+            void Draw() override;
 
-			// Updates render target size
-			void UpdateRenderTargetSize();
+            // Updates render target size
+            void UpdateRenderTargetSize();
 
-			// Returns create menu category in editor
-			static String GetCreateMenuCategory();
+            // Returns create menu category in editor
+            static String GetCreateMenuCategory();
 
             SERIALIZABLE(GameView);
             CLONEABLE_REF(GameView);
 
-		protected:
-			Ref<Sprite>  mRenderTargetSprite; // Render target sprite, using for drawing scene render target
-			TextureRef mRenderTarget;       // Render target texture, using for rendering scene
+        protected:
+            Ref<Sprite>  mRenderTargetSprite; // Render target sprite, using for drawing scene render target
+            TextureRef mRenderTarget;       // Render target texture, using for rendering scene
 
-		protected:
-			// Called when transformation was changed and updated, updates render texture and sprite
-			void OnTransformUpdated() override;
-		};
+        protected:
+            // Called when transformation was changed and updated, updates render texture and sprite
+            void OnTransformUpdated() override;
+        };
 
-		// ---------------------------
-		// Simulation devicedefinition
-		// ---------------------------
-		class SimulationDevice : public ISerializable
-		{
-		public:
-			String deviceName; // Name of device @SERIALIZABLE
-			Vec2I  resolution; // Target resolution @SERIALIZABLE
+        // ---------------------------
+        // Simulation devicedefinition
+        // ---------------------------
+        class SimulationDevice : public ISerializable
+        {
+        public:
+            String deviceName; // Name of device @SERIALIZABLE
+            Vec2I  resolution; // Target resolution @SERIALIZABLE
 
-		public:
-			// Equality operator
-			bool operator==(const SimulationDevice& other) const;
+        public:
+            // Equality operator
+            bool operator==(const SimulationDevice& other) const;
 
-			SERIALIZABLE(SimulationDevice);
-		};
+            SERIALIZABLE(SimulationDevice);
+        };
 
-	public:
-		// Default constructor, initializes window and creates controls
-		GameWindow();
+    public:
+        // Default constructor, initializes window and creates controls
+        GameWindow();
 
-		// Copy constructor
-		GameWindow(const GameWindow& other);
+        // Copy constructor
+        GameWindow(const GameWindow& other);
 
-		// Destructor
-		~GameWindow();
+        // Destructor
+        ~GameWindow();
 
-		IOBJECT(GameWindow);
+        IOBJECT(GameWindow);
 
-	protected:
-		Ref<GameView> mGameView; // Game view widget
+    protected:
+        Ref<GameView> mGameView; // Game view widget
 
-		Ref<Button> mResolutionsButton; // Resolutions popup button
+        Ref<Button> mResolutionsButton; // Resolutions popup button
 
-		Map<String, SimulationDevice> mDevicesList; // List of devices
+        Map<String, SimulationDevice> mDevicesList; // List of devices
 
-		Ref<ContextMenu>       mDevicesMenu;           // Devices menu
-		Ref<ContextMenu::Item> mCurrentWindowSizeItem; // Current window size item
-		Ref<ContextMenu::Item> mCustomSizeItem;        // Custom size item
+        Ref<ContextMenu>       mDevicesMenu;           // Devices menu
+        Ref<ContextMenu::Item> mCurrentWindowSizeItem; // Current window size item
+        Ref<ContextMenu::Item> mCustomSizeItem;        // Custom size item
 
-		Ref<Vec2IProperty> mCustomSizeProperty; // Custom view resolution size property
+        Ref<Vec2IProperty> mCustomSizeProperty; // Custom view resolution size property
 
-	protected:
-		// Initializes window
-		void InitializeWindow();
+    protected:
+        // Initializes window
+        void InitializeWindow();
 
-		// Initializes devices menu
-		void InitializeDevicesMenu();
+        // Initializes devices menu
+        void InitializeDevicesMenu();
 
-		// Sets game resolution
-		void SetResolution(const Vec2I& resolution);
+        // Sets game resolution
+        void SetResolution(const Vec2I& resolution);
 
-		// When current window size resolution checked
-		void OnCurrentWindowSize(bool enabled);
+        // When current window size resolution checked
+        void OnCurrentWindowSize(bool enabled);
 
-		// When custom resolution checked
-		void OnCustomResolution(bool enabled);
+        // When custom resolution checked
+        void OnCustomResolution(bool enabled);
 
-		// When device selected
-		void OnDeviceSelected(const String& name, const Ref<ContextMenu::Item>& item);
+        // When device selected
+        void OnDeviceSelected(const String& name, const Ref<ContextMenu::Item>& item);
 
-		// Sets device menu checked item by name
-		void SetDeviceMenuCheckedItem(const Ref<ContextMenu::Item>& item);
-	};
+        // Sets device menu checked item by name
+        void SetDeviceMenuCheckedItem(const Ref<ContextMenu::Item>& item);
+    };
 }
 // --- META ---
 

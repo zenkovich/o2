@@ -4,79 +4,79 @@
 
 namespace o2
 {
-	class HorizontalScrollBar;
-	class VerticalScrollBar;
+    class HorizontalScrollBar;
+    class VerticalScrollBar;
 }
 
 namespace Editor
 {
-	// ----------------------------------------
-	// Scroll view, where view limited by frame
-	// ----------------------------------------
-	class FrameScrollView: public ScrollView
-	{
-	public:
-		Function<void()> onViewChanged; // Camera move or zoom event
+    // ----------------------------------------
+    // Scroll view, where view limited by frame
+    // ----------------------------------------
+    class FrameScrollView: public ScrollView
+    {
+    public:
+        Function<void()> onViewChanged; // Camera move or zoom event
 
-	public:
-		// Default constructor
-		FrameScrollView(RefCounter* refCounter);
+    public:
+        // Default constructor
+        FrameScrollView(RefCounter* refCounter);
 
-		// Copy-constructor
-		FrameScrollView(RefCounter* refCounter, const FrameScrollView& other);
+        // Copy-constructor
+        FrameScrollView(RefCounter* refCounter, const FrameScrollView& other);
 
-		// Destructor
-		~FrameScrollView();
+        // Destructor
+        ~FrameScrollView();
 
-		// Copy-operator
-		FrameScrollView& operator=(const FrameScrollView& other);
+        // Copy-operator
+        FrameScrollView& operator=(const FrameScrollView& other);
 
-		// Draws widget, updates render target 
-		void Draw() override;
+        // Draws widget, updates render target 
+        void Draw() override;
 
-		// Updates drawables, states and widget
-		void Update(float dt) override;
+        // Updates drawables, states and widget
+        void Update(float dt) override;
 
-		// Updates layout
-		void UpdateSelfTransform() override;
+        // Updates layout
+        void UpdateSelfTransform() override;
 
-		// Sets horizontal scrollbar
-		void SetHorScrollbar(const Ref<HorizontalScrollBar>& scrollbar);
+        // Sets horizontal scrollbar
+        void SetHorScrollbar(const Ref<HorizontalScrollBar>& scrollbar);
 
-		// Sets vertical scrollbar
-		void SetVerScrollbar(const Ref<VerticalScrollBar>& scrollbar);
+        // Sets vertical scrollbar
+        void SetVerScrollbar(const Ref<VerticalScrollBar>& scrollbar);
 
-		// Sets view area
-		void SetViewArea(const RectF& area);
+        // Sets view area
+        void SetViewArea(const RectF& area);
 
-		// Returns view area
-		RectF GetViewArea() const;
+        // Returns view area
+        RectF GetViewArea() const;
 
-		// Returns create menu category in editor
-		static String GetCreateMenuCategory();
+        // Returns create menu category in editor
+        static String GetCreateMenuCategory();
 
         SERIALIZABLE(FrameScrollView);
         CLONEABLE_REF(FrameScrollView);
 
-	protected:
-		Ref<HorizontalScrollBar> mHorScrollbar; // Horizontal view scrollbar @SERIALIZABLE
-		Ref<VerticalScrollBar>   mVerScrollbar; // Vertical view scrollbar @SERIALIZABLE
+    protected:
+        Ref<HorizontalScrollBar> mHorScrollbar; // Horizontal view scrollbar @SERIALIZABLE
+        Ref<VerticalScrollBar>   mVerScrollbar; // Vertical view scrollbar @SERIALIZABLE
 
-		RectF mAvailableArea; // Available viewing area @SERIALIZABLE
+        RectF mAvailableArea; // Available viewing area @SERIALIZABLE
 
-	protected:
-		// Updates camera limits
-		void UpdateCameraLimits(float dt);
+    protected:
+        // Updates camera limits
+        void UpdateCameraLimits(float dt);
 
-		// Called when horizontal scroll bar was scrolled
-		void OnHorScrollScrolled(float value);
+        // Called when horizontal scroll bar was scrolled
+        void OnHorScrollScrolled(float value);
 
-		// Called when vertical scroll bar was scrolled
-		void OnVerScrollScrolled(float value);
+        // Called when vertical scroll bar was scrolled
+        void OnVerScrollScrolled(float value);
 
-		// Called when camera position was changed
-		void OnCameraTransformChanged() override;
-	};
+        // Called when camera position was changed
+        void OnCameraTransformChanged() override;
+    };
 }
 // --- META ---
 

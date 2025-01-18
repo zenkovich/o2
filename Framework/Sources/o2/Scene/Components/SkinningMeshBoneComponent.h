@@ -46,9 +46,9 @@ namespace o2
         SERIALIZABLE(SkinningMeshBoneComponent);
         CLONEABLE_REF(SkinningMeshBoneComponent);
 
-	protected:
-		// Draw particle system
-		void OnDraw() override;
+    protected:
+        // Draw particle system
+        void OnDraw() override;
 
         // Called when actor's transform was changed
         void OnTransformUpdated() override;

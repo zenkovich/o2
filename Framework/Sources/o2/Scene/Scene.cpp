@@ -367,7 +367,7 @@ namespace o2
     }
 
     void Scene::RemoveActorFromScene(const Ref<Actor>& actor, bool keepEditorObjects /*= false*/)
-	{
+    {
         if (!actor->mParent)
             mRootActors.Remove(actor);
 

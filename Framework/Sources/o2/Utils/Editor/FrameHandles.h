@@ -156,8 +156,8 @@ namespace o2
         void OnTransformed(const Basis& transform);
 
         // Called when handle change completed, calling basis change completed event
-		void OnChangeCompleted();
+        void OnChangeCompleted();
 
-		REF_COUNTERABLE_IMPL(RefCounterable);
+        REF_COUNTERABLE_IMPL(RefCounterable);
     };
 }

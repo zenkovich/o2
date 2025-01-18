@@ -7,38 +7,38 @@ using namespace o2;
 
 namespace o2
 {
-	class SceneEditableObject;
+    class SceneEditableObject;
 }
 
 namespace Editor
 {
-	// -----------------------------
-	// Scene object selection action
-	// -----------------------------
-	class SelectAction: public IAction
-	{
-	public:
-		Vector<SceneUID> selectedObjectsIds;     // Selected objects ids
-		Vector<SceneUID> prevSelectedObjectsIds; // Selected objects ids before
+    // -----------------------------
+    // Scene object selection action
+    // -----------------------------
+    class SelectAction: public IAction
+    {
+    public:
+        Vector<SceneUID> selectedObjectsIds;     // Selected objects ids
+        Vector<SceneUID> prevSelectedObjectsIds; // Selected objects ids before
 
-	public:
-		// Default constructor
-		SelectAction();
+    public:
+        // Default constructor
+        SelectAction();
 
-		// CUnstructor with new and previous selected objects
-		SelectAction(const Vector<Ref<SceneEditableObject>>& selectedObjects, const Vector<Ref<SceneEditableObject>>& prevSelectedObjects);
+        // CUnstructor with new and previous selected objects
+        SelectAction(const Vector<Ref<SceneEditableObject>>& selectedObjects, const Vector<Ref<SceneEditableObject>>& prevSelectedObjects);
 
-		// Returns name of action
-		String GetName() const override;
+        // Returns name of action
+        String GetName() const override;
 
-		// Selects objects again
-		void Redo() override;
+        // Selects objects again
+        void Redo() override;
 
-		// Selects previous selected objects
-		void Undo() override;
+        // Selects previous selected objects
+        void Undo() override;
 
-		SERIALIZABLE(SelectAction);
-	};
+        SERIALIZABLE(SelectAction);
+    };
 }
 // --- META ---
 

@@ -97,9 +97,9 @@ namespace o2
 
         bool mNeedUpdateMesh = false; // True, when mesh data is dirty and need to rebuild
 
-	protected:
-		// Draws sprite 
-		void OnDraw() override;
+    protected:
+        // Draws sprite 
+        void OnDraw() override;
 
         // Called when actor's transform was changed
         void OnTransformUpdated() override;

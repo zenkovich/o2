@@ -96,7 +96,7 @@ namespace o2
 
     Ref<IAnimationTrack> AnimationClip::AddTrack(const String& path, const Type& type)
     {
-		const Type* animType = nullptr;
+        const Type* animType = nullptr;
 
         if (type.IsBasedOn(TypeOf(IAnimation)))
             animType = &TypeOf(AnimationSubTrack);

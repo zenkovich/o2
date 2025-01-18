@@ -53,12 +53,12 @@ namespace o2
         return "ui/UI4_emitter_component.png";
     }
 
-	Ref<o2::RefCounterable> ParticlesEmitterComponent::CastToRefCounterable(const Ref<ParticlesEmitterComponent>& ref)
-	{
+    Ref<o2::RefCounterable> ParticlesEmitterComponent::CastToRefCounterable(const Ref<ParticlesEmitterComponent>& ref)
+    {
         return DynamicCast<Component>(ref);
-	}
+    }
 
-	void ParticlesEmitterComponent::OnTransformUpdated()
+    void ParticlesEmitterComponent::OnTransformUpdated()
     {
         basis = mOwner.Lock()->transform->GetWorldBasis();
     }

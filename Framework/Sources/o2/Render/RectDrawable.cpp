@@ -59,18 +59,18 @@ namespace o2
         return mColor.AF();
     }
 
-	void IRectDrawable::SetBlendMode(BlendMode blendMode)
-	{
-		mBlendMode = blendMode;
+    void IRectDrawable::SetBlendMode(BlendMode blendMode)
+    {
+        mBlendMode = blendMode;
         BlendModeChanged();
-	}
+    }
 
-	BlendMode IRectDrawable::GetBlendMode() const
-	{
-		return mBlendMode;
-	}
+    BlendMode IRectDrawable::GetBlendMode() const
+    {
+        return mBlendMode;
+    }
 
-	void IRectDrawable::SetEnabled(bool enabled)
+    void IRectDrawable::SetEnabled(bool enabled)
     {
         mEnabled = enabled;
         EnableChanged();

@@ -13,10 +13,10 @@ using namespace o2;
 
 namespace o2
 {
-	class Sprite;
-	class SceneEditableObject;
-	class Component;
-	class Tree;
+    class Sprite;
+    class SceneEditableObject;
+    class Component;
+    class Tree;
 }
 
 // Editor scene screen accessor macros
@@ -24,130 +24,130 @@ namespace o2
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(IEditTool);
-	FORWARD_CLASS_REF(SceneDragHandle);
-	FORWARD_CLASS_REF(SceneEditorLayer);
-	FORWARD_CLASS_REF(SceneHierarchyTree);
+    FORWARD_CLASS_REF(IEditTool);
+    FORWARD_CLASS_REF(SceneDragHandle);
+    FORWARD_CLASS_REF(SceneEditorLayer);
+    FORWARD_CLASS_REF(SceneHierarchyTree);
 
-	// --------------------
-	// Scene editing screen
-	// --------------------
-	class SceneEditScreen : public Singleton<SceneEditScreen>, public ScrollView, public DragDropArea, public KeyboardEventsListener
-	{
-	public:
-		Function<void(const Vector<Ref<SceneEditableObject>>&)> onSelectionChanged; // Actors selection change event
+    // --------------------
+    // Scene editing screen
+    // --------------------
+    class SceneEditScreen : public Singleton<SceneEditScreen>, public ScrollView, public DragDropArea, public KeyboardEventsListener
+    {
+    public:
+        Function<void(const Vector<Ref<SceneEditableObject>>&)> onSelectionChanged; // Actors selection change event
 
-		// Default constructor
-		SceneEditScreen(RefCounter* refCounter);
+        // Default constructor
+        SceneEditScreen(RefCounter* refCounter);
 
-		// Copy-constructor
-		SceneEditScreen(RefCounter* refCounter, const SceneEditScreen& other);
+        // Copy-constructor
+        SceneEditScreen(RefCounter* refCounter, const SceneEditScreen& other);
 
-		// Destructor
-		~SceneEditScreen();
+        // Destructor
+        ~SceneEditScreen();
 
-		// Draws widget
-		void Draw() override;
+        // Draws widget
+        void Draw() override;
 
-		// Called when required to redraw content. Sets flag and redraws at next frame
-		void NeedRedraw();
+        // Called when required to redraw content. Sets flag and redraws at next frame
+        void NeedRedraw();
 
-		// Updates drawables, states and widget
-		void Update(float dt) override;
+        // Updates drawables, states and widget
+        void Update(float dt) override;
 
-		// Returns is listener scrollable
-		bool IsScrollable() const override;
+        // Returns is listener scrollable
+        bool IsScrollable() const override;
 
-		// Transforms point from screen space to scene space
-		Vec2F ScreenToScenePoint(const Vec2F& point);
+        // Transforms point from screen space to scene space
+        Vec2F ScreenToScenePoint(const Vec2F& point);
 
-		// Transforms point from scene space to screen space
-		Vec2F SceneToScreenPoint(const Vec2F& point);
+        // Transforms point from scene space to screen space
+        Vec2F SceneToScreenPoint(const Vec2F& point);
 
-		// Transforms point from screen space to scene space
-		Vec2F ScreenToSceneVector(const Vec2F& point);
+        // Transforms point from screen space to scene space
+        Vec2F ScreenToSceneVector(const Vec2F& point);
 
-		// Transforms point from scene space to screen space
-		Vec2F SceneToScreenVector(const Vec2F& point);
+        // Transforms point from scene space to screen space
+        Vec2F SceneToScreenVector(const Vec2F& point);
 
-		// Draws object selection
-		void DrawObjectSelection(const Ref<SceneEditableObject>& object, const Color4& color);
+        // Draws object selection
+        void DrawObjectSelection(const Ref<SceneEditableObject>& object, const Color4& color);
 
-		// Selects objects
-		void SelectObjects(const Vector<Ref<SceneEditableObject>>& objects, bool additive = true);
+        // Selects objects
+        void SelectObjects(const Vector<Ref<SceneEditableObject>>& objects, bool additive = true);
 
-		// Selects object
-		void SelectObject(const Ref<SceneEditableObject>& object, bool additive = true);
+        // Selects object
+        void SelectObject(const Ref<SceneEditableObject>& object, bool additive = true);
 
-		// Selects all objects
-		void SelectAllObjects();
+        // Selects all objects
+        void SelectAllObjects();
 
-		// Clears objects selection
-		void ClearSelection();
+        // Clears objects selection
+        void ClearSelection();
 
-		// Returns left top widgets container, can be used for tools additional controls
-		const Ref<HorizontalLayout>& GetLeftTopWidgetsContainer();
+        // Returns left top widgets container, can be used for tools additional controls
+        const Ref<HorizontalLayout>& GetLeftTopWidgetsContainer();
 
-		// Returns right top widgets container, can be used for tools additional controls
-		const Ref<HorizontalLayout>& GetRightTopWidgetsContainer();
+        // Returns right top widgets container, can be used for tools additional controls
+        const Ref<HorizontalLayout>& GetRightTopWidgetsContainer();
 
-		// Returns left bottom widgets container, can be used for tools additional controls
-		const Ref<HorizontalLayout>& GetLeftBottomWidgetsContainer();
+        // Returns left bottom widgets container, can be used for tools additional controls
+        const Ref<HorizontalLayout>& GetLeftBottomWidgetsContainer();
 
-		// Returns right bottom widgets container, can be used for tools additional controls
-		const Ref<HorizontalLayout>& GetRightBottomWidgetsContainer();
+        // Returns right bottom widgets container, can be used for tools additional controls
+        const Ref<HorizontalLayout>& GetRightBottomWidgetsContainer();
 
-		// Adds editable layer
-		void AddEditorLayer(const Ref<SceneEditorLayer>& layer);
+        // Adds editable layer
+        void AddEditorLayer(const Ref<SceneEditorLayer>& layer);
 
-		// Removes editable layer
-		void RemoveEditorLayer(const Ref<SceneEditorLayer>& layer);
+        // Removes editable layer
+        void RemoveEditorLayer(const Ref<SceneEditorLayer>& layer);
 
-		// Sets layers with name enabled
-		void SetLayerEnabled(const String& name, bool enabled);
+        // Sets layers with name enabled
+        void SetLayerEnabled(const String& name, bool enabled);
 
-		// Returns is layer enabled
-		bool IsLayerEnabled(const String& name) const;
+        // Returns is layer enabled
+        bool IsLayerEnabled(const String& name) const;
 
-		// Selects tool with type
-		template<typename _type>
-		void SelectTool();
+        // Selects tool with type
+        template<typename _type>
+        void SelectTool();
 
-		// Selects tool
-		void SelectTool(const Ref<IEditTool>& tool);
+        // Selects tool
+        void SelectTool(const Ref<IEditTool>& tool);
 
-		// Returns selected tool
-		const Ref<IEditTool>& GetSelectedTool() const;
+        // Returns selected tool
+        const Ref<IEditTool>& GetSelectedTool() const;
 
-		// Adds tool
-		void AddTool(const Ref<IEditTool>& tool);
+        // Adds tool
+        void AddTool(const Ref<IEditTool>& tool);
 
-		// Removes tool
-		void RemoveTool(const Ref<IEditTool>& tool);
+        // Removes tool
+        void RemoveTool(const Ref<IEditTool>& tool);
 
-		// Returns tool by type, or null if it doesn't exists
-		template<typename _type>
-		Ref<_type> GetTool();
+        // Returns tool by type, or null if it doesn't exists
+        template<typename _type>
+        Ref<_type> GetTool();
 
-		// Returns all registered tools
-		const Vector<Ref<IEditTool>>& GetTools() const;
+        // Returns all registered tools
+        const Vector<Ref<IEditTool>>& GetTools() const;
 
-		// Returns selected objects array
-		const Vector<Ref<SceneEditableObject>>& GetSelectedObjects() const;
+        // Returns selected objects array
+        const Vector<Ref<SceneEditableObject>>& GetSelectedObjects() const;
 
-		// Returns top selected objects in hierarchy
-		const Vector<Ref<SceneEditableObject>>& GetTopSelectedObjects() const;
+        // Returns top selected objects in hierarchy
+        const Vector<Ref<SceneEditableObject>>& GetTopSelectedObjects() const;
 
-		// Returns color for single selected object
-		const Color4& GetSingleObjectSelectionColor() const;
+        // Returns color for single selected object
+        const Color4& GetSingleObjectSelectionColor() const;
 
-		// Return color for multiple selected objects
-		const Color4& GetManyObjectsSelectionColor() const;
+        // Return color for multiple selected objects
+        const Color4& GetManyObjectsSelectionColor() const;
 
-		// Called when scene was changed and needs to redraw
-		void OnSceneChanged();
+        // Called when scene was changed and needs to redraw
+        void OnSceneChanged();
 
-		// Returns true if point is in this object
+        // Returns true if point is in this object
         bool IsUnderPoint(const Vec2F& point) override;
 
         // Dynamic cast to RefCounterable via Singleton<SceneEditScreen>
@@ -156,170 +156,170 @@ namespace Editor
         SERIALIZABLE(SceneEditScreen);
         CLONEABLE_REF(SceneEditScreen);
 
-	protected:
-		Color4 mSelectedObjectColor = Color4(220, 220, 220, 255);      // Selected object color
-		Color4 mMultiSelectedObjectColor = Color4(220, 220, 220, 100); // Selected object color
-		float  mObjectMinimalSelectionSize = 10.0f;                    // Minimal object size on pixels
+    protected:
+        Color4 mSelectedObjectColor = Color4(220, 220, 220, 255);      // Selected object color
+        Color4 mMultiSelectedObjectColor = Color4(220, 220, 220, 100); // Selected object color
+        float  mObjectMinimalSelectionSize = 10.0f;                    // Minimal object size on pixels
 
-		Vector<Ref<SceneEditableObject>> mSelectedObjects;          // Current selected objects
-		Vector<Ref<SceneEditableObject>> mTopSelectedObjects;       // Current selected objects most top in hierarchy
-		bool                             mSelectedFromThis = false; // True if selection changed from this, needs to break recursive selection update
+        Vector<Ref<SceneEditableObject>> mSelectedObjects;          // Current selected objects
+        Vector<Ref<SceneEditableObject>> mTopSelectedObjects;       // Current selected objects most top in hierarchy
+        bool                             mSelectedFromThis = false; // True if selection changed from this, needs to break recursive selection update
 
-		Vector<Ref<IEditTool>> mTools;       // Available tools
-		Ref<IEditTool>         mEnabledTool; // Current enabled tool
+        Vector<Ref<IEditTool>> mTools;       // Available tools
+        Ref<IEditTool>         mEnabledTool; // Current enabled tool
 
-		Vector<Ref<SceneDragHandle>> mDragHandles; // Dragging handles array
+        Vector<Ref<SceneDragHandle>> mDragHandles; // Dragging handles array
 
-		Vector<Ref<SceneEditorLayer>> mEditorLayers;        // List of editable layers
-		Map<String, bool>             mEditorLayersEnabled; // Map of enabled or disabled layers by user
+        Vector<Ref<SceneEditorLayer>> mEditorLayers;        // List of editable layers
+        Map<String, bool>             mEditorLayersEnabled; // Map of enabled or disabled layers by user
 
-		Ref<HorizontalLayout> mLeftTopWidgetsContainer;     // Additional controls widgets container at left top
-		Ref<HorizontalLayout> mRightTopWidgetsContainer;    // Additional controls widgets container at right top
-		Ref<HorizontalLayout> mLeftBottomWidgetsContainer;  // Additional controls widgets container at left bottom
-		Ref<HorizontalLayout> mRightBottomWidgetsContainer; // Additional controls widgets container at right bottom
+        Ref<HorizontalLayout> mLeftTopWidgetsContainer;     // Additional controls widgets container at left top
+        Ref<HorizontalLayout> mRightTopWidgetsContainer;    // Additional controls widgets container at right top
+        Ref<HorizontalLayout> mLeftBottomWidgetsContainer;  // Additional controls widgets container at left bottom
+        Ref<HorizontalLayout> mRightBottomWidgetsContainer; // Additional controls widgets container at right bottom
 
-	protected:
-		// Initializes tools
-		void InitializeTools();
+    protected:
+        // Initializes tools
+        void InitializeTools();
 
-		// Creates and configures widgets container with specified base corner
-		Ref<HorizontalLayout> InitializeWidgetsContainer(BaseCorner baseCorner);
+        // Creates and configures widgets container with specified base corner
+        Ref<HorizontalLayout> InitializeWidgetsContainer(BaseCorner baseCorner);
 
-		// Returns true if some handle hovered or pressed by cursor
-		bool IsHandleWorking(const Input::Cursor& cursor) const;
+        // Returns true if some handle hovered or pressed by cursor
+        bool IsHandleWorking(const Input::Cursor& cursor) const;
 
-		// Called when cursor pressed on this
-		void OnCursorPressed(const Input::Cursor& cursor) override;
+        // Called when cursor pressed on this
+        void OnCursorPressed(const Input::Cursor& cursor) override;
 
-		// Called when cursor released (only when cursor pressed this at previous time)
-		void OnCursorReleased(const Input::Cursor& cursor) override;
+        // Called when cursor released (only when cursor pressed this at previous time)
+        void OnCursorReleased(const Input::Cursor& cursor) override;
 
-		// Called when cursor pressing was broken (when scrolled scroll area or some other)
-		void OnCursorPressBreak(const Input::Cursor& cursor) override;
+        // Called when cursor pressing was broken (when scrolled scroll area or some other)
+        void OnCursorPressBreak(const Input::Cursor& cursor) override;
 
-		// Called when cursor stay down during frame
-		void OnCursorStillDown(const Input::Cursor& cursor) override;
+        // Called when cursor stay down during frame
+        void OnCursorStillDown(const Input::Cursor& cursor) override;
 
-		// Called when cursor moved on this (or moved outside when this was pressed)
-		void OnCursorMoved(const Input::Cursor& cursor) override;
+        // Called when cursor moved on this (or moved outside when this was pressed)
+        void OnCursorMoved(const Input::Cursor& cursor) override;
 
-		// Called when cursor enters this object
-		void OnCursorEnter(const Input::Cursor& cursor) override;
+        // Called when cursor enters this object
+        void OnCursorEnter(const Input::Cursor& cursor) override;
 
-		// Called when cursor exits this object
-		void OnCursorExit(const Input::Cursor& cursor) override;
+        // Called when cursor exits this object
+        void OnCursorExit(const Input::Cursor& cursor) override;
 
-		// Called when right mouse button was pressed on this
-		void OnCursorRightMousePressed(const Input::Cursor& cursor) override;
+        // Called when right mouse button was pressed on this
+        void OnCursorRightMousePressed(const Input::Cursor& cursor) override;
 
-		// Called when right mouse button stay down on this
-		void OnCursorRightMouseStayDown(const Input::Cursor& cursor) override;
+        // Called when right mouse button stay down on this
+        void OnCursorRightMouseStayDown(const Input::Cursor& cursor) override;
 
-		// Called when right mouse button was released (only when right mouse button pressed this at previous time)
-		void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
+        // Called when right mouse button was released (only when right mouse button pressed this at previous time)
+        void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
 
-		// Called when middle mouse button was pressed on this
-		void OnCursorMiddleMousePressed(const Input::Cursor& cursor) override;
+        // Called when middle mouse button was pressed on this
+        void OnCursorMiddleMousePressed(const Input::Cursor& cursor) override;
 
-		// Called when middle mouse button stay down on this
-		void OnCursorMiddleMouseStayDown(const Input::Cursor& cursor) override;
+        // Called when middle mouse button stay down on this
+        void OnCursorMiddleMouseStayDown(const Input::Cursor& cursor) override;
 
-		// Called when middle mouse button was released (only when middle mouse button pressed this at previous time)
-		void OnCursorMiddleMouseReleased(const Input::Cursor& cursor) override;
+        // Called when middle mouse button was released (only when middle mouse button pressed this at previous time)
+        void OnCursorMiddleMouseReleased(const Input::Cursor& cursor) override;
 
-		// Called when scrolling
-		void OnScrolled(float scroll) override;
+        // Called when scrolling
+        void OnScrolled(float scroll) override;
 
-		// Called when key was pressed
-		void OnKeyPressed(const Input::Key& key) override;
+        // Called when key was pressed
+        void OnKeyPressed(const Input::Key& key) override;
 
-		// Called when key was released
-		void OnKeyReleased(const Input::Key& key) override;
+        // Called when key was released
+        void OnKeyReleased(const Input::Key& key) override;
 
-		// Called when key stay down during frame
-		void OnKeyStayDown(const Input::Key& key) override;
+        // Called when key stay down during frame
+        void OnKeyStayDown(const Input::Key& key) override;
 
-		// Called when changed selected objects from this
-		void OnObjectsSelectedFromThis();
+        // Called when changed selected objects from this
+        void OnObjectsSelectedFromThis();
 
-		// Redraws scene texture
-		void RedrawContent() override;
+        // Redraws scene texture
+        void RedrawContent() override;
 
-		// Draws objects drawables components
-		void DrawObjects();
+        // Draws objects drawables components
+        void DrawObjects();
 
-		// Draws selection on objects
-		void DrawSelection();
+        // Draws selection on objects
+        void DrawSelection();
 
-		// Binds to scene tree selection window
-		void BindSceneTree();
+        // Binds to scene tree selection window
+        void BindSceneTree();
 
-		// Called when scene tree selection changed
-		void OnTreeSelectionChanged(Vector<Ref<SceneEditableObject>> selectedObjects);
+        // Called when scene tree selection changed
+        void OnTreeSelectionChanged(Vector<Ref<SceneEditableObject>> selectedObjects);
 
-		// Updates top selected objects
-		void UpdateTopSelectedObjects();
+        // Updates top selected objects
+        void UpdateTopSelectedObjects();
 
-		// Called when objects was changed
-		void OnSceneChanged(Vector<Ref<SceneEditableObject>> objects);
+        // Called when objects was changed
+        void OnSceneChanged(Vector<Ref<SceneEditableObject>> objects);
 
-		// Clears objects selection
-		void ClearSelectionWithoutAction(bool sendSelectedMessage = true);
+        // Clears objects selection
+        void ClearSelectionWithoutAction(bool sendSelectedMessage = true);
 
-		// Selects objects
-		void SelectObjectsWithoutAction(Vector<Ref<SceneEditableObject>> objects, bool additive = true);
+        // Selects objects
+        void SelectObjectsWithoutAction(Vector<Ref<SceneEditableObject>> objects, bool additive = true);
 
-		// Selects object
-		void SelectObjectWithoutAction(const Ref<SceneEditableObject>& object, bool additive = true);
+        // Selects object
+        void SelectObjectWithoutAction(const Ref<SceneEditableObject>& object, bool additive = true);
 
-		// Called when some selectable listeners was dropped to this
-		void OnDropped(const Ref<ISelectableDragableObjectsGroup>& group) override;
+        // Called when some selectable listeners was dropped to this
+        void OnDropped(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
-		// Called when some drag listeners was entered to this area
-		void OnDragEnter(const Ref<ISelectableDragableObjectsGroup>& group) override;
+        // Called when some drag listeners was entered to this area
+        void OnDragEnter(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
-		// Called when some drag listeners was dragged above this area
-		void OnDraggedAbove(const Ref<ISelectableDragableObjectsGroup>& group) override;
+        // Called when some drag listeners was dragged above this area
+        void OnDraggedAbove(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
-		// Called when some drag listeners was exited from this area
-		void OnDragExit(const Ref<ISelectableDragableObjectsGroup>& group) override;
+        // Called when some drag listeners was exited from this area
+        void OnDragExit(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
-		// Returns that this has transparent input
-		bool IsInputTransparent() const override;
+        // Returns that this has transparent input
+        bool IsInputTransparent() const override;
 
-		REF_COUNTERABLE_IMPL(ScrollView);
+        REF_COUNTERABLE_IMPL(ScrollView);
 
-		friend class DeleteAction;
-		friend class SelectAction;
-		friend class SelectionTool;
-		friend class SceneDragHandle;
-		friend class SceneWindow;
-		friend class TreeWindow;
-		friend class CreateAction;
-	};
+        friend class DeleteAction;
+        friend class SelectAction;
+        friend class SelectionTool;
+        friend class SceneDragHandle;
+        friend class SceneWindow;
+        friend class TreeWindow;
+        friend class CreateAction;
+    };
 }
 
 #include "o2Editor/Core/Tools/IEditorTool.h"
 
 namespace Editor
 {
-	template<typename _type>
-	void SceneEditScreen::SelectTool()
-	{
-		SelectTool(mTools.FindOrDefault([&](auto x) { return x->GetType() == TypeOf(_type); }));
-	}
+    template<typename _type>
+    void SceneEditScreen::SelectTool()
+    {
+        SelectTool(mTools.FindOrDefault([&](auto x) { return x->GetType() == TypeOf(_type); }));
+    }
 
-	template<typename _type>
-	Ref<_type> SceneEditScreen::GetTool()
-	{
-		for (auto& tool : mTools) 
-		{
-			if (auto typedTool = DynamicCast<_type>(tool))
-				return typedTool;
-		}
+    template<typename _type>
+    Ref<_type> SceneEditScreen::GetTool()
+    {
+        for (auto& tool : mTools) 
+        {
+            if (auto typedTool = DynamicCast<_type>(tool))
+                return typedTool;
+        }
 
-		return nullptr;
-	}
+        return nullptr;
+    }
 
 }
 // --- META ---

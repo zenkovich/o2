@@ -9,43 +9,43 @@ using namespace o2;
 
 namespace o2
 {
-	class EditBox;
-	class Button;
+    class EditBox;
+    class Button;
 }
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(ActorViewer);
-	FORWARD_CLASS_REF(ComponentsTree);
+    FORWARD_CLASS_REF(ActorViewer);
+    FORWARD_CLASS_REF(ComponentsTree);
 
-	// --------------------------------------------------------------------------------
-	// Add component to actor panel. Shows filter input, add button and components tree
-	// --------------------------------------------------------------------------------
-	class AddComponentPanel : public Widget, public CursorEventsArea, public KeyboardEventsListener
-	{
-	public:
-		// Default constructor
-		AddComponentPanel(RefCounter* refCounter);
+    // --------------------------------------------------------------------------------
+    // Add component to actor panel. Shows filter input, add button and components tree
+    // --------------------------------------------------------------------------------
+    class AddComponentPanel : public Widget, public CursorEventsArea, public KeyboardEventsListener
+    {
+    public:
+        // Default constructor
+        AddComponentPanel(RefCounter* refCounter);
 
-		// Constructor
-		AddComponentPanel(RefCounter* refCounter, const Ref<ActorViewer>& viewer);
+        // Constructor
+        AddComponentPanel(RefCounter* refCounter, const Ref<ActorViewer>& viewer);
 
-		// Draws widget, calls OnDrawn for CursorEventsListener
-		void Draw() override;
+        // Draws widget, calls OnDrawn for CursorEventsListener
+        void Draw() override;
 
-		// Returns filter widget
-		const Ref<EditBox>& GetFilter() const;
+        // Returns filter widget
+        const Ref<EditBox>& GetFilter() const;
 
-		// Returns tree widget
-		const Ref<ComponentsTree>& GetTree() const;
+        // Returns tree widget
+        const Ref<ComponentsTree>& GetTree() const;
 
-		// Returns true if point is in this object
-		bool IsUnderPoint(const Vec2F& point) override;
+        // Returns true if point is in this object
+        bool IsUnderPoint(const Vec2F& point) override;
 
-		// Returns true when input events can be handled by down listeners
-		bool IsInputTransparent() const override;
+        // Returns true when input events can be handled by down listeners
+        bool IsInputTransparent() const override;
 
-		// Returns create menu category in editor
+        // Returns create menu category in editor
         static String GetCreateMenuCategory();
 
         // Dynamic cast to RefCounterable via Component
@@ -54,55 +54,55 @@ namespace Editor
         SERIALIZABLE(AddComponentPanel);
         CLONEABLE_REF(AddComponentPanel);
 
-	private:
-		WeakRef<ActorViewer> mViewer; // Owner actors viewer
+    private:
+        WeakRef<ActorViewer> mViewer; // Owner actors viewer
 
-		Ref<EditBox>        mFilterBox; // Components names filter edit box, updates list of component when edit
-		Ref<Button>         mAddButton; // Add button
-		Ref<ComponentsTree> mTree;      // Components tree
+        Ref<EditBox>        mFilterBox; // Components names filter edit box, updates list of component when edit
+        Ref<Button>         mAddButton; // Add button
+        Ref<ComponentsTree> mTree;      // Components tree
 
-	private:
-		// Called when add button pressed. Adds selected component to target actors from viewer
-		void OnAddPressed();
+    private:
+        // Called when add button pressed. Adds selected component to target actors from viewer
+        void OnAddPressed();
 
-		// Creates component by type
-		void CreateComponent(const ObjectType* objType);
+        // Creates component by type
+        void CreateComponent(const ObjectType* objType);
 
-		// Called when tree node was double clicked
-		void OnNodeDblClick(const Ref<TreeNode>& nodeWidget);
+        // Called when tree node was double clicked
+        void OnNodeDblClick(const Ref<TreeNode>& nodeWidget);
 
-		// Called when key was released. When returns has pressed, component is creating
-		void OnKeyReleased(const Input::Key& key) override;
+        // Called when key was released. When returns has pressed, component is creating
+        void OnKeyReleased(const Input::Key& key) override;
 
         REF_COUNTERABLE_IMPL(Widget, CursorEventsArea);
-	};
-	
-	// ---------------------------------------------------------------------
-	// Components tree. Builds data tree by available components with filter
-	// ---------------------------------------------------------------------
-	class ComponentsTree : public Tree
-	{
-	public:
-		struct NodeData: public RefCounterable
-		{
-			WeakRef<NodeData>     parent ;
-			Vector<Ref<NodeData>> children;
+    };
+    
+    // ---------------------------------------------------------------------
+    // Components tree. Builds data tree by available components with filter
+    // ---------------------------------------------------------------------
+    class ComponentsTree : public Tree
+    {
+    public:
+        struct NodeData: public RefCounterable
+        {
+            WeakRef<NodeData>     parent ;
+            Vector<Ref<NodeData>> children;
 
-			String name;
-			String path;
-			String icon = "ui/UI4_component_icon.png";
+            String name;
+            String path;
+            String icon = "ui/UI4_component_icon.png";
 
-			const Type* type = nullptr;
+            const Type* type = nullptr;
 
-		public:
-			~NodeData();
+        public:
+            ~NodeData();
 
-			void Clear();
-			Ref<NodeData> AddChild(const String& name, const Type* type);
-		};
+            void Clear();
+            Ref<NodeData> AddChild(const String& name, const Type* type);
+        };
 
-	public:
-		// Default constructor
+    public:
+        // Default constructor
         ComponentsTree(RefCounter* refCounter);
 
         // Copy-constructor
@@ -111,91 +111,91 @@ namespace Editor
         // Copy-constructor
         ComponentsTree(const ComponentsTree& other);
 
-		// Copy operator
-		ComponentsTree& operator=(const ComponentsTree& other);
+        // Copy operator
+        ComponentsTree& operator=(const ComponentsTree& other);
 
-		// Refreshes components list
-		void Refresh();
+        // Refreshes components list
+        void Refresh();
 
-		// Sets filter and refreshes tree
-		void SetFilter(const WString& filter);
+        // Sets filter and refreshes tree
+        void SetFilter(const WString& filter);
 
-		// Returns create menu category in editor
-		static String GetCreateMenuCategory();
+        // Returns create menu category in editor
+        static String GetCreateMenuCategory();
 
         SERIALIZABLE(ComponentsTree);
         CLONEABLE_REF(ComponentsTree);
 
-	private:
-		WString  mFilterStr; // Filtering string
-		Ref<NodeData> mRoot; // Root properties data node
+    private:
+        WString  mFilterStr; // Filtering string
+        Ref<NodeData> mRoot; // Root properties data node
 
-	private:
-		// Updates visible nodes (calculates range and initializes nodes), enables editor mode
-		void UpdateVisibleNodes() override;
+    private:
+        // Updates visible nodes (calculates range and initializes nodes), enables editor mode
+        void UpdateVisibleNodes() override;
 
-		// Gets tree node from pool or creates new, enables editor mode
-		Ref<TreeNode> CreateTreeNodeWidget() override;
+        // Gets tree node from pool or creates new, enables editor mode
+        Ref<TreeNode> CreateTreeNodeWidget() override;
 
-		// Returns object's parent
-		void* GetObjectParent(void* object) override;
+        // Returns object's parent
+        void* GetObjectParent(void* object) override;
 
-		// Returns object's children
-		Vector<void*> GetObjectChilds(void* object) override;
+        // Returns object's children
+        Vector<void*> GetObjectChilds(void* object) override;
 
-		// Returns debugging string for object
-		String GetObjectDebug(void* object) override;
+        // Returns debugging string for object
+        String GetObjectDebug(void* object) override;
 
-		// Sets nodeWidget data by object
-		void FillNodeDataByObject(const Ref<TreeNode>& nodeWidget, void* object) override;
+        // Sets nodeWidget data by object
+        void FillNodeDataByObject(const Ref<TreeNode>& nodeWidget, void* object) override;
 
-		void OnDeserialized(const DataValue& node) override;
+        void OnDeserialized(const DataValue& node) override;
 
-		friend class ComponentsTreeNode;
-	};
+        friend class ComponentsTreeNode;
+    };
 
-	// --------------------------------------------------------------------------
-	// Components tree node. Can bea  group of components or the component itself
-	// --------------------------------------------------------------------------
-	class ComponentsTreeNode : public TreeNode
-	{
-	public:
-		Ref<ComponentsTree::NodeData> data;
+    // --------------------------------------------------------------------------
+    // Components tree node. Can bea  group of components or the component itself
+    // --------------------------------------------------------------------------
+    class ComponentsTreeNode : public TreeNode
+    {
+    public:
+        Ref<ComponentsTree::NodeData> data;
 
-	public:
-		// Default constructor
-		ComponentsTreeNode(RefCounter* refCounter);
+    public:
+        // Default constructor
+        ComponentsTreeNode(RefCounter* refCounter);
 
-		// Copy-constructor
-		ComponentsTreeNode(RefCounter* refCounter, const ComponentsTreeNode& other);
+        // Copy-constructor
+        ComponentsTreeNode(RefCounter* refCounter, const ComponentsTreeNode& other);
 
-		// Copy operator
-		ComponentsTreeNode& operator=(const ComponentsTreeNode& other);
+        // Copy operator
+        ComponentsTreeNode& operator=(const ComponentsTreeNode& other);
 
-		// Initializes node by data
-		void Setup(const Ref<ComponentsTree::NodeData>& data, const Ref<ComponentsTree>& tree);
+        // Initializes node by data
+        void Setup(const Ref<ComponentsTree::NodeData>& data, const Ref<ComponentsTree>& tree);
 
-		// Returns create menu category in editor
-		static String GetCreateMenuCategory();
+        // Returns create menu category in editor
+        static String GetCreateMenuCategory();
 
         SERIALIZABLE(ComponentsTreeNode);
         CLONEABLE_REF(ComponentsTreeNode);
 
-	private:
-		Ref<Text>   mName;
-		Ref<Sprite> mIcon;
+    private:
+        Ref<Text>   mName;
+        Ref<Sprite> mIcon;
 
-		WeakRef<ComponentsTree> mTree;
+        WeakRef<ComponentsTree> mTree;
 
-	private:
-		// Called on deserialization, initializes controls
-		void OnDeserialized(const DataValue& node) override;
+    private:
+        // Called on deserialization, initializes controls
+        void OnDeserialized(const DataValue& node) override;
 
-		// initializes controls and widgets
-		void InitializeControls();
+        // initializes controls and widgets
+        void InitializeControls();
 
-		friend class ComponentsTree;
-	};
+        friend class ComponentsTree;
+    };
 }
 // --- META ---
 

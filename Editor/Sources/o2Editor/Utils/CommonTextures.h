@@ -6,14 +6,14 @@ using namespace o2;
 
 namespace Editor
 {
-	// ----------------------
-	// Editor common textures
-	// ----------------------
-	struct CommonTextures
-	{
-		// Initializes common textures
-		static void Initialize();
+    // ----------------------
+    // Editor common textures
+    // ----------------------
+    struct CommonTextures
+    {
+        // Initializes common textures
+        static void Initialize();
 
-		static TextureRef checkedBackground;
-	};
+        static TextureRef checkedBackground;
+    };
 }

@@ -113,99 +113,99 @@ namespace o2
     template<typename _component_type>
     class LinkRef<_component_type, ENABLE_COMPONENT> : public BaseComponentLinkRef
     {
-	public:
-		// Default constructor, no reference
-		LinkRef();
+    public:
+        // Default constructor, no reference
+        LinkRef();
 
-		// Nullptr constructor
-		LinkRef(std::nullptr_t);
+        // Nullptr constructor
+        LinkRef(std::nullptr_t);
 
-		// Constructor with component pointer
-		explicit LinkRef(_component_type* ptr);
+        // Constructor with component pointer
+        explicit LinkRef(_component_type* ptr);
 
-		// Copy constructor from other reference
-		LinkRef(const Ref<_component_type>& other);
+        // Copy constructor from other reference
+        LinkRef(const Ref<_component_type>& other);
 
-		// Move constructor from other reference
-		LinkRef(Ref<_component_type>&& other);
+        // Move constructor from other reference
+        LinkRef(Ref<_component_type>&& other);
 
-		// Copy constructor from other component reference
-		template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, _component_type*>::value>::type>
-		LinkRef(const LinkRef<_other_type>& other);
+        // Copy constructor from other component reference
+        template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, _component_type*>::value>::type>
+        LinkRef(const LinkRef<_other_type>& other);
 
-		// Move constructor from other component reference
-		template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, _component_type*>::value>::type>
-		LinkRef(LinkRef<_other_type>&& other);
+        // Move constructor from other component reference
+        template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, _component_type*>::value>::type>
+        LinkRef(LinkRef<_other_type>&& other);
 
-		// Equality operator
-		bool operator==(const LinkRef<_component_type>& other) const;
+        // Equality operator
+        bool operator==(const LinkRef<_component_type>& other) const;
 
-		// Equality operator
-		bool operator==(const _component_type* other) const;
+        // Equality operator
+        bool operator==(const _component_type* other) const;
 
-		// Inequality operator
-		bool operator!=(const LinkRef<_component_type>& other) const;
+        // Inequality operator
+        bool operator!=(const LinkRef<_component_type>& other) const;
 
-		// Inequality operator
-		bool operator!=(const _component_type* other) const;
+        // Inequality operator
+        bool operator!=(const _component_type* other) const;
 
-		// Copy operator from other component reference
-		template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, _component_type*>::value>::type>
-		LinkRef<_component_type>& operator=(const LinkRef<_other_type>& other);
+        // Copy operator from other component reference
+        template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, _component_type*>::value>::type>
+        LinkRef<_component_type>& operator=(const LinkRef<_other_type>& other);
 
-		// Move operator from other component reference
-		LinkRef<_component_type>& operator=(Ref<_component_type>&& other);
+        // Move operator from other component reference
+        LinkRef<_component_type>& operator=(Ref<_component_type>&& other);
 
-		// Move operator from nullptr
+        // Move operator from nullptr
         LinkRef<_component_type>& operator=(std::nullptr_t);
 
         // Less operator
         bool operator<(const LinkRef<_component_type>& other) const;
 
-		// Returns is reference is valid
-		bool IsValid() const;
+        // Returns is reference is valid
+        bool IsValid() const;
 
-		// Returns is reference is valid
-		explicit operator bool() const;
+        // Returns is reference is valid
+        explicit operator bool() const;
 
-		// Returns component reference
-		operator Ref<_component_type>() const;
+        // Returns component reference
+        operator Ref<_component_type>() const;
 
-		// Returns component reference
-		_component_type& operator*() const;
+        // Returns component reference
+        _component_type& operator*() const;
 
-		// Returns component pointer
-		_component_type* operator->() const;
+        // Returns component pointer
+        _component_type* operator->() const;
 
-		// Returns component pointer 
-		_component_type* Get() override;
+        // Returns component pointer 
+        _component_type* Get() override;
 
-		// Returns component pointer
-		const _component_type* Get() const override;
+        // Returns component pointer
+        const _component_type* Get() const override;
 
-		// Returns reference
-		Ref<_component_type>& GetRef();
+        // Returns reference
+        Ref<_component_type>& GetRef();
 
-		// Returns reference
-		const Ref<_component_type>& GetRef() const;
+        // Returns reference
+        const Ref<_component_type>& GetRef() const;
 
-		// Sets component pointer
-		void Set(Component* component) override;
+        // Sets component pointer
+        void Set(Component* component) override;
 
         // Returns component type
-		const Type& GetComponentType() const override;
+        const Type& GetComponentType() const override;
 
         // Copying ref without requiring remap
-		void CopyWithoutRemap(const BaseComponentLinkRef& other) override;
+        void CopyWithoutRemap(const BaseComponentLinkRef& other) override;
 
         // Returns component type
-		static const Type* GetComponentTypeStatic();
+        static const Type* GetComponentTypeStatic();
 
-	protected:
-		Ref<_component_type> mRef; // Reference to component
+    protected:
+        Ref<_component_type> mRef; // Reference to component
 
     public:
-		typedef LinkRef<_component_type> _thisType;
+        typedef LinkRef<_component_type> _thisType;
 
         SERIALIZABLE_MAIN(_thisType);
         IOBJECT_SCRIPTING();
@@ -238,89 +238,89 @@ namespace o2
             FUNCTION().PUBLIC().SIGNATURE(const Type&, GetComponentType);
             FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetComponentTypeStatic);
         }
-	};
+    };
 
-	template<typename _component_type>
-	LinkRef<_component_type, ENABLE_COMPONENT>::LinkRef()
-	{}
+    template<typename _component_type>
+    LinkRef<_component_type, ENABLE_COMPONENT>::LinkRef()
+    {}
 
-	template<typename _component_type>
-	LinkRef<_component_type, ENABLE_COMPONENT>::LinkRef(std::nullptr_t) :
-		mRef(nullptr)
-	{}
+    template<typename _component_type>
+    LinkRef<_component_type, ENABLE_COMPONENT>::LinkRef(std::nullptr_t) :
+        mRef(nullptr)
+    {}
 
-	template<typename _component_type>
-	LinkRef<_component_type, ENABLE_COMPONENT>::LinkRef(_component_type* ptr) :
-		mRef(ptr)
-	{}
+    template<typename _component_type>
+    LinkRef<_component_type, ENABLE_COMPONENT>::LinkRef(_component_type* ptr) :
+        mRef(ptr)
+    {}
 
-	template<typename _component_type>
-	LinkRef<_component_type, ENABLE_COMPONENT>::LinkRef(const Ref<_component_type>& ref) :
-		mRef(ref)
-	{}
+    template<typename _component_type>
+    LinkRef<_component_type, ENABLE_COMPONENT>::LinkRef(const Ref<_component_type>& ref) :
+        mRef(ref)
+    {}
 
-	template<typename _component_type>
-	LinkRef<_component_type, ENABLE_COMPONENT>::LinkRef(Ref<_component_type> && other):
-		mRef(std::move(other))
-	{}
+    template<typename _component_type>
+    LinkRef<_component_type, ENABLE_COMPONENT>::LinkRef(Ref<_component_type> && other):
+        mRef(std::move(other))
+    {}
 
-	template<typename _component_type>
-	template<typename _other_type, typename _enable>
-	LinkRef<_component_type, ENABLE_COMPONENT>::LinkRef(const LinkRef<_other_type>& other) :
-		mRef(other.mRef)
-	{}
+    template<typename _component_type>
+    template<typename _other_type, typename _enable>
+    LinkRef<_component_type, ENABLE_COMPONENT>::LinkRef(const LinkRef<_other_type>& other) :
+        mRef(other.mRef)
+    {}
 
-	template<typename _component_type>
-	template<typename _other_type, typename>
-	LinkRef<_component_type, ENABLE_COMPONENT>::LinkRef(LinkRef<_other_type>&& other) :
-		mRef(std::move(other.mRef))
-	{}
+    template<typename _component_type>
+    template<typename _other_type, typename>
+    LinkRef<_component_type, ENABLE_COMPONENT>::LinkRef(LinkRef<_other_type>&& other) :
+        mRef(std::move(other.mRef))
+    {}
 
-	template<typename _component_type>
-	bool LinkRef<_component_type, ENABLE_COMPONENT>::operator==(const LinkRef<_component_type>& other) const
-	{
-		return mRef == other.mRef;
-	}
+    template<typename _component_type>
+    bool LinkRef<_component_type, ENABLE_COMPONENT>::operator==(const LinkRef<_component_type>& other) const
+    {
+        return mRef == other.mRef;
+    }
 
-	template<typename _component_type>
-	bool LinkRef<_component_type, ENABLE_COMPONENT>::operator==(const _component_type* other) const
-	{
-		return mRef == other;
-	}
+    template<typename _component_type>
+    bool LinkRef<_component_type, ENABLE_COMPONENT>::operator==(const _component_type* other) const
+    {
+        return mRef == other;
+    }
 
-	template<typename _component_type>
-	bool LinkRef<_component_type, ENABLE_COMPONENT>::operator!=(const LinkRef<_component_type>& other) const
-	{
-		return mRef != other.mRef;
-	}
+    template<typename _component_type>
+    bool LinkRef<_component_type, ENABLE_COMPONENT>::operator!=(const LinkRef<_component_type>& other) const
+    {
+        return mRef != other.mRef;
+    }
 
-	template<typename _component_type>
-	bool LinkRef<_component_type, ENABLE_COMPONENT>::operator!=(const _component_type* other) const
-	{
-		return mRef != other;
-	}
+    template<typename _component_type>
+    bool LinkRef<_component_type, ENABLE_COMPONENT>::operator!=(const _component_type* other) const
+    {
+        return mRef != other;
+    }
 
-	template<typename _component_type>
-	template<typename _other_type, typename _enable>
-	LinkRef<_component_type>& LinkRef<_component_type, ENABLE_COMPONENT>::operator=(const LinkRef<_other_type>& other)
-	{
-		mRef = other.mRef;
-		return *this;
-	}
+    template<typename _component_type>
+    template<typename _other_type, typename _enable>
+    LinkRef<_component_type>& LinkRef<_component_type, ENABLE_COMPONENT>::operator=(const LinkRef<_other_type>& other)
+    {
+        mRef = other.mRef;
+        return *this;
+    }
 
-	template<typename _component_type>
-	LinkRef<_component_type>& LinkRef<_component_type, ENABLE_COMPONENT>::operator=(Ref<_component_type>&& other)
-	{
-		mRef = std::move(other);
-		return *this;
-	}
+    template<typename _component_type>
+    LinkRef<_component_type>& LinkRef<_component_type, ENABLE_COMPONENT>::operator=(Ref<_component_type>&& other)
+    {
+        mRef = std::move(other);
+        return *this;
+    }
 
-	template<typename _component_type>
-	LinkRef<_component_type>& LinkRef<_component_type, ENABLE_COMPONENT>::operator=(std::nullptr_t)
-	{
-		mRef = nullptr;
-		return *this;
-	}
+    template<typename _component_type>
+    LinkRef<_component_type>& LinkRef<_component_type, ENABLE_COMPONENT>::operator=(std::nullptr_t)
+    {
+        mRef = nullptr;
+        return *this;
+    }
 
     template<typename _component_type>
     bool LinkRef<_component_type, ENABLE_COMPONENT>::operator<(const LinkRef<_component_type>& other) const
@@ -329,83 +329,83 @@ namespace o2
     }
 
     template<typename _component_type>
-	bool LinkRef<_component_type, ENABLE_COMPONENT>::IsValid() const
-	{
-		return mRef.IsValid();
-	}
+    bool LinkRef<_component_type, ENABLE_COMPONENT>::IsValid() const
+    {
+        return mRef.IsValid();
+    }
 
-	template<typename _component_type>
-	LinkRef<_component_type, ENABLE_COMPONENT>::operator bool() const
-	{
-		return IsValid();
-	}
+    template<typename _component_type>
+    LinkRef<_component_type, ENABLE_COMPONENT>::operator bool() const
+    {
+        return IsValid();
+    }
 
-	template<typename _component_type>
-	LinkRef<_component_type, ENABLE_COMPONENT>::operator Ref<_component_type>() const
-	{
-		return mRef;
-	}
+    template<typename _component_type>
+    LinkRef<_component_type, ENABLE_COMPONENT>::operator Ref<_component_type>() const
+    {
+        return mRef;
+    }
 
-	template<typename _component_type>
-	_component_type& LinkRef<_component_type, ENABLE_COMPONENT>::operator*() const
-	{
-		return *mRef;
-	}
+    template<typename _component_type>
+    _component_type& LinkRef<_component_type, ENABLE_COMPONENT>::operator*() const
+    {
+        return *mRef;
+    }
 
-	template<typename _component_type>
-	_component_type* LinkRef<_component_type, ENABLE_COMPONENT>::operator->() const
-	{
-		return mRef.Get();
-	}
+    template<typename _component_type>
+    _component_type* LinkRef<_component_type, ENABLE_COMPONENT>::operator->() const
+    {
+        return mRef.Get();
+    }
 
-	template<typename _component_type>
-	_component_type* LinkRef<_component_type, ENABLE_COMPONENT>::Get()
-	{
-		return mRef.Get();
-	}
+    template<typename _component_type>
+    _component_type* LinkRef<_component_type, ENABLE_COMPONENT>::Get()
+    {
+        return mRef.Get();
+    }
 
-	template<typename _component_type>
-	const _component_type* LinkRef<_component_type, ENABLE_COMPONENT>::Get() const
-	{
-		return mRef.Get();
-	}
+    template<typename _component_type>
+    const _component_type* LinkRef<_component_type, ENABLE_COMPONENT>::Get() const
+    {
+        return mRef.Get();
+    }
 
-	template<typename _component_type>
-	Ref<_component_type>& LinkRef<_component_type, ENABLE_COMPONENT>::GetRef()
-	{
-		return mRef;
-	}
+    template<typename _component_type>
+    Ref<_component_type>& LinkRef<_component_type, ENABLE_COMPONENT>::GetRef()
+    {
+        return mRef;
+    }
 
-	template<typename _component_type>
-	const Ref<_component_type>& LinkRef<_component_type, ENABLE_COMPONENT>::GetRef() const
-	{
-		return mRef;
-	}
+    template<typename _component_type>
+    const Ref<_component_type>& LinkRef<_component_type, ENABLE_COMPONENT>::GetRef() const
+    {
+        return mRef;
+    }
 
-	template<typename _component_type>
-	void LinkRef<_component_type, ENABLE_COMPONENT>::Set(Component* component)
-	{
-		*this = LinkRef(dynamic_cast<_component_type*>(component));
-	}
+    template<typename _component_type>
+    void LinkRef<_component_type, ENABLE_COMPONENT>::Set(Component* component)
+    {
+        *this = LinkRef(dynamic_cast<_component_type*>(component));
+    }
 
-	template<typename _component_type>
-	const Type& LinkRef<_component_type, ENABLE_COMPONENT>::GetComponentType() const
-	{
-		return TypeOf(_component_type);
-	}
+    template<typename _component_type>
+    const Type& LinkRef<_component_type, ENABLE_COMPONENT>::GetComponentType() const
+    {
+        return TypeOf(_component_type);
+    }
 
-	template<typename _component_type>
-	void LinkRef<_component_type, ENABLE_COMPONENT>::CopyWithoutRemap(const BaseComponentLinkRef& other)
-	{
-		mRef = Ref(dynamic_cast<_component_type*>(const_cast<Component*>(other.Get())));
-		mRequiredResolveData = nullptr;
-	}
+    template<typename _component_type>
+    void LinkRef<_component_type, ENABLE_COMPONENT>::CopyWithoutRemap(const BaseComponentLinkRef& other)
+    {
+        mRef = Ref(dynamic_cast<_component_type*>(const_cast<Component*>(other.Get())));
+        mRequiredResolveData = nullptr;
+    }
 
-	template<typename _component_type>
-	const Type* LinkRef<_component_type, ENABLE_COMPONENT>::GetComponentTypeStatic()
-	{
-		return &TypeOf(_component_type);
-	}
+    template<typename _component_type>
+    const Type* LinkRef<_component_type, ENABLE_COMPONENT>::GetComponentTypeStatic()
+    {
+        return &TypeOf(_component_type);
+    }
 }
 // --- META ---
 

@@ -22,9 +22,9 @@ namespace o2
         SERIALIZABLE(ScissorClippingComponent);
         CLONEABLE_REF(ScissorClippingComponent);
 
-	private:
-		// Draws content of scene
-		void OnDraw() override;
+    private:
+        // Draws content of scene
+        void OnDraw() override;
     };
 }
 // --- META ---

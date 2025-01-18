@@ -293,19 +293,19 @@ namespace o2
 
     // Forward declaration of class and reference counter implementation
 #define FORWARD_REF(CLASS)                        \
-	o2::RefCounter* GetRefCounterFwd(CLASS* ptr); \
-	void DestructObjectFwd(CLASS* obj);           \
+    o2::RefCounter* GetRefCounterFwd(CLASS* ptr); \
+    void DestructObjectFwd(CLASS* obj);           \
     OPTIONAL_REFS_MANAGE_FORWARD(CLASS)
 
     // Forward declaration of class and reference counter implementation
 #define FORWARD_CLASS_REF(CLASS) \
     class CLASS;                 \
-	FORWARD_REF(CLASS)
+    FORWARD_REF(CLASS)
 
     // Implementation of forward declared reference counter 
 #define FORWARD_REF_IMPL(CLASS)                                                     \
-	o2::RefCounter* GetRefCounterFwd(CLASS* ptr) { return GetRefCounterImpl(ptr); } \
-	void DestructObjectFwd(CLASS* obj) { DestructObjectImpl(obj); }                 \
+    o2::RefCounter* GetRefCounterFwd(CLASS* ptr) { return GetRefCounterImpl(ptr); } \
+    void DestructObjectFwd(CLASS* obj) { DestructObjectImpl(obj); }                 \
     OPTIONAL_REFS_MANAGE_FORWARD_IMPL(CLASS)
 
     // Declares friend function for creating new object

@@ -8,7 +8,7 @@
 namespace o2
 {
     Component::Component() :
-		Component(nullptr)
+        Component(nullptr)
     {}
 
     Component::Component(RefCounter* refCounter, const Component& other) :
@@ -18,17 +18,17 @@ namespace o2
         ActorRefResolver::ComponentCreated(this);
     }
 
-	Component::Component(RefCounter* refCounter):
-		RefCounterable(refCounter), mId(Math::Random())
-	{
-		ActorRefResolver::ComponentCreated(this);
-	}
+    Component::Component(RefCounter* refCounter):
+        RefCounterable(refCounter), mId(Math::Random())
+    {
+        ActorRefResolver::ComponentCreated(this);
+    }
 
-	Component::Component(const Component& other):
-		Component(other.GetRefCounter(), other)
-	{}
+    Component::Component(const Component& other):
+        Component(other.GetRefCounter(), other)
+    {}
 
-	Component::~Component()
+    Component::~Component()
     {}
 
     Component& Component::operator=(const Component& other)

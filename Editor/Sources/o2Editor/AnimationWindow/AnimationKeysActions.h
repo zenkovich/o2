@@ -5,62 +5,62 @@
 
 namespace Editor
 {
-	class AnimationAddKeysAction : public IAction
-	{
-	public:
-		AnimationAddKeysAction();
-		AnimationAddKeysAction(const Map<String, Vector<UInt64>>& keys, const DataDocument& keysData, const Ref<KeyHandlesSheet>& editor);
+    class AnimationAddKeysAction : public IAction
+    {
+    public:
+        AnimationAddKeysAction();
+        AnimationAddKeysAction(const Map<String, Vector<UInt64>>& keys, const DataDocument& keysData, const Ref<KeyHandlesSheet>& editor);
 
-		String GetName() const override;
-		void Redo() override;
-		void Undo() override;
+        String GetName() const override;
+        void Redo() override;
+        void Undo() override;
 
         SERIALIZABLE(AnimationAddKeysAction);
 
-	protected:
-		Map<String, Vector<UInt64>> mKeys;
-		DataDocument                mKeysData;
-		WeakRef<KeyHandlesSheet>    mEditor;
-	};
+    protected:
+        Map<String, Vector<UInt64>> mKeys;
+        DataDocument                mKeysData;
+        WeakRef<KeyHandlesSheet>    mEditor;
+    };
 
-	class AnimationDeleteKeysAction : public IAction
-	{
-	public:
-		AnimationDeleteKeysAction();
-		AnimationDeleteKeysAction(const Map<String, Vector<UInt64>>& keys, const DataDocument& keysData, const Ref<KeyHandlesSheet>& editor);
+    class AnimationDeleteKeysAction : public IAction
+    {
+    public:
+        AnimationDeleteKeysAction();
+        AnimationDeleteKeysAction(const Map<String, Vector<UInt64>>& keys, const DataDocument& keysData, const Ref<KeyHandlesSheet>& editor);
 
-		String GetName() const override;
-		void Redo() override;
-		void Undo() override;
+        String GetName() const override;
+        void Redo() override;
+        void Undo() override;
 
-		SERIALIZABLE(AnimationDeleteKeysAction);
+        SERIALIZABLE(AnimationDeleteKeysAction);
 
-	protected:
-		Map<String, Vector<UInt64>> mKeys;
-		DataDocument                mKeysData;
-		WeakRef<KeyHandlesSheet>    mEditor;
-	};
+    protected:
+        Map<String, Vector<UInt64>> mKeys;
+        DataDocument                mKeysData;
+        WeakRef<KeyHandlesSheet>    mEditor;
+    };
 
-	class AnimationKeysChangeAction : public IAction
-	{
-	public:
-		AnimationKeysChangeAction();
-		AnimationKeysChangeAction(const Map<String, Vector<UInt64>>& keys,
-								  const DataDocument& beforeKeysData, const DataDocument& afterKeysData,
-								  const Ref<KeyHandlesSheet>& editor);
+    class AnimationKeysChangeAction : public IAction
+    {
+    public:
+        AnimationKeysChangeAction();
+        AnimationKeysChangeAction(const Map<String, Vector<UInt64>>& keys,
+                                  const DataDocument& beforeKeysData, const DataDocument& afterKeysData,
+                                  const Ref<KeyHandlesSheet>& editor);
 
-		String GetName() const override;
-		void Redo() override;
-		void Undo() override;
+        String GetName() const override;
+        void Redo() override;
+        void Undo() override;
 
-		SERIALIZABLE(AnimationKeysChangeAction);
+        SERIALIZABLE(AnimationKeysChangeAction);
 
-	protected:
-		Map<String, Vector<UInt64>> mKeys;
-		DataDocument                mBeforeKeysData;
-		DataDocument                mAfterKeysData;
-		WeakRef<KeyHandlesSheet>    mEditor;
-	};
+    protected:
+        Map<String, Vector<UInt64>> mKeys;
+        DataDocument                mBeforeKeysData;
+        DataDocument                mAfterKeysData;
+        WeakRef<KeyHandlesSheet>    mEditor;
+    };
 }
 // --- META ---
 

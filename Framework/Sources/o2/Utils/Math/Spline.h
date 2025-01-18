@@ -171,7 +171,7 @@ namespace o2
             UInt64 uid = Math::Random();        // Random unique id @SERIALIZABLE
             float  position = 0.0f;             // Position from start, or length @SERIALIZABLE
             Vec2F  value;                       // Main position @SERIALIZABLE
-			float  valueRange = 0.0f;           // Value range @SERIALIZABLE
+            float  valueRange = 0.0f;           // Value range @SERIALIZABLE
             Vec2F  prevSupport;                 // Previous support point @SERIALIZABLE
             Vec2F  nextSupport;                 // Next support point @SERIALIZABLE
             Type   supportsType = Type::Smooth; // Type of support points @SERIALIZABLE
@@ -199,13 +199,13 @@ namespace o2
             bool operator==(const Key& other) const;
 
             // Check not equals operator
-			bool operator!=(const Key& other) const;
+            bool operator!=(const Key& other) const;
 
-			// Returns approximated points
-			const ApproximationVec2F* GetApproximatedPointsLeft() const;
+            // Returns approximated points
+            const ApproximationVec2F* GetApproximatedPointsLeft() const;
 
-			// Returns approximated points
-			const ApproximationVec2F* GetApproximatedPointsRight() const;
+            // Returns approximated points
+            const ApproximationVec2F* GetApproximatedPointsRight() const;
 
             // Returns approximated points count
             int GetApproximatedPointsCount() const;
@@ -213,15 +213,15 @@ namespace o2
             // Returns bounds of approximation values
             const RectF& GetGetApproximatedPointsBounds() const;
 
-			// Returns range normal. Prev and next can be nullptr
-			static Vec2F GetRangeNormal(const Vec2F& position, Vec2F* prev, Vec2F* next);
+            // Returns range normal. Prev and next can be nullptr
+            static Vec2F GetRangeNormal(const Vec2F& position, Vec2F* prev, Vec2F* next);
 
             SERIALIZABLE(Key);
 
         public:
             static const int   mApproxValuesCount = 20;                // Approximation values count
-			ApproximationVec2F mLeftApproxValues[mApproxValuesCount];  // Approximation values from left side
-			ApproximationVec2F mRightApproxValues[mApproxValuesCount]; // Approximation values from right side
+            ApproximationVec2F mLeftApproxValues[mApproxValuesCount];  // Approximation values from left side
+            ApproximationVec2F mRightApproxValues[mApproxValuesCount]; // Approximation values from right side
             RectF              mApproxValuesBounds;                    // Bounds of approximation values
 
             friend class Spline;

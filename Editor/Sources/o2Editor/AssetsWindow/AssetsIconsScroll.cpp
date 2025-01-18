@@ -376,7 +376,7 @@ namespace Editor
     {
         Vector<void*> result;
         for (int i = start; i < end; i++)
-			result.Add((void*)&mAssetInfos[i]);
+            result.Add((void*)&mAssetInfos[i]);
 
         return result;
     }
@@ -995,8 +995,8 @@ namespace Editor
     }
 
     void AssetsIconsScrollArea::Deselect(const Ref<SelectableDragableObject>& object)
-	{
-		auto icon = DynamicCast<AssetIcon>(object);
+    {
+        auto icon = DynamicCast<AssetIcon>(object);
         auto info = icon->GetAssetInfo();
 
         if (mSelectedAssets.Contains(info))
@@ -1008,7 +1008,7 @@ namespace Editor
         }
     }
 
-	void AssetsIconsScrollArea::AddSelectableObject(const Ref<SelectableDragableObject>& object)
+    void AssetsIconsScrollArea::AddSelectableObject(const Ref<SelectableDragableObject>& object)
     {}
 
     void AssetsIconsScrollArea::RemoveSelectableObject(SelectableDragableObject* object)
@@ -1016,8 +1016,8 @@ namespace Editor
 
     void AssetsIconsScrollArea::OnSelectableObjectCursorReleased(const Ref<SelectableDragableObject>& object, const Input::Cursor& cursor)
     {
-        // 		if ((mPressedPoint - cursor.position).Length() > 5.0f)
-        // 			return;
+        //         if ((mPressedPoint - cursor.position).Length() > 5.0f)
+        //             return;
 
         if (!o2Input.IsKeyDown(VK_CONTROL) && !o2Input.IsKeyDown(VK_SHIFT))
             DeselectAllAssets();
@@ -1096,7 +1096,7 @@ namespace Editor
         return DynamicCastVector<SelectableDragableObject>(mChildWidgets);
     }
 
-	void AssetsIconsScrollArea::Select(const Ref<SelectableDragableObject>& object)
+    void AssetsIconsScrollArea::Select(const Ref<SelectableDragableObject>& object)
     {
         Select(object, true);
     }

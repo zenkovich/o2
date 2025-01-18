@@ -90,7 +90,7 @@ namespace o2
 
         WeakRef<Widget> mOwner; // Owner widget pointer
 
-		Ref<AnimationPlayer> mPlayer = mmake<AnimationPlayer>(); // Animation player
+        Ref<AnimationPlayer> mPlayer = mmake<AnimationPlayer>(); // Animation player
 
         AssetRef<AnimationAsset> mAnimation; // Widget animation @SERIALIZABLE @EDITOR_PROPERTY @INVOKE_ON_CHANGE(OnAnimationChanged)
 

@@ -10,15 +10,15 @@ using namespace o2;
 
 namespace o2
 {
-	FORWARD_CLASS_REF(Sprite);
-	FORWARD_CLASS_REF(Button);
-	FORWARD_CLASS_REF(EditBox);
-	FORWARD_CLASS_REF(GridLayout);
-	FORWARD_CLASS_REF(Label);
-	FORWARD_CLASS_REF(ScrollArea);
-	FORWARD_CLASS_REF(Tree);
-	FORWARD_CLASS_REF(TreeNode);
-	FORWARD_CLASS_REF(Widget);
+    FORWARD_CLASS_REF(Sprite);
+    FORWARD_CLASS_REF(Button);
+    FORWARD_CLASS_REF(EditBox);
+    FORWARD_CLASS_REF(GridLayout);
+    FORWARD_CLASS_REF(Label);
+    FORWARD_CLASS_REF(ScrollArea);
+    FORWARD_CLASS_REF(Tree);
+    FORWARD_CLASS_REF(TreeNode);
+    FORWARD_CLASS_REF(Widget);
 }
 
 // Editor assets window accessor macros
@@ -26,147 +26,147 @@ namespace o2
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(AssetsIconsScrollArea);
-	FORWARD_CLASS_REF(AssetsFoldersTree);
+    FORWARD_CLASS_REF(AssetsIconsScrollArea);
+    FORWARD_CLASS_REF(AssetsFoldersTree);
 
-	// -------------
-	// Assets window
-	// -------------
-	class AssetsWindow: public Singleton<AssetsWindow>, public IEditorWindow
-	{
-	public:
-		// Default constructor. Initializes window
-		AssetsWindow(RefCounter* refCounter);
+    // -------------
+    // Assets window
+    // -------------
+    class AssetsWindow: public Singleton<AssetsWindow>, public IEditorWindow
+    {
+    public:
+        // Default constructor. Initializes window
+        AssetsWindow(RefCounter* refCounter);
 
-		// Destructor
-		~AssetsWindow();
+        // Destructor
+        ~AssetsWindow();
 
-		// Updates window logic
-		void Update(float dt) override;
+        // Updates window logic
+        void Update(float dt) override;
 
-		// Selects asset with id
-		void SelectAsset(const UID& id);
+        // Selects asset with id
+        void SelectAsset(const UID& id);
 
-		// Selects asset by path
-		void SelectAsset(const String& path);
+        // Selects asset by path
+        void SelectAsset(const String& path);
 
-		// Selects assets with ids
-		void SelectAsset(const Vector<UID>& ids);
+        // Selects assets with ids
+        void SelectAsset(const Vector<UID>& ids);
 
-		// Selects assets by paths
-		void SelectAssets(const Vector<String>& paths);
+        // Selects assets by paths
+        void SelectAssets(const Vector<String>& paths);
 
-		// Deselects all assets
-		void DeselectAssets();
+        // Deselects all assets
+        void DeselectAssets();
 
-		// Returns selected assets infos
-		const Vector<Ref<AssetInfo>>& GetSelectedAssets() const;
+        // Returns selected assets infos
+        const Vector<Ref<AssetInfo>>& GetSelectedAssets() const;
 
-		// Opens asset in folder
-		void OpenAsset(const UID& id);
+        // Opens asset in folder
+        void OpenAsset(const UID& id);
 
-		// Opens asset in folder
-		void OpenAsset(const String& path);
+        // Opens asset in folder
+        void OpenAsset(const String& path);
 
-		// Opens asset for editing 
-		void OpenAndEditAsset(const UID& id);
+        // Opens asset for editing 
+        void OpenAndEditAsset(const UID& id);
 
-		// Opens asset for editing 
-		void OpenAndEditAsset(const String& path);
+        // Opens asset for editing 
+        void OpenAndEditAsset(const String& path);
 
-		// Returns opened folder path
-		String GetOpenedFolderPath() const;
+        // Returns opened folder path
+        String GetOpenedFolderPath() const;
 
-		// Opens folder
-		void OpenFolder(const String& path);
+        // Opens folder
+        void OpenFolder(const String& path);
 
-		// Shows asset
-		void ShowAssetIcon(const UID& id);
+        // Shows asset
+        void ShowAssetIcon(const UID& id);
 
-		// Shows asset
-		void ShowAssetIcon(const String& path);
+        // Shows asset
+        void ShowAssetIcon(const String& path);
 
-		// Copy assets in clipboard
-		void CopyAssets(const Vector<String>& assetsPaths);
+        // Copy assets in clipboard
+        void CopyAssets(const Vector<String>& assetsPaths);
 
-		// Cut assets and put into clipboard
-		void CutAssets(const Vector<String>& assetsPaths);
+        // Cut assets and put into clipboard
+        void CutAssets(const Vector<String>& assetsPaths);
 
-		// Paste assets from clipboard to path
-		void PasteAssets(const String& targetPath);
+        // Paste assets from clipboard to path
+        void PasteAssets(const String& targetPath);
 
-		// Removes assets in clipboard
-		void DeleteAssets(const Vector<String>& assetsPaths);
+        // Removes assets in clipboard
+        void DeleteAssets(const Vector<String>& assetsPaths);
 
-		// Creates and returns an icon sprite for the asset
+        // Creates and returns an icon sprite for the asset
         static Ref<Sprite> GetAssetIconSprite(const AssetRef<Asset>& asset);
 
         // Dynamic cast to RefCounterable via Singleton<AssetsWindow>
         static Ref<RefCounterable> CastToRefCounterable(const Ref<AssetsWindow>& ref);
-		 
+         
         IOBJECT(AssetsWindow);
         REF_COUNTERABLE_IMPL(Singleton<AssetsWindow>, IEditorWindow);
 
-	protected:
-		float mFoldersTreeShowCoef = 1.0f; // Animation show folders tree coefficient (0...1)
+    protected:
+        float mFoldersTreeShowCoef = 1.0f; // Animation show folders tree coefficient (0...1)
 
-		Ref<Button>  mFilterButton;           // Search filter button
-		Ref<EditBox> mSearchEditBox;          // Search edit box
-		Ref<Label>   mSelectedAssetPathLabel; // Selected asset path label
+        Ref<Button>  mFilterButton;           // Search filter button
+        Ref<EditBox> mSearchEditBox;          // Search edit box
+        Ref<Label>   mSelectedAssetPathLabel; // Selected asset path label
 
-		Ref<AssetsFoldersTree> mFoldersTree;                                    // Folders tree			
+        Ref<AssetsFoldersTree> mFoldersTree;                                    // Folders tree            
         Ref<AnimationPlayer>   mFoldersTreeShowAnim = mmake<AnimationPlayer>(); // Folders tree visible animation
         bool                   mFoldersTreeVisible;                             // Is folders tree visible
 
-		Ref<AssetsIconsScrollArea> mAssetsGridScroll; // Assets grid scroll
+        Ref<AssetsIconsScrollArea> mAssetsGridScroll; // Assets grid scroll
 
-		Ref<Tree> mAssetsTree; // Assets tree
+        Ref<Tree> mAssetsTree; // Assets tree
 
-		Ref<CursorEventsArea> mSeparatorHandle; // Folders tree and assets tree/grid separator handle
-		float                 mSeparatorCoef;   // Separator coefficient, means anchors for tree nad assets scroll
+        Ref<CursorEventsArea> mSeparatorHandle; // Folders tree and assets tree/grid separator handle
+        float                 mSeparatorCoef;   // Separator coefficient, means anchors for tree nad assets scroll
 
-		Vector<Pair<UID, String>> mCuttingAssets; // Current cutted assets
+        Vector<Pair<UID, String>> mCuttingAssets; // Current cutted assets
 
-	protected:
-		// Initializes window
-		void InitializeWindow();
+    protected:
+        // Initializes window
+        void InitializeWindow();
 
-		// Initializes folders tree separator
-		void InitializeFoldersTreeSeparator();
+        // Initializes folders tree separator
+        void InitializeFoldersTreeSeparator();
 
-		// Initializes folders tree visible state
-		void InitializeFoldersTreeVisibleState();
+        // Initializes folders tree visible state
+        void InitializeFoldersTreeVisibleState();
 
-		// Initializes folders tree
-		void InitializeFoldersTree();
+        // Initializes folders tree
+        void InitializeFoldersTree();
 
-		// Initializes down panel
-		void InitializeDownPanel();
+        // Initializes down panel
+        void InitializeDownPanel();
 
-		// Initializes up search panel
-		void InitializeUpPanel();
+        // Initializes up search panel
+        void InitializeUpPanel();
 
-		// Called when search edit box text was changed
-		void OnSearchEdited(const WString& search);
+        // Called when search edit box text was changed
+        void OnSearchEdited(const WString& search);
 
-		// Called when menu filter button was pressed
-		void OnMenuFilterPressed();
+        // Called when menu filter button was pressed
+        void OnMenuFilterPressed();
 
-		// Called when show folders tree button pressed
-		void OnShowTreePressed();
+        // Called when show folders tree button pressed
+        void OnShowTreePressed();
 
-		// Called when assets was rebuilt
-		void OnAssetsRebuilt(const Vector<UID>& changedAssets);
+        // Called when assets was rebuilt
+        void OnAssetsRebuilt(const Vector<UID>& changedAssets);
 
-		// Shows and highligh asset icon
-		void ShowAssetIcon(const String& folder, UID assetId);
+        // Shows and highligh asset icon
+        void ShowAssetIcon(const String& folder, UID assetId);
 
-		// Copies asset folder recursively
-		void CopyAssetFolder(const String& src, const String& dst);
+        // Copies asset folder recursively
+        void CopyAssetFolder(const String& src, const String& dst);
 
-		friend class AssetsFoldersTree;
-		friend class AssetsIconsScrollArea;
-	};
+        friend class AssetsFoldersTree;
+        friend class AssetsIconsScrollArea;
+    };
 }
 // --- META ---
 

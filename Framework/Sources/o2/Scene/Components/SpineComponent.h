@@ -5,122 +5,122 @@
 
 namespace o2
 {
-	// --------------------------------
-	// EsotericSoftware spine component
-	// --------------------------------
-	class SpineComponent : public AnimationComponent
-	{
-	public:
-		// ---------------------
-		// Spine animation state
-		// ---------------------
-		class AnimationState : public IAnimationState
-		{
-		public:
-			PROPERTIES(AnimationState);
-			PROPERTY(bool, looped, SetLooped, IsLooped); // State looped
+    // --------------------------------
+    // EsotericSoftware spine component
+    // --------------------------------
+    class SpineComponent : public AnimationComponent
+    {
+    public:
+        // ---------------------
+        // Spine animation state
+        // ---------------------
+        class AnimationState : public IAnimationState
+        {
+        public:
+            PROPERTIES(AnimationState);
+            PROPERTY(bool, looped, SetLooped, IsLooped); // State looped
 
-		public:
-			// Default constructor
-			AnimationState() = default;
+        public:
+            // Default constructor
+            AnimationState() = default;
 
-			// Constructor
-			AnimationState(const String& name);
+            // Constructor
+            AnimationState(const String& name);
 
-			// Updates state
-			void Update(float dt) override;
+            // Updates state
+            void Update(float dt) override;
 
-			// Returns player
-			IAnimation& GetPlayer() override;
+            // Returns player
+            IAnimation& GetPlayer() override;
 
-			// Sets state weight
-			void SetWeight(float weight) override;
+            // Sets state weight
+            void SetWeight(float weight) override;
 
-			// Returns state weight
-			float GetWeight() const override;
+            // Returns state weight
+            float GetWeight() const override;
 
-			// Sets state looped
-			void SetLooped(bool looped) override;
+            // Sets state looped
+            void SetLooped(bool looped) override;
 
-			// Returns state looped
-			bool IsLooped() const override;
+            // Returns state looped
+            bool IsLooped() const override;
 
-			SERIALIZABLE(AnimationState);
-			CLONEABLE_REF(AnimationState);
+            SERIALIZABLE(AnimationState);
+            CLONEABLE_REF(AnimationState);
 
-		private:
-			Ref<Spine::Track> mTrack; // Spine track @EDITOR_PROPERTY
+        private:
+            Ref<Spine::Track> mTrack; // Spine track @EDITOR_PROPERTY
 
-			bool mLooped = false; // State looped @SERIALIZABLE
-			float mWeight = 1.0f; // State weight @SERIALIZABLE @RANGE(0, 1)
+            bool mLooped = false; // State looped @SERIALIZABLE
+            float mWeight = 1.0f; // State weight @SERIALIZABLE @RANGE(0, 1)
 
-		protected:
-			// Registers animation in state
-			void Register(const Ref<AnimationComponent>& owner);
+        protected:
+            // Registers animation in state
+            void Register(const Ref<AnimationComponent>& owner);
 
-			// Removes animation state from component
-			void Unregister();
-		};
+            // Removes animation state from component
+            void Unregister();
+        };
 
-	public:
-		PROPERTIES(SpineComponent);
-		PROPERTY(AssetRef<SpineAsset>, spineAsset, SetSpineAsset, GetSpineAsset); // Spine asset @EDITOR_PROPERTY
+    public:
+        PROPERTIES(SpineComponent);
+        PROPERTY(AssetRef<SpineAsset>, spineAsset, SetSpineAsset, GetSpineAsset); // Spine asset @EDITOR_PROPERTY
 
-	public:
-		// Default constructor
-		SpineComponent();
+    public:
+        // Default constructor
+        SpineComponent();
 
-		// Copy-constructor
-		SpineComponent(const SpineComponent& other);
+        // Copy-constructor
+        SpineComponent(const SpineComponent& other);
 
-		// Copy-operator
-		SpineComponent& operator=(const SpineComponent& other);
+        // Copy-operator
+        SpineComponent& operator=(const SpineComponent& other);
 
-		// Destructor
-		~SpineComponent();
+        // Destructor
+        ~SpineComponent();
 
-		// Sets spine asset and loads spine
-		void SetSpineAsset(const AssetRef<SpineAsset>& spineAsset);
+        // Sets spine asset and loads spine
+        void SetSpineAsset(const AssetRef<SpineAsset>& spineAsset);
 
-		// Returns spine asset
-		const AssetRef<SpineAsset>& GetSpineAsset() const;
+        // Returns spine asset
+        const AssetRef<SpineAsset>& GetSpineAsset() const;
 
-		// Returns name of component
-		static String GetName();
+        // Returns name of component
+        static String GetName();
 
-		// Returns category of component
-		static String GetCategory();
+        // Returns category of component
+        static String GetCategory();
 
-		// Returns name of component icon
-		static String GetIcon();
+        // Returns name of component icon
+        static String GetIcon();
 
-		SERIALIZABLE(SpineComponent);
-		CLONEABLE_REF(SpineComponent);
+        SERIALIZABLE(SpineComponent);
+        CLONEABLE_REF(SpineComponent);
 
-	protected:
-		AssetRef<SpineAsset> mSpineAsset; // Spine asset @SERIALIZABLE
+    protected:
+        AssetRef<SpineAsset> mSpineAsset; // Spine asset @SERIALIZABLE
 
-		Ref<Spine> mSpineRenderer; // Spine renderer
+        Ref<Spine> mSpineRenderer; // Spine renderer
 
-	protected:
-		// Loads spine from asset
-		void LoadSpine();
+    protected:
+        // Loads spine from asset
+        void LoadSpine();
 
-		// Creates animation states from spine
-		void CreateAnimationStates();
+        // Creates animation states from spine
+        void CreateAnimationStates();
 
-		// Called when actor and scene is initialized
-		void OnInitialized() override;
+        // Called when actor and scene is initialized
+        void OnInitialized() override;
 
-		// Called when transformation was updated. Updates spine root transform
-		void OnTransformUpdated() override;
+        // Called when transformation was updated. Updates spine root transform
+        void OnTransformUpdated() override;
 
-		// Called on update with frame dt, updates spine animation
-		void OnUpdate(float dt) override;
+        // Called on update with frame dt, updates spine animation
+        void OnUpdate(float dt) override;
 
-		// Called when actor is drawing, draws spine animation
-		void OnDraw() override;
-	};
+        // Called when actor is drawing, draws spine animation
+        void OnDraw() override;
+    };
 }
 // --- META ---
 

@@ -7,42 +7,42 @@ using namespace o2;
 
 namespace o2
 {
-	class EditBox;
+    class EditBox;
 }
 
 namespace Editor
 {
-	// -------------------------------
-	// Editor string property edit box
-	// -------------------------------
-	class WStringProperty: public TPropertyField<WString>
-	{
-	public:
-		// Default constructor
-		WStringProperty(RefCounter* refCounter);
+    // -------------------------------
+    // Editor string property edit box
+    // -------------------------------
+    class WStringProperty: public TPropertyField<WString>
+    {
+    public:
+        // Default constructor
+        WStringProperty(RefCounter* refCounter);
 
-		// Copy constructor
-		WStringProperty(RefCounter* refCounter, const WStringProperty& other);
+        // Copy constructor
+        WStringProperty(RefCounter* refCounter, const WStringProperty& other);
 
-		// Copy operator
-		WStringProperty& operator=(const WStringProperty& other);
+        // Copy operator
+        WStringProperty& operator=(const WStringProperty& other);
 
-		SERIALIZABLE(WStringProperty);
+        SERIALIZABLE(WStringProperty);
         CLONEABLE_REF(WStringProperty);
 
-	protected:
-		Ref<EditBox> mEditBox; // Edit box 
+    protected:
+        Ref<EditBox> mEditBox; // Edit box 
 
-	protected:
-		// Updates value view
-		void UpdateValueView() override;
+    protected:
+        // Updates value view
+        void UpdateValueView() override;
 
-		// Searches controls widgets and layers and initializes them
-		void InitializeControls();
+        // Searches controls widgets and layers and initializes them
+        void InitializeControls();
 
-		// Edit box change event
-		void OnEdited(const WString& data);
-	};
+        // Edit box change event
+        void OnEdited(const WString& data);
+    };
 }
 // --- META ---
 

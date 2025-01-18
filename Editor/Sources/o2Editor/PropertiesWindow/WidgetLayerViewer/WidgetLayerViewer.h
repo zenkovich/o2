@@ -6,73 +6,73 @@ using namespace o2;
 
 namespace o2
 {
-	class SceneEditableObject;
-	class VerticalLayout;
-	class WidgetLayer;
+    class SceneEditableObject;
+    class VerticalLayout;
+    class WidgetLayer;
 }
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(IWidgetLayerHeaderViewer);
-	FORWARD_CLASS_REF(IWidgetLayerLayoutViewer);
-	FORWARD_CLASS_REF(IWidgetLayerPropertiesViewer);
+    FORWARD_CLASS_REF(IWidgetLayerHeaderViewer);
+    FORWARD_CLASS_REF(IWidgetLayerLayoutViewer);
+    FORWARD_CLASS_REF(IWidgetLayerPropertiesViewer);
 
-	// ------------------------------
-	// Widget layer properties viewer
-	// ------------------------------
-	class WidgetLayerViewer : public IPropertiesViewer
-	{
-	public:
-		WidgetLayerViewer();
+    // ------------------------------
+    // Widget layer properties viewer
+    // ------------------------------
+    class WidgetLayerViewer : public IPropertiesViewer
+    {
+    public:
+        WidgetLayerViewer();
 
-		// Virtual destructor
-		~WidgetLayerViewer();
+        // Virtual destructor
+        ~WidgetLayerViewer();
 
-		// Returns viewing object type
-		const Type* GetViewingObjectType() const override;
+        // Returns viewing object type
+        const Type* GetViewingObjectType() const override;
 
-		// Sets header viewer
-		void SetHeaderViewer(const Ref<IWidgetLayerHeaderViewer>& viewer);
+        // Sets header viewer
+        void SetHeaderViewer(const Ref<IWidgetLayerHeaderViewer>& viewer);
 
-		// Sets transform viewer
-		void SetLayoutViewer(const Ref<IWidgetLayerLayoutViewer>& viewer);
+        // Sets transform viewer
+        void SetLayoutViewer(const Ref<IWidgetLayerLayoutViewer>& viewer);
 
-		// Adds new available actor properties viewer type
-		void SetActorPropertiesViewer(const Ref<IWidgetLayerPropertiesViewer>& viewer);
+        // Adds new available actor properties viewer type
+        void SetActorPropertiesViewer(const Ref<IWidgetLayerPropertiesViewer>& viewer);
 
-		// Updates properties values
-		void Refresh() override;
+        // Updates properties values
+        void Refresh() override;
 
-		IOBJECT(WidgetLayerViewer);
+        IOBJECT(WidgetLayerViewer);
 
-	protected:
-		Vector<WidgetLayer*> mTargetLayers; // Current target layers
+    protected:
+        Vector<WidgetLayer*> mTargetLayers; // Current target layers
 
-		Ref<IWidgetLayerHeaderViewer>     mHeaderViewer;     // Layer header viewer
-		Ref<IWidgetLayerLayoutViewer>     mLayoutViewer;     // Layer layout viewer
-		Ref<IWidgetLayerPropertiesViewer> mPropertiesViewer; // Layer properties viewer
+        Ref<IWidgetLayerHeaderViewer>     mHeaderViewer;     // Layer header viewer
+        Ref<IWidgetLayerLayoutViewer>     mLayoutViewer;     // Layer layout viewer
+        Ref<IWidgetLayerPropertiesViewer> mPropertiesViewer; // Layer properties viewer
 
-		Ref<VerticalLayout> mViewersLayout; // Viewers layout
+        Ref<VerticalLayout> mViewersLayout; // Viewers layout
 
-	protected:
-		// Called when some actors on scene were changed
-		void OnSceneObjectsChanged(const Vector<Ref<SceneEditableObject>>& objects);
+    protected:
+        // Called when some actors on scene were changed
+        void OnSceneObjectsChanged(const Vector<Ref<SceneEditableObject>>& objects);
 
-		// Sets target objects
-		void SetTargets(const Vector<IObject*>& targets) override;
+        // Sets target objects
+        void SetTargets(const Vector<IObject*>& targets) override;
 
-		// Enable viewer event function
-		void OnPropertiesEnabled() override;
+        // Enable viewer event function
+        void OnPropertiesEnabled() override;
 
-		// Disable viewer event function
-		void OnPropertiesDisabled() override;
+        // Disable viewer event function
+        void OnPropertiesDisabled() override;
 
-		// Updates viewer
-		void Update(float dt) override;
+        // Updates viewer
+        void Update(float dt) override;
 
-		// Draws something
-		void Draw() override;
-	};
+        // Draws something
+        void Draw() override;
+    };
 
 }
 // --- META ---

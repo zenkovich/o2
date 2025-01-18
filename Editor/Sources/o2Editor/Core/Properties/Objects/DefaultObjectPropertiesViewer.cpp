@@ -7,37 +7,37 @@
 
 namespace Editor
 {
-	bool DefaultObjectPropertiesViewer::CheckBuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets)
-	{
-		IObjectPropertiesViewer::CheckBuildProperties(targetObjets);
+    bool DefaultObjectPropertiesViewer::CheckBuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets)
+    {
+        IObjectPropertiesViewer::CheckBuildProperties(targetObjets);
 
-		if (targetObjets.IsEmpty())
-			return false;
+        if (targetObjets.IsEmpty())
+            return false;
 
-		PushEditorScopeOnStack scope;
+        PushEditorScopeOnStack scope;
 
-		const Type* objectsType = &(targetObjets[0].first)->GetType();
+        const Type* objectsType = &(targetObjets[0].first)->GetType();
 
-		if (mBuiltObjectType != objectsType || mBuiltWithHiddenProperties != o2EditorProperties.IsPrivateFieldsVisible())
-		{
-			mBuiltObjectType = objectsType;
+        if (mBuiltObjectType != objectsType || mBuiltWithHiddenProperties != o2EditorProperties.IsPrivateFieldsVisible())
+        {
+            mBuiltObjectType = objectsType;
 
-			if (mBuiltObjectType)
-				o2EditorProperties.FreeProperties(mPropertiesContext);
+            if (mBuiltObjectType)
+                o2EditorProperties.FreeProperties(mPropertiesContext);
 
-			if (mBuiltObjectType)
-			{
-				o2EditorProperties.BuildObjectProperties(mSpoiler, mBuiltObjectType, mPropertiesContext, "",
-														 mOnChildFieldChangeCompleted, onChanged);
+            if (mBuiltObjectType)
+            {
+                o2EditorProperties.BuildObjectProperties(mSpoiler, mBuiltObjectType, mPropertiesContext, "",
+                                                         mOnChildFieldChangeCompleted, onChanged);
 
-				mBuiltWithHiddenProperties = o2EditorProperties.IsPrivateFieldsVisible();
-			}
+                mBuiltWithHiddenProperties = o2EditorProperties.IsPrivateFieldsVisible();
+            }
 
-			return true;
-		}
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 }
 // --- META ---
 

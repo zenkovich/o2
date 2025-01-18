@@ -5,47 +5,47 @@ using namespace o2;
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(IObjectPropertiesViewer);
-	FORWARD_CLASS_REF(PropertiesContext);
+    FORWARD_CLASS_REF(IObjectPropertiesViewer);
+    FORWARD_CLASS_REF(PropertiesContext);
 
-	// -----------------------------------------------------------------
-	// Basic automatic object viewer. Selects suitable properties viewer
-	// -----------------------------------------------------------------
-	class ObjectViewer: public VerticalLayout
-	{
-	public:
-		// Default constructor, creates view widget as vertical layout
+    // -----------------------------------------------------------------
+    // Basic automatic object viewer. Selects suitable properties viewer
+    // -----------------------------------------------------------------
+    class ObjectViewer: public VerticalLayout
+    {
+    public:
+        // Default constructor, creates view widget as vertical layout
         ObjectViewer(RefCounter* refCounter);
 
-		// Refreshing controls and properties by target objects with prototypes
-		void Refresh(const Vector<Pair<IObject*, IObject*>>& targetObjets);
+        // Refreshing controls and properties by target objects with prototypes
+        void Refresh(const Vector<Pair<IObject*, IObject*>>& targetObjets);
 
-		// Refreshing controls and properties by target objects
-		void Refresh(const Vector<IObject*>& targetObjets);
+        // Refreshing controls and properties by target objects
+        void Refresh(const Vector<IObject*>& targetObjets);
 
-		// Sets parent context
-		void SetParentContext(const Ref<PropertiesContext>& context);
+        // Sets parent context
+        void SetParentContext(const Ref<PropertiesContext>& context);
 
-		// Enable viewer event function
-		virtual void OnPropertiesEnabled();
+        // Enable viewer event function
+        virtual void OnPropertiesEnabled();
 
-		// Disable viewer event function
-		virtual void OnPropertiesDisabled();
+        // Disable viewer event function
+        virtual void OnPropertiesDisabled();
 
-		// Returns viewing objects type
-		const Type* GetViewingObjectType() const;
+        // Returns viewing objects type
+        const Type* GetViewingObjectType() const;
 
-		// Returns create menu category in editor
-		static String GetCreateMenuCategory();
+        // Returns create menu category in editor
+        static String GetCreateMenuCategory();
 
         SERIALIZABLE(ObjectViewer);
         CLONEABLE_REF(ObjectViewer);
 
-	protected:
-		Ref<PropertiesContext> mParentContext; // Parent properties context
+    protected:
+        Ref<PropertiesContext> mParentContext; // Parent properties context
 
-		Ref<IObjectPropertiesViewer> mPropertiesViewer; // Object properties viewer
-	};
+        Ref<IObjectPropertiesViewer> mPropertiesViewer; // Object properties viewer
+    };
 }
 // --- META ---
 

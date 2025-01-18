@@ -7,61 +7,61 @@ using namespace o2;
 
 namespace o2
 {
-	class Toggle;
-	class Button;
-	class HorizontalProgress;
+    class Toggle;
+    class Button;
+    class HorizontalProgress;
 }
 
 namespace Editor
 {
-	// ------------------------------------
-	// AnimationComponent properties viewer
-	// ------------------------------------
-	class AnimationStateViewer : public DefaultObjectPropertiesViewer
-	{
-	public:
-		// Returns viewing objects type
-		const Type* GetViewingObjectType() const override;
+    // ------------------------------------
+    // AnimationComponent properties viewer
+    // ------------------------------------
+    class AnimationStateViewer : public DefaultObjectPropertiesViewer
+    {
+    public:
+        // Returns viewing objects type
+        const Type* GetViewingObjectType() const override;
 
-		// Creates spoiler for properties
-		Ref<Spoiler> CreateSpoiler(const Ref<Widget>& parent) override;
+        // Creates spoiler for properties
+        Ref<Spoiler> CreateSpoiler(const Ref<Widget>& parent) override;
 
-		// Returns viewing objects base type by static function
-		static const Type* GetViewingObjectTypeStatic();
+        // Returns viewing objects base type by static function
+        static const Type* GetViewingObjectTypeStatic();
 
-		IOBJECT(AnimationStateViewer);
+        IOBJECT(AnimationStateViewer);
 
-	private:
-		Ref<Toggle> mPlayPause;
-		Ref<Button> mEditBtn;
-		Ref<Toggle> mLooped;
+    private:
+        Ref<Toggle> mPlayPause;
+        Ref<Button> mEditBtn;
+        Ref<Toggle> mLooped;
 
-		Ref<HorizontalProgress> mTimeProgress;
+        Ref<HorizontalProgress> mTimeProgress;
 
-		WeakRef<IAnimation> mSubscribedPlayer;
+        WeakRef<IAnimation> mSubscribedPlayer;
 
-	private:
-		// Called when viewer is refreshed
-		void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
+    private:
+        // Called when viewer is refreshed
+        void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 
-		// ThCalled when the viewer is freed
-		void OnFree() override;
+        // ThCalled when the viewer is freed
+        void OnFree() override;
 
-		// Called when play pause toggled
-		void OnPlayPauseToggled(bool play);
+        // Called when play pause toggled
+        void OnPlayPauseToggled(bool play);
 
-		// Called when loop toggled
-		void OnLoopToggled(bool looped);
+        // Called when loop toggled
+        void OnLoopToggled(bool looped);
 
-		// Called when edit button pressed, sets animation editing
-		void OnEditPressed();
+        // Called when edit button pressed, sets animation editing
+        void OnEditPressed();
 
-		// Called when time progress changed by user, sets subscribed player time 
-		void OnTimeProgressChanged(float value);
+        // Called when time progress changed by user, sets subscribed player time 
+        void OnTimeProgressChanged(float value);
 
-		// Called when animation updates
-		void OnAnimationUpdated(float time);
-	};
+        // Called when animation updates
+        void OnAnimationUpdated(float time);
+    };
 }
 // --- META ---
 

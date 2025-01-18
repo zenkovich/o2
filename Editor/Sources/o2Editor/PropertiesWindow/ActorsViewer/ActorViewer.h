@@ -6,102 +6,102 @@ using namespace o2;
 
 namespace o2
 {
-	class Actor;
-	class Button;
-	class VerticalLayout;
-	class Widget;
+    class Actor;
+    class Button;
+    class VerticalLayout;
+    class Widget;
 }
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(AddComponentPanel);
-	FORWARD_CLASS_REF(DefaultActorComponentViewer);
-	FORWARD_CLASS_REF(DefaultActorPropertiesViewer);
-	FORWARD_CLASS_REF(IActorComponentViewer);
-	FORWARD_CLASS_REF(IActorHeaderViewer);
-	FORWARD_CLASS_REF(IActorPropertiesViewer);
-	FORWARD_CLASS_REF(IActorTransformViewer);
+    FORWARD_CLASS_REF(AddComponentPanel);
+    FORWARD_CLASS_REF(DefaultActorComponentViewer);
+    FORWARD_CLASS_REF(DefaultActorPropertiesViewer);
+    FORWARD_CLASS_REF(IActorComponentViewer);
+    FORWARD_CLASS_REF(IActorHeaderViewer);
+    FORWARD_CLASS_REF(IActorPropertiesViewer);
+    FORWARD_CLASS_REF(IActorTransformViewer);
 
-	// ------------------------
-	// Actors properties viewer
-	// ------------------------
-	class ActorViewer: public IPropertiesViewer
-	{
-	public:
-		// Default constructor
+    // ------------------------
+    // Actors properties viewer
+    // ------------------------
+    class ActorViewer: public IPropertiesViewer
+    {
+    public:
+        // Default constructor
         ActorViewer(RefCounter* refCounter);
 
-		// Virtual destructor
-		~ActorViewer();
+        // Virtual destructor
+        ~ActorViewer();
 
-		// Returns viewing object type
-		const Type* GetViewingObjectType() const override;
+        // Returns viewing object type
+        const Type* GetViewingObjectType() const override;
 
-		// Sets header viewer
-		void SetActorHeaderViewer(const Ref<IActorHeaderViewer>& viewer);
+        // Sets header viewer
+        void SetActorHeaderViewer(const Ref<IActorHeaderViewer>& viewer);
 
-		// Sets transform viewer
-		void SetActorTransformViewer(const Ref<IActorTransformViewer>& viewer);
+        // Sets transform viewer
+        void SetActorTransformViewer(const Ref<IActorTransformViewer>& viewer);
 
-		// Adds new available component viewer type
-		void AddComponentViewerType(const Ref<IActorComponentViewer>& viewer);
+        // Adds new available component viewer type
+        void AddComponentViewerType(const Ref<IActorComponentViewer>& viewer);
 
-		// Adds new available actor properties viewer type
-		void AddActorPropertiesViewerType(const Ref<IActorPropertiesViewer>& viewer);
+        // Adds new available actor properties viewer type
+        void AddActorPropertiesViewerType(const Ref<IActorPropertiesViewer>& viewer);
 
-		// Updates properties values
-		void Refresh() override;
+        // Updates properties values
+        void Refresh() override;
 
-		IOBJECT(ActorViewer);
+        IOBJECT(ActorViewer);
 
-	protected:
-		typedef Map<const Type*, Vector<Ref<IActorComponentViewer>>> TypeCompViewersMap;
-		typedef Map<const Type*, Ref<IActorPropertiesViewer>> TypeActorViewersMap;
+    protected:
+        typedef Map<const Type*, Vector<Ref<IActorComponentViewer>>> TypeCompViewersMap;
+        typedef Map<const Type*, Ref<IActorPropertiesViewer>> TypeActorViewersMap;
 
-		Vector<Actor*> mTargetActors; // Current target actors
-									    
-		Ref<IActorHeaderViewer>    mHeaderViewer;    // Actor header viewer
-		Ref<IActorTransformViewer> mTransformViewer; // Actor transform viewer
+        Vector<Actor*> mTargetActors; // Current target actors
+                                        
+        Ref<IActorHeaderViewer>    mHeaderViewer;    // Actor header viewer
+        Ref<IActorTransformViewer> mTransformViewer; // Actor transform viewer
 
-		Ref<IActorPropertiesViewer>         mActorPropertiesViewer;           // Actor properties viewer
-		Ref<DefaultActorPropertiesViewer>   mDefaultActorPropertiesViewer;    // Default actor properties viewer sample
-		Vector<Ref<IActorPropertiesViewer>> mAvailableActorPropertiesViewers; // Available actor properties viewers										 							      
-		TypeActorViewersMap                 mActorPropertiesViewersPool;      // Actor properties viewers pool
+        Ref<IActorPropertiesViewer>         mActorPropertiesViewer;           // Actor properties viewer
+        Ref<DefaultActorPropertiesViewer>   mDefaultActorPropertiesViewer;    // Default actor properties viewer sample
+        Vector<Ref<IActorPropertiesViewer>> mAvailableActorPropertiesViewers; // Available actor properties viewers                                                                           
+        TypeActorViewersMap                 mActorPropertiesViewersPool;      // Actor properties viewers pool
 
-		Vector<Pair<const Type*, Vector<Ref<Component>>>> mComponentGroupsTypes;       // List of components group types for targets
-		Vector<Ref<IActorComponentViewer>>                mComponentsViewers;          // Components viewers
-		Ref<DefaultActorComponentViewer>                  mDefaultComponentViewer;     // Default component viewer sample
-		Vector<Ref<IActorComponentViewer>>                mAvailableComponentsViewers; // Available components' viewers										 							      
-		TypeCompViewersMap                                mComponentViewersPool;       // Components viewers pool
+        Vector<Pair<const Type*, Vector<Ref<Component>>>> mComponentGroupsTypes;       // List of components group types for targets
+        Vector<Ref<IActorComponentViewer>>                mComponentsViewers;          // Components viewers
+        Ref<DefaultActorComponentViewer>                  mDefaultComponentViewer;     // Default component viewer sample
+        Vector<Ref<IActorComponentViewer>>                mAvailableComponentsViewers; // Available components' viewers                                                                           
+        TypeCompViewersMap                                mComponentViewersPool;       // Components viewers pool
 
-		Ref<AddComponentPanel> mAddComponentPanel; // Add component panel. Shown by clicking on filter field
-									    
-		Ref<VerticalLayout> mViewersLayout; // Viewers layout
+        Ref<AddComponentPanel> mAddComponentPanel; // Add component panel. Shown by clicking on filter field
+                                        
+        Ref<VerticalLayout> mViewersLayout; // Viewers layout
 
-	protected:
-		// Called when some actors on scene were changed
-		void OnSceneObjectsChanged(const Vector<Ref<SceneEditableObject>>& objects);
+    protected:
+        // Called when some actors on scene were changed
+        void OnSceneObjectsChanged(const Vector<Ref<SceneEditableObject>>& objects);
 
-		// Sets target objects
-		void SetTargets(const Vector<IObject*>& targets) override;
+        // Sets target objects
+        void SetTargets(const Vector<IObject*>& targets) override;
 
-		// Sets target actor properties
-		void SetTargetsActorProperties(const Vector<IObject*>& targets, Vector<Ref<Widget>>& viewersWidgets);
+        // Sets target actor properties
+        void SetTargetsActorProperties(const Vector<IObject*>& targets, Vector<Ref<Widget>>& viewersWidgets);
 
-		// Sets target components: gets common components and initializes them
-		void SetTargetsComponents(const Vector<IObject*>& targets, Vector<Ref<Widget>>& viewersWidgets);
+        // Sets target components: gets common components and initializes them
+        void SetTargetsComponents(const Vector<IObject*>& targets, Vector<Ref<Widget>>& viewersWidgets);
 
-		// Returns list of grouped by types components
-		Vector<Pair<const Type*, Vector<Ref<Component>>>> GetGroupedComponents() const;
+        // Returns list of grouped by types components
+        Vector<Pair<const Type*, Vector<Ref<Component>>>> GetGroupedComponents() const;
 
-		// Enable viewer event function
-		void OnPropertiesEnabled() override;
+        // Enable viewer event function
+        void OnPropertiesEnabled() override;
 
-		// Disable viewer event function
-		void OnPropertiesDisabled() override;
+        // Disable viewer event function
+        void OnPropertiesDisabled() override;
 
-		friend class AddComponentPanel;
-	};
+        friend class AddComponentPanel;
+    };
 
 }
 // --- META ---

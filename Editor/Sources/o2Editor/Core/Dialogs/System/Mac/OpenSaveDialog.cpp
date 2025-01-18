@@ -5,15 +5,15 @@
 
 namespace Editor
 {
-	String GetOpenFileNameDialog(const String& title, const Map<String, String>& extensions, const String& defaultPath /*= ""*/)
-	{
-		return "";
-	}
+    String GetOpenFileNameDialog(const String& title, const Map<String, String>& extensions, const String& defaultPath /*= ""*/)
+    {
+        return "";
+    }
 
-	String GetSaveFileNameDialog(const String& title, const Map<String, String>& extensions, const String& defaultPath /*= ""*/)
-	{
-		return "";
-	}
+    String GetSaveFileNameDialog(const String& title, const Map<String, String>& extensions, const String& defaultPath /*= ""*/)
+    {
+        return "";
+    }
 }
 
 #endif

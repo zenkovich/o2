@@ -8,40 +8,40 @@
 
 namespace Editor
 {
-	BooleanProperty::BooleanProperty(RefCounter* refCounter):
-		TPropertyField<bool>(refCounter)
+    BooleanProperty::BooleanProperty(RefCounter* refCounter):
+        TPropertyField<bool>(refCounter)
     {}
 
-	BooleanProperty::BooleanProperty(RefCounter* refCounter, const BooleanProperty& other) :
-		TPropertyField<bool>(refCounter, other)
-	{
-		InitializeControls();
-	}
+    BooleanProperty::BooleanProperty(RefCounter* refCounter, const BooleanProperty& other) :
+        TPropertyField<bool>(refCounter, other)
+    {
+        InitializeControls();
+    }
 
-	BooleanProperty& BooleanProperty::operator=(const BooleanProperty& other)
-	{
-		TPropertyField<bool>::operator=(other);
-		InitializeControls();
-		return *this;
-	}
+    BooleanProperty& BooleanProperty::operator=(const BooleanProperty& other)
+    {
+        TPropertyField<bool>::operator=(other);
+        InitializeControls();
+        return *this;
+    }
 
-	void BooleanProperty::InitializeControls()
-	{
-		mToggle = FindChildByType<Toggle>();
-		if (mToggle)
-		{
-			mToggle->layout->minHeight = 10;
-			mToggle->onToggleByUser = [&](bool value) { SetValueByUser(value); };
-			mToggle->SetValueUnknown();
-		}
-	}
+    void BooleanProperty::InitializeControls()
+    {
+        mToggle = FindChildByType<Toggle>();
+        if (mToggle)
+        {
+            mToggle->layout->minHeight = 10;
+            mToggle->onToggleByUser = [&](bool value) { SetValueByUser(value); };
+            mToggle->SetValueUnknown();
+        }
+    }
 
-	void BooleanProperty::UpdateValueView()
-	{
-		mToggle->value = mCommonValue;
-		if (mValuesDifferent)
-			mToggle->SetValueUnknown();
-	}
+    void BooleanProperty::UpdateValueView()
+    {
+        mToggle->value = mCommonValue;
+        if (mValuesDifferent)
+            mToggle->SetValueUnknown();
+    }
 }
 
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<bool>);

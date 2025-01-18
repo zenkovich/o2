@@ -9,67 +9,67 @@ using namespace o2;
 
 namespace o2
 {
-	class Widget;
-	class WidgetLayer;
+    class Widget;
+    class WidgetLayer;
 }
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(SpoilerWithHead);
+    FORWARD_CLASS_REF(SpoilerWithHead);
 
-	// -----------------------------------------------
-	// Editor widget layer properties viewer interface
-	// -----------------------------------------------
-	class IWidgetLayerPropertiesViewer : public IObject, virtual public RefCounterable
-	{
-	public:
-		// Default constructor. Initializes data widget
-		IWidgetLayerPropertiesViewer();
+    // -----------------------------------------------
+    // Editor widget layer properties viewer interface
+    // -----------------------------------------------
+    class IWidgetLayerPropertiesViewer : public IObject, virtual public RefCounterable
+    {
+    public:
+        // Default constructor. Initializes data widget
+        IWidgetLayerPropertiesViewer();
 
-		// Virtual destructor
-		virtual ~IWidgetLayerPropertiesViewer();
+        // Virtual destructor
+        virtual ~IWidgetLayerPropertiesViewer();
 
-		// Sets target actors
-		virtual void SetTargetLayers(const Vector<WidgetLayer*>& layers) {}
+        // Sets target actors
+        virtual void SetTargetLayers(const Vector<WidgetLayer*>& layers) {}
 
-		// Returns viewing layer drawable type 
-		virtual const Type* GetDrawableType() const { return nullptr; }
+        // Returns viewing layer drawable type 
+        virtual const Type* GetDrawableType() const { return nullptr; }
 
-		// Returns data widget
-		virtual Ref<Widget> GetWidget() const;
+        // Returns data widget
+        virtual Ref<Widget> GetWidget() const;
 
-		// Expands view
-		void Expand();
+        // Expands view
+        void Expand();
 
-		// Collapse view
-		void Collapse();
+        // Collapse view
+        void Collapse();
 
-		// Updates all actor values
-		virtual void Refresh();
+        // Updates all actor values
+        virtual void Refresh();
 
-		// Returns is there no properties
-		virtual bool IsEmpty() const;
+        // Returns is there no properties
+        virtual bool IsEmpty() const;
 
-		// Sets viewer enabled
-		void SetPropertiesEnabled(bool enabled);
+        // Sets viewer enabled
+        void SetPropertiesEnabled(bool enabled);
 
-		// Returns is viewer enabled
-		bool IsPropertiesEnabled() const;
+        // Returns is viewer enabled
+        bool IsPropertiesEnabled() const;
 
-		IOBJECT(IWidgetLayerPropertiesViewer);
+        IOBJECT(IWidgetLayerPropertiesViewer);
 
-	protected:
-		Ref<SpoilerWithHead> mSpoiler;
+    protected:
+        Ref<SpoilerWithHead> mSpoiler;
 
-		bool mPropertiesEnabled = false; // Is viewer enabled 
+        bool mPropertiesEnabled = false; // Is viewer enabled 
 
-	protected:
-		// Enable viewer event function
-		virtual void OnPropertiesEnabled() {}
+    protected:
+        // Enable viewer event function
+        virtual void OnPropertiesEnabled() {}
 
-		// Disable viewer event function
-		virtual void OnPropertiesDisabled() {}
-	};
+        // Disable viewer event function
+        virtual void OnPropertiesDisabled() {}
+    };
 }
 // --- META ---
 

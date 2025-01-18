@@ -4,61 +4,61 @@
 
 namespace o2
 {
-	class Toggle;
-	class EditBox;
-	class Button;
+    class Toggle;
+    class EditBox;
+    class Button;
 }
 
 namespace Editor
 {
-	using namespace o2;
+    using namespace o2;
 
-	FORWARD_CLASS_REF(BooleanProperty);
-	FORWARD_CLASS_REF(StringProperty);
+    FORWARD_CLASS_REF(BooleanProperty);
+    FORWARD_CLASS_REF(StringProperty);
 
-	// ----------------------------------
-	// Default widget layer header viewer
-	// ----------------------------------
-	class DefaultWidgetLayerHeaderViewer : public IWidgetLayerHeaderViewer
-	{
-	public:
-		// Default constructor
-		DefaultWidgetLayerHeaderViewer();
+    // ----------------------------------
+    // Default widget layer header viewer
+    // ----------------------------------
+    class DefaultWidgetLayerHeaderViewer : public IWidgetLayerHeaderViewer
+    {
+    public:
+        // Default constructor
+        DefaultWidgetLayerHeaderViewer();
 
-		// Virtual destructor
-		~DefaultWidgetLayerHeaderViewer();
+        // Virtual destructor
+        ~DefaultWidgetLayerHeaderViewer();
 
-		// Sets target actors
-		void SetTargetLayers(const Vector<WidgetLayer*>& layers) override;
+        // Sets target actors
+        void SetTargetLayers(const Vector<WidgetLayer*>& layers) override;
 
-		// Returns data widget
-		Ref<Widget> GetWidget() const override;
+        // Returns data widget
+        Ref<Widget> GetWidget() const override;
 
-		// Updates properties values
-		void Refresh() override;
+        // Updates properties values
+        void Refresh() override;
 
-		IOBJECT(DefaultWidgetLayerHeaderViewer);
+        IOBJECT(DefaultWidgetLayerHeaderViewer);
 
-	public:
-		Vector<WidgetLayer*> mLayers;
+    public:
+        Vector<WidgetLayer*> mLayers;
 
-		Ref<Widget> mDataView;
+        Ref<Widget> mDataView;
 
-		Ref<BooleanProperty> mEnableProperty;
-		Ref<StringProperty>  mNameProperty;
-		Ref<BooleanProperty> mLockProperty;
+        Ref<BooleanProperty> mEnableProperty;
+        Ref<StringProperty>  mNameProperty;
+        Ref<BooleanProperty> mLockProperty;
 
-	protected:
-		// Enable viewer event function
-		void OnPropertiesEnabled() override;
+    protected:
+        // Enable viewer event function
+        void OnPropertiesEnabled() override;
 
-		// Disable viewer event function
-		void OnPropertiesDisabled() override;
+        // Disable viewer event function
+        void OnPropertiesDisabled() override;
 
-		// Called when some property changed, stores action for undo
-		void OnPropertyChanged(const String& path, const Vector<DataDocument>& prevValue, 
-							   const Vector<DataDocument>& newValue);
-	};
+        // Called when some property changed, stores action for undo
+        void OnPropertyChanged(const String& path, const Vector<DataDocument>& prevValue, 
+                               const Vector<DataDocument>& newValue);
+    };
 }
 // --- META ---
 

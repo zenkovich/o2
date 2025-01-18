@@ -8,44 +8,44 @@ using namespace o2;
 
 namespace o2
 {
-	class Text;
-	class Spoiler;
+    class Text;
+    class Spoiler;
 }
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(AssetProperty);
-	FORWARD_CLASS_REF(FloatProperty);
-	FORWARD_CLASS_REF(ColorProperty);
-	FORWARD_CLASS_REF(EnumProperty);
-	FORWARD_CLASS_REF(WStringProperty);
-	FORWARD_CLASS_REF(BooleanProperty);
+    FORWARD_CLASS_REF(AssetProperty);
+    FORWARD_CLASS_REF(FloatProperty);
+    FORWARD_CLASS_REF(ColorProperty);
+    FORWARD_CLASS_REF(EnumProperty);
+    FORWARD_CLASS_REF(WStringProperty);
+    FORWARD_CLASS_REF(BooleanProperty);
 
-	// --------------------
-	// Editor text property
-	// --------------------
-	class TextViewer : public TObjectPropertiesViewer<Text>
-	{
-	public:
-		IOBJECT(TextViewer);
+    // --------------------
+    // Editor text property
+    // --------------------
+    class TextViewer : public TObjectPropertiesViewer<Text>
+    {
+    public:
+        IOBJECT(TextViewer);
 
-	protected:
-		Ref<ColorProperty>   mColorProperty;
-		Ref<FloatProperty>   mAlphaProperty;
-		Ref<AssetProperty>   mFontProperty;
-		Ref<WStringProperty> mTextProperty;
-		Ref<FloatProperty>   mHeightProperty;
-		Ref<EnumProperty>    mHorAlignProperty;
-		Ref<EnumProperty>    mVerAlignProperty;
-		Ref<BooleanProperty> mWordWrapProperty;
-		Ref<BooleanProperty> mDotsEndingsProperty;
-		Ref<FloatProperty>   mSymbolsDistCoefProperty;
-		Ref<FloatProperty>   mLinesDistCoefProperty;
+    protected:
+        Ref<ColorProperty>   mColorProperty;
+        Ref<FloatProperty>   mAlphaProperty;
+        Ref<AssetProperty>   mFontProperty;
+        Ref<WStringProperty> mTextProperty;
+        Ref<FloatProperty>   mHeightProperty;
+        Ref<EnumProperty>    mHorAlignProperty;
+        Ref<EnumProperty>    mVerAlignProperty;
+        Ref<BooleanProperty> mWordWrapProperty;
+        Ref<BooleanProperty> mDotsEndingsProperty;
+        Ref<FloatProperty>   mSymbolsDistCoefProperty;
+        Ref<FloatProperty>   mLinesDistCoefProperty;
 
-	protected:
-		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
-		void RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
-	};
+    protected:
+        // Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
+        void RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
+    };
 }
 // --- META ---
 

@@ -30,539 +30,539 @@
 
 namespace Editor
 {
-	DrawOrderTree::DrawOrderTree(RefCounter* refCounter) :
-		Tree(refCounter), mAttachedToSceneEvents(false), mDragActorPropertyField(nullptr), mDragComponentPropertyField(nullptr)
-	{
-		mNodeWidgetSample = mmake<DrawOrderTreeNode>();
-		mNodeWidgetSample->layout->minHeight = 20;
-		mNodeWidgetSample->AddLayer("caption", nullptr);
+    DrawOrderTree::DrawOrderTree(RefCounter* refCounter) :
+        Tree(refCounter), mAttachedToSceneEvents(false), mDragActorPropertyField(nullptr), mDragComponentPropertyField(nullptr)
+    {
+        mNodeWidgetSample = mmake<DrawOrderTreeNode>();
+        mNodeWidgetSample->layout->minHeight = 20;
+        mNodeWidgetSample->AddLayer("caption", nullptr);
 
-		Initialize();
-	}
+        Initialize();
+    }
 
-	DrawOrderTree::DrawOrderTree(RefCounter* refCounter, const DrawOrderTree& other) :
-		Tree(refCounter, other), mAttachedToSceneEvents(false), mDragActorPropertyField(nullptr), mDragComponentPropertyField(nullptr)
-	{
-		Initialize();
-	}
+    DrawOrderTree::DrawOrderTree(RefCounter* refCounter, const DrawOrderTree& other) :
+        Tree(refCounter, other), mAttachedToSceneEvents(false), mDragActorPropertyField(nullptr), mDragComponentPropertyField(nullptr)
+    {
+        Initialize();
+    }
 
     DrawOrderTree::DrawOrderTree(const DrawOrderTree& other):
-		DrawOrderTree(nullptr, other)
+        DrawOrderTree(nullptr, other)
     {}
 
     DrawOrderTree::~DrawOrderTree()
-	{
-		DeattachFromSceneEvents();
-	}
+    {
+        DeattachFromSceneEvents();
+    }
 
-	DrawOrderTree& DrawOrderTree::operator=(const DrawOrderTree& other)
-	{
-		Tree::operator=(other);
-		return *this;
-	}
+    DrawOrderTree& DrawOrderTree::operator=(const DrawOrderTree& other)
+    {
+        Tree::operator=(other);
+        return *this;
+    }
 
-	void DrawOrderTree::AttachToSceneEvents()
-	{
-		o2Scene.onObjectsChanged += THIS_FUNC(OnObjectsChanged);
+    void DrawOrderTree::AttachToSceneEvents()
+    {
+        o2Scene.onObjectsChanged += THIS_FUNC(OnObjectsChanged);
 
-		o2Scene.onAddedToScene += THIS_FUNC(OnObjectCreated);
-		o2Scene.onRemovedFromScene += THIS_FUNC(OnObjectDestroing);
+        o2Scene.onAddedToScene += THIS_FUNC(OnObjectCreated);
+        o2Scene.onRemovedFromScene += THIS_FUNC(OnObjectDestroing);
 
-		auto updateTreeNode = THIS_FUNC(OnObjectChanged);
-		o2Scene.onEnableChanged += updateTreeNode;
-		o2Scene.onLockChanged += updateTreeNode;
-		o2Scene.onNameChanged += updateTreeNode;
-		o2Scene.onChildrenHierarchyChanged += updateTreeNode;
+        auto updateTreeNode = THIS_FUNC(OnObjectChanged);
+        o2Scene.onEnableChanged += updateTreeNode;
+        o2Scene.onLockChanged += updateTreeNode;
+        o2Scene.onNameChanged += updateTreeNode;
+        o2Scene.onChildrenHierarchyChanged += updateTreeNode;
 
-		mAttachedToSceneEvents = true;
-	}
+        mAttachedToSceneEvents = true;
+    }
 
-	void DrawOrderTree::DeattachFromSceneEvents()
-	{
-		if (Scene::IsSingletonInitialzed() && mAttachedToSceneEvents)
-		{
-			o2Scene.onObjectsChanged -= THIS_FUNC(OnObjectsChanged);
+    void DrawOrderTree::DeattachFromSceneEvents()
+    {
+        if (Scene::IsSingletonInitialzed() && mAttachedToSceneEvents)
+        {
+            o2Scene.onObjectsChanged -= THIS_FUNC(OnObjectsChanged);
 
-			o2Scene.onAddedToScene -= THIS_FUNC(OnObjectCreated);
-			o2Scene.onRemovedFromScene -= THIS_FUNC(OnObjectDestroing);
+            o2Scene.onAddedToScene -= THIS_FUNC(OnObjectCreated);
+            o2Scene.onRemovedFromScene -= THIS_FUNC(OnObjectDestroing);
 
-			auto updateTreeNode = THIS_FUNC(OnObjectChanged);
-			o2Scene.onEnableChanged -= updateTreeNode;
-			o2Scene.onLockChanged -= updateTreeNode;
-			o2Scene.onNameChanged -= updateTreeNode;
-			o2Scene.onChildrenHierarchyChanged -= updateTreeNode;
-		}
-	}
+            auto updateTreeNode = THIS_FUNC(OnObjectChanged);
+            o2Scene.onEnableChanged -= updateTreeNode;
+            o2Scene.onLockChanged -= updateTreeNode;
+            o2Scene.onNameChanged -= updateTreeNode;
+            o2Scene.onChildrenHierarchyChanged -= updateTreeNode;
+        }
+    }
 
-	String DrawOrderTree::GetCreateMenuCategory()
-	{
-		return "UI/Editor";
-	}
+    String DrawOrderTree::GetCreateMenuCategory()
+    {
+        return "UI/Editor";
+    }
 
-	void DrawOrderTree::Initialize()
-	{
-		mEnableTogglesGroup = mmake<ToggleGroup>(ToggleGroup::Type::VerOneClick);
-		mEnableTogglesGroup->onReleased = THIS_FUNC(EnableObjectsGroupReleased);
+    void DrawOrderTree::Initialize()
+    {
+        mEnableTogglesGroup = mmake<ToggleGroup>(ToggleGroup::Type::VerOneClick);
+        mEnableTogglesGroup->onReleased = THIS_FUNC(EnableObjectsGroupReleased);
 
-		mLockTogglesGroup = mmake<ToggleGroup>(ToggleGroup::Type::VerOneClick);
-		mLockTogglesGroup->onReleased = THIS_FUNC(LockObjectsGroupReleased);
+        mLockTogglesGroup = mmake<ToggleGroup>(ToggleGroup::Type::VerOneClick);
+        mLockTogglesGroup->onReleased = THIS_FUNC(LockObjectsGroupReleased);
 
-		auto objectNodeWidgetSample = DynamicCast<DrawOrderTreeNode>(mNodeWidgetSample);
-		objectNodeWidgetSample->InitializeControls();
-	}
+        auto objectNodeWidgetSample = DynamicCast<DrawOrderTreeNode>(mNodeWidgetSample);
+        objectNodeWidgetSample->InitializeControls();
+    }
 
-	void DrawOrderTree::SetSelectedObjects(const Vector<Ref<SceneEditableObject>>& objects)
-	{
-		Vector<Ref<OrderTreeNode>> nodes;
-		for (auto& object : objects)
-		{
-			Ref<OrderTreeNode> node;
-			if (mObjectToNodeMap.TryGetValue(object, node))
-				nodes.Add(node);
-		}
+    void DrawOrderTree::SetSelectedObjects(const Vector<Ref<SceneEditableObject>>& objects)
+    {
+        Vector<Ref<OrderTreeNode>> nodes;
+        for (auto& object : objects)
+        {
+            Ref<OrderTreeNode> node;
+            if (mObjectToNodeMap.TryGetValue(object, node))
+                nodes.Add(node);
+        }
 
-		Tree::SetSelectedObjects(nodes.Convert<void*>([](auto& x) { return (void*)x.Get(); }));
-	}
+        Tree::SetSelectedObjects(nodes.Convert<void*>([](auto& x) { return (void*)x.Get(); }));
+    }
 
-	void DrawOrderTree::ScrollToAndHighlight(const Ref<SceneEditableObject>& object)
+    void DrawOrderTree::ScrollToAndHighlight(const Ref<SceneEditableObject>& object)
     {
         Ref<OrderTreeNode> node;
-		if (mObjectToNodeMap.TryGetValue(object, node))
-			Tree::ScrollToAndHighlight(node.Get());
-	}
+        if (mObjectToNodeMap.TryGetValue(object, node))
+            Tree::ScrollToAndHighlight(node.Get());
+    }
 
-	void DrawOrderTree::RebuildOrderTree()
-	{
-		mRootOrderNodes.Clear();
-		mObjectToNodeMap.Clear();
+    void DrawOrderTree::RebuildOrderTree()
+    {
+        mRootOrderNodes.Clear();
+        mObjectToNodeMap.Clear();
 
-		mStartBatchIdx = INT_MAX;
+        mStartBatchIdx = INT_MAX;
 
-		for (auto& weakCamera : o2Scene.GetCameras())
-		{
-			auto camera = weakCamera.Lock();
-			Ref<OrderTreeNode> cameraNode = mmake<OrderTreeNode>();
-			cameraNode->name = camera->GetName();
-			cameraNode->type = OrderTreeNode::Type::Camera;
-			cameraNode->object = camera;
-			mObjectToNodeMap[cameraNode->object] = cameraNode;
-			mRootOrderNodes.Add(cameraNode);
+        for (auto& weakCamera : o2Scene.GetCameras())
+        {
+            auto camera = weakCamera.Lock();
+            Ref<OrderTreeNode> cameraNode = mmake<OrderTreeNode>();
+            cameraNode->name = camera->GetName();
+            cameraNode->type = OrderTreeNode::Type::Camera;
+            cameraNode->object = camera;
+            mObjectToNodeMap[cameraNode->object] = cameraNode;
+            mRootOrderNodes.Add(cameraNode);
 
-			for (auto& layer : camera->drawLayers.GetLayers())
-			{
-				Ref<OrderTreeNode> layerNode = mmake<OrderTreeNode>();
-				layerNode->name = layer->GetName();
-				layerNode->type = OrderTreeNode::Type::Layer;
-				cameraNode->AddChild(layerNode);
+            for (auto& layer : camera->drawLayers.GetLayers())
+            {
+                Ref<OrderTreeNode> layerNode = mmake<OrderTreeNode>();
+                layerNode->name = layer->GetName();
+                layerNode->type = OrderTreeNode::Type::Layer;
+                cameraNode->AddChild(layerNode);
 
-				for (auto& drawable : layer->GetDrawables())
-					ProcessDrawableTreeNode(layerNode, drawable);
-			}
-		}
-	}
+                for (auto& drawable : layer->GetDrawables())
+                    ProcessDrawableTreeNode(layerNode, drawable);
+            }
+        }
+    }
 
-	void DrawOrderTree::ProcessDrawableTreeNode(const Ref<OrderTreeNode>& parent, const Ref<ISceneDrawable>& drawable)
-	{
-		Ref<OrderTreeNode> drawableNode = mmake<OrderTreeNode>();
+    void DrawOrderTree::ProcessDrawableTreeNode(const Ref<OrderTreeNode>& parent, const Ref<ISceneDrawable>& drawable)
+    {
+        Ref<OrderTreeNode> drawableNode = mmake<OrderTreeNode>();
 
-		drawableNode->inheritedOrderFromParent = drawable->IsDrawingDepthInheritedFromParent();
-		drawableNode->customOrder = drawable->GetDrawingDepth();
-		drawableNode->batchIdx = drawable->drawCallIdx;
+        drawableNode->inheritedOrderFromParent = drawable->IsDrawingDepthInheritedFromParent();
+        drawableNode->customOrder = drawable->GetDrawingDepth();
+        drawableNode->batchIdx = drawable->drawCallIdx;
 
-		if (drawableNode->batchIdx < mStartBatchIdx)
-			mStartBatchIdx = drawableNode->batchIdx;
+        if (drawableNode->batchIdx < mStartBatchIdx)
+            mStartBatchIdx = drawableNode->batchIdx;
 
-		if (auto actor = DynamicCast<Actor>(drawable))
-		{
-			drawableNode->name = actor->name;
-			drawableNode->type = OrderTreeNode::Type::Actor;
-			drawableNode->object = actor;
+        if (auto actor = DynamicCast<Actor>(drawable))
+        {
+            drawableNode->name = actor->name;
+            drawableNode->type = OrderTreeNode::Type::Actor;
+            drawableNode->object = actor;
 
-			mObjectToNodeMap[drawableNode->object] = drawableNode; 
+            mObjectToNodeMap[drawableNode->object] = drawableNode; 
 
-			CheckBatchEnd(drawableNode);
-			parent->AddChild(drawableNode);
-		}
-		else if (auto root = DynamicCast<SceneLayerRootDrawablesContainer>(drawable))
-		{
-			drawableNode->type = OrderTreeNode::Type::Root;
-			drawableNode->name = "Layer roots";
+            CheckBatchEnd(drawableNode);
+            parent->AddChild(drawableNode);
+        }
+        else if (auto root = DynamicCast<SceneLayerRootDrawablesContainer>(drawable))
+        {
+            drawableNode->type = OrderTreeNode::Type::Root;
+            drawableNode->name = "Layer roots";
 
-			CheckBatchEnd(drawableNode);
-			parent->AddChild(drawableNode);
-		}
-		else
-		{
-			drawableNode->name = drawable->GetType().GetName();
-			drawableNode->type = OrderTreeNode::Type::Drawable;
+            CheckBatchEnd(drawableNode);
+            parent->AddChild(drawableNode);
+        }
+        else
+        {
+            drawableNode->name = drawable->GetType().GetName();
+            drawableNode->type = OrderTreeNode::Type::Drawable;
 
-			CheckBatchEnd(drawableNode);
-			parent->AddChild(drawableNode);
-		}
+            CheckBatchEnd(drawableNode);
+            parent->AddChild(drawableNode);
+        }
 
-		for (auto& inherited : drawable->GetChildrenInheritedDepth())
-			ProcessDrawableTreeNode(drawableNode, inherited);
-	}
+        for (auto& inherited : drawable->GetChildrenInheritedDepth())
+            ProcessDrawableTreeNode(drawableNode, inherited);
+    }
 
-	void DrawOrderTree::CheckBatchEnd(const Ref<OrderTreeNode>& node)
-	{
-		static Ref<OrderTreeNode> prevDrawableNode;
+    void DrawOrderTree::CheckBatchEnd(const Ref<OrderTreeNode>& node)
+    {
+        static Ref<OrderTreeNode> prevDrawableNode;
 
-		if (prevDrawableNode && node->object != nullptr && node->batchIdx != prevDrawableNode->batchIdx)
-		{
-			Ref<OrderTreeNode> endNode = mmake<OrderTreeNode>();
-			endNode->type = OrderTreeNode::Type::EndOfBatch;
-			endNode->batchIdx = prevDrawableNode->batchIdx;
+        if (prevDrawableNode && node->object != nullptr && node->batchIdx != prevDrawableNode->batchIdx)
+        {
+            Ref<OrderTreeNode> endNode = mmake<OrderTreeNode>();
+            endNode->type = OrderTreeNode::Type::EndOfBatch;
+            endNode->batchIdx = prevDrawableNode->batchIdx;
 
-			endNode->name = "End of batch #" + (String)(endNode->batchIdx - mStartBatchIdx);
+            endNode->name = "End of batch #" + (String)(endNode->batchIdx - mStartBatchIdx);
 
-			auto parent = prevDrawableNode->GetParent();
-			parent.Lock()->AddChild(endNode);
-		}
+            auto parent = prevDrawableNode->GetParent();
+            parent.Lock()->AddChild(endNode);
+        }
 
-		if (node->object && node->batchIdx >= 0)
-			prevDrawableNode = node;
-	}
+        if (node->object && node->batchIdx >= 0)
+            prevDrawableNode = node;
+    }
 
-	void DrawOrderTree::UpdateNodesStructure()
-	{
-		RebuildOrderTree();
-		Tree::UpdateNodesStructure();
-	}
+    void DrawOrderTree::UpdateNodesStructure()
+    {
+        RebuildOrderTree();
+        Tree::UpdateNodesStructure();
+    }
 
-	void DrawOrderTree::UpdateVisibleNodes()
-	{
-		PushEditorScopeOnStack scope;
-		Tree::UpdateVisibleNodes();
-	}
+    void DrawOrderTree::UpdateVisibleNodes()
+    {
+        PushEditorScopeOnStack scope;
+        Tree::UpdateVisibleNodes();
+    }
 
-	Ref<TreeNode> DrawOrderTree::CreateTreeNodeWidget()
-	{
-		PushEditorScopeOnStack scope;
-		return Tree::CreateTreeNodeWidget();
-	}
+    Ref<TreeNode> DrawOrderTree::CreateTreeNodeWidget()
+    {
+        PushEditorScopeOnStack scope;
+        return Tree::CreateTreeNodeWidget();
+    }
 
-	void* DrawOrderTree::GetObjectParent(void* object)
-	{
-		if (!object)
-			return nullptr;
+    void* DrawOrderTree::GetObjectParent(void* object)
+    {
+        if (!object)
+            return nullptr;
 
-		OrderTreeNode* treeNode = (OrderTreeNode*)(void*)object;
-		return (void*)(treeNode->GetParent().Lock().Get());
-	}
+        OrderTreeNode* treeNode = (OrderTreeNode*)(void*)object;
+        return (void*)(treeNode->GetParent().Lock().Get());
+    }
 
-	Vector<void*> DrawOrderTree::GetObjectChilds(void* object)
-	{
-		OrderTreeNode* treeNode = (OrderTreeNode*)object;
-		if (OrderTreeNode* treeNode = (OrderTreeNode*)object)
-			return treeNode->GetChildren().Convert<void*>([](auto x) { return (void*)x.Get(); });
+    Vector<void*> DrawOrderTree::GetObjectChilds(void* object)
+    {
+        OrderTreeNode* treeNode = (OrderTreeNode*)object;
+        if (OrderTreeNode* treeNode = (OrderTreeNode*)object)
+            return treeNode->GetChildren().Convert<void*>([](auto x) { return (void*)x.Get(); });
 
-		return mRootOrderNodes.Convert<void*>([](auto x) { return (void*)x.Get(); });
-	}
+        return mRootOrderNodes.Convert<void*>([](auto x) { return (void*)x.Get(); });
+    }
 
-	void DrawOrderTree::FillNodeDataByObject(const Ref<TreeNode>& nodeWidget, void* object)
-	{
-		Ref<DrawOrderTreeNode> node = DynamicCast<DrawOrderTreeNode>(nodeWidget);
-		node->Setup(Ref((OrderTreeNode*)object));
-		node->mLockToggle->SetToggleGroup(mLockTogglesGroup);
-		node->mEnableToggle->SetToggleGroup(mEnableTogglesGroup);
-	}
+    void DrawOrderTree::FillNodeDataByObject(const Ref<TreeNode>& nodeWidget, void* object)
+    {
+        Ref<DrawOrderTreeNode> node = DynamicCast<DrawOrderTreeNode>(nodeWidget);
+        node->Setup(Ref((OrderTreeNode*)object));
+        node->mLockToggle->SetToggleGroup(mLockTogglesGroup);
+        node->mEnableToggle->SetToggleGroup(mEnableTogglesGroup);
+    }
 
-	void DrawOrderTree::OnNodeDblClick(const Ref<TreeNode>& nodeWidget)
-	{
-		(DynamicCast<DrawOrderTreeNode>(nodeWidget))->EnableEditName();
-	}
+    void DrawOrderTree::OnNodeDblClick(const Ref<TreeNode>& nodeWidget)
+    {
+        (DynamicCast<DrawOrderTreeNode>(nodeWidget))->EnableEditName();
+    }
 
-	void DrawOrderTree::OnDraggedObjects(Vector<void*> objects, void* newParent, void* prevObject)
-	{
-		auto newParentEditableObject = Ref((SceneEditableObject*)newParent);
-		auto prevEditableObject = Ref((SceneEditableObject*)prevObject);
+    void DrawOrderTree::OnDraggedObjects(Vector<void*> objects, void* newParent, void* prevObject)
+    {
+        auto newParentEditableObject = Ref((SceneEditableObject*)newParent);
+        auto prevEditableObject = Ref((SceneEditableObject*)prevObject);
         auto editableObjects = objects.Convert<Ref<SceneEditableObject>>([](void* x) { return Ref((SceneEditableObject*)x); });
 
-		auto action = mmake<ReparentAction>(editableObjects);
+        auto action = mmake<ReparentAction>(editableObjects);
 
-		o2Scene.ReparentEditableObjects(editableObjects, newParentEditableObject, prevEditableObject);
+        o2Scene.ReparentEditableObjects(editableObjects, newParentEditableObject, prevEditableObject);
 
-		action->ObjectsReparented(mParent.Lock(), prevEditableObject);
-		o2EditorApplication.DoneAction(action);
+        action->ObjectsReparented(mParent.Lock(), prevEditableObject);
+        o2EditorApplication.DoneAction(action);
 
-		Tree::OnDraggedObjects(objects, newParent, prevObject);
-	}
+        Tree::OnDraggedObjects(objects, newParent, prevObject);
+    }
 
-	void DrawOrderTree::EnableObjectsGroupPressed(bool value)
-	{}
+    void DrawOrderTree::EnableObjectsGroupPressed(bool value)
+    {}
 
-	void DrawOrderTree::EnableObjectsGroupReleased(bool value)
-	{
-		Vector<Ref<SceneEditableObject>> objects = mEnableTogglesGroup->GetToggled().Convert<Ref<SceneEditableObject>>(
-			[](const WeakRef<Toggle>& x) {
-				auto toggleParent = DynamicCast<TreeNode>(x.Lock()->GetParent().Lock());
-				return Ref(static_cast<SceneEditableObject*>(toggleParent->GetObject()));
-			});
+    void DrawOrderTree::EnableObjectsGroupReleased(bool value)
+    {
+        Vector<Ref<SceneEditableObject>> objects = mEnableTogglesGroup->GetToggled().Convert<Ref<SceneEditableObject>>(
+            [](const WeakRef<Toggle>& x) {
+                auto toggleParent = DynamicCast<TreeNode>(x.Lock()->GetParent().Lock());
+                return Ref(static_cast<SceneEditableObject*>(toggleParent->GetObject()));
+            });
 
-		auto action = mmake<EnableAction>(objects, value);
-		o2EditorApplication.DoneAction(action);
-	}
+        auto action = mmake<EnableAction>(objects, value);
+        o2EditorApplication.DoneAction(action);
+    }
 
-	void DrawOrderTree::LockObjectsGroupPressed(bool value)
-	{}
+    void DrawOrderTree::LockObjectsGroupPressed(bool value)
+    {}
 
-	void DrawOrderTree::LockObjectsGroupReleased(bool value)
-	{
-		Vector<Ref<SceneEditableObject>> objects = mLockTogglesGroup->GetToggled().Convert<Ref<SceneEditableObject>>(
-			[](const WeakRef<Toggle>& x) {
-				auto toggleParent = DynamicCast<TreeNode>(x.Lock()->GetParent().Lock());
-				return Ref(static_cast<SceneEditableObject*>(toggleParent->GetObject()));
-			});
+    void DrawOrderTree::LockObjectsGroupReleased(bool value)
+    {
+        Vector<Ref<SceneEditableObject>> objects = mLockTogglesGroup->GetToggled().Convert<Ref<SceneEditableObject>>(
+            [](const WeakRef<Toggle>& x) {
+                auto toggleParent = DynamicCast<TreeNode>(x.Lock()->GetParent().Lock());
+                return Ref(static_cast<SceneEditableObject*>(toggleParent->GetObject()));
+            });
 
-		auto action = mmake<LockAction>(objects, value);
-		o2EditorApplication.DoneAction(action);
-	}
+        auto action = mmake<LockAction>(objects, value);
+        o2EditorApplication.DoneAction(action);
+    }
 
-	void DrawOrderTree::OnNodesSelectionChanged(Vector<void*> objects)
-	{
-		Vector<Ref<SceneEditableObject>> editableObjects = objects
-			.Convert<Ref<OrderTreeNode>>([](auto x) { return Ref((OrderTreeNode*)x); })
-			.FindAll([](auto& x) { return x->object.IsValid(); })
-			.Convert<Ref<SceneEditableObject>>([](auto& x) { return x->object; });
+    void DrawOrderTree::OnNodesSelectionChanged(Vector<void*> objects)
+    {
+        Vector<Ref<SceneEditableObject>> editableObjects = objects
+            .Convert<Ref<OrderTreeNode>>([](auto x) { return Ref((OrderTreeNode*)x); })
+            .FindAll([](auto& x) { return x->object.IsValid(); })
+            .Convert<Ref<SceneEditableObject>>([](auto& x) { return x->object; });
 
-		onObjectsSelectionChanged(editableObjects);
-		Tree::OnNodesSelectionChanged(objects);
-	}
+        onObjectsSelectionChanged(editableObjects);
+        Tree::OnNodesSelectionChanged(objects);
+    }
 
-	void DrawOrderTree::OnDragEnter(const Ref<ISelectableDragableObjectsGroup>& group)
-	{
-		Tree::OnDragEnter(group);
-	}
+    void DrawOrderTree::OnDragEnter(const Ref<ISelectableDragableObjectsGroup>& group)
+    {
+        Tree::OnDragEnter(group);
+    }
 
-	void DrawOrderTree::OnDragExit(const Ref<ISelectableDragableObjectsGroup>& group)
-	{
-		Tree::OnDragExit(group);
-	}
+    void DrawOrderTree::OnDragExit(const Ref<ISelectableDragableObjectsGroup>& group)
+    {
+        Tree::OnDragExit(group);
+    }
 
-	void DrawOrderTree::OnDraggedAbove(const Ref<ISelectableDragableObjectsGroup>& group)
-	{
-		Tree::OnDraggedAbove(group);
-	}
+    void DrawOrderTree::OnDraggedAbove(const Ref<ISelectableDragableObjectsGroup>& group)
+    {
+        Tree::OnDraggedAbove(group);
+    }
 
-	void DrawOrderTree::OnDropped(const Ref<ISelectableDragableObjectsGroup>& group)
-	{
-		Tree::OnDropped(group);
-	}
+    void DrawOrderTree::OnDropped(const Ref<ISelectableDragableObjectsGroup>& group)
+    {
+        Tree::OnDropped(group);
+    }
 
-	void DrawOrderTree::OnObjectCreated(const Ref<SceneEditableObject>& object)
-	{
-		RebuildOrderTree();
-		Tree::OnObjectCreated(object.Get(), object->GetEditableParent().Get());
-	}
+    void DrawOrderTree::OnObjectCreated(const Ref<SceneEditableObject>& object)
+    {
+        RebuildOrderTree();
+        Tree::OnObjectCreated(object.Get(), object->GetEditableParent().Get());
+    }
 
-	void DrawOrderTree::OnObjectDestroing(const Ref<SceneEditableObject>& object)
-	{
-		RebuildOrderTree();
-		Tree::OnObjectRemoved(object.Get());
-	}
+    void DrawOrderTree::OnObjectDestroing(const Ref<SceneEditableObject>& object)
+    {
+        RebuildOrderTree();
+        Tree::OnObjectRemoved(object.Get());
+    }
 
-	void DrawOrderTree::OnObjectsChanged(const Vector<Ref<SceneEditableObject>>& objects)
-	{
-		RebuildOrderTree();
+    void DrawOrderTree::OnObjectsChanged(const Vector<Ref<SceneEditableObject>>& objects)
+    {
+        RebuildOrderTree();
         Tree::OnObjectsChanged(objects.Convert<void*>([](auto& x) { return x.Get(); }));
-	}
+    }
 
-	void DrawOrderTree::OnObjectChanged(const Ref<SceneEditableObject>& object)
-	{
-		Tree::OnObjectsChanged({ object.Get() });
-	}
+    void DrawOrderTree::OnObjectChanged(const Ref<SceneEditableObject>& object)
+    {
+        Tree::OnObjectsChanged({ object.Get() });
+    }
 
-	DrawOrderTreeNode::DrawOrderTreeNode(RefCounter* refCounter) :
-		TreeNode(refCounter)
-	{}
+    DrawOrderTreeNode::DrawOrderTreeNode(RefCounter* refCounter) :
+        TreeNode(refCounter)
+    {}
 
-	DrawOrderTreeNode::DrawOrderTreeNode(RefCounter* refCounter, const DrawOrderTreeNode& other) :
-		TreeNode(refCounter, other)
-	{
-		InitializeControls();
-	}
+    DrawOrderTreeNode::DrawOrderTreeNode(RefCounter* refCounter, const DrawOrderTreeNode& other) :
+        TreeNode(refCounter, other)
+    {
+        InitializeControls();
+    }
 
-	Editor::DrawOrderTreeNode& DrawOrderTreeNode::operator=(const DrawOrderTreeNode& other)
-	{
-		TreeNode::operator=(other);
-		InitializeControls();
-		return *this;
-	}
+    Editor::DrawOrderTreeNode& DrawOrderTreeNode::operator=(const DrawOrderTreeNode& other)
+    {
+        TreeNode::operator=(other);
+        InitializeControls();
+        return *this;
+    }
 
-	void DrawOrderTreeNode::OnDeserialized(const DataValue& node)
-	{
-		TreeNode::OnDeserialized(node);
-		InitializeControls();
-	}
+    void DrawOrderTreeNode::OnDeserialized(const DataValue& node)
+    {
+        TreeNode::OnDeserialized(node);
+        InitializeControls();
+    }
 
-	void DrawOrderTreeNode::InitializeControls()
-	{
-		mNameDrawable = GetLayerDrawable<Text>("name");
-		mOrderDrawable = GetLayerDrawable<Text>("batch");
-		mIconSprite = GetLayerDrawable<Sprite>("icon");
-		mBackSprite = GetLayerDrawable<Sprite>("back");
-		mLockToggle = DynamicCast<Toggle>(GetChild("lockToggle"));
-		mEnableToggle = DynamicCast<Toggle>(GetChild("enableToggle"));
-		mLinkBtn = DynamicCast<Button>(GetChild("linkBtn"));
-		mNameEditBox = DynamicCast<EditBox>(GetChild("nameEditBox"));
-		mEditState = GetStateObject("edit");
+    void DrawOrderTreeNode::InitializeControls()
+    {
+        mNameDrawable = GetLayerDrawable<Text>("name");
+        mOrderDrawable = GetLayerDrawable<Text>("batch");
+        mIconSprite = GetLayerDrawable<Sprite>("icon");
+        mBackSprite = GetLayerDrawable<Sprite>("back");
+        mLockToggle = DynamicCast<Toggle>(GetChild("lockToggle"));
+        mEnableToggle = DynamicCast<Toggle>(GetChild("enableToggle"));
+        mLinkBtn = DynamicCast<Button>(GetChild("linkBtn"));
+        mNameEditBox = DynamicCast<EditBox>(GetChild("nameEditBox"));
+        mEditState = GetStateObject("edit");
 
-		if (mLinkBtn)
-			mLinkBtnHalfHideState = mLinkBtn->GetStateObject("halfHide");
+        if (mLinkBtn)
+            mLinkBtnHalfHideState = mLinkBtn->GetStateObject("halfHide");
 
-		if (mLockToggle)
-		{
-			mLockToggleHalfHideState = mLockToggle->GetStateObject("halfHide");
-			mLockToggleLockedState = mLockToggle->GetStateObject("locked");
+        if (mLockToggle)
+        {
+            mLockToggleHalfHideState = mLockToggle->GetStateObject("halfHide");
+            mLockToggleLockedState = mLockToggle->GetStateObject("locked");
 
-			mLockToggle->onClick = THIS_FUNC(OnLockClicked);
-		}
+            mLockToggle->onClick = THIS_FUNC(OnLockClicked);
+        }
 
-		if (mEnableToggle)
-			mEnableToggle->onClick = THIS_FUNC(OnEnableCkicked);
+        if (mEnableToggle)
+            mEnableToggle->onClick = THIS_FUNC(OnEnableCkicked);
 
-		if (mNameEditBox)
-			mNameEditBox->onChangeCompleted = THIS_FUNC(OnObjectNameChanged);
-	}
+        if (mNameEditBox)
+            mNameEditBox->onChangeCompleted = THIS_FUNC(OnObjectNameChanged);
+    }
 
-	void DrawOrderTreeNode::Setup(const Ref<DrawOrderTree::OrderTreeNode>& object)
-	{
-		mTarget = object;
+    void DrawOrderTreeNode::Setup(const Ref<DrawOrderTree::OrderTreeNode>& object)
+    {
+        mTarget = object;
 
-		Map<DrawOrderTree::OrderTreeNode::Type, String> icons =
-		{
-			{ DrawOrderTree::OrderTreeNode::Type::Camera, "ui/UI4_camera_icn.png" },
-			{ DrawOrderTree::OrderTreeNode::Type::Layer, "ui/UI4_layer_big.png" },
-			{ DrawOrderTree::OrderTreeNode::Type::Drawable, "ui/UI4_image_icn.png" },
-			{ DrawOrderTree::OrderTreeNode::Type::Actor, "ui/UI4_image_icn.png" },
-			{ DrawOrderTree::OrderTreeNode::Type::Root, "ui/UI4_folder_icn.png" },
-			{ DrawOrderTree::OrderTreeNode::Type::EndOfBatch, "ui/UI4_color_type.png" },
-		};
+        Map<DrawOrderTree::OrderTreeNode::Type, String> icons =
+        {
+            { DrawOrderTree::OrderTreeNode::Type::Camera, "ui/UI4_camera_icn.png" },
+            { DrawOrderTree::OrderTreeNode::Type::Layer, "ui/UI4_layer_big.png" },
+            { DrawOrderTree::OrderTreeNode::Type::Drawable, "ui/UI4_image_icn.png" },
+            { DrawOrderTree::OrderTreeNode::Type::Actor, "ui/UI4_image_icn.png" },
+            { DrawOrderTree::OrderTreeNode::Type::Root, "ui/UI4_folder_icn.png" },
+            { DrawOrderTree::OrderTreeNode::Type::EndOfBatch, "ui/UI4_color_type.png" },
+        };
 
-		String name = mTarget->name;
+        String name = mTarget->name;
 
-		if (mName != name)
-		{
-			mName = name;
-			mNameDrawable->SetText(mName);
-		}
+        if (mName != name)
+        {
+            mName = name;
+            mNameDrawable->SetText(mName);
+        }
 
-		WString orderText;
-		if ((!mTarget->inheritedOrderFromParent && mTarget->object) || mTarget->type == DrawOrderTree::OrderTreeNode::Type::Root)
-			orderText = (WString)mTarget->customOrder;
-		else if (mTarget->inheritedOrderFromParent)
-			orderText = "inherited";
+        WString orderText;
+        if ((!mTarget->inheritedOrderFromParent && mTarget->object) || mTarget->type == DrawOrderTree::OrderTreeNode::Type::Root)
+            orderText = (WString)mTarget->customOrder;
+        else if (mTarget->inheritedOrderFromParent)
+            orderText = "inherited";
 
-		if (orderText != mOrderDrawable->GetText())
-			mOrderDrawable->SetText(orderText);
+        if (orderText != mOrderDrawable->GetText())
+            mOrderDrawable->SetText(orderText);
 
-		String icon = icons[mTarget->type];
-		if (mIconSprite->GetImageName() != icon)
-			mIconSprite->SetImageAsset(AssetRef<ImageAsset>(icon));
-		
-		mBackSprite->color = Color4::SomeColor(mTarget->batchIdx, mBackSprite->GetColor().a);
-		mBackSprite->enabled = mTarget->type != DrawOrderTree::OrderTreeNode::Type::Camera &&
-			mTarget->type != DrawOrderTree::OrderTreeNode::Type::Layer &&
-			mTarget->type != DrawOrderTree::OrderTreeNode::Type::Root;
+        String icon = icons[mTarget->type];
+        if (mIconSprite->GetImageName() != icon)
+            mIconSprite->SetImageAsset(AssetRef<ImageAsset>(icon));
+        
+        mBackSprite->color = Color4::SomeColor(mTarget->batchIdx, mBackSprite->GetColor().a);
+        mBackSprite->enabled = mTarget->type != DrawOrderTree::OrderTreeNode::Type::Camera &&
+            mTarget->type != DrawOrderTree::OrderTreeNode::Type::Layer &&
+            mTarget->type != DrawOrderTree::OrderTreeNode::Type::Root;
 
-		if (mTarget->object)
-		{
-			auto sceneObject = mTarget->object;
-			float alpha = sceneObject->IsEnabledInHierarchy() ? 1.0f : 0.5f;
-			if (!Math::Equals(alpha, mNameDrawable->GetTransparency()))
-			{
-				mNameDrawable->SetTransparency(alpha);
-				mEnableToggle->SetTransparency(alpha);
-				mLinkBtn->SetTransparency(alpha);
-			}
+        if (mTarget->object)
+        {
+            auto sceneObject = mTarget->object;
+            float alpha = sceneObject->IsEnabledInHierarchy() ? 1.0f : 0.5f;
+            if (!Math::Equals(alpha, mNameDrawable->GetTransparency()))
+            {
+                mNameDrawable->SetTransparency(alpha);
+                mEnableToggle->SetTransparency(alpha);
+                mLinkBtn->SetTransparency(alpha);
+            }
 
-			if (auto actor = DynamicCast<Actor>(sceneObject))
-			{
-				mLinkBtn->SetEnabled(actor->GetPrototype().IsValid());
-				mLinkBtnHalfHideState->SetState(!actor->GetPrototypeDirectly().IsValid());
+            if (auto actor = DynamicCast<Actor>(sceneObject))
+            {
+                mLinkBtn->SetEnabled(actor->GetPrototype().IsValid());
+                mLinkBtnHalfHideState->SetState(!actor->GetPrototypeDirectly().IsValid());
 
-				if (actor->GetPrototype())
-				{
-					mLinkBtn->onClick = [=]() {
-						auto proto = actor->GetPrototype();
-						o2EditorAssets.ShowAssetIcon(proto->GetPath());
-					};
-				}
-			}
-			else
-				mLinkBtn->SetEnabled(false);
+                if (actor->GetPrototype())
+                {
+                    mLinkBtn->onClick = [=]() {
+                        auto proto = actor->GetPrototype();
+                        o2EditorAssets.ShowAssetIcon(proto->GetPath());
+                    };
+                }
+            }
+            else
+                mLinkBtn->SetEnabled(false);
 
-			if (sceneObject->IsSupportsDisabling())
-			{
-				mEnableToggle->SetValue(sceneObject->IsEnabled());
-				mEnableToggle->SetEnabled(true);
-			}
-			else
-				mEnableToggle->SetEnabled(false);
+            if (sceneObject->IsSupportsDisabling())
+            {
+                mEnableToggle->SetValue(sceneObject->IsEnabled());
+                mEnableToggle->SetEnabled(true);
+            }
+            else
+                mEnableToggle->SetEnabled(false);
 
-			mLockToggle->SetEnabled(true);
-			mLockToggle->SetValue(sceneObject->IsLocked());
-			mLockToggleLockedState->SetState(sceneObject->IsLockedInHierarchy());
-			mLockToggleHalfHideState->SetState(sceneObject->IsLockedInHierarchy() && !sceneObject->IsLocked());
-		}
-		else
-		{
-			mEnableToggle->SetEnabled(false);
-			mLockToggle->SetEnabled(false);
-			mLinkBtn->SetEnabled(false);
-		}
-	}
+            mLockToggle->SetEnabled(true);
+            mLockToggle->SetValue(sceneObject->IsLocked());
+            mLockToggleLockedState->SetState(sceneObject->IsLockedInHierarchy());
+            mLockToggleHalfHideState->SetState(sceneObject->IsLockedInHierarchy() && !sceneObject->IsLocked());
+        }
+        else
+        {
+            mEnableToggle->SetEnabled(false);
+            mLockToggle->SetEnabled(false);
+            mLinkBtn->SetEnabled(false);
+        }
+    }
 
-	void DrawOrderTreeNode::EnableEditName()
-	{
-		if (mTarget->object)
-		{
-			mEditState->SetState(true);
+    void DrawOrderTreeNode::EnableEditName()
+    {
+        if (mTarget->object)
+        {
+            mEditState->SetState(true);
 
-			mNameEditBox->text = mTarget->object->GetName();
-			mNameEditBox->SelectAll();
-			mNameEditBox->Widget::Focus();
-			mNameEditBox->ResetScroll();
-		}
-	}
+            mNameEditBox->text = mTarget->object->GetName();
+            mNameEditBox->SelectAll();
+            mNameEditBox->Widget::Focus();
+            mNameEditBox->ResetScroll();
+        }
+    }
 
-	String DrawOrderTreeNode::GetCreateMenuCategory()
-	{
-		return "UI/Editor";
-	}
+    String DrawOrderTreeNode::GetCreateMenuCategory()
+    {
+        return "UI/Editor";
+    }
 
-	void DrawOrderTreeNode::OnLockClicked()
-	{
-		if (mTarget->object)
-			mTarget->object->SetLocked(mLockToggle->GetValue());
-	}
+    void DrawOrderTreeNode::OnLockClicked()
+    {
+        if (mTarget->object)
+            mTarget->object->SetLocked(mLockToggle->GetValue());
+    }
 
-	void DrawOrderTreeNode::OnEnableCkicked()
-	{
-		if (mTarget->object)
-			mTarget->object->SetEnabled(mEnableToggle->GetValue());
-	}
+    void DrawOrderTreeNode::OnEnableCkicked()
+    {
+        if (mTarget->object)
+            mTarget->object->SetEnabled(mEnableToggle->GetValue());
+    }
 
-	void DrawOrderTreeNode::OnObjectNameChanged(const WString& text)
-	{
-		if (mTarget->object)
-		{
-			String prevName = mTarget->object->GetName();
+    void DrawOrderTreeNode::OnObjectNameChanged(const WString& text)
+    {
+        if (mTarget->object)
+        {
+            String prevName = mTarget->object->GetName();
 
-			mTarget->object->SetName(text);
-			mEditState->SetState(false);
-			(DynamicCast<DrawOrderTree>(mOwnerTree.Lock()))->OnObjectChanged(mTarget->object);
+            mTarget->object->SetName(text);
+            mEditState->SetState(false);
+            (DynamicCast<DrawOrderTree>(mOwnerTree.Lock()))->OnObjectChanged(mTarget->object);
 
 
-			DataDocument prevData; prevData = prevName;
-			DataDocument newData; newData = mTarget->object->GetName();
+            DataDocument prevData; prevData = prevName;
+            DataDocument newData; newData = mTarget->object->GetName();
 
-			auto action = mmake<PropertyChangeAction>(Vector<Ref<SceneEditableObject>>{ mTarget->object }, "name", 
-													  Vector<DataDocument>{ prevData }, Vector<DataDocument>{ newData });
-			o2EditorApplication.DoneAction(action);
-		}
-	}
+            auto action = mmake<PropertyChangeAction>(Vector<Ref<SceneEditableObject>>{ mTarget->object }, "name", 
+                                                      Vector<DataDocument>{ prevData }, Vector<DataDocument>{ newData });
+            o2EditorApplication.DoneAction(action);
+        }
+    }
 }
 
 DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::DrawOrderTree>);

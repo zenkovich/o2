@@ -8,63 +8,63 @@ using namespace o2;
 
 namespace o2
 {
-	class Widget;
+    class Widget;
 }
 
 namespace Editor
 {
-	// ----------------------------------
-	// Object properties viewer interface
-	// ----------------------------------
-	class IPropertiesViewer: public IObject, public RefCounterable
-	{
-	public:
-		// Default constructor
-		IPropertiesViewer();
+    // ----------------------------------
+    // Object properties viewer interface
+    // ----------------------------------
+    class IPropertiesViewer: public IObject, public RefCounterable
+    {
+    public:
+        // Default constructor
+        IPropertiesViewer();
 
-		// Default constructor
-		IPropertiesViewer(RefCounter* refCounter);
+        // Default constructor
+        IPropertiesViewer(RefCounter* refCounter);
 
-		// Virtual destructor
-		virtual ~IPropertiesViewer();
+        // Virtual destructor
+        virtual ~IPropertiesViewer();
 
-		// Returns viewing object type
-		virtual const Type* GetViewingObjectType() const;
+        // Returns viewing object type
+        virtual const Type* GetViewingObjectType() const;
 
-		// Sets target objects
-		virtual void SetTargets(const Vector<IObject*>& targets) {}
+        // Sets target objects
+        virtual void SetTargets(const Vector<IObject*>& targets) {}
 
-		// Refreshes viewing properties
-		virtual void Refresh();
+        // Refreshes viewing properties
+        virtual void Refresh();
 
-		// Sets viewer enabled
-		void SetPropertiesEnabled(bool enabled);
+        // Sets viewer enabled
+        void SetPropertiesEnabled(bool enabled);
 
-		// Returns is viewer enabled
-		bool IsEnabled() const;
+        // Returns is viewer enabled
+        bool IsEnabled() const;
 
-		IOBJECT(IPropertiesViewer);
+        IOBJECT(IPropertiesViewer);
 
-	protected:
-		Ref<Widget> mContentWidget; // Data content widget (turning on/off on enabling/disabling)
+    protected:
+        Ref<Widget> mContentWidget; // Data content widget (turning on/off on enabling/disabling)
 
-		bool mPropertiesEnabled = false; // Is viewer enabled
+        bool mPropertiesEnabled = false; // Is viewer enabled
 
-	protected:
-		// Enable viewer event function
-		virtual void OnPropertiesEnabled() {}
+    protected:
+        // Enable viewer event function
+        virtual void OnPropertiesEnabled() {}
 
-		// Disable viewer event function
-		virtual void OnPropertiesDisabled() {}
+        // Disable viewer event function
+        virtual void OnPropertiesDisabled() {}
 
-		// Updates viewer
-		virtual void Update(float dt) {}
+        // Updates viewer
+        virtual void Update(float dt) {}
 
-		// Draws something
-		virtual void Draw() {}
+        // Draws something
+        virtual void Draw() {}
 
-		friend class PropertiesWindow;
-	};
+        friend class PropertiesWindow;
+    };
 }
 // --- META ---
 

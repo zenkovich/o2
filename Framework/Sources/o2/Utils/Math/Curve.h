@@ -213,7 +213,7 @@ namespace o2
         public:
             UInt64 uid;                  // Random unique id @SERIALIZABLE
             float  value;                // Value @SERIALIZABLE
-			float  valueRange;           // Value range @SERIALIZABLE
+            float  valueRange;           // Value range @SERIALIZABLE
             float  position;             // Position @SERIALIZABLE
             float  leftSupportValue;     // Left bezier support value, relative to key value @SERIALIZABLE
             float  leftSupportPosition;  // Left bezier support position, relative to key position @SERIALIZABLE
@@ -248,13 +248,13 @@ namespace o2
             bool operator==(const Key& other) const;
 
             // Check not equals operator
-			bool operator!=(const Key& other) const;
+            bool operator!=(const Key& other) const;
 
-			// Returns approximated points for top range
-			const ApproximationValue* GetTopApproximatedPoints() const;
+            // Returns approximated points for top range
+            const ApproximationValue* GetTopApproximatedPoints() const;
 
-			// Returns approximated points for bottom range
-			const ApproximationValue* GetBottomApproximatedPoints() const;
+            // Returns approximated points for bottom range
+            const ApproximationValue* GetBottomApproximatedPoints() const;
 
             // Returns approximated points count
             int GetApproximatedPointsCount() const;
@@ -265,9 +265,9 @@ namespace o2
             SERIALIZABLE(Key);
 
         public:
-			static const int   mApproxValuesCount = 20;                 // Approximation values count
-			ApproximationValue mApproxTopValues[mApproxValuesCount];    // Approximation values for top range
-			ApproximationValue mApproxBottomValues[mApproxValuesCount]; // Approximation values for top range
+            static const int   mApproxValuesCount = 20;                 // Approximation values count
+            ApproximationValue mApproxTopValues[mApproxValuesCount];    // Approximation values for top range
+            ApproximationValue mApproxBottomValues[mApproxValuesCount]; // Approximation values for top range
             RectF              mApproxValuesBounds;                     // Bounds of approximation values
 
             friend class Curve;

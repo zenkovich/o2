@@ -835,7 +835,7 @@ namespace o2
     }
 
     template<typename _type>
-	void AnimationTrack<_type>::Player::SetTargetProxy(const Ref<IAbstractValueProxy>& targetProxy)
+    void AnimationTrack<_type>::Player::SetTargetProxy(const Ref<IAbstractValueProxy>& targetProxy)
     {
         SetTargetProxy(DynamicCast<IValueProxy<_type>>(targetProxy));
     }

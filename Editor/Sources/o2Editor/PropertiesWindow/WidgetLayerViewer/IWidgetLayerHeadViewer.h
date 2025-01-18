@@ -8,48 +8,48 @@ using namespace o2;
 
 namespace o2
 {
-	class Widget;
-	class WidgetLayer;
+    class Widget;
+    class WidgetLayer;
 }
 
 namespace Editor
 {
-	// -------------------------------------------
-	// Editor widget layer header viewer interface
-	// -------------------------------------------
-	class IWidgetLayerHeaderViewer : public IObject, virtual public RefCounterable
-	{
-	public:
-		// Virtual destructor
-		virtual ~IWidgetLayerHeaderViewer() {}
+    // -------------------------------------------
+    // Editor widget layer header viewer interface
+    // -------------------------------------------
+    class IWidgetLayerHeaderViewer : public IObject, virtual public RefCounterable
+    {
+    public:
+        // Virtual destructor
+        virtual ~IWidgetLayerHeaderViewer() {}
 
-		// Sets target actors
-		virtual void SetTargetLayers(const Vector<WidgetLayer*>& layers) {}
+        // Sets target actors
+        virtual void SetTargetLayers(const Vector<WidgetLayer*>& layers) {}
 
-		// Returns data widget
-		virtual Ref<Widget> GetWidget() const { return nullptr; }
+        // Returns data widget
+        virtual Ref<Widget> GetWidget() const { return nullptr; }
 
-		// Updates properties values
-		virtual void Refresh() {}
+        // Updates properties values
+        virtual void Refresh() {}
 
-		// Sets viewer enabled
-		void SetPropertiesEnabled(bool enabled);
+        // Sets viewer enabled
+        void SetPropertiesEnabled(bool enabled);
 
-		// Returns is viewer enabled
-		bool IsPropertiesEnabled() const;
+        // Returns is viewer enabled
+        bool IsPropertiesEnabled() const;
 
-		IOBJECT(IWidgetLayerHeaderViewer);
+        IOBJECT(IWidgetLayerHeaderViewer);
 
-	protected:
-		bool mPropertiesEnabled = false; // Is viewer enabled 
+    protected:
+        bool mPropertiesEnabled = false; // Is viewer enabled 
 
-	protected:
-		// Enable viewer event function
-		virtual void OnPropertiesEnabled() {}
+    protected:
+        // Enable viewer event function
+        virtual void OnPropertiesEnabled() {}
 
-		// Disable viewer event function
-		virtual void OnPropertiesDisabled() {}
-	};
+        // Disable viewer event function
+        virtual void OnPropertiesDisabled() {}
+    };
 }
 // --- META ---
 

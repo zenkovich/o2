@@ -7,70 +7,70 @@
 
 namespace Editor
 {
-	DefaultActorComponentViewer::DefaultActorComponentViewer()
-	{}
+    DefaultActorComponentViewer::DefaultActorComponentViewer()
+    {}
 
-	DefaultActorComponentViewer::~DefaultActorComponentViewer()
-	{}
+    DefaultActorComponentViewer::~DefaultActorComponentViewer()
+    {}
 
     void DefaultActorComponentViewer::SetTargetComponents(const Vector<Ref<Component>>& components)
-	{
-		IActorComponentViewer::SetTargetComponents(components);
-		Refresh();
-	}
+    {
+        IActorComponentViewer::SetTargetComponents(components);
+        Refresh();
+    }
 
-	const Type* DefaultActorComponentViewer::GetComponentType() const
-	{
-		return mComponentType;
-	}
+    const Type* DefaultActorComponentViewer::GetComponentType() const
+    {
+        return mComponentType;
+    }
 
-	void DefaultActorComponentViewer::Refresh()
-	{
-		const Type* objectsType = &mTargetComponents[0]->GetType();
+    void DefaultActorComponentViewer::Refresh()
+    {
+        const Type* objectsType = &mTargetComponents[0]->GetType();
 
-		if (mComponentType != objectsType)
-		{
-			mComponentType = objectsType;
-			mSpoiler->name = "component " + mComponentType->GetName();
+        if (mComponentType != objectsType)
+        {
+            mComponentType = objectsType;
+            mSpoiler->name = "component " + mComponentType->GetName();
 
-			if (mViewer)
-				o2EditorProperties.FreeObjectViewer(mViewer);
+            if (mViewer)
+                o2EditorProperties.FreeObjectViewer(mViewer);
 
-			mViewer = o2EditorProperties.CreateObjectViewer(mComponentType, (String)"component:" + mComponentType->GetName() + "/",
-															THIS_FUNC(OnPropertyChanged));
+            mViewer = o2EditorProperties.CreateObjectViewer(mComponentType, (String)"component:" + mComponentType->GetName() + "/",
+                                                            THIS_FUNC(OnPropertyChanged));
 
-			mViewer->CreateSpoiler(mSpoiler);
-			mViewer->SetHeaderEnabled(false);
-		}
+            mViewer->CreateSpoiler(mSpoiler);
+            mViewer->SetHeaderEnabled(false);
+        }
 
-		if (mViewer)
-		{
-			mViewer->Refresh(mTargetComponents.Convert<Pair<IObject*, IObject*>>([](const Ref<Component>& x) {
-				return Pair<IObject*, IObject*>(dynamic_cast<IObject*>(x.Get()), dynamic_cast<IObject*>(x->GetPrototypeLink().Lock().Get()));
-			}));
-		}
-	}
+        if (mViewer)
+        {
+            mViewer->Refresh(mTargetComponents.Convert<Pair<IObject*, IObject*>>([](const Ref<Component>& x) {
+                return Pair<IObject*, IObject*>(dynamic_cast<IObject*>(x.Get()), dynamic_cast<IObject*>(x->GetPrototypeLink().Lock().Get()));
+            }));
+        }
+    }
 
-	void DefaultActorComponentViewer::OnPropertyChanged(const String& path, const Vector<DataDocument>& before,
-														const Vector<DataDocument>& after)
-	{
-		for (auto& component : mTargetComponents)
-			component->GetActor()->OnChanged();
+    void DefaultActorComponentViewer::OnPropertyChanged(const String& path, const Vector<DataDocument>& before,
+                                                        const Vector<DataDocument>& after)
+    {
+        for (auto& component : mTargetComponents)
+            component->GetActor()->OnChanged();
 
-		o2EditorApplication.DoneActorPropertyChangeAction(path, before, after);
-	}
+        o2EditorApplication.DoneActorPropertyChangeAction(path, before, after);
+    }
 
-	void DefaultActorComponentViewer::OnPropertiesEnabled()
-	{
-		if (mViewer)
-			mViewer->OnPropertiesEnabled();
-	}
+    void DefaultActorComponentViewer::OnPropertiesEnabled()
+    {
+        if (mViewer)
+            mViewer->OnPropertiesEnabled();
+    }
 
-	void DefaultActorComponentViewer::OnPropertiesDisabled()
-	{
-		if (mViewer)
-			mViewer->OnPropertiesDisabled();
-	}
+    void DefaultActorComponentViewer::OnPropertiesDisabled()
+    {
+        if (mViewer)
+            mViewer->OnPropertiesDisabled();
+    }
 
 }
 // --- META ---

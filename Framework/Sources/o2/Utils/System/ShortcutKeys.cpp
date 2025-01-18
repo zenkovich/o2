@@ -17,11 +17,11 @@ namespace o2
         key(key), control(control), shift(shift), alt(alt)
     {}
 
-	ShortcutKeys::ShortcutKeys(const String& customString):
+    ShortcutKeys::ShortcutKeys(const String& customString):
         custromString(customString)
-	{}
+    {}
 
-	bool ShortcutKeys::IsPressed() const
+    bool ShortcutKeys::IsPressed() const
     {
         return o2Input.IsKeyPressed(key) &&
             (shift ? o2Input.IsKeyDown(VK_SHIFT) : !o2Input.IsKeyDown(VK_SHIFT)) &&

@@ -14,384 +14,384 @@ namespace o2
     // -------------------------------
     class ParticlesEffect: public ISerializable, public RefCounterable, public ICloneableRef
     {
-	public:
-		// Called when particle is emitted, used to initialize effect data
-		virtual void OnParticleEmitted(Particle& particle) {}
+    public:
+        // Called when particle is emitted, used to initialize effect data
+        virtual void OnParticleEmitted(Particle& particle) {}
 
-		// Called when particle is died, used to cleanup effect data
-		virtual void OnParticleDied(Particle& particle) {}
+        // Called when particle is died, used to cleanup effect data
+        virtual void OnParticleDied(Particle& particle) {}
 
-		// Called each frame to update effect data
+        // Called each frame to update effect data
         virtual void Update(float dt, ParticlesEmitter* emitter);
 
-		// Get particles directly from emitter
+        // Get particles directly from emitter
         Vector<Particle>& GetParticlesDirect(ParticlesEmitter* emitter);
 
-		// Returns owning emitter	
-		Ref<ParticlesEmitter> GetEmitter() const;
-
-		SERIALIZABLE(ParticlesEffect);
-		CLONEABLE_REF(ParticlesEffect);
-
-	protected:
-		WeakRef<ParticlesEmitter> mEmitter; // Owning emitter
-
-	protected:
-		// Called  when particle effect parameters are changed, used to invalidate baked frames
-		void OnChanged();
-
-		friend class ParticlesEmitter;
-	};
-
-	// ------------------------
-	// Particles gravity effect
-	// ------------------------
-	class ParticlesGravityEffect : public ParticlesEffect
-	{
-	public:
-		PROPERTIES(ParticlesGravityEffect);
-		PROPERTY(Vec2F, gravity, SetGravity, GetGravity);
+        // Returns owning emitter    
+        Ref<ParticlesEmitter> GetEmitter() const;
+
+        SERIALIZABLE(ParticlesEffect);
+        CLONEABLE_REF(ParticlesEffect);
+
+    protected:
+        WeakRef<ParticlesEmitter> mEmitter; // Owning emitter
+
+    protected:
+        // Called  when particle effect parameters are changed, used to invalidate baked frames
+        void OnChanged();
+
+        friend class ParticlesEmitter;
+    };
+
+    // ------------------------
+    // Particles gravity effect
+    // ------------------------
+    class ParticlesGravityEffect : public ParticlesEffect
+    {
+    public:
+        PROPERTIES(ParticlesGravityEffect);
+        PROPERTY(Vec2F, gravity, SetGravity, GetGravity);
 
-	public:
-		// Set gravity vector
-		void SetGravity(const Vec2F& gravity) { mGravity = gravity; OnChanged(); }
+    public:
+        // Set gravity vector
+        void SetGravity(const Vec2F& gravity) { mGravity = gravity; OnChanged(); }
 
-		// Get gravity vector
-		const Vec2F& GetGravity() const { return mGravity; }
-
-		// Update particles velocity with gravity vector
-		void Update(float dt, ParticlesEmitter* emitter) override;
-
-		SERIALIZABLE(ParticlesGravityEffect);
-		CLONEABLE_REF(ParticlesGravityEffect);
-
-	protected:
-		Vec2F mGravity; // Vector of gravity @SERIALIZABLE
-	};
-
-	// --------------------------------
-	// Particles color over time effect
-	// --------------------------------
-	class ParticlesColorEffect : public ParticlesEffect
-	{
-	public:
-		Ref<ColorGradient> colorGradient; // Color gradient @SERIALIZABLE
-
-	public:
-		ParticlesColorEffect();
-
-		// Called when particle is emitted, used to initialize effect data
-		void OnParticleEmitted(Particle& particle) override;
-
-		// Update particles color over time
-		void Update(float dt, ParticlesEmitter* emitter) override;
-
-		SERIALIZABLE(ParticlesColorEffect);
-		CLONEABLE_REF(ParticlesColorEffect);
-
-	private:
-		struct ParticleColorData
-		{
-			int cacheKey = 0;
-
-			bool operator==(const ParticleColorData& other) const
-			{
-				return cacheKey == other.cacheKey;
-			}
-		};
+        // Get gravity vector
+        const Vec2F& GetGravity() const { return mGravity; }
+
+        // Update particles velocity with gravity vector
+        void Update(float dt, ParticlesEmitter* emitter) override;
+
+        SERIALIZABLE(ParticlesGravityEffect);
+        CLONEABLE_REF(ParticlesGravityEffect);
+
+    protected:
+        Vec2F mGravity; // Vector of gravity @SERIALIZABLE
+    };
+
+    // --------------------------------
+    // Particles color over time effect
+    // --------------------------------
+    class ParticlesColorEffect : public ParticlesEffect
+    {
+    public:
+        Ref<ColorGradient> colorGradient; // Color gradient @SERIALIZABLE
+
+    public:
+        ParticlesColorEffect();
+
+        // Called when particle is emitted, used to initialize effect data
+        void OnParticleEmitted(Particle& particle) override;
+
+        // Update particles color over time
+        void Update(float dt, ParticlesEmitter* emitter) override;
+
+        SERIALIZABLE(ParticlesColorEffect);
+        CLONEABLE_REF(ParticlesColorEffect);
+
+    private:
+        struct ParticleColorData
+        {
+            int cacheKey = 0;
+
+            bool operator==(const ParticleColorData& other) const
+            {
+                return cacheKey == other.cacheKey;
+            }
+        };
 
-		Vector<ParticleColorData> mColorData; // Color data buffer
+        Vector<ParticleColorData> mColorData; // Color data buffer
 
-	private:
-		// Check if color data buffer size is enough
-		void CheckDataBufferSize(int particlesCount);
-
-		// Called when deserialization is done, used to subscribe to color gradient changes
-		void OnDeserialized(const DataValue& node) override;
-	};
-
-	// ---------------------------------------------------
-	// Particles random color between two over time effect
-	// ---------------------------------------------------
-	class ParticlesRandomColorEffect : public ParticlesEffect
-	{
-	public:
-		Ref<ColorGradient> colorGradientA; // Color gradient A @SERIALIZABLE
-		Ref<ColorGradient> colorGradientB; // Color gradient B @SERIALIZABLE
-
-	public:
-		// Default constructor
-		ParticlesRandomColorEffect();
+    private:
+        // Check if color data buffer size is enough
+        void CheckDataBufferSize(int particlesCount);
+
+        // Called when deserialization is done, used to subscribe to color gradient changes
+        void OnDeserialized(const DataValue& node) override;
+    };
+
+    // ---------------------------------------------------
+    // Particles random color between two over time effect
+    // ---------------------------------------------------
+    class ParticlesRandomColorEffect : public ParticlesEffect
+    {
+    public:
+        Ref<ColorGradient> colorGradientA; // Color gradient A @SERIALIZABLE
+        Ref<ColorGradient> colorGradientB; // Color gradient B @SERIALIZABLE
+
+    public:
+        // Default constructor
+        ParticlesRandomColorEffect();
 
-		// Called when particle is emitted, used to initialize effect data
-		void OnParticleEmitted(Particle& particle) override;
-
-		// Update particles color between two gradients over time
-		void Update(float dt, ParticlesEmitter* emitter) override;
+        // Called when particle is emitted, used to initialize effect data
+        void OnParticleEmitted(Particle& particle) override;
+
+        // Update particles color between two gradients over time
+        void Update(float dt, ParticlesEmitter* emitter) override;
 
-		SERIALIZABLE(ParticlesRandomColorEffect);
-		CLONEABLE_REF(ParticlesRandomColorEffect);
+        SERIALIZABLE(ParticlesRandomColorEffect);
+        CLONEABLE_REF(ParticlesRandomColorEffect);
 
-	private:
-		struct ParticleColorData
-		{
-			int cacheKeyA = 0;
-			int cacheKeyB = 0;
+    private:
+        struct ParticleColorData
+        {
+            int cacheKeyA = 0;
+            int cacheKeyB = 0;
 
-			float coef = 0.0f;
+            float coef = 0.0f;
 
-			bool operator==(const ParticleColorData& other) const
-			{
-				return cacheKeyA == other.cacheKeyA && cacheKeyB == other.cacheKeyB && coef == other.coef;
-			}
-		};
+            bool operator==(const ParticleColorData& other) const
+            {
+                return cacheKeyA == other.cacheKeyA && cacheKeyB == other.cacheKeyB && coef == other.coef;
+            }
+        };
 
-		Vector<ParticleColorData> mColorData; // Color data buffer
+        Vector<ParticleColorData> mColorData; // Color data buffer
 
-	private:
-		void CheckDataBufferSize(int particlesCount);
+    private:
+        void CheckDataBufferSize(int particlesCount);
 
-		// Called when deserialization is done, used to subscribe to color gradient changes
-		void OnDeserialized(const DataValue& node) override;
-	};
+        // Called when deserialization is done, used to subscribe to color gradient changes
+        void OnDeserialized(const DataValue& node) override;
+    };
 
-	// -------------------------------
-	// Particles size over time effect
-	// -------------------------------
-	class ParticlesSizeEffect : public ParticlesEffect
-	{
-	public:
-		Ref<Curve> curve; // Size curve @SERIALIZABLE
+    // -------------------------------
+    // Particles size over time effect
+    // -------------------------------
+    class ParticlesSizeEffect : public ParticlesEffect
+    {
+    public:
+        Ref<Curve> curve; // Size curve @SERIALIZABLE
 
-	public:
-		// Default constructor
-		ParticlesSizeEffect();
+    public:
+        // Default constructor
+        ParticlesSizeEffect();
 
-		// Called when particle is emitted, used to initialize effect data
-		void OnParticleEmitted(Particle& particle) override;
+        // Called when particle is emitted, used to initialize effect data
+        void OnParticleEmitted(Particle& particle) override;
 
-		// Update particles size over time
-		void Update(float dt, ParticlesEmitter* emitter) override;
+        // Update particles size over time
+        void Update(float dt, ParticlesEmitter* emitter) override;
 
-		SERIALIZABLE(ParticlesSizeEffect);
-		CLONEABLE_REF(ParticlesSizeEffect);
+        SERIALIZABLE(ParticlesSizeEffect);
+        CLONEABLE_REF(ParticlesSizeEffect);
 
-	private:
-		struct ParticleData
-		{
-			Vec2F initialSize;
+    private:
+        struct ParticleData
+        {
+            Vec2F initialSize;
 
-			int cacheKey = 0;
-			int cacheKeyApprox = 0;
+            int cacheKey = 0;
+            int cacheKeyApprox = 0;
 
-			float randomCoef = 0.0f;
+            float randomCoef = 0.0f;
 
-			bool operator==(const ParticleData& other) const
-			{
-				return cacheKey == other.cacheKey;
-			}
-		};
+            bool operator==(const ParticleData& other) const
+            {
+                return cacheKey == other.cacheKey;
+            }
+        };
 
-		Vector<ParticleData> mData; // Particles data buffer
+        Vector<ParticleData> mData; // Particles data buffer
 
-	private:
-		void CheckDataBufferSize(int particlesCount);
+    private:
+        void CheckDataBufferSize(int particlesCount);
 
-		// Called when deserialization is done, used to subscribe to size curve changes
-		void OnDeserialized(const DataValue& node) override;
-	};
+        // Called when deserialization is done, used to subscribe to size curve changes
+        void OnDeserialized(const DataValue& node) override;
+    };
 
-	// -------------------------------
-	// Particles angle over time effect
-	// -------------------------------
-	class ParticlesAngleEffect : public ParticlesEffect
-	{
-	public:
-		Ref<Curve> curve; // Angle curve @SERIALIZABLE
+    // -------------------------------
+    // Particles angle over time effect
+    // -------------------------------
+    class ParticlesAngleEffect : public ParticlesEffect
+    {
+    public:
+        Ref<Curve> curve; // Angle curve @SERIALIZABLE
 
-	public:
-		// Default constructor
-		ParticlesAngleEffect();
+    public:
+        // Default constructor
+        ParticlesAngleEffect();
 
-		// Called when particle is emitted, used to initialize effect data
-		void OnParticleEmitted(Particle& particle) override;
+        // Called when particle is emitted, used to initialize effect data
+        void OnParticleEmitted(Particle& particle) override;
 
-		// Update particles size over time
-		void Update(float dt, ParticlesEmitter* emitter) override;
+        // Update particles size over time
+        void Update(float dt, ParticlesEmitter* emitter) override;
 
-		SERIALIZABLE(ParticlesAngleEffect);
-		CLONEABLE_REF(ParticlesAngleEffect);
+        SERIALIZABLE(ParticlesAngleEffect);
+        CLONEABLE_REF(ParticlesAngleEffect);
 
-	private:
-		struct ParticleData
-		{
-			float initialAngle = 0.0f;
+    private:
+        struct ParticleData
+        {
+            float initialAngle = 0.0f;
 
-			int cacheKey = 0;
-			int cacheKeyApprox = 0;
+            int cacheKey = 0;
+            int cacheKeyApprox = 0;
 
-			float randomCoef = 0.0f;
+            float randomCoef = 0.0f;
 
-			bool operator==(const ParticleData& other) const
-			{
-				return cacheKey == other.cacheKey;
-			}
-		};
+            bool operator==(const ParticleData& other) const
+            {
+                return cacheKey == other.cacheKey;
+            }
+        };
 
-		Vector<ParticleData> mData; // Particles data buffer
+        Vector<ParticleData> mData; // Particles data buffer
 
-	private:
-		void CheckDataBufferSize(int particlesCount);
+    private:
+        void CheckDataBufferSize(int particlesCount);
 
-		// Called when deserialization is done, used to subscribe to size curve changes
-		void OnDeserialized(const DataValue& node) override;
-	};
+        // Called when deserialization is done, used to subscribe to size curve changes
+        void OnDeserialized(const DataValue& node) override;
+    };
 
-	// --------------------------------------
-	// Particles angle speed over time effect
-	// --------------------------------------
-	class ParticlesAngleSpeedEffect : public ParticlesEffect
-	{
-	public:
-		Ref<Curve> curve; // Angle speed curve @SERIALIZABLE
+    // --------------------------------------
+    // Particles angle speed over time effect
+    // --------------------------------------
+    class ParticlesAngleSpeedEffect : public ParticlesEffect
+    {
+    public:
+        Ref<Curve> curve; // Angle speed curve @SERIALIZABLE
 
-	public:
-		// Default constructor
-		ParticlesAngleSpeedEffect();
+    public:
+        // Default constructor
+        ParticlesAngleSpeedEffect();
 
-		// Called when particle is emitted, used to initialize effect data
-		void OnParticleEmitted(Particle& particle) override;
+        // Called when particle is emitted, used to initialize effect data
+        void OnParticleEmitted(Particle& particle) override;
 
-		// Update particles size over time
-		void Update(float dt, ParticlesEmitter* emitter) override;
+        // Update particles size over time
+        void Update(float dt, ParticlesEmitter* emitter) override;
 
-		SERIALIZABLE(ParticlesAngleSpeedEffect);
-		CLONEABLE_REF(ParticlesAngleSpeedEffect);
+        SERIALIZABLE(ParticlesAngleSpeedEffect);
+        CLONEABLE_REF(ParticlesAngleSpeedEffect);
 
-	private:
-		struct ParticleData
-		{
-			float initialSpeed = 0.0f;
+    private:
+        struct ParticleData
+        {
+            float initialSpeed = 0.0f;
 
-			int cacheKey = 0;
-			int cacheKeyApprox = 0;
+            int cacheKey = 0;
+            int cacheKeyApprox = 0;
 
-			float randomCoef = 0.0f;
+            float randomCoef = 0.0f;
 
-			bool operator==(const ParticleData& other) const
-			{
-				return cacheKey == other.cacheKey;
-			}
-		};
+            bool operator==(const ParticleData& other) const
+            {
+                return cacheKey == other.cacheKey;
+            }
+        };
 
-		Vector<ParticleData> mData; // Particles data buffer
+        Vector<ParticleData> mData; // Particles data buffer
 
-	private:
-		void CheckDataBufferSize(int particlesCount);
+    private:
+        void CheckDataBufferSize(int particlesCount);
 
-		// Called when deserialization is done, used to subscribe to size curve changes
-		void OnDeserialized(const DataValue& node) override;
-	};
+        // Called when deserialization is done, used to subscribe to size curve changes
+        void OnDeserialized(const DataValue& node) override;
+    };
 
-	// --------------------------------------
-	// Particles velocity over time effect
-	// --------------------------------------
-	class ParticlesVelocityEffect : public ParticlesEffect
-	{
-	public:
-		Ref<Curve> XCurve; // Velocity by X curve @SERIALIZABLE
-		Ref<Curve> YCurve; // Velocity by X curve @SERIALIZABLE
+    // --------------------------------------
+    // Particles velocity over time effect
+    // --------------------------------------
+    class ParticlesVelocityEffect : public ParticlesEffect
+    {
+    public:
+        Ref<Curve> XCurve; // Velocity by X curve @SERIALIZABLE
+        Ref<Curve> YCurve; // Velocity by X curve @SERIALIZABLE
 
-	public:
-		// Default constructor
-		ParticlesVelocityEffect();
+    public:
+        // Default constructor
+        ParticlesVelocityEffect();
 
-		// Called when particle is emitted, used to initialize effect data
-		void OnParticleEmitted(Particle& particle) override;
+        // Called when particle is emitted, used to initialize effect data
+        void OnParticleEmitted(Particle& particle) override;
 
-		// Update particles size over time
-		void Update(float dt, ParticlesEmitter* emitter) override;
+        // Update particles size over time
+        void Update(float dt, ParticlesEmitter* emitter) override;
 
-		SERIALIZABLE(ParticlesVelocityEffect);
-		CLONEABLE_REF(ParticlesVelocityEffect);
+        SERIALIZABLE(ParticlesVelocityEffect);
+        CLONEABLE_REF(ParticlesVelocityEffect);
 
-	private:
-		struct ParticleData
-		{
-			Vec2F initialVelocity;
+    private:
+        struct ParticleData
+        {
+            Vec2F initialVelocity;
 
-			int cacheXKey = 0;
-			int cacheXKeyApprox = 0;
-			float randomXCoef = 0.0f;
+            int cacheXKey = 0;
+            int cacheXKeyApprox = 0;
+            float randomXCoef = 0.0f;
 
-			int cacheYKey = 0;
-			int cacheYKeyApprox = 0;
-			float randomYCoef = 0.0f;
+            int cacheYKey = 0;
+            int cacheYKeyApprox = 0;
+            float randomYCoef = 0.0f;
 
-			bool operator==(const ParticleData& other) const
-			{
-				return cacheXKey == other.cacheXKey && cacheYKey == other.cacheYKey;
-			}
-		};
+            bool operator==(const ParticleData& other) const
+            {
+                return cacheXKey == other.cacheXKey && cacheYKey == other.cacheYKey;
+            }
+        };
 
-		Vector<ParticleData> mData; // Particles data buffer
+        Vector<ParticleData> mData; // Particles data buffer
 
-	private:
-		void CheckDataBufferSize(int particlesCount);
+    private:
+        void CheckDataBufferSize(int particlesCount);
 
-		// Called when deserialization is done, used to subscribe to size curve changes
-		void OnDeserialized(const DataValue& node) override;
-	};
+        // Called when deserialization is done, used to subscribe to size curve changes
+        void OnDeserialized(const DataValue& node) override;
+    };
 
-	// ---------------------------------------------
-	// Particles position over time on spline effect
-	// ---------------------------------------------
-	class ParticlesSplineEffect : public ParticlesEffect
-	{
-	public:
-		Ref<Curve>  timeCurve; // Time movement curve @SERIALIZABLE
-		Ref<Spline> spline;    // Trajectory spline @SERIALIZABLE
+    // ---------------------------------------------
+    // Particles position over time on spline effect
+    // ---------------------------------------------
+    class ParticlesSplineEffect : public ParticlesEffect
+    {
+    public:
+        Ref<Curve>  timeCurve; // Time movement curve @SERIALIZABLE
+        Ref<Spline> spline;    // Trajectory spline @SERIALIZABLE
 
-	public:
-		// Default constructor
-		ParticlesSplineEffect();
+    public:
+        // Default constructor
+        ParticlesSplineEffect();
 
-		// Called when particle is emitted, used to initialize effect data
-		void OnParticleEmitted(Particle& particle) override;
+        // Called when particle is emitted, used to initialize effect data
+        void OnParticleEmitted(Particle& particle) override;
 
-		// Update particles size over time
-		void Update(float dt, ParticlesEmitter* emitter) override;
+        // Update particles size over time
+        void Update(float dt, ParticlesEmitter* emitter) override;
 
-		SERIALIZABLE(ParticlesSplineEffect);
-		CLONEABLE_REF(ParticlesSplineEffect);
+        SERIALIZABLE(ParticlesSplineEffect);
+        CLONEABLE_REF(ParticlesSplineEffect);
 
-	private:
-		struct ParticleData
-		{
-			Vec2F initialPosition;
+    private:
+        struct ParticleData
+        {
+            Vec2F initialPosition;
 
-			int timeCacheKey = 0;
-			int timeCacheKeyApprox = 0;
-			float timeRandomCoef = 0.0f;
+            int timeCacheKey = 0;
+            int timeCacheKeyApprox = 0;
+            float timeRandomCoef = 0.0f;
 
-			int splineCacheKey = 0;
-			int splineCacheKeyApprox = 0;
-			float splineRandomCoef = 0.0f;
+            int splineCacheKey = 0;
+            int splineCacheKeyApprox = 0;
+            float splineRandomCoef = 0.0f;
 
-			bool operator==(const ParticleData& other) const
-			{
-				return timeCacheKey == other.timeCacheKey && splineCacheKey == other.splineCacheKey;
-			}
-		};
+            bool operator==(const ParticleData& other) const
+            {
+                return timeCacheKey == other.timeCacheKey && splineCacheKey == other.splineCacheKey;
+            }
+        };
 
-		Vector<ParticleData> mData; // Particles data buffer
+        Vector<ParticleData> mData; // Particles data buffer
 
-	private:
-		void CheckDataBufferSize(int particlesCount);
+    private:
+        void CheckDataBufferSize(int particlesCount);
 
-		// Called when deserialization is done, used to subscribe to size curve changes
-		void OnDeserialized(const DataValue& node) override;
-	};
+        // Called when deserialization is done, used to subscribe to size curve changes
+        void OnDeserialized(const DataValue& node) override;
+    };
 }
 // --- META ---
 

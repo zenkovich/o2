@@ -8,98 +8,98 @@ using namespace o2;
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(FloatProperty);
+    FORWARD_CLASS_REF(FloatProperty);
 
-	// ----------------------------
-	// Editor float vector property
-	// ----------------------------
-	class Vec2FProperty: public IPropertyField
-	{
-	public:
-		// Default constructor
-		Vec2FProperty(RefCounter* refCounter);
+    // ----------------------------
+    // Editor float vector property
+    // ----------------------------
+    class Vec2FProperty: public IPropertyField
+    {
+    public:
+        // Default constructor
+        Vec2FProperty(RefCounter* refCounter);
 
-		// Copy constructor
-		Vec2FProperty(RefCounter* refCounter, const Vec2FProperty& other);
+        // Copy constructor
+        Vec2FProperty(RefCounter* refCounter, const Vec2FProperty& other);
 
-		// Copy operator
-		Vec2FProperty& operator=(const Vec2FProperty& other);
+        // Copy operator
+        Vec2FProperty& operator=(const Vec2FProperty& other);
 
-		// Sets fields
-		void SetValueAndPrototypeProxy(const TargetsVec& targets) override;
+        // Sets fields
+        void SetValueAndPrototypeProxy(const TargetsVec& targets) override;
 
-		// Updates and checks value
-		void Refresh() override;
+        // Updates and checks value
+        void Refresh() override;
 
-		// Reverts value to prototype value
-		void Revert() override;
+        // Reverts value to prototype value
+        void Revert() override;
 
-		// Sets value
-		void SetValue(const Vec2F& value);
+        // Sets value
+        void SetValue(const Vec2F& value);
 
-		// Sets value X
-		void SetValueX(float value);
+        // Sets value X
+        void SetValueX(float value);
 
-		// Sets value Y
-		void SetValueY(float value);
+        // Sets value Y
+        void SetValueY(float value);
 
-		// Sets value as unknown
-		void SetUnknownValue(const Vec2F& defaultValue = Vec2F());
+        // Sets value as unknown
+        void SetUnknownValue(const Vec2F& defaultValue = Vec2F());
 
-		// Sets value X as unknown
-		void SetXUnknownValue(float defaultValue = 0.0f);
+        // Sets value X as unknown
+        void SetXUnknownValue(float defaultValue = 0.0f);
 
-		// Sets value Y as unknown
-		void SetYUnknownValue(float defaultValue = 0.0f);
+        // Sets value Y as unknown
+        void SetYUnknownValue(float defaultValue = 0.0f);
 
-		// Returns value
-		Vec2F GetCommonValue() const;
+        // Returns value
+        Vec2F GetCommonValue() const;
 
-		// Returns is values different
-		bool IsValuesDifferent() const;
+        // Returns is values different
+        bool IsValuesDifferent() const;
 
-		// Returns editing by this field type
-		const Type* GetValueType() const override;
+        // Returns editing by this field type
+        const Type* GetValueType() const override;
 
-		// Returns editing by this field type by static function, can't be changed during runtime
-		static const Type* GetValueTypeStatic();
+        // Returns editing by this field type by static function, can't be changed during runtime
+        static const Type* GetValueTypeStatic();
 
-		SERIALIZABLE(Vec2FProperty);
+        SERIALIZABLE(Vec2FProperty);
         CLONEABLE_REF(Vec2FProperty);
 
-	protected:
-		Ref<FloatProperty> mXProperty; // X value property
-		Ref<FloatProperty> mYProperty; // Y value property
+    protected:
+        Ref<FloatProperty> mXProperty; // X value property
+        Ref<FloatProperty> mYProperty; // Y value property
 
-	protected:
-		// Searches controls widgets and layers and initializes them
-		void InitializeControls();
+    protected:
+        // Searches controls widgets and layers and initializes them
+        void InitializeControls();
 
-	protected:
-		class XValueProxy : public IValueProxy<float>
-		{
-			Ref<IAbstractValueProxy> mProxy;
+    protected:
+        class XValueProxy : public IValueProxy<float>
+        {
+            Ref<IAbstractValueProxy> mProxy;
 
-		public:
-			XValueProxy();
-			XValueProxy(const Ref<IAbstractValueProxy>& proxy);
+        public:
+            XValueProxy();
+            XValueProxy(const Ref<IAbstractValueProxy>& proxy);
 
-			void SetValue(const float& value) override;
-			float GetValue() const override;
-		};
+            void SetValue(const float& value) override;
+            float GetValue() const override;
+        };
 
-		class YValueProxy : public IValueProxy<float>
-		{
-			Ref<IAbstractValueProxy> mProxy;
+        class YValueProxy : public IValueProxy<float>
+        {
+            Ref<IAbstractValueProxy> mProxy;
 
-		public:
-			YValueProxy();
-			YValueProxy(const Ref<IAbstractValueProxy>& proxy);
+        public:
+            YValueProxy();
+            YValueProxy(const Ref<IAbstractValueProxy>& proxy);
 
-			void SetValue(const float& value) override;
-			float GetValue() const override;
-		};
-	};
+            void SetValue(const float& value) override;
+            float GetValue() const override;
+        };
+    };
 }
 // --- META ---
 

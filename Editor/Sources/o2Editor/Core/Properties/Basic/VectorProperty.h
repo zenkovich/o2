@@ -8,154 +8,154 @@ using namespace o2;
 
 namespace o2
 {
-	class Button;
-	class Spoiler;
-	class Widget;
+    class Button;
+    class Spoiler;
+    class Widget;
 }
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(IntegerProperty);
+    FORWARD_CLASS_REF(IntegerProperty);
 
-	// ----------------------
-	// Editor vector property
-	// ----------------------
-	class VectorProperty: public IPropertyField
-	{
-	public:
-		// Default constructor
-		VectorProperty(RefCounter* refCounter);
+    // ----------------------
+    // Editor vector property
+    // ----------------------
+    class VectorProperty: public IPropertyField
+    {
+    public:
+        // Default constructor
+        VectorProperty(RefCounter* refCounter);
 
-		// Copy constructor
-		VectorProperty(RefCounter* refCounter, const VectorProperty& other);
+        // Copy constructor
+        VectorProperty(RefCounter* refCounter, const VectorProperty& other);
 
-		// Copy operator
-		VectorProperty& operator=(const VectorProperty& other);
+        // Copy operator
+        VectorProperty& operator=(const VectorProperty& other);
 
-		// Destructor
-		~VectorProperty();
+        // Destructor
+        ~VectorProperty();
 
-		// Sets fields
-		void SetValueAndPrototypeProxy(const TargetsVec& targets) override;
+        // Sets fields
+        void SetValueAndPrototypeProxy(const TargetsVec& targets) override;
 
-		// Updates and checks value
-		void Refresh() override;
+        // Updates and checks value
+        void Refresh() override;
 
-		// Returns editing by this field type
-		const Type* GetValueType() const override;
+        // Returns editing by this field type
+        const Type* GetValueType() const override;
 
-		// Sets property caption
-		void SetCaption(const WString& text) override;
+        // Sets property caption
+        void SetCaption(const WString& text) override;
 
-		// Returns property caption
-		WString GetCaption() const override;
+        // Returns property caption
+        WString GetCaption() const override;
 
-		// Adds remove button
-		Ref<Button> GetRemoveButton() override;
+        // Adds remove button
+        Ref<Button> GetRemoveButton() override;
 
-		// Specializes vector type
-		void SpecializeType(const Type* type);
+        // Specializes vector type
+        void SpecializeType(const Type* type);
 
-		// Specializes field info, processing attributes
-		void SetFieldInfo(const FieldInfo* fieldInfo) override;
+        // Specializes field info, processing attributes
+        void SetFieldInfo(const FieldInfo* fieldInfo) override;
 
-		// Returns specialized vector type
-		const Type* GetSpecializedType() const;
+        // Returns specialized vector type
+        const Type* GetSpecializedType() const;
 
-		// Expands property fields
-		void Expand();
+        // Expands property fields
+        void Expand();
 
-		// Collapses property field
-		void Collapse();
+        // Collapses property field
+        void Collapse();
 
-		// Sets properties expanding
-		void SetExpanded(bool expanded);
+        // Sets properties expanding
+        void SetExpanded(bool expanded);
 
-		// Returns is properties expanded
-		bool IsExpanded() const;
+        // Returns is properties expanded
+        bool IsExpanded() const;
 
-		SERIALIZABLE(VectorProperty);
+        SERIALIZABLE(VectorProperty);
         CLONEABLE_REF(VectorProperty);
 
-	protected:
-		struct TargetObjectData
-		{
-			Ref<IAbstractValueProxy> proxy;
+    protected:
+        struct TargetObjectData
+        {
+            Ref<IAbstractValueProxy> proxy;
 
-			void* data = nullptr;
-			bool  isCreated = false;
+            void* data = nullptr;
+            bool  isCreated = false;
 
-			bool operator==(const TargetObjectData& other) const { return proxy == other.proxy; }
+            bool operator==(const TargetObjectData& other) const { return proxy == other.proxy; }
 
-			void Refresh();
-			void SetValue();
-		};
+            void Refresh();
+            void SetValue();
+        };
 
-	protected:
-		Ref<Spoiler> mSpoiler; // Properties spoiler
+    protected:
+        Ref<Spoiler> mSpoiler; // Properties spoiler
 
-		const VectorType* mVectorType = nullptr; // Vector type
+        const VectorType* mVectorType = nullptr; // Vector type
 
-		Vector<Pair<TargetObjectData, TargetObjectData>>  mTargetObjects; // Target objects
-						 						    
-		Vector<Ref<IPropertyField>> mValueProperties;     // Values properties
-		Vector<Ref<IPropertyField>> mValuePropertiesPool; // Unused value properties pool
+        Vector<Pair<TargetObjectData, TargetObjectData>>  mTargetObjects; // Target objects
+                                                     
+        Vector<Ref<IPropertyField>> mValueProperties;     // Values properties
+        Vector<Ref<IPropertyField>> mValuePropertiesPool; // Unused value properties pool
 
-		Ref<IntegerProperty> mCountProperty; // Vector count property
+        Ref<IntegerProperty> mCountProperty; // Vector count property
 
-		bool mCountDifferents = false; // Is targets counts of elements are different
-		int  mCountOfElements = 0;     // Common count of elements
+        bool mCountDifferents = false; // Is targets counts of elements are different
+        int  mCountOfElements = 0;     // Common count of elements
 
-		Ref<HorizontalLayout> mHeaderContainer; // Count property and other controls container
+        Ref<HorizontalLayout> mHeaderContainer; // Count property and other controls container
 
-		Ref<Button> mAddButton; // Add button, adds new element at end
+        Ref<Button> mAddButton; // Add button, adds new element at end
 
-		bool mIsRefreshing = false; // Is currently refreshing content. Need to prevent cycled size changing
+        bool mIsRefreshing = false; // Is currently refreshing content. Need to prevent cycled size changing
 
-	protected:
-		// Enable property event function
-		void OnPropertyEnabled() override;
+    protected:
+        // Enable property event function
+        void OnPropertyEnabled() override;
 
-		// Disable property event function
-		void OnPropertyDisabled() override;
+        // Disable property event function
+        void OnPropertyDisabled() override;
 
-		// Searches controls widgets and layers and initializes them
-		void InitializeControls();
+        // Searches controls widgets and layers and initializes them
+        void InitializeControls();
 
-		// Returns value pointer from proxy when proxy is pointer proxy
-		void* GetProxyValuePointer(const Ref<IAbstractValueProxy>& proxy) const;
+        // Returns value pointer from proxy when proxy is pointer proxy
+        void* GetProxyValuePointer(const Ref<IAbstractValueProxy>& proxy) const;
 
-		// Returns free element property
-		Ref<IPropertyField> GetFreeValueProperty();
+        // Returns free element property
+        Ref<IPropertyField> GetFreeValueProperty();
 
-		// Frees element property
-		void FreeValueProperty(const Ref<IPropertyField>& def);
+        // Frees element property
+        void FreeValueProperty(const Ref<IPropertyField>& def);
 
-		// Updates element caption
-		void UpdateElementCaption(const Ref<IPropertyField>& propertyDef) const;
+        // Updates element caption
+        void UpdateElementCaption(const Ref<IPropertyField>& propertyDef) const;
 
-		// Called when count property changing
-		void OnCountChanged(const Ref<IPropertyField>& def);
+        // Called when count property changing
+        void OnCountChanged(const Ref<IPropertyField>& def);
 
-		// Sets new count of elements in vector
-		void Resize(int newCount);
+        // Sets new count of elements in vector
+        void Resize(int newCount);
 
-		// Removes element from vector
-		void Remove(int idx);
+        // Removes element from vector
+        void Remove(int idx);
 
-		// Called when add button has pressed
-		void OnAddPressed();
+        // Called when add button has pressed
+        void OnAddPressed();
 
-		// Called when expanding spoiler, refreshing array properties
-		void OnExpand();
+        // Called when expanding spoiler, refreshing array properties
+        void OnExpand();
 
-		// Returns object target data from proxy. Creates copy of object when it is property proxy, or gets pointer from pointer proxy
-		TargetObjectData GetObjectFromProxy(const Ref<IAbstractValueProxy>& proxy);
+        // Returns object target data from proxy. Creates copy of object when it is property proxy, or gets pointer from pointer proxy
+        TargetObjectData GetObjectFromProxy(const Ref<IAbstractValueProxy>& proxy);
 
-		// Called when some property changed, sets value via proxy
-		void OnPropertyChanged(const String& path, const Vector<DataDocument>& before, 
-							   const Vector<DataDocument>& after);
-	};
+        // Called when some property changed, sets value via proxy
+        void OnPropertyChanged(const String& path, const Vector<DataDocument>& before, 
+                               const Vector<DataDocument>& after);
+    };
 }
 // --- META ---
 

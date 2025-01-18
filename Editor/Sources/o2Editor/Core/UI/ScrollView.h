@@ -9,157 +9,157 @@ using namespace o2;
 
 namespace o2
 {
-	class Sprite;
+    class Sprite;
 }
 
 namespace Editor
 {
-	// ----------------------------
-	// Scrollable and zoomable view
-	// ----------------------------
-	class ScrollView: public Widget, virtual public CursorAreaEventsListener
-	{
-	public:
-		bool horGridEnabled = true; // Is horizontal lines of grid are enabled
-		bool verGridEnabled = true; // Is vertical lines of grid are enabled
+    // ----------------------------
+    // Scrollable and zoomable view
+    // ----------------------------
+    class ScrollView: public Widget, virtual public CursorAreaEventsListener
+    {
+    public:
+        bool horGridEnabled = true; // Is horizontal lines of grid are enabled
+        bool verGridEnabled = true; // Is vertical lines of grid are enabled
 
-	public:
-		// Default constructor
-		ScrollView(RefCounter* refCounter);
+    public:
+        // Default constructor
+        ScrollView(RefCounter* refCounter);
 
-		// Copy-constructor
-		ScrollView(RefCounter* refCounter, const ScrollView& other);
+        // Copy-constructor
+        ScrollView(RefCounter* refCounter, const ScrollView& other);
 
-		// Destructor
-		~ScrollView();
+        // Destructor
+        ~ScrollView();
 
-		// Copy-operator
-		ScrollView& operator=(const ScrollView& other);
+        // Copy-operator
+        ScrollView& operator=(const ScrollView& other);
 
-		// Draws widget, updates render target 
-		void Draw() override;
+        // Draws widget, updates render target 
+        void Draw() override;
 
-		// Updates drawables, states and widget
-		void Update(float dt) override;
+        // Updates drawables, states and widget
+        void Update(float dt) override;
 
-		// Transforms point from screen space to local space
-		Vec2F ScreenToLocalPoint(const Vec2F& point);
+        // Transforms point from screen space to local space
+        Vec2F ScreenToLocalPoint(const Vec2F& point);
 
-		// Transforms point from local space to screen space
-		Vec2F LocalToScreenPoint(const Vec2F& point);
+        // Transforms point from local space to screen space
+        Vec2F LocalToScreenPoint(const Vec2F& point);
 
-		// Returns local to screen transform
-		const Basis& GetLocalToScreenTransform() const;
+        // Returns local to screen transform
+        const Basis& GetLocalToScreenTransform() const;
 
-		// Returns screen to local transform
-		const Basis& GetScreenToLocalTransform() const;
+        // Returns screen to local transform
+        const Basis& GetScreenToLocalTransform() const;
 
-		// Returns camera scale
-		Vec2F GetCameraScale() const;
+        // Returns camera scale
+        Vec2F GetCameraScale() const;
 
-		// Sets view camera
-		void SetCamera(const Camera& camera);
+        // Sets view camera
+        void SetCamera(const Camera& camera);
 
-		// Returns view camera
-		const Camera& GetCamera() const;
+        // Returns view camera
+        const Camera& GetCamera() const;
 
-		// Sets back color
-		void SetBackColor(const Color4& color);
+        // Sets back color
+        void SetBackColor(const Color4& color);
 
-		// Sets grid color
-		void SetGridColor(const Color4& color);
+        // Sets grid color
+        void SetGridColor(const Color4& color);
 
-		// Updates layout
-		void UpdateSelfTransform() override;
+        // Updates layout
+        void UpdateSelfTransform() override;
 
-		// Returns true if point is in this object
-		bool IsUnderPoint(const Vec2F& point) override;
+        // Returns true if point is in this object
+        bool IsUnderPoint(const Vec2F& point) override;
 
-		// Returns is listener scrollable
-		bool IsScrollable() const override;
+        // Returns is listener scrollable
+        bool IsScrollable() const override;
 
-		// Returns is this widget can be focused
-		bool IsFocusable() const override;
+        // Returns is this widget can be focused
+        bool IsFocusable() const override;
 
-		// Returns create menu category in editor
-		static String GetCreateMenuCategory();
+        // Returns create menu category in editor
+        static String GetCreateMenuCategory();
 
         SERIALIZABLE(ScrollView);
         CLONEABLE_REF(ScrollView);
 
-	protected:
-		bool mReady = false; // Is widget initialized and ready to use
-				   								           
-		Ref<Sprite>  mRenderTargetSprite; // Render target sprite, using for caching graphics
-		TextureRef mRenderTarget;       // Render target texture, using for caching graphics
-		bool         mNeedRedraw = false; // Is need to redraw render target
-				   								           
-		Color4 mBackColor; // Color of back @SERIALIZABLE
-		Color4 mGridColor; // Color of grid @SERIALIZABLE
+    protected:
+        bool mReady = false; // Is widget initialized and ready to use
+                                                              
+        Ref<Sprite>  mRenderTargetSprite; // Render target sprite, using for caching graphics
+        TextureRef mRenderTarget;       // Render target texture, using for caching graphics
+        bool         mNeedRedraw = false; // Is need to redraw render target
+                                                              
+        Color4 mBackColor; // Color of back @SERIALIZABLE
+        Color4 mGridColor; // Color of grid @SERIALIZABLE
 
-		RectF  mViewArea;                              // View area range
-		Camera mViewCamera;     					   // Scene view camera
-		Vec2F  mViewCameraTargetScale = Vec2F(1, 1);   // Camera target scale
-		float  mViewCameraScaleSence = 0.1f / 120.0f;  // Camera scale sense
-		float  mViewCameraScaleElasticyCoef = 30.0f;   // Scale smoothing coefficient
-		Vec2F  mViewCameraTargetPos;				   // Target camera position
-		Vec2F  mViewCameraVelocity;					   // Camera velocity
-		float  mViewCameraPosElasticyCoef = 30.0f;	   // Camera dragging smoothing coefficient
-		float  mViewCameraVelocityDampingCoef = 10.0f; // Camera velocity damping coefficient
-		float  mViewCameraMinScale = 0.001f;		   // Minimal camera scale
-		float  mViewCameraMaxScale = 10000.0f;		   // Maximal camera scale
-			       
-		Basis mLocalToScreenTransform; // Local to screen transformation
-		Basis mScreenToLocalTransform; // Screen to local transformation
+        RectF  mViewArea;                              // View area range
+        Camera mViewCamera;                            // Scene view camera
+        Vec2F  mViewCameraTargetScale = Vec2F(1, 1);   // Camera target scale
+        float  mViewCameraScaleSence = 0.1f / 120.0f;  // Camera scale sense
+        float  mViewCameraScaleElasticyCoef = 30.0f;   // Scale smoothing coefficient
+        Vec2F  mViewCameraTargetPos;                   // Target camera position
+        Vec2F  mViewCameraVelocity;                       // Camera velocity
+        float  mViewCameraPosElasticyCoef = 30.0f;       // Camera dragging smoothing coefficient
+        float  mViewCameraVelocityDampingCoef = 10.0f; // Camera velocity damping coefficient
+        float  mViewCameraMinScale = 0.001f;           // Minimal camera scale
+        float  mViewCameraMaxScale = 10000.0f;           // Maximal camera scale
+                   
+        Basis mLocalToScreenTransform; // Local to screen transformation
+        Basis mScreenToLocalTransform; // Screen to local transformation
 
-	protected:
-		// Called when transformation was changed and updated, updates render texture and sprite
-		void OnTransformUpdated() override;
+    protected:
+        // Called when transformation was changed and updated, updates render texture and sprite
+        void OnTransformUpdated() override;
 
-		// Updates transparency for this and children widgets
-		void UpdateTransparency() override;
+        // Updates transparency for this and children widgets
+        void UpdateTransparency() override;
 
-		// Updates camera
-		void UpdateCamera(float dt);
+        // Updates camera
+        void UpdateCamera(float dt);
 
-		// Returns transformation basis from screen to local for camera
-		Basis GetCameraScreenToLocalTransform(const Camera& camera) const;
+        // Returns transformation basis from screen to local for camera
+        Basis GetCameraScreenToLocalTransform(const Camera& camera) const;
 
-		// Updates scene to screen and screen and scene transformations
-		void UpdateLocalScreenTransforms();
+        // Updates scene to screen and screen and scene transformations
+        void UpdateLocalScreenTransforms();
 
-		// Redraws content into render target
-		void RedrawRenderTarget();
+        // Redraws content into render target
+        void RedrawRenderTarget();
 
-		// Redraws content into render target
-		virtual void RedrawContent();
+        // Redraws content into render target
+        virtual void RedrawContent();
 
-		// Draws grid
-		virtual void DrawGrid();
+        // Draws grid
+        virtual void DrawGrid();
 
-		// Called when camera position was changed
-		virtual void OnCameraTransformChanged();
+        // Called when camera position was changed
+        virtual void OnCameraTransformChanged();
 
-		// Called when scrolling
-		void OnScrolled(float scroll) override;
+        // Called when scrolling
+        void OnScrolled(float scroll) override;
 
-		// Updates camera's scale and position
-		void ChangeCameraScaleRelativeToCursor(const Vec2F& newScale);
+        // Updates camera's scale and position
+        void ChangeCameraScaleRelativeToCursor(const Vec2F& newScale);
 
-		// Called when right mouse button was pressed on this
-		void OnCursorRightMousePressed(const Input::Cursor& cursor) override;
+        // Called when right mouse button was pressed on this
+        void OnCursorRightMousePressed(const Input::Cursor& cursor) override;
 
-		// Called when right mouse button stay down on this
-		void OnCursorRightMouseStayDown(const Input::Cursor& cursor) override;
+        // Called when right mouse button stay down on this
+        void OnCursorRightMouseStayDown(const Input::Cursor& cursor) override;
 
-		// Called when right mouse button was released (only when right mouse button pressed this at previous time)
-		void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
+        // Called when right mouse button was released (only when right mouse button pressed this at previous time)
+        void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
 
-		// Returns that this scroll area has transparent input
-		bool IsInputTransparent() const override;
+        // Returns that this scroll area has transparent input
+        bool IsInputTransparent() const override;
 
-		REF_COUNTERABLE_IMPL(Widget);
-	};
+        REF_COUNTERABLE_IMPL(Widget);
+    };
 }
 // --- META ---
 

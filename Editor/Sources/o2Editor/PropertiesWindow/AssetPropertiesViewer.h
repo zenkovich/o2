@@ -6,40 +6,40 @@ using namespace o2;
 
 namespace o2
 {
-	class Label;
-	class Button;
+    class Label;
+    class Button;
 }
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(DefaultObjectPropertiesViewer);
+    FORWARD_CLASS_REF(DefaultObjectPropertiesViewer);
 
-	// -------------------------
-	// Default properties viewer
-	// -------------------------
-	class AssetPropertiesViewer : public DefaultPropertiesViewer
-	{
-	public:
-		// Default constructor, creates asset header controls
-		AssetPropertiesViewer();
+    // -------------------------
+    // Default properties viewer
+    // -------------------------
+    class AssetPropertiesViewer : public DefaultPropertiesViewer
+    {
+    public:
+        // Default constructor, creates asset header controls
+        AssetPropertiesViewer();
 
-		// Returns viewing object type
-		const Type* GetViewingObjectType() const override;
+        // Returns viewing object type
+        const Type* GetViewingObjectType() const override;
 
-		IOBJECT(AssetPropertiesViewer);
+        IOBJECT(AssetPropertiesViewer);
 
-	protected:
-		Ref<Widget> mAssetHeader;    // Asset header
-		Ref<Label>  mAssetNameLabel; // Asset name label
-		Ref<Button> mSaveButton;     // Save asset button
+    protected:
+        Ref<Widget> mAssetHeader;    // Asset header
+        Ref<Label>  mAssetNameLabel; // Asset name label
+        Ref<Button> mSaveButton;     // Save asset button
 
-	protected:
-		// Sets target objects
-		void SetTargets(const Vector<IObject*>& targets) override;
+    protected:
+        // Sets target objects
+        void SetTargets(const Vector<IObject*>& targets) override;
 
-		// Called when save button is pressed
-		void OnSavePressed();
-	};
+        // Called when save button is pressed
+        void OnSavePressed();
+    };
 
 }
 // --- META ---

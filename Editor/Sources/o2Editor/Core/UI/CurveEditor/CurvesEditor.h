@@ -90,15 +90,15 @@ namespace Editor
 
         // Sets main key handle images
         void SetMainHandleImages(const AssetRef<ImageAsset>& regular, const AssetRef<ImageAsset>& hover, const AssetRef<ImageAsset>& pressed,
-								 const AssetRef<ImageAsset>& selected);
+                                 const AssetRef<ImageAsset>& selected);
 
-		// Sets support key handle images
-		void SetSupportHandleImages(const AssetRef<ImageAsset>& regular, const AssetRef<ImageAsset>& hover, const AssetRef<ImageAsset>& pressed,
-									const AssetRef<ImageAsset>& selected);
+        // Sets support key handle images
+        void SetSupportHandleImages(const AssetRef<ImageAsset>& regular, const AssetRef<ImageAsset>& hover, const AssetRef<ImageAsset>& pressed,
+                                    const AssetRef<ImageAsset>& selected);
 
-		// Sets range key handle images
-		void SetRangeHandleImages(const AssetRef<ImageAsset>& regular, const AssetRef<ImageAsset>& hover, const AssetRef<ImageAsset>& pressed,
-								  const AssetRef<ImageAsset>& selected);
+        // Sets range key handle images
+        void SetRangeHandleImages(const AssetRef<ImageAsset>& regular, const AssetRef<ImageAsset>& hover, const AssetRef<ImageAsset>& pressed,
+                                  const AssetRef<ImageAsset>& selected);
 
         // Enables curves scale adjusting. When it is true, all curves adopts their size to be in the same view range
         void SetAdjustCurvesScale(bool enable);
@@ -134,7 +134,7 @@ namespace Editor
                         const Ref<Sprite>& selected = nullptr, const Ref<Sprite>& selectedHovered = nullptr, const Ref<Sprite>& selectedPressed = nullptr);
 
             // Copy-constructor
-			CurveHandle(const CurveHandle& other);
+            CurveHandle(const CurveHandle& other);
 
             // Destructor
             ~CurveHandle() override;
@@ -170,8 +170,8 @@ namespace Editor
             Ref<CurveHandle> mainHandle;         // Main point handle
             Ref<CurveHandle> leftSupportHandle;  // Left support handle
             Ref<CurveHandle> rightSupportHandle; // Right support handle
-			Ref<CurveHandle> topRangeHandle;     // Top range handle
-			Ref<CurveHandle> bottomRangeHandle;  // Bottom range handle
+            Ref<CurveHandle> topRangeHandle;     // Top range handle
+            Ref<CurveHandle> bottomRangeHandle;  // Bottom range handle
 
             int    curveKeyIdx = 0; // Curve key index
             UInt64 curveKeyUid;     // Curve key unique id
@@ -299,7 +299,7 @@ namespace Editor
 
         CurveHandle    mMainHandleSample;      // Main handle sample, uses to copy sprites @SERIALIZABLE
         CurveHandle    mSupportHandleSample;   // Support handle sample, uses to copy sprites @SERIALIZABLE
-		CurveHandle    mRangeHandleSample;  // Top range handle sample, uses to copy sprites @SERIALIZABLE
+        CurveHandle    mRangeHandleSample;  // Top range handle sample, uses to copy sprites @SERIALIZABLE
         Ref<CurveInfo> mHandleSamplesStubInfo; // Empty curve info, used int handles samples
 
         Vector<Ref<CurveInfo>> mCurves; // Editing curves infos list 
@@ -321,7 +321,7 @@ namespace Editor
         Ref<Text> mTextBottom; // Captions text drawable at bottom border
         BorderF   mTextBorder; // Captions offsets from border
 
-		Ref<Mesh> mCurvesMesh; // Mesh for drawing curves ranges
+        Ref<Mesh> mCurvesMesh; // Mesh for drawing curves ranges
 
         Vec2F mSelectingPressedPoint; // Point, where cursor was pressed, selection starts here, in local space
 
@@ -386,32 +386,32 @@ namespace Editor
         // Called when one of main curve key handles was moved. Updates graphics and handles
         void OnCurveKeyMainHandleDragged(const Ref<CurveInfo>& info, const Ref<KeyHandles>& handles, const Vec2F& position);
 
-		// Called when main curve key handle was pressed, calls OnTransformBegin and checks to add value range. Updates graphics and handles
+        // Called when main curve key handle was pressed, calls OnTransformBegin and checks to add value range. Updates graphics and handles
         void OnCurveKeyMainHandlePressed(const Ref<CurveInfo>& info, const Ref<KeyHandles>& handles);
 
         // Called when one of left support curve key handles was moved. Updates graphics and handles
-		void OnCurveKeyLeftSupportHandleDragged(const Ref<CurveInfo>& info, const Ref<KeyHandles>& handles, const Vec2F& position);
+        void OnCurveKeyLeftSupportHandleDragged(const Ref<CurveInfo>& info, const Ref<KeyHandles>& handles, const Vec2F& position);
 
-		// Called when one of right support curve key handles was moved. Updates graphics and handles
-		void OnCurveKeyRightSupportHandleDragged(const Ref<CurveInfo>& info, const Ref<KeyHandles>& handles, const Vec2F& position);
+        // Called when one of right support curve key handles was moved. Updates graphics and handles
+        void OnCurveKeyRightSupportHandleDragged(const Ref<CurveInfo>& info, const Ref<KeyHandles>& handles, const Vec2F& position);
 
-		// Called when one of top range curve key handles was moved. Updates graphics and handles
-		void OnCurveKeyTopRangeHandleDragged(const Ref<CurveInfo>& info, const Ref<KeyHandles>& handles, const Vec2F& position);
+        // Called when one of top range curve key handles was moved. Updates graphics and handles
+        void OnCurveKeyTopRangeHandleDragged(const Ref<CurveInfo>& info, const Ref<KeyHandles>& handles, const Vec2F& position);
 
-		// Called when one of bottom range curve key handles was moved. Updates graphics and handles
-		void OnCurveKeyBottomRangeHandleDragged(const Ref<CurveInfo>& info, const Ref<KeyHandles>& handles, const Vec2F& position);
+        // Called when one of bottom range curve key handles was moved. Updates graphics and handles
+        void OnCurveKeyBottomRangeHandleDragged(const Ref<CurveInfo>& info, const Ref<KeyHandles>& handles, const Vec2F& position);
 
-		// Checks left support handle constrains and returns filtered position
-		Vec2F CheckLeftSupportHandlePosition(const Ref<CurveInfo>& info, const Ref<KeyHandles>& handles, const Vec2F& position);
+        // Checks left support handle constrains and returns filtered position
+        Vec2F CheckLeftSupportHandlePosition(const Ref<CurveInfo>& info, const Ref<KeyHandles>& handles, const Vec2F& position);
 
-		// Checks right support handle constrains and returns filtered position
-		Vec2F CheckRightSupportHandlePosition(const Ref<CurveInfo>& info, const Ref<KeyHandles>& handles, const Vec2F& position);
+        // Checks right support handle constrains and returns filtered position
+        Vec2F CheckRightSupportHandlePosition(const Ref<CurveInfo>& info, const Ref<KeyHandles>& handles, const Vec2F& position);
 
-		// Checks top range handle constrains and returns filtered position
-		Vec2F CheckTopRangeHandlePosition(const Ref<CurveInfo>& info, const Ref<KeyHandles>& handles, const Vec2F& position);
+        // Checks top range handle constrains and returns filtered position
+        Vec2F CheckTopRangeHandlePosition(const Ref<CurveInfo>& info, const Ref<KeyHandles>& handles, const Vec2F& position);
 
-		// Checks bottom range handle constrains and returns filtered position
-		Vec2F CheckBottomRangeHandlePosition(const Ref<CurveInfo>& info, const Ref<KeyHandles>& handles, const Vec2F& position);
+        // Checks bottom range handle constrains and returns filtered position
+        Vec2F CheckBottomRangeHandlePosition(const Ref<CurveInfo>& info, const Ref<KeyHandles>& handles, const Vec2F& position);
 
         // Smooths key support points and updates handles
         void SmoothKey(const Ref<CurveInfo>& info, int idx);
@@ -483,7 +483,7 @@ namespace Editor
         // On context menu edit pressed. Shows key edit window
         void OnEditPressed();
 
-		// Sets handles types for selected keys and checks context menu items
+        // Sets handles types for selected keys and checks context menu items
         void SetHandlesTypesChecked(Curve::Key::Type type);
 
         // On context menu copy pressed. Stores keys into buffer

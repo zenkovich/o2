@@ -89,7 +89,7 @@ namespace Editor
 
     protected:
         Ref<ToggleGroup> mEnableTogglesGroup;    // Enable objects toggles group
-        Ref<ToggleGroup> mLockTogglesGroup;	     // Lock objects toggles group
+        Ref<ToggleGroup> mLockTogglesGroup;         // Lock objects toggles group
         bool         mAttachedToSceneEvents; // Is tree attached to scene events
 
         Ref<ActorProperty>     mDragActorPropertyField;     // Actor property field under cursor when dragging actor

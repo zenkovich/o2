@@ -5,45 +5,17 @@
 
 namespace Editor
 {
-	// ----------------------------
+    // ----------------------------
     // Add to the curve keys action
     // ----------------------------
-	class CurveAddKeysAction : public IAction
-	{
-	public:
-		// Default constructor
-		CurveAddKeysAction();
-
-		// Constructor
-		CurveAddKeysAction(const Vector<CurvesEditor::CurveKeysInfo>& infos, const Ref<CurvesEditor>& editor);
-
-		// Get the action name
-		String GetName() const override;
-
-		// Redo the action
-		void Redo() override;
-
-		// Undo the action
-		void Undo() override;
-
-		SERIALIZABLE(CurveAddKeysAction);
-
-	protected:
-		Vector<CurvesEditor::CurveKeysInfo> mInfos;  // Added keys info
-		Ref<CurvesEditor>                   mEditor; // Curves editor
-	};
-
-	// ---------------------------------
-    // Delete from the curve keys action
-    // ---------------------------------
-	class CurveDeleteKeysAction : public IAction
-	{
+    class CurveAddKeysAction : public IAction
+    {
     public:
         // Default constructor
-		CurveDeleteKeysAction();
+        CurveAddKeysAction();
 
         // Constructor
-		CurveDeleteKeysAction(const Vector<CurvesEditor::CurveKeysInfo>& infos, const Ref<CurvesEditor>& editor);
+        CurveAddKeysAction(const Vector<CurvesEditor::CurveKeysInfo>& infos, const Ref<CurvesEditor>& editor);
 
         // Get the action name
         String GetName() const override;
@@ -54,37 +26,65 @@ namespace Editor
         // Undo the action
         void Undo() override;
 
-		SERIALIZABLE(CurveDeleteKeysAction);
+        SERIALIZABLE(CurveAddKeysAction);
 
-	protected:
+    protected:
+        Vector<CurvesEditor::CurveKeysInfo> mInfos;  // Added keys info
+        Ref<CurvesEditor>                   mEditor; // Curves editor
+    };
+
+    // ---------------------------------
+    // Delete from the curve keys action
+    // ---------------------------------
+    class CurveDeleteKeysAction : public IAction
+    {
+    public:
+        // Default constructor
+        CurveDeleteKeysAction();
+
+        // Constructor
+        CurveDeleteKeysAction(const Vector<CurvesEditor::CurveKeysInfo>& infos, const Ref<CurvesEditor>& editor);
+
+        // Get the action name
+        String GetName() const override;
+
+        // Redo the action
+        void Redo() override;
+
+        // Undo the action
+        void Undo() override;
+
+        SERIALIZABLE(CurveDeleteKeysAction);
+
+    protected:
         Vector<CurvesEditor::CurveKeysInfo> mInfos;  // Deleted keys info
         Ref<CurvesEditor>                   mEditor; // Curves editor
-	};
+    };
 
     // ----------------------------
     // Change the curve keys action
     // ----------------------------
-	class CurveKeysChangeAction : public IAction
-	{
-	public:
-		struct KeysInfo
-		{
-			String curveId;
+    class CurveKeysChangeAction : public IAction
+    {
+    public:
+        struct KeysInfo
+        {
+            String curveId;
 
-			Vector<Curve::Key> beforeKeys;
-			Vector<Curve::Key> afterKeys;
+            Vector<Curve::Key> beforeKeys;
+            Vector<Curve::Key> afterKeys;
 
-			Vector<CurvesEditor::SelectedHandlesInfo> selectedHandles;
+            Vector<CurvesEditor::SelectedHandlesInfo> selectedHandles;
 
-			bool operator==(const KeysInfo& other) const;
-		};
+            bool operator==(const KeysInfo& other) const;
+        };
 
     public:
         // Default constructor
-		CurveKeysChangeAction();
+        CurveKeysChangeAction();
 
         // Constructor
-		CurveKeysChangeAction(const Vector<KeysInfo>& infos, const Ref<CurvesEditor>& editor);
+        CurveKeysChangeAction(const Vector<KeysInfo>& infos, const Ref<CurvesEditor>& editor);
 
         // Get the action name
         String GetName() const override;
@@ -95,12 +95,12 @@ namespace Editor
         // Undo the action
         void Undo() override;
 
-		SERIALIZABLE(CurveKeysChangeAction);
+        SERIALIZABLE(CurveKeysChangeAction);
 
-	protected:
+    protected:
         Vector<KeysInfo>  mInfos;  // Changed keys info
         Ref<CurvesEditor> mEditor; // Curves editor
-	};
+    };
 }
 // --- META ---
 

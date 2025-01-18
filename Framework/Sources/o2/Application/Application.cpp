@@ -149,7 +149,7 @@ namespace o2
     }
 
     void Application::DeinitializeSystems()
-	{
+    {
         mScene = nullptr;
         mInput = nullptr;
         mProjectConfig = nullptr;

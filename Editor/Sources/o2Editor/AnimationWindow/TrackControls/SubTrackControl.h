@@ -18,7 +18,7 @@ namespace Editor
     class SubTrackControl : public ITrackControl
     {
     public:
-		PROPERTIES(SubTrackControl);
+        PROPERTIES(SubTrackControl);
 
     public:
         // Default constructor
@@ -37,10 +37,10 @@ namespace Editor
         void Initialize(const Ref<AnimationTimeline>& timeline, const Ref<KeyHandlesSheet>& handlesSheet) override;
 
         // Draws handles with clipping
-		void Draw() override;
+        void Draw() override;
 
-		// Sets Animation track, updates and creates key handles
-		void SetTrack(const Ref<IAnimationTrack>& track, const Ref<IAnimationTrack::IPlayer>& player, const String& path) override;
+        // Sets Animation track, updates and creates key handles
+        void SetTrack(const Ref<IAnimationTrack>& track, const Ref<IAnimationTrack::IPlayer>& player, const String& path) override;
 
         // Updates handles position on timeline
         void UpdateHandles() override;
@@ -64,27 +64,27 @@ namespace Editor
         CLONEABLE_REF(SubTrackControl);
 
     private:
-		Ref<KeyHandle> mLeftBorderHandle;  // Left border handle
-		Ref<KeyHandle> mRightBorderHandle; // Right border handle
-		Ref<KeyHandle> mCenterHandle;      // Center handle
+        Ref<KeyHandle> mLeftBorderHandle;  // Left border handle
+        Ref<KeyHandle> mRightBorderHandle; // Right border handle
+        Ref<KeyHandle> mCenterHandle;      // Center handle
 
-		bool mDisableHandlesUpdate = false; // It is true when handles are changing and combining or updating is not available
+        bool mDisableHandlesUpdate = false; // It is true when handles are changing and combining or updating is not available
 
-		String mTrackPath; // Path to Animation track in animation
+        String mTrackPath; // Path to Animation track in animation
 
-		WeakRef<AnimationSubTrack>         mTrack;  // Editing Animation track
-		WeakRef<AnimationSubTrack::Player> mPlayer; // Track player
+        WeakRef<AnimationSubTrack>         mTrack;  // Editing Animation track
+        WeakRef<AnimationSubTrack::Player> mPlayer; // Track player
 
-		WeakRef<AnimationTimeline> mTimeline;     // Time line used for calculating handles positions
-		WeakRef<KeyHandlesSheet>   mHandlesSheet; // Handles sheet, used for drawing and managing drag handles
+        WeakRef<AnimationTimeline> mTimeline;     // Time line used for calculating handles positions
+        WeakRef<KeyHandlesSheet>   mHandlesSheet; // Handles sheet, used for drawing and managing drag handles
 
-		Ref<Sprite> mTrackSprite; // Track sprite
+        Ref<Sprite> mTrackSprite; // Track sprite
 
-	private:
-		// Initializes handles
-		void InitializeHandles();
+    private:
+        // Initializes handles
+        void InitializeHandles();
 
-		// Initializes handles for track
+        // Initializes handles for track
         void SetupTrackHandles();
 
         // Draws track with offsets

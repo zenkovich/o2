@@ -10,43 +10,43 @@ namespace o2
         return Vec2F();
     }
 
-	void ParticlesEmitterShape::OnChanged()
-	{
+    void ParticlesEmitterShape::OnChanged()
+    {
         if (mEmitter)
-		    mEmitter.Lock()->InvalidateBakedFrames();
-	}
+            mEmitter.Lock()->InvalidateBakedFrames();
+    }
 
     Vec2F CircleParticlesEmitterShape::GetEmittinPoint(const Basis& transform, bool fromShell)
     {
         if (fromShell)
-		{
-			Vec2F localPoint = Vec2F::Rotated(Math::Random(0.0f, Math::PI()*2.0f))*0.5f + Vec2F(0.5f, 0.5f);
-			return localPoint*transform;
+        {
+            Vec2F localPoint = Vec2F::Rotated(Math::Random(0.0f, Math::PI()*2.0f))*0.5f + Vec2F(0.5f, 0.5f);
+            return localPoint*transform;
         }
         else
         {
             Vec2F localPoint = Vec2F::Rotated(Math::Random(0.0f, Math::PI()*2.0f))*Math::Random(0.0f, 0.5f) + Vec2F(0.5f, 0.5f);
-			return localPoint*transform;
+            return localPoint*transform;
         }
     }
 
-	Vec2F SquareParticlesEmitterShape::GetEmittinPoint(const Basis& transform, bool fromShell)
+    Vec2F SquareParticlesEmitterShape::GetEmittinPoint(const Basis& transform, bool fromShell)
     {
         if (fromShell)
         {
-			Vec2F localPoint = Vec2F(Math::Random(0.0f, 1.0f), Math::Random(0.0f, 1.0f));
+            Vec2F localPoint = Vec2F(Math::Random(0.0f, 1.0f), Math::Random(0.0f, 1.0f));
 
-			if (Math::Random(0, 100) > 50)
-			    localPoint.x = Math::Round(localPoint.x);
+            if (Math::Random(0, 100) > 50)
+                localPoint.x = Math::Round(localPoint.x);
             else
-			    localPoint.y = Math::Round(localPoint.y);
+                localPoint.y = Math::Round(localPoint.y);
 
-			return localPoint*transform;
+            return localPoint*transform;
         }
         else
         {
-			Vec2F localPoint = Vec2F(Math::Random(0.0f, 1.0f), Math::Random(0.0f, 1.0f));
-			return localPoint*transform;
+            Vec2F localPoint = Vec2F(Math::Random(0.0f, 1.0f), Math::Random(0.0f, 1.0f));
+            return localPoint*transform;
         }
     }
 }

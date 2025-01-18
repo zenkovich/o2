@@ -5,39 +5,39 @@ using namespace o2;
 
 namespace o2
 {
-	class Button;
+    class Button;
 }
 
 namespace Editor
 {
-	// -----------------------
-	// Editor animation viewer
-	// -----------------------
-	class AnimationViewer : public DefaultObjectPropertiesViewer
-	{
-	public:
-		// Returns viewing objects type
-		const Type* GetViewingObjectType() const override;
+    // -----------------------
+    // Editor animation viewer
+    // -----------------------
+    class AnimationViewer : public DefaultObjectPropertiesViewer
+    {
+    public:
+        // Returns viewing objects type
+        const Type* GetViewingObjectType() const override;
 
-		// Returns viewing objects base type by static function
-		static const Type* GetViewingObjectTypeStatic();
+        // Returns viewing objects base type by static function
+        static const Type* GetViewingObjectTypeStatic();
 
-		IOBJECT(AnimationViewer);
+        IOBJECT(AnimationViewer);
 
-	private:
-		Ref<Button>        mEditButton;       // Edit button, opens animation editor window
-		Ref<AnimationClip> mCurrentAnimation; // Current animation
+    private:
+        Ref<Button>        mEditButton;       // Edit button, opens animation editor window
+        Ref<AnimationClip> mCurrentAnimation; // Current animation
 
-	private:
-		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
-		void RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
+    private:
+        // Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
+        void RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 
-		// Called when viewer is refreshed
-		void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
+        // Called when viewer is refreshed
+        void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 
-		// Called when edit button has pressed, opens animation editor window
-		void OnEditPressed();
-	};
+        // Called when edit button has pressed, opens animation editor window
+        void OnEditPressed();
+    };
 }
 // --- META ---
 

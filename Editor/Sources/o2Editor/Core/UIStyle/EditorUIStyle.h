@@ -6,160 +6,160 @@ using namespace o2;
 
 namespace Editor
 {
-	class EditorUIStyleBuilder: public BasicUIStyleBuilder
-	{
-	public:
-		void RebuildDockableWndStyle();
-		void RebuildPlayStopButtonStyle();
-		void RebuildPauseButtonStyle();
-		void RebuildStepButtonStyle();
-		void RebuildRoundDropDown();
-		void RebuildMenuPanelDropDown();
-		void RebuildSearchButton();
-		void RebuildListTreeToggle();
-		void RebuildRevertBtn();
-		void RebuildActorsTreeNodeEnableToggle();
-		void RebuildActorsTreeLockToggle();
-		void RebuildActorsTreeLinkBtn();
-		void RebuildActorsTree();
-		void RebuildDrawOrderTree();
-		void RebuildPanelDownButton();
-		void RebuildTrashDownPanelButton();
-		void RebuildMessagesDownPanelToggle();
-		void RebuildWarningsDownPanelToggle();
-		void RebuildErrorsDownPanelToggle();
-		void RebuildFilterMenuButton();
-		void RebuildTreeMenuButton();
-		void RebuildFoldersTree();
-		void RebuildRegularAssetIcon();
-		void RebuildAssetsGridScroll();
-		void RebuildLinkBtn();
-		void RebuildSinglelineEditboxProperty();
-		void RebuildEditorDropdown();
-		void RebuildRedEditBoxStyle();
-		void RebuildGreenEditBoxStyle();
+    class EditorUIStyleBuilder: public BasicUIStyleBuilder
+    {
+    public:
+        void RebuildDockableWndStyle();
+        void RebuildPlayStopButtonStyle();
+        void RebuildPauseButtonStyle();
+        void RebuildStepButtonStyle();
+        void RebuildRoundDropDown();
+        void RebuildMenuPanelDropDown();
+        void RebuildSearchButton();
+        void RebuildListTreeToggle();
+        void RebuildRevertBtn();
+        void RebuildActorsTreeNodeEnableToggle();
+        void RebuildActorsTreeLockToggle();
+        void RebuildActorsTreeLinkBtn();
+        void RebuildActorsTree();
+        void RebuildDrawOrderTree();
+        void RebuildPanelDownButton();
+        void RebuildTrashDownPanelButton();
+        void RebuildMessagesDownPanelToggle();
+        void RebuildWarningsDownPanelToggle();
+        void RebuildErrorsDownPanelToggle();
+        void RebuildFilterMenuButton();
+        void RebuildTreeMenuButton();
+        void RebuildFoldersTree();
+        void RebuildRegularAssetIcon();
+        void RebuildAssetsGridScroll();
+        void RebuildLinkBtn();
+        void RebuildSinglelineEditboxProperty();
+        void RebuildEditorDropdown();
+        void RebuildRedEditBoxStyle();
+        void RebuildGreenEditBoxStyle();
 
-		void RebuildPreviewMenuToggle();
-		void RebuildRecordMenuToggle();
-		void RebuildRewindLeftMenuButton();
-		void RebuildMoveLeftMenuButton();
-		void RebuildPlayStopMenuToggle();
-		void RebuildRewindRightMenuButton();
-		void RebuildMoveRightMenuButton();
-		void RebuildLoopMenuToggle();
-		void RebuildAddKeyMenuButton();
-		void RebuildCurvesMenuToggle();
-		void RebuildPropertiesMenuButton();
+        void RebuildPreviewMenuToggle();
+        void RebuildRecordMenuToggle();
+        void RebuildRewindLeftMenuButton();
+        void RebuildMoveLeftMenuButton();
+        void RebuildPlayStopMenuToggle();
+        void RebuildRewindRightMenuButton();
+        void RebuildMoveRightMenuButton();
+        void RebuildLoopMenuToggle();
+        void RebuildAddKeyMenuButton();
+        void RebuildCurvesMenuToggle();
+        void RebuildPropertiesMenuButton();
 
-		void RebuildAddKeyButton();
-		void RebuildAddKeyDotButton();
+        void RebuildAddKeyButton();
+        void RebuildAddKeyDotButton();
 
-		void RebuildAddSmallBtn();
-		void RebuildRemoveSmallBtn();
+        void RebuildAddSmallBtn();
+        void RebuildRemoveSmallBtn();
 
-		void RebuildCreateAssetInstanceBtn();
-		void RebuildRemoveAssetInstanceBtn();
-		void RebuildSaveAssetInstanceBtn();
+        void RebuildCreateAssetInstanceBtn();
+        void RebuildRemoveAssetInstanceBtn();
+        void RebuildSaveAssetInstanceBtn();
 
-		void RebuildFloatProperty();
-		void RebuildRedFloatProperty();
-		void RebuildGreenFloatProperty();
-		void RebuildIntegerProperty();
-		void RebuildActorProperty();
-		void RebuildBoolProperty();
-		void RebuildBorderFProperty();
-		void RebuildBorderIProperty();
-		void RebuildColorPropety();
-		void RebuildComponentProperty();
-		void RebuildCurveProperty();
-		void RebuildColorGradientProperty();
-		void RebuildEnumProperty();
-		void RebuildLayerProperty();
-		void RebuildRectFProperty();
-		void RebuildRectIProperty();
-		void RebuildStringProperty();
-		void RebuildWStringProperty();
-		void RebuildTagProperty();
-		void RebuildVector2FProperty();
-		void RebuildVector2IProperty();
-		void RebuildColoredVector2Property();
-		void RebuildAssetPropety();
-		void RebuildSceneLayersListProperty();
+        void RebuildFloatProperty();
+        void RebuildRedFloatProperty();
+        void RebuildGreenFloatProperty();
+        void RebuildIntegerProperty();
+        void RebuildActorProperty();
+        void RebuildBoolProperty();
+        void RebuildBorderFProperty();
+        void RebuildBorderIProperty();
+        void RebuildColorPropety();
+        void RebuildComponentProperty();
+        void RebuildCurveProperty();
+        void RebuildColorGradientProperty();
+        void RebuildEnumProperty();
+        void RebuildLayerProperty();
+        void RebuildRectFProperty();
+        void RebuildRectIProperty();
+        void RebuildStringProperty();
+        void RebuildWStringProperty();
+        void RebuildTagProperty();
+        void RebuildVector2FProperty();
+        void RebuildVector2IProperty();
+        void RebuildColoredVector2Property();
+        void RebuildAssetPropety();
+        void RebuildSceneLayersListProperty();
 
-		void RebuildPropertiesWithCaptins();
+        void RebuildPropertiesWithCaptins();
 
-		void RebuildActorHeadEnableToggle();
-		void RebuildActorHeadEnableProperty();
+        void RebuildActorHeadEnableToggle();
+        void RebuildActorHeadEnableProperty();
 
-		void RebuildActorHeadName();
-		void RebuildActorHeadNameProperty();
-		void RebuildActorHeadDepthProperty();
+        void RebuildActorHeadName();
+        void RebuildActorHeadNameProperty();
+        void RebuildActorHeadDepthProperty();
 
-		void RebuildActorHeadLockToggle();
-		void RebuildActorHeadLockProperty();
+        void RebuildActorHeadLockToggle();
+        void RebuildActorHeadLockProperty();
 
-		void RebuildActorHeadActorAssetProperty();
+        void RebuildActorHeadActorAssetProperty();
 
-		void RebuildActorHeadTags();
-		void RebuildActorHeadTagsProperty();
+        void RebuildActorHeadTags();
+        void RebuildActorHeadTagsProperty();
 
-		void RebuildActorHeadLayer();
-		void RebuildActorHeadLayerProperty();
+        void RebuildActorHeadLayer();
+        void RebuildActorHeadLayerProperty();
 
-		void RebuildAcceptPrototypeBtn();
-		void RebuildRevertPrototypeBtn();
-		void RebuildBreakPrototypeBtn();
-		void RebuildPlayGreenBtn();
-		void RebuildComponentOptionsBtn();
-		void RebuildComponentSaveBtn();
-		void RebuildHorWideScrollbar();
-		void RebuildVerWideScrollbar();
-		void RebuildHorWideProgressbar();
-		void RebuildVerWideProgressbar();
+        void RebuildAcceptPrototypeBtn();
+        void RebuildRevertPrototypeBtn();
+        void RebuildBreakPrototypeBtn();
+        void RebuildPlayGreenBtn();
+        void RebuildComponentOptionsBtn();
+        void RebuildComponentSaveBtn();
+        void RebuildHorWideScrollbar();
+        void RebuildVerWideScrollbar();
+        void RebuildHorWideProgressbar();
+        void RebuildVerWideProgressbar();
 
-		void RebuildAnimationTree();
-		void RebuildAnimationPropertiesTree();
+        void RebuildAnimationTree();
+        void RebuildAnimationPropertiesTree();
 
-		void RebuildSpoilerWithHead();
+        void RebuildSpoilerWithHead();
 
-		void RebuildAddComponentButton();
-		void RebuildAddComponentsTree();
+        void RebuildAddComponentButton();
+        void RebuildAddComponentsTree();
 
-		void RebuildAnimationStateViewerEditButton();
-		void RebuildAnimationStateViewerPlayToggle();
-		void RebuildAnimationStateViewerLoopToggle();
-		void RebuildAnimationStateViewerProgressBar();
-		void RebuildAnimationSpoiler();
+        void RebuildAnimationStateViewerEditButton();
+        void RebuildAnimationStateViewerPlayToggle();
+        void RebuildAnimationStateViewerLoopToggle();
+        void RebuildAnimationStateViewerProgressBar();
+        void RebuildAnimationSpoiler();
 
-		void RebuildBacklessDropdownButton();
+        void RebuildBacklessDropdownButton();
         void RebuildMemoryAnalyzerTree();
 
-		void RebuildEditorUIManager(const String& stylesFolder, bool saveStyle = true, bool checkEditedDate = true);
+        void RebuildEditorUIManager(const String& stylesFolder, bool saveStyle = true, bool checkEditedDate = true);
 
-		IOBJECT(EditorUIStyleBuilder);
+        IOBJECT(EditorUIStyleBuilder);
 
-	private: 
-		template<typename _property_type>
-		void BuildPropertyWithCaption(const String& propertyStyle, const String& propertyWithCaptionStyle);
+    private: 
+        template<typename _property_type>
+        void BuildPropertyWithCaption(const String& propertyStyle, const String& propertyWithCaptionStyle);
 
-	};
+    };
 
-	template<typename _property_type>
-	void EditorUIStyleBuilder::BuildPropertyWithCaption(const String& propertyStyle, const String& propertyWithCaptionStyle)
-	{
-		Ref<_property_type> property = o2UI.CreateWidget<_property_type>(propertyStyle);
+    template<typename _property_type>
+    void EditorUIStyleBuilder::BuildPropertyWithCaption(const String& propertyStyle, const String& propertyWithCaptionStyle)
+    {
+        Ref<_property_type> property = o2UI.CreateWidget<_property_type>(propertyStyle);
 
-		auto label = o2UI.CreateWidget<Label>();
-		label->name = "propertyName";
-		label->horAlign = HorAlign::Left;
-		label->layout->widthWeight = 0.6f;
-		label->horOverflow = Label::HorOverflow::Dots;
+        auto label = o2UI.CreateWidget<Label>();
+        label->name = "propertyName";
+        label->horAlign = HorAlign::Left;
+        label->layout->widthWeight = 0.6f;
+        label->horOverflow = Label::HorOverflow::Dots;
 
-		property->AddChild(label, 0);
-		property->borderLeft = 10;
+        property->AddChild(label, 0);
+        property->borderLeft = 10;
 
-		o2UI.AddWidgetStyle(property, propertyWithCaptionStyle);
-	}
+        o2UI.AddWidgetStyle(property, propertyWithCaptionStyle);
+    }
 }
 // --- META ---
 

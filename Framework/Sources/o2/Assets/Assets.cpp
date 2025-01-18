@@ -22,16 +22,16 @@ namespace o2
 
         LoadAssetsTree();
 
-		mSpineManager = mmake<SpineManager>();
+        mSpineManager = mmake<SpineManager>();
     }
 
     Assets::~Assets()
     {
-		mCachedAssets.Clear();
-		mCachedAssetsByPath.Clear();
-		mCachedAssetsByUID.Clear();
-		mAssetsTrees.Clear();
-		mMainAssetsTree = nullptr;
+        mCachedAssets.Clear();
+        mCachedAssetsByPath.Clear();
+        mCachedAssetsByUID.Clear();
+        mAssetsTrees.Clear();
+        mMainAssetsTree = nullptr;
 
         SpineManager::DestroySingleton(mSpineManager);
     }
@@ -55,9 +55,9 @@ namespace o2
     }
 
     const UID& Assets::GetAssetId(const String& path) const
-	{
-		if (auto cached = FindAssetCache(path))
-			return cached->GetUID();
+    {
+        if (auto cached = FindAssetCache(path))
+            return cached->GetUID();
 
         auto& info = GetAssetInfo(path);
         return info.meta ? info.meta->ID() : UID::empty;
@@ -561,7 +561,7 @@ namespace o2
 
     Vector<UID> Assets::ReloadAssetsTree()
     {
-		Ref<AssetsTree> newBuiltAssetsTree = mmake<AssetsTree>();
+        Ref<AssetsTree> newBuiltAssetsTree = mmake<AssetsTree>();
         newBuiltAssetsTree->DeserializeFromString(o2FileSystem.ReadFile(::GetBuiltAssetsTreePath()));
 
         Vector<UID> changedAssetsUIDs;

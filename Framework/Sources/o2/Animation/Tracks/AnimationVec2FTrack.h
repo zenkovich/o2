@@ -117,7 +117,7 @@ namespace o2
             void SetTargetVoid(void* target, const Function<void()>& changeEvent) override;
 
             // Sets target property by void pointer
-			void SetTargetProxy(const Ref<IAbstractValueProxy>& targetProxy) override;
+            void SetTargetProxy(const Ref<IAbstractValueProxy>& targetProxy) override;
 
             // Sets animation track
             void SetTrack(const Ref<IAnimationTrack>& track) override;

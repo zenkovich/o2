@@ -7,25 +7,25 @@ using namespace o2;
 
 namespace o2
 {
-	class Spoiler;
+    class Spoiler;
 }
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(EnumProperty);
-	FORWARD_CLASS_REF(Vec2FProperty);
-	FORWARD_CLASS_REF(SceneLayersListProperty);
-	FORWARD_CLASS_REF(ColorProperty);
+    FORWARD_CLASS_REF(EnumProperty);
+    FORWARD_CLASS_REF(Vec2FProperty);
+    FORWARD_CLASS_REF(SceneLayersListProperty);
+    FORWARD_CLASS_REF(ColorProperty);
 
-	// -------------------
-	// Camera actor viewer
-	// -------------------
-	class CameraActorViewer : public TObjectPropertiesViewer<CameraActor>
-	{
-	public:
-		IOBJECT(CameraActorViewer);
+    // -------------------
+    // Camera actor viewer
+    // -------------------
+    class CameraActorViewer : public TObjectPropertiesViewer<CameraActor>
+    {
+    public:
+        IOBJECT(CameraActorViewer);
 
-	protected:
+    protected:
         Ref<ColorProperty>           mColorProperty;  // Background fill color property
         Ref<SceneLayersListProperty> mLayersProperty; // Layers property
 
@@ -38,13 +38,13 @@ namespace Editor
         Ref<Spoiler>      mUnitsPropertySpoiler; // Units property spoiler
         Ref<EnumProperty> mUnitsProperty;        // Units property
 
-	protected:
-		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
-		void RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
+    protected:
+        // Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
+        void RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 
-		// Called when type enum selected, shows required property spoiler
-		void OnTypeSelected();
-	};
+        // Called when type enum selected, shows required property spoiler
+        void OnTypeSelected();
+    };
 }
 // --- META ---
 

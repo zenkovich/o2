@@ -132,7 +132,7 @@ namespace o2
         Asset(const Ref<AssetMeta>& meta);
 
         // Copy-constructor
-		Asset(const Asset& asset);
+        Asset(const Asset& asset);
 
         // Returns meta full path (from binary path)
         String GetMetaFullPath() const;
@@ -162,9 +162,9 @@ namespace o2
         friend class AssetRef;
 
         friend class Assets;
-		friend class AssetsBuilder;
+        friend class AssetsBuilder;
 
-		FRIEND_REF_MAKE();
+        FRIEND_REF_MAKE();
     };
 
     // This macro defines asset type

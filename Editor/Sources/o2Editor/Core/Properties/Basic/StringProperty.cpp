@@ -5,48 +5,48 @@
 
 namespace Editor
 {
-	StringProperty::StringProperty(RefCounter* refCounter):
-		TPropertyField<String>(refCounter)
-	{}
+    StringProperty::StringProperty(RefCounter* refCounter):
+        TPropertyField<String>(refCounter)
+    {}
 
-	StringProperty::StringProperty(RefCounter* refCounter, const StringProperty& other) :
-		TPropertyField<String>(refCounter, other)
-	{
-		InitializeControls();
-	}
+    StringProperty::StringProperty(RefCounter* refCounter, const StringProperty& other) :
+        TPropertyField<String>(refCounter, other)
+    {
+        InitializeControls();
+    }
 
-	StringProperty& StringProperty::operator=(const StringProperty& other)
-	{
-		TPropertyField<String>::operator=(other);
-		InitializeControls();
-		return *this;
-	}
+    StringProperty& StringProperty::operator=(const StringProperty& other)
+    {
+        TPropertyField<String>::operator=(other);
+        InitializeControls();
+        return *this;
+    }
 
-	void StringProperty::InitializeControls()
-	{
-		mEditBox = FindChildByType<EditBox>();
-		if (mEditBox)
-		{
-			mEditBox->onChangeCompleted = THIS_FUNC(OnEdited);
-			mEditBox->text = "--";
-		}
-	}
+    void StringProperty::InitializeControls()
+    {
+        mEditBox = FindChildByType<EditBox>();
+        if (mEditBox)
+        {
+            mEditBox->onChangeCompleted = THIS_FUNC(OnEdited);
+            mEditBox->text = "--";
+        }
+    }
 
-	void StringProperty::UpdateValueView()
-	{
-		if (mValuesDifferent)
-			mEditBox->text = "--";
-		else
-			mEditBox->text = mCommonValue;
-	}
+    void StringProperty::UpdateValueView()
+    {
+        if (mValuesDifferent)
+            mEditBox->text = "--";
+        else
+            mEditBox->text = mCommonValue;
+    }
 
-	void StringProperty::OnEdited(const WString& data)
-	{
-		if (mValuesDifferent && data == "--")
-			return;
+    void StringProperty::OnEdited(const WString& data)
+    {
+        if (mValuesDifferent && data == "--")
+            return;
 
-		SetValueByUser(data);
-	}
+        SetValueByUser(data);
+    }
 }
 
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::String>);

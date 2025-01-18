@@ -7,40 +7,40 @@ using namespace o2;
 
 namespace o2
 {
-	class SceneEditableObject;
+    class SceneEditableObject;
 }
 
 namespace Editor
 {
-	// -----------------------------
-	// Scene objects creation action
-	// -----------------------------
-	class CreateAction: public IAction
-	{
-	public:
-		DataDocument     objectsData;        // Serialized created objects
-		Vector<SceneUID> objectsIds;         // Created objects ids
-		SceneUID         insertParentId;     // Parent id
-		SceneUID         insertPrevObjectId; // Previous object id
+    // -----------------------------
+    // Scene objects creation action
+    // -----------------------------
+    class CreateAction: public IAction
+    {
+    public:
+        DataDocument     objectsData;        // Serialized created objects
+        Vector<SceneUID> objectsIds;         // Created objects ids
+        SceneUID         insertParentId;     // Parent id
+        SceneUID         insertPrevObjectId; // Previous object id
 
-	public:
-		// Default constructor
-		CreateAction();
+    public:
+        // Default constructor
+        CreateAction();
 
-		// Constructor wit created actors and their places in their parents
+        // Constructor wit created actors and their places in their parents
         CreateAction(const Vector<Ref<SceneEditableObject>>& objects, const Ref<SceneEditableObject>& parent, const Ref<SceneEditableObject>& prevObject);
 
-		// Returns name of action
-		String GetName() const override;
+        // Returns name of action
+        String GetName() const override;
 
-		// Creates all objects again
-		void Redo() override;
+        // Creates all objects again
+        void Redo() override;
 
-		// Removes created objects
-		void Undo() override;
+        // Removes created objects
+        void Undo() override;
 
-		SERIALIZABLE(CreateAction);
-	};
+        SERIALIZABLE(CreateAction);
+    };
 
 }
 // --- META ---

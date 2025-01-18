@@ -5,53 +5,53 @@
 namespace Editor
 {
     FORWARD_CLASS_REF(IPropertyField);
-	FORWARD_CLASS_REF(Vec2FProperty);
-	FORWARD_CLASS_REF(FloatProperty);
+    FORWARD_CLASS_REF(Vec2FProperty);
+    FORWARD_CLASS_REF(FloatProperty);
 
-	// --------------------------------------------
-	// Default editor widget layer transform viewer
-	// --------------------------------------------
-	class DefaultWidgetLayerLayoutViewer : public IWidgetLayerLayoutViewer
-	{
-	public:
-		// Default constructor. Initializes data widget
-		DefaultWidgetLayerLayoutViewer();
+    // --------------------------------------------
+    // Default editor widget layer transform viewer
+    // --------------------------------------------
+    class DefaultWidgetLayerLayoutViewer : public IWidgetLayerLayoutViewer
+    {
+    public:
+        // Default constructor. Initializes data widget
+        DefaultWidgetLayerLayoutViewer();
 
-		// Virtual destructor
-		~DefaultWidgetLayerLayoutViewer();
+        // Virtual destructor
+        ~DefaultWidgetLayerLayoutViewer();
 
-		// Sets target actors
-		void SetTargetLayers(const Vector<WidgetLayer*>& layers) override;
+        // Sets target actors
+        void SetTargetLayers(const Vector<WidgetLayer*>& layers) override;
 
-		// Updates properties values
-		void Refresh() override;
+        // Updates properties values
+        void Refresh() override;
 
-		IOBJECT(DefaultWidgetLayerLayoutViewer);
+        IOBJECT(DefaultWidgetLayerLayoutViewer);
 
-	protected:
-		Vector<WidgetLayer*> mLayers;
+    protected:
+        Vector<WidgetLayer*> mLayers;
 
-		Ref<Vec2FProperty> mPositionProperty;
-		Ref<Vec2FProperty> mSizeProperty;
-		Ref<Vec2FProperty> mAnchorRightTopProperty;
-		Ref<Vec2FProperty> mAnchorLeftBottomProperty;
-		Ref<Vec2FProperty> mOffsetRightTopProperty;
-		Ref<Vec2FProperty> mOffsetLeftBottomProperty;
+        Ref<Vec2FProperty> mPositionProperty;
+        Ref<Vec2FProperty> mSizeProperty;
+        Ref<Vec2FProperty> mAnchorRightTopProperty;
+        Ref<Vec2FProperty> mAnchorLeftBottomProperty;
+        Ref<Vec2FProperty> mOffsetRightTopProperty;
+        Ref<Vec2FProperty> mOffsetLeftBottomProperty;
 
-	protected:
-		// Enable viewer event function
-		void OnPropertiesEnabled() override;
+    protected:
+        // Enable viewer event function
+        void OnPropertiesEnabled() override;
 
-		// Disable viewer event function
-		void OnPropertiesDisabled() override;
+        // Disable viewer event function
+        void OnPropertiesDisabled() override;
 
-		// Called when some property change completed, stores action for undo
-		void OnPropertyChangeCompleted(const String& path, const Vector<DataDocument>& prevValue, 
-									   const Vector<DataDocument>& newValue);
+        // Called when some property change completed, stores action for undo
+        void OnPropertyChangeCompleted(const String& path, const Vector<DataDocument>& prevValue, 
+                                       const Vector<DataDocument>& newValue);
 
-		// Called when some property changed, updates owner widgets
-		void OnPropertyChanged(const Ref<IPropertyField>& field);
-	};
+        // Called when some property changed, updates owner widgets
+        void OnPropertyChanged(const Ref<IPropertyField>& field);
+    };
 }
 // --- META ---
 

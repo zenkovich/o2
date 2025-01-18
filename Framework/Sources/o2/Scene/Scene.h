@@ -173,9 +173,9 @@ namespace o2
         IOBJECT(Scene);
 
     protected:
-		Ref<LogStream> mLog; // Scene log
+        Ref<LogStream> mLog; // Scene log
 
-		Vector<Ref<Actor>> mRootActors; // Scene root actors     
+        Vector<Ref<Actor>> mRootActors; // Scene root actors     
 
         Vector<WeakRef<CameraActor>> mCameras; // List of cameras on scene
    
@@ -261,15 +261,15 @@ namespace o2
         friend class Component;
         friend class SceneLayer;
         friend class Widget;
-		friend class WidgetLayer;
+        friend class WidgetLayer;
 
 #if IS_EDITOR          
     public:
         Function<void(const Ref<SceneEditableObject>&)> onAddedToScene;             // Actor added to scene event
         Function<void(const Ref<SceneEditableObject>&)> onRemovedFromScene;         // Actor removed from scene event
         Function<void(const Ref<SceneEditableObject>&)> onEnableChanged;            // Actor enable changing
-		Function<void(const Ref<SceneEditableObject>&)> onLockChanged;              // Actor locking change
-		Function<void(const Ref<SceneEditableObject>&)> onNameChanged;              // Actor name changing event
+        Function<void(const Ref<SceneEditableObject>&)> onLockChanged;              // Actor locking change
+        Function<void(const Ref<SceneEditableObject>&)> onNameChanged;              // Actor name changing event
         Function<void(const Ref<SceneEditableObject>&)> onChildrenHierarchyChanged; // Actor childs hierarchy change event
 
         Function<void(const Vector<Ref<SceneEditableObject>>&)> onObjectsChanged; // Actors some change event
@@ -296,7 +296,7 @@ namespace o2
         void RemoveEditableObjectFromScene(const Ref<SceneEditableObject>& object);
 
         // Returns all editable objects
-		const Vector<WeakRef<SceneEditableObject>>& GetAllEditableObjects();
+        const Vector<WeakRef<SceneEditableObject>>& GetAllEditableObjects();
 
         // Returns current changed actors
         const Vector<Ref<SceneEditableObject>>& GetChangedObjects() const;
@@ -327,7 +327,7 @@ namespace o2
         void EndDrawingScene();
 
         // Called when object was created
-		void OnObjectAddToScene(const Ref<SceneEditableObject>& object);
+        void OnObjectAddToScene(const Ref<SceneEditableObject>& object);
 
         // Called when object is destroying
         void OnObjectRemoveFromScene(const Ref<SceneEditableObject>& object);

@@ -9,14 +9,14 @@
 namespace o2
 {    
     // ---------------------------------------------------------------------------------------
-	// Animation state graph component. Contains animation states and transitions between them
+    // Animation state graph component. Contains animation states and transitions between them
     // ---------------------------------------------------------------------------------------
     class AnimationStateGraphComponent: public Component
     {
     public:
         PROPERTIES(AnimationStateGraphComponent);
-		PROPERTY(AssetRef<AnimationStateGraphAsset>, graph, SetGraph, GetGraph); // State graph asset property
-		PROPERTY(String, State, GoToState, GetCurrentStateName);                 // Current state property
+        PROPERTY(AssetRef<AnimationStateGraphAsset>, graph, SetGraph, GetGraph); // State graph asset property
+        PROPERTY(String, State, GoToState, GetCurrentStateName);                 // Current state property
 
     public:
         // Default constructor @SCRIPTABLE
@@ -31,44 +31,44 @@ namespace o2
         // Copy-operator
         AnimationStateGraphComponent& operator=(const AnimationStateGraphComponent& other);
 
-		// Updates animations, blendings and transitions
+        // Updates animations, blendings and transitions
         void OnUpdate(float dt) override;
 
-		// Sets animation state graph asset
-		void SetGraph(const AssetRef<AnimationStateGraphAsset>& graph);
+        // Sets animation state graph asset
+        void SetGraph(const AssetRef<AnimationStateGraphAsset>& graph);
 
-		// Returns animation state graph asset
-		const AssetRef<AnimationStateGraphAsset>& GetGraph() const;
+        // Returns animation state graph asset
+        const AssetRef<AnimationStateGraphAsset>& GetGraph() const;
 
-		// Starts transition to state
-		void GoToState(const String& name);
+        // Starts transition to state
+        void GoToState(const String& name);
 
-		// Starts transition to state
-		void GoToState(const Ref<AnimationGraphState>& state);
+        // Starts transition to state
+        void GoToState(const Ref<AnimationGraphState>& state);
 
-		// Forces play state without transition
-		void ForcePlayState(const String& name);
+        // Forces play state without transition
+        void ForcePlayState(const String& name);
 
-		// Forces play state without transition
-		void ForcePlayState(const Ref<AnimationGraphState>& state);
+        // Forces play state without transition
+        void ForcePlayState(const Ref<AnimationGraphState>& state);
 
-		// Immediately stops current transitions
-		void StopTransition();
+        // Immediately stops current transitions
+        void StopTransition();
 
-		// Returns current state
-		const Ref<AnimationGraphState>& GetCurrentState() const;
+        // Returns current state
+        const Ref<AnimationGraphState>& GetCurrentState() const;
 
-		// Returns current state name
+        // Returns current state name
         String GetCurrentStateName() const;
 
-		// Returns next state
-		const Ref<AnimationGraphState>& GetNextState() const;
+        // Returns next state
+        const Ref<AnimationGraphState>& GetNextState() const;
 
-		// Returns current transition
-		const Ref<AnimationGraphTransition>& GetCurrentTransition() const;
+        // Returns current transition
+        const Ref<AnimationGraphTransition>& GetCurrentTransition() const;
 
-		// Returns next transitions
-		const Vector<Ref<AnimationGraphTransition>>& GetNextTransitions() const;
+        // Returns next transitions
+        const Vector<Ref<AnimationGraphTransition>>& GetNextTransitions() const;
 
         // Returns name of component
         static String GetName();
@@ -80,65 +80,65 @@ namespace o2
         static String GetIcon();
 
         SERIALIZABLE(AnimationStateGraphComponent);
-		REF_COUNTERABLE_IMPL(Component);
+        REF_COUNTERABLE_IMPL(Component);
 
     protected:
-		struct StatePlayer
-		{
-			Vector<Pair<Ref<AnimationGraphState::Animation>, Ref<IAnimationState>>> players;
-			Ref<AnimationGraphState> state;
+        struct StatePlayer
+        {
+            Vector<Pair<Ref<AnimationGraphState::Animation>, Ref<IAnimationState>>> players;
+            Ref<AnimationGraphState> state;
 
         public:
-			// Setup state player. Initializes animation players
-			void Setup(const Ref<AnimationComponent>& animationComponent, const Ref<AnimationGraphState>& state);
+            // Setup state player. Initializes animation players
+            void Setup(const Ref<AnimationComponent>& animationComponent, const Ref<AnimationGraphState>& state);
 
-			// Play state
+            // Play state
             void Play();
 
-			// Stop state
-			void Stop();
+            // Stop state
+            void Stop();
 
-			// Set weight of state
-			void SetWeight(float weight);
+            // Set weight of state
+            void SetWeight(float weight);
 
-			// Returns time of state. Gets value from first animation player
+            // Returns time of state. Gets value from first animation player
             float GetTime() const;
 
-			// Returns duration of state. Gets value from first animation player
-			float GetDuration() const;
-		};
+            // Returns duration of state. Gets value from first animation player
+            float GetDuration() const;
+        };
 
     protected:
-		AssetRef<AnimationStateGraphAsset> mStateGraph; // State graph asset @SERIALIZABLE 
+        AssetRef<AnimationStateGraphAsset> mStateGraph; // State graph asset @SERIALIZABLE 
 
-		WeakRef<AnimationComponent> mAnimationComponent; // Animation component reference
+        WeakRef<AnimationComponent> mAnimationComponent; // Animation component reference
 
-		Ref<AnimationGraphState> mCurrentState;       // Current state
+        Ref<AnimationGraphState> mCurrentState;       // Current state
         StatePlayer              mCurrentStatePlayer; // Current state player
 
-		Ref<AnimationGraphState> mNextState;       // Next state
+        Ref<AnimationGraphState> mNextState;       // Next state
         StatePlayer              mNextStatePlayer; // Next state player
 
-		Ref<AnimationGraphTransition> mCurrentTransition;            // Current transition
-		float mCurrentTransitionTime = 0.0f; // Current transition time
+        Ref<AnimationGraphTransition> mCurrentTransition;            // Current transition
+        float mCurrentTransitionTime = 0.0f; // Current transition time
 
-		Vector<Ref<AnimationGraphTransition>> mNextTransitions;   // Next transitions
+        Vector<Ref<AnimationGraphTransition>> mNextTransitions;   // Next transitions
 
     protected:
-		// Called when actor initialized, reattaches animation states
+        // Called when actor initialized, reattaches animation states
         void OnInitialized() override;
 
-		// Resets graph to initial state
-		void Reset();
+        // Resets graph to initial state
+        void Reset();
 
-		// Checks if current transition is finished and starts next transition
-		void CheckStartNextTransition();
+        // Checks if current transition is finished and starts next transition
+        void CheckStartNextTransition();
 
-		// Updates current transition
-		void UpdateCurrentTransition(float dt);
+        // Updates current transition
+        void UpdateCurrentTransition(float dt);
 
-		// Returns animation component. Stores reference to animation component
-		Ref<AnimationComponent> GetAnimationComponent();
+        // Returns animation component. Stores reference to animation component
+        Ref<AnimationComponent> GetAnimationComponent();
     };
 }
 // --- META ---

@@ -235,12 +235,12 @@ namespace o2
         mPressedCursorPos = cursor.position;
     }
 
-	void DragHandle::OnCursorDblClicked(const Input::Cursor& cursor)
-	{
+    void DragHandle::OnCursorDblClicked(const Input::Cursor& cursor)
+    {
         onDblClicked();
-	}
+    }
 
-	void DragHandle::OnCursorReleased(const Input::Cursor& cursor)
+    void DragHandle::OnCursorReleased(const Input::Cursor& cursor)
     {
         if (mIsDragging)
         {
@@ -590,8 +590,8 @@ namespace o2
 
     void DragHandle::SetSelectionGroup(const Ref<ISelectableDragHandlesGroup>& group)
     {
-		if (mSelectGroup == group)
-			return;
+        if (mSelectGroup == group)
+            return;
 
         if (mSelectGroup)
             mSelectGroup->RemoveHandle(this);
@@ -599,7 +599,7 @@ namespace o2
         mSelectGroup = group;
 
         if (mSelectGroup)
-			mSelectGroup->AddHandle(Ref(this));
+            mSelectGroup->AddHandle(Ref(this));
     }
 
     const Ref<ISelectableDragHandlesGroup>& DragHandle::GetSelectionGroup() const
@@ -766,12 +766,12 @@ namespace o2
         return "UI/Editor";
     }
 
-	Ref<o2::RefCounterable> WidgetDragHandle::CastToRefCounterable(const Ref<WidgetDragHandle>& ref)
-	{
+    Ref<o2::RefCounterable> WidgetDragHandle::CastToRefCounterable(const Ref<WidgetDragHandle>& ref)
+    {
         return DynamicCast<Widget>(ref);
-	}
+    }
 
-	void WidgetDragHandle::UpdateLayersLayouts()
+    void WidgetDragHandle::UpdateLayersLayouts()
     {
         onLayoutUpdated();
         UpdateScreenPosition();

@@ -93,14 +93,14 @@ namespace o2
         const ApproximationVec2F& segBeginLeft = rightKey.mLeftApproxValues[segBeginIdx];
         const ApproximationVec2F& segEndLeft = rightKey.mLeftApproxValues[segEndIdx];
 
-		const ApproximationVec2F& segBeginRight = rightKey.mRightApproxValues[segBeginIdx];
-		const ApproximationVec2F& segEndRight = rightKey.mRightApproxValues[segEndIdx];
+        const ApproximationVec2F& segBeginRight = rightKey.mRightApproxValues[segBeginIdx];
+        const ApproximationVec2F& segEndRight = rightKey.mRightApproxValues[segEndIdx];
 
         float dist = segEndLeft.position - segBeginLeft.position;
         float coef = (position - segBeginLeft.position) / dist;
 
         return Math::Lerp(Math::Lerp(segBeginLeft.value, segEndLeft.value, coef),
-						  Math::Lerp(segBeginRight.value, segEndRight.value, coef), randomRangeCoef);
+                          Math::Lerp(segBeginRight.value, segEndRight.value, coef), randomRangeCoef);
     }
 
     void Spline::BeginKeysBatchChange()
@@ -437,10 +437,10 @@ namespace o2
                 res.top = Math::Max(key.mLeftApproxValues[i].value.y, res.top);
                 res.bottom = Math::Min(key.mLeftApproxValues[i].value.y, res.bottom);
 
-				res.left = Math::Min(key.mRightApproxValues[i].value.x, res.left);
-				res.right = Math::Max(key.mRightApproxValues[i].value.x, res.right);
-				res.top = Math::Max(key.mRightApproxValues[i].value.y, res.top);
-				res.bottom = Math::Min(key.mRightApproxValues[i].value.y, res.bottom);
+                res.left = Math::Min(key.mRightApproxValues[i].value.x, res.left);
+                res.right = Math::Max(key.mRightApproxValues[i].value.x, res.right);
+                res.top = Math::Max(key.mRightApproxValues[i].value.y, res.top);
+                res.bottom = Math::Min(key.mRightApproxValues[i].value.y, res.bottom);
             }
         }
 
@@ -477,65 +477,65 @@ namespace o2
     void Spline::UpdateApproximation()
     {
         float lengthLeft = 0.0f;
-		float lengthRight = 0.0f;
+        float lengthRight = 0.0f;
 
         Vec2F prevLeft;
-		Vec2F prevRight;
+        Vec2F prevRight;
 
         auto calculateApproximation = [&](int begin, int end) {
             Key& beginKey = mKeys[begin];
             Key& endKey = mKeys[end];
 
-			Vec2F beginNormal = Key::GetRangeNormal(beginKey.value, begin == 0 ? nullptr : &mKeys[begin - 1].value, begin == mKeys.Count() - 1 ? nullptr : &mKeys[begin + 1].value);
-			Vec2F beginRange = beginNormal * beginKey.valueRange;
+            Vec2F beginNormal = Key::GetRangeNormal(beginKey.value, begin == 0 ? nullptr : &mKeys[begin - 1].value, begin == mKeys.Count() - 1 ? nullptr : &mKeys[begin + 1].value);
+            Vec2F beginRange = beginNormal * beginKey.valueRange;
 
-			Vec2F endNormal = Key::GetRangeNormal(endKey.value, end == 0 ? nullptr : &mKeys[end - 1].value, end == mKeys.Count() - 1 ? nullptr : &mKeys[end + 1].value);
-			Vec2F endRange = endNormal * endKey.valueRange;
+            Vec2F endNormal = Key::GetRangeNormal(endKey.value, end == 0 ? nullptr : &mKeys[end - 1].value, end == mKeys.Count() - 1 ? nullptr : &mKeys[end + 1].value);
+            Vec2F endRange = endNormal * endKey.valueRange;
 
             Vec2F beginLeft = beginKey.value + beginRange;
             Vec2F beginSupportLeft = beginKey.value + beginRange + beginKey.nextSupport;
             Vec2F endSupportLeft = endKey.value + endRange + endKey.prevSupport;
             Vec2F endLeft = endKey.value + endRange;
 
-			Vec2F beginRight = beginKey.value - beginRange;
-			Vec2F beginSupportRight = beginKey.value - beginRange + beginKey.nextSupport;
-			Vec2F endSupportRight = endKey.value - endRange + endKey.prevSupport;
-			Vec2F endRight = endKey.value - endRange;
+            Vec2F beginRight = beginKey.value - beginRange;
+            Vec2F beginSupportRight = beginKey.value - beginRange + beginKey.nextSupport;
+            Vec2F endSupportRight = endKey.value - endRange + endKey.prevSupport;
+            Vec2F endRight = endKey.value - endRange;
 
             endKey.mApproxValuesBounds.Set(beginLeft, beginLeft);
             for (int j = 0; j < Key::mApproxValuesCount; j++)
             {
                 float coef = (float)j / (float)(Key::mApproxValuesCount - 1);
                 Vec2F pointLeft = Bezier(beginLeft, beginSupportLeft, endSupportLeft, endLeft, coef);
-				Vec2F pointRight = Bezier(beginRight, beginSupportRight, endSupportRight, endRight, coef);
+                Vec2F pointRight = Bezier(beginRight, beginSupportRight, endSupportRight, endRight, coef);
 
-				if (begin == 0 && j == 0)
+                if (begin == 0 && j == 0)
                 {
-					prevLeft = pointLeft;
-					prevRight = pointRight;
-				}
+                    prevLeft = pointLeft;
+                    prevRight = pointRight;
+                }
 
                 lengthLeft += (pointLeft - prevLeft).Length();
                 prevLeft = pointLeft;
 
-				lengthRight += (pointRight - prevRight).Length();
-				prevRight = pointRight;
+                lengthRight += (pointRight - prevRight).Length();
+                prevRight = pointRight;
 
                 endKey.mLeftApproxValues[j].value = pointLeft;
                 endKey.mLeftApproxValues[j].position = lengthLeft;
 
-				endKey.mRightApproxValues[j].value = pointRight;
-				endKey.mRightApproxValues[j].position = lengthRight;
+                endKey.mRightApproxValues[j].value = pointRight;
+                endKey.mRightApproxValues[j].position = lengthRight;
 
                 endKey.mApproxValuesBounds.left = Math::Min(endKey.mApproxValuesBounds.left, pointLeft.x);
                 endKey.mApproxValuesBounds.right = Math::Max(endKey.mApproxValuesBounds.right, pointLeft.x);
                 endKey.mApproxValuesBounds.top = Math::Max(endKey.mApproxValuesBounds.top, pointLeft.y);
                 endKey.mApproxValuesBounds.bottom = Math::Min(endKey.mApproxValuesBounds.bottom, pointLeft.y);
 
-				endKey.mApproxValuesBounds.left = Math::Min(endKey.mApproxValuesBounds.left, pointRight.x);
-				endKey.mApproxValuesBounds.right = Math::Max(endKey.mApproxValuesBounds.right, pointRight.x);
-				endKey.mApproxValuesBounds.top = Math::Max(endKey.mApproxValuesBounds.top, pointRight.y);
-				endKey.mApproxValuesBounds.bottom = Math::Min(endKey.mApproxValuesBounds.bottom, pointRight.y);
+                endKey.mApproxValuesBounds.left = Math::Min(endKey.mApproxValuesBounds.left, pointRight.x);
+                endKey.mApproxValuesBounds.right = Math::Max(endKey.mApproxValuesBounds.right, pointRight.x);
+                endKey.mApproxValuesBounds.top = Math::Max(endKey.mApproxValuesBounds.top, pointRight.y);
+                endKey.mApproxValuesBounds.bottom = Math::Min(endKey.mApproxValuesBounds.bottom, pointRight.y);
             }
 
             mKeys[end].position = lengthLeft;
@@ -614,9 +614,9 @@ namespace o2
     Spline::Key::Key(const Key& other) :
         uid(other.uid), value(other.value), valueRange(other.valueRange), position(other.position), prevSupport(other.prevSupport),
         nextSupport(other.nextSupport), supportsType(other.supportsType), mApproxValuesBounds(other.mApproxValuesBounds)
-	{
-		memcpy(mLeftApproxValues, other.mLeftApproxValues, mApproxValuesCount * sizeof(ApproximationVec2F));
-		memcpy(mRightApproxValues, other.mRightApproxValues, mApproxValuesCount * sizeof(ApproximationVec2F));
+    {
+        memcpy(mLeftApproxValues, other.mLeftApproxValues, mApproxValuesCount * sizeof(ApproximationVec2F));
+        memcpy(mRightApproxValues, other.mRightApproxValues, mApproxValuesCount * sizeof(ApproximationVec2F));
     }
 
     Spline::Key::operator Vec2F() const
@@ -629,12 +629,12 @@ namespace o2
         return mLeftApproxValues;
     }
 
-	const ApproximationVec2F* Spline::Key::GetApproximatedPointsRight() const
-	{
-		return mRightApproxValues;
-	}
+    const ApproximationVec2F* Spline::Key::GetApproximatedPointsRight() const
+    {
+        return mRightApproxValues;
+    }
 
-	int Spline::Key::GetApproximatedPointsCount() const
+    int Spline::Key::GetApproximatedPointsCount() const
     {
         return mApproxValuesCount;
     }
@@ -644,8 +644,8 @@ namespace o2
         return mApproxValuesBounds;
     }
 
-	Vec2F Spline::Key::GetRangeNormal(const Vec2F& position, Vec2F* prev, Vec2F* next)
-	{
+    Vec2F Spline::Key::GetRangeNormal(const Vec2F& position, Vec2F* prev, Vec2F* next)
+    {
         if (!prev && !next)
             return Vec2F(0.0f, 1.0f);
 
@@ -653,15 +653,15 @@ namespace o2
             return (*next - position).Normalized().Perpendicular();
 
         if (!next)
-			return (position - *prev).Normalized().Perpendicular();
+            return (position - *prev).Normalized().Perpendicular();
 
-		Vec2F nextDirNorm = (*next - position).Normalized().Perpendicular();
-		Vec2F prevDirNorm = (position - *prev).Normalized().Perpendicular();
+        Vec2F nextDirNorm = (*next - position).Normalized().Perpendicular();
+        Vec2F prevDirNorm = (position - *prev).Normalized().Perpendicular();
 
-		return ((nextDirNorm + prevDirNorm)*0.5f).Normalized();
-	}
+        return ((nextDirNorm + prevDirNorm)*0.5f).Normalized();
+    }
 
-	Spline::Key& Spline::Key::operator=(const Vec2F& value)
+    Spline::Key& Spline::Key::operator=(const Vec2F& value)
     {
         this->value = value;
         return *this;
@@ -679,7 +679,7 @@ namespace o2
         mApproxValuesBounds = other.mApproxValuesBounds;
 
         memcpy(mLeftApproxValues, other.mLeftApproxValues, mApproxValuesCount * sizeof(Vec2F));
-		memcpy(mRightApproxValues, other.mRightApproxValues, mApproxValuesCount * sizeof(Vec2F));
+        memcpy(mRightApproxValues, other.mRightApproxValues, mApproxValuesCount * sizeof(Vec2F));
 
         return *this;
     }

@@ -206,10 +206,10 @@ namespace o2
         TType(const String& name, int size);
 
         // Creates sample copy and returns him
-		void* CreateSample() const override;
+        void* CreateSample() const override;
 
-		// Creates sample copy and returns him if type is reference
-		Ref<RefCounterable> CreateSampleRef() const override;
+        // Creates sample copy and returns him if type is reference
+        Ref<RefCounterable> CreateSampleRef() const override;
 
         // Destroys sample
         void DestroySample(void* sample) const override;
@@ -282,10 +282,10 @@ namespace o2
         TObjectType(const String& name, int size, void* (*castFromFunc)(void*), void* (*castToFunc)(void*));
 
         // Creates sample copy and returns him
-		void* CreateSample() const override;
+        void* CreateSample() const override;
 
-		// Creates sample copy and returns him if type is reference
-		Ref<RefCounterable> CreateSampleRef() const override;
+        // Creates sample copy and returns him if type is reference
+        Ref<RefCounterable> CreateSampleRef() const override;
 
         // Destroys sample
         void DestroySample(void* sample) const override;
@@ -919,16 +919,16 @@ namespace o2
     void* TType<_type>::CreateSample() const
     {
         return mnew _type();
-	}
+    }
 
-	template<typename _type>
-	Ref<RefCounterable> TType<_type>::CreateSampleRef() const
-	{
+    template<typename _type>
+    Ref<RefCounterable> TType<_type>::CreateSampleRef() const
+    {
         if constexpr (std::is_base_of<RefCounterable, _type>::value)
-			return mmake<_type>();
-		else
-			return nullptr;
-	}
+            return mmake<_type>();
+        else
+            return nullptr;
+    }
 
     template<typename _type>
     void TType<_type>::DestroySample(void* sample) const
@@ -961,11 +961,11 @@ namespace o2
             Assert(false, "Type isn't constructible");
             return nullptr;
         }
-	}
+    }
 
-	template<typename _type>
-	Ref<RefCounterable> TObjectType<_type>::CreateSampleRef() const
-	{
+    template<typename _type>
+    Ref<RefCounterable> TObjectType<_type>::CreateSampleRef() const
+    {
         if constexpr (std::is_base_of<RefCounterable, _type>::value)
         {
             if constexpr (HasCastToRefCounterable<_type>::value)
@@ -975,7 +975,7 @@ namespace o2
         }
         
         return nullptr;
-	}
+    }
 
     template<typename _type>
     void TObjectType<_type>::DestroySample(void* sample) const

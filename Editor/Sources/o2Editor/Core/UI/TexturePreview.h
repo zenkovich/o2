@@ -7,44 +7,44 @@ using namespace o2;
 
 namespace o2
 {
-	class Sprite;
-	class Label;
+    class Sprite;
+    class Label;
 }
 
 namespace Editor
 {
-	// ----------------------
-	// Texture preview widget
-	// ----------------------
-	class TexturePreview: public Widget
-	{
-	public:
-		// Default constructor. Initializes image
-		TexturePreview(RefCounter* refCounter);
+    // ----------------------
+    // Texture preview widget
+    // ----------------------
+    class TexturePreview: public Widget
+    {
+    public:
+        // Default constructor. Initializes image
+        TexturePreview(RefCounter* refCounter);
 
-		// Default copy-constructor
-		TexturePreview(RefCounter* refCounter, const TexturePreview& other);
+        // Default copy-constructor
+        TexturePreview(RefCounter* refCounter, const TexturePreview& other);
 
-		// Copy operator
-		TexturePreview& operator=(const TexturePreview& other);
+        // Copy operator
+        TexturePreview& operator=(const TexturePreview& other);
 
-		// Sets viewing curve
-		void SetTexture(const TextureRef& texture, const RectI& srcRect = RectI());
+        // Sets viewing curve
+        void SetTexture(const TextureRef& texture, const RectI& srcRect = RectI());
 
         SERIALIZABLE(TexturePreview);
         CLONEABLE_REF(TexturePreview);
 
-	protected:
-		const float mLabelHeight = 20.0f; // Height of the label with texture info
+    protected:
+        const float mLabelHeight = 20.0f; // Height of the label with texture info
 
-		Ref<Sprite> mBackgroundSprite; // Background sprite (chessmate pattern)
-		Ref<Sprite> mTextureSprite;    // Texture sprite
-		Ref<Label>  mTextureInfoLabel; // Texture info label
+        Ref<Sprite> mBackgroundSprite; // Background sprite (chessmate pattern)
+        Ref<Sprite> mTextureSprite;    // Texture sprite
+        Ref<Label>  mTextureInfoLabel; // Texture info label
 
-	protected:
-		// Updates layers layouts, calls after updating widget layout; calculates sprite size
-		void UpdateLayersLayouts() override;
-	};
+    protected:
+        // Updates layers layouts, calls after updating widget layout; calculates sprite size
+        void UpdateLayersLayouts() override;
+    };
 }
 // --- META ---
 

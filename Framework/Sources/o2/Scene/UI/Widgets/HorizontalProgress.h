@@ -98,8 +98,8 @@ namespace o2
         float        mScrollSense = 1.0f;               // Scroll sense coefficient @SERIALIZABLE
         Orientation  mOrientation = Orientation::Right; // Bar orientation @SERIALIZABLE
 
-		Ref<WidgetLayer> mBarLayer;  // Bar layer
-		Ref<WidgetLayer> mBackLayer; // background layer
+        Ref<WidgetLayer> mBarLayer;  // Bar layer
+        Ref<WidgetLayer> mBackLayer; // background layer
 
     protected:
         // Called when new layer was added. Here searching bar, back and handle layers

@@ -6,37 +6,37 @@ using namespace o2;
 
 namespace o2
 {
-	class Image;
+    class Image;
 }
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(TexturePreview);
+    FORWARD_CLASS_REF(TexturePreview);
 
-	// ------------------------
-	// Vector font asset viewer
-	// ------------------------
-	class VectorFontAssetViewer : public DefaultObjectPropertiesViewer
-	{
-	public:
-		// Returns viewing objects type
-		const Type* GetViewingObjectType() const override;
+    // ------------------------
+    // Vector font asset viewer
+    // ------------------------
+    class VectorFontAssetViewer : public DefaultObjectPropertiesViewer
+    {
+    public:
+        // Returns viewing objects type
+        const Type* GetViewingObjectType() const override;
 
-		// Returns viewing objects base type by static function
-		static const Type* GetViewingObjectTypeStatic();
+        // Returns viewing objects base type by static function
+        static const Type* GetViewingObjectTypeStatic();
 
-		IOBJECT(VectorFontAssetViewer);
+        IOBJECT(VectorFontAssetViewer);
 
-	private:
-		Ref<TexturePreview> mTexturePreview; // Texture preview widget
+    private:
+        Ref<TexturePreview> mTexturePreview; // Texture preview widget
 
-	private:
-		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
-		void RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
+    private:
+        // Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
+        void RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 
-		// Called when viewer is refreshed
-		void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
-	};
+        // Called when viewer is refreshed
+        void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
+    };
 }
 // --- META ---
 

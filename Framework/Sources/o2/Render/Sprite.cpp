@@ -358,12 +358,12 @@ namespace o2
 
     void Sprite::LoadFromBitmap(const Bitmap& bitmap, bool setSizeByImage /*= true*/)
     {
-		mImageAsset = AssetRef<ImageAsset>();
-		mMesh.mTexture = TextureRef(bitmap);
-		mTextureSrcRect.Set(Vec2F(), mMesh.mTexture->GetSize());
+        mImageAsset = AssetRef<ImageAsset>();
+        mMesh.mTexture = TextureRef(bitmap);
+        mTextureSrcRect.Set(Vec2F(), mMesh.mTexture->GetSize());
 
-		if (setSizeByImage)
-			SetSize(mMesh.mTexture->GetSize());
+        if (setSizeByImage)
+            SetSize(mMesh.mTexture->GetSize());
     }
 
     void Sprite::SetImageAsset(const AssetRef<ImageAsset>& asset)
@@ -429,12 +429,12 @@ namespace o2
         UpdateMesh();
     }
 
-	void Sprite::BlendModeChanged()
-	{
-		mMesh.blendMode = mBlendMode;
-	}
+    void Sprite::BlendModeChanged()
+    {
+        mMesh.blendMode = mBlendMode;
+    }
 
-	void Sprite::UpdateMesh()
+    void Sprite::UpdateMesh()
     {
         (this->*mMeshBuildFunc)();
     }

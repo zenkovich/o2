@@ -9,22 +9,22 @@ namespace o2
     {}
 
     IAnimation::IAnimation(const IAnimation& other) :
-		IAnimation(nullptr, other)
+        IAnimation(nullptr, other)
     {}
 
-	IAnimation::IAnimation(RefCounter* refCounter):
-		RefCounterable(refCounter)
-	{}
+    IAnimation::IAnimation(RefCounter* refCounter):
+        RefCounterable(refCounter)
+    {}
 
-	IAnimation::IAnimation(RefCounter* refCounter, const IAnimation& other):
-		RefCounterable(refCounter), mTime(other.mTime), mDuration(other.mDuration), mBeginTime(other.mBeginTime), mEndTime(other.mEndTime),
-		mDirection(other.mDirection), mSpeed(other.mSpeed), mLoop(other.mLoop),
-		mPlaying(other.mPlaying), mInDurationTime(other.mInDurationTime),
-		playing(this), reversed(this), speed(this), time(this), relTime(this),
-		beginBound(this), endBound(this), loop(this), duration(this)
-	{}
+    IAnimation::IAnimation(RefCounter* refCounter, const IAnimation& other):
+        RefCounterable(refCounter), mTime(other.mTime), mDuration(other.mDuration), mBeginTime(other.mBeginTime), mEndTime(other.mEndTime),
+        mDirection(other.mDirection), mSpeed(other.mSpeed), mLoop(other.mLoop),
+        mPlaying(other.mPlaying), mInDurationTime(other.mInDurationTime),
+        playing(this), reversed(this), speed(this), time(this), relTime(this),
+        beginBound(this), endBound(this), loop(this), duration(this)
+    {}
 
-	IAnimation::~IAnimation()
+    IAnimation::~IAnimation()
     {}
 
     IAnimation& IAnimation::operator=(const IAnimation& other)
@@ -62,17 +62,17 @@ namespace o2
         }
     }
 
-	void IAnimation::SetSubControlled(bool subControlled)
-	{
-		mSubControlled = subControlled;
-	}
+    void IAnimation::SetSubControlled(bool subControlled)
+    {
+        mSubControlled = subControlled;
+    }
 
-	bool IAnimation::IsSubControlled() const
-	{
-		return mSubControlled;
-	}
+    bool IAnimation::IsSubControlled() const
+    {
+        return mSubControlled;
+    }
 
-	void IAnimation::UpdateTime()
+    void IAnimation::UpdateTime()
     {
         if (mLoop == Loop::None)
         {
@@ -95,8 +95,8 @@ namespace o2
                 Evaluate();
 
                 onStopEvent();
-				onPlayedEvent();
-				OnStop();
+                onPlayedEvent();
+                OnStop();
             }
             else
             {
@@ -139,14 +139,14 @@ namespace o2
     void IAnimation::Play()
     {
         if (mPlaying)
-			return;
+            return;
 
-		Evaluate();
+        Evaluate();
 
         mPlaying = true;
 
         onPlayEvent();
-		OnPlay();
+        OnPlay();
     }
 
     void IAnimation::PlayInBounds(float beginTime, float endTime)
@@ -230,9 +230,9 @@ namespace o2
     void IAnimation::SetPlaying(bool playing)
     {
         if (playing)
-			Play();
-		else
-			Stop();
+            Play();
+        else
+            Stop();
     }
 
     bool IAnimation::IsPlaying() const
@@ -285,12 +285,12 @@ namespace o2
         return mTime/(mEndTime - mBeginTime);
     }
 
-	float IAnimation::GetInDurationTime() const
-	{
-		return mInDurationTime;
-	}
+    float IAnimation::GetInDurationTime() const
+    {
+        return mInDurationTime;
+    }
 
-	void IAnimation::GoToBegin()
+    void IAnimation::GoToBegin()
     {
         SetTime(mBeginTime);
     }

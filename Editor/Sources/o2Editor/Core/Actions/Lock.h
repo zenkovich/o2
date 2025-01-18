@@ -7,38 +7,38 @@ using namespace o2;
 
 namespace o2
 {
-	class SceneEditableObject;
+    class SceneEditableObject;
 }
 
 namespace Editor
 {
-	// ----------------------------------
-	// Locking or unlocking object action
-	// ----------------------------------
-	class LockAction: public IAction
-	{
-	public:
-		Vector<SceneUID> objectsIds; // Changed objects
-		bool             lock;       // Lock state
+    // ----------------------------------
+    // Locking or unlocking object action
+    // ----------------------------------
+    class LockAction: public IAction
+    {
+    public:
+        Vector<SceneUID> objectsIds; // Changed objects
+        bool             lock;       // Lock state
 
-	public:
-		// Default constructor
-		LockAction();
+    public:
+        // Default constructor
+        LockAction();
 
-		// Constructor with list of objects
-		LockAction(const Vector<Ref<SceneEditableObject>>& object, bool lock);
+        // Constructor with list of objects
+        LockAction(const Vector<Ref<SceneEditableObject>>& object, bool lock);
 
-		// Return name of action
-		String GetName() const override;
+        // Return name of action
+        String GetName() const override;
 
-		// Sets stored lock
-		void Redo() override;
+        // Sets stored lock
+        void Redo() override;
 
-		// Sets previous lock 
-		void Undo() override;
+        // Sets previous lock 
+        void Undo() override;
 
-		SERIALIZABLE(LockAction);
-	};
+        SERIALIZABLE(LockAction);
+    };
 }
 // --- META ---
 

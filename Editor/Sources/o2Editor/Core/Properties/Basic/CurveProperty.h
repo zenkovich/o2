@@ -8,46 +8,46 @@ using namespace o2;
 
 namespace o2
 {
-	class Widget;
+    class Widget;
 }
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(CurvePreview);
+    FORWARD_CLASS_REF(CurvePreview);
 
-	// ------------------------------
-	// Editor curve property edit box
-	// ------------------------------
-	class CurveProperty: public TPropertyField<Ref<Curve>>
-	{
-	public:
-		// Default constructor
-		CurveProperty(RefCounter* refCounter);
+    // ------------------------------
+    // Editor curve property edit box
+    // ------------------------------
+    class CurveProperty: public TPropertyField<Ref<Curve>>
+    {
+    public:
+        // Default constructor
+        CurveProperty(RefCounter* refCounter);
 
-		// Copy constructor
-		CurveProperty(RefCounter* refCounter, const CurveProperty& other);
+        // Copy constructor
+        CurveProperty(RefCounter* refCounter, const CurveProperty& other);
 
-		// Copy operator
-		CurveProperty& operator=(const CurveProperty& other);
+        // Copy operator
+        CurveProperty& operator=(const CurveProperty& other);
 
-		SERIALIZABLE(CurveProperty);
+        SERIALIZABLE(CurveProperty);
         CLONEABLE_REF(CurveProperty);
 
-	protected:
-		Ref<Widget>           mEditBox;      // Edit box 
-		Ref<CurvePreview>     mPreviewImage; // Curve preview image
-		Ref<CursorEventsArea> mClickArea;    // Box click area
+    protected:
+        Ref<Widget>           mEditBox;      // Edit box 
+        Ref<CurvePreview>     mPreviewImage; // Curve preview image
+        Ref<CursorEventsArea> mClickArea;    // Box click area
 
-	protected:
-		// Searches controls widgets and layers and initializes them
-		void InitializeControls();
+    protected:
+        // Searches controls widgets and layers and initializes them
+        void InitializeControls();
 
-		// Called when common curve changed in curve edit dialog, tells to drawing content
-		void OnValueChanged();
+        // Called when common curve changed in curve edit dialog, tells to drawing content
+        void OnValueChanged();
 
-		// Called when box pressed and shows color picking dialog
-		void OnClicked();
-	};
+        // Called when box pressed and shows color picking dialog
+        void OnClicked();
+    };
 }
 // --- META ---
 

@@ -6,41 +6,41 @@ using namespace o2;
 
 namespace o2
 {
-	class Button;
-	class EditBox;
-	class HorizontalLayout;
-	class Toggle;
+    class Button;
+    class EditBox;
+    class HorizontalLayout;
+    class Toggle;
 }
 
 namespace Editor
 {
     FORWARD_CLASS_REF(LayerPopupItem);
 
-	// -----------------------
-	// Scene layers list popup
-	// -----------------------
-	class LayersPopup: public PopupWidget
-	{
-	public:
-		// Default constructor
-		LayersPopup(RefCounter* refCounter);
+    // -----------------------
+    // Scene layers list popup
+    // -----------------------
+    class LayersPopup: public PopupWidget
+    {
+    public:
+        // Default constructor
+        LayersPopup(RefCounter* refCounter);
 
-		// Destructor
-		~LayersPopup();
+        // Destructor
+        ~LayersPopup();
 
-		// Shows layers popup at position
-		void Show(const Vec2F& position);
+        // Shows layers popup at position
+        void Show(const Vec2F& position);
 
-		// Updates widget and dragging animation
-		void Update(float dt) override;
+        // Updates widget and dragging animation
+        void Update(float dt) override;
 
-		// Returns create menu category in editor
-		static String GetCreateMenuCategory();
+        // Returns create menu category in editor
+        static String GetCreateMenuCategory();
 
         SERIALIZABLE(LayersPopup);
         CLONEABLE_REF(LayersPopup);
 
-	private:
+    private:
         Ref<LayerPopupItem> mItemSample; // Layer item sample @SERIALIZABLE
 
         Vector<Ref<LayerPopupItem>> mItemsCache; // Cached items widgets
@@ -75,55 +75,55 @@ namespace Editor
         // Called when item drag began
         void BeginDragging(const Ref<LayerPopupItem>& item);
 
-		// Called until dragging
-		void UpdateDragging();
+        // Called until dragging
+        void UpdateDragging();
 
-		// Updates drag animation of items
-		void UpdateDragAnimation(float dt);
+        // Updates drag animation of items
+        void UpdateDragAnimation(float dt);
 
-		// it is colled when item has dropped
-		void EndDragging();
+        // it is colled when item has dropped
+        void EndDragging();
 
-		friend class LayerPopupItem;
-	};
+        friend class LayerPopupItem;
+    };
 
-	// ----------------------
-	// Layers view popup item
-	// ----------------------
-	class LayerPopupItem: public Widget, public SelectableDragableObject
-	{
-	public:
-		// Default constructor
-		LayerPopupItem(RefCounter* refCounter);
+    // ----------------------
+    // Layers view popup item
+    // ----------------------
+    class LayerPopupItem: public Widget, public SelectableDragableObject
+    {
+    public:
+        // Default constructor
+        LayerPopupItem(RefCounter* refCounter);
 
-		// Copy-constructor
-		LayerPopupItem(RefCounter* refCounter, const LayerPopupItem& other);
+        // Copy-constructor
+        LayerPopupItem(RefCounter* refCounter, const LayerPopupItem& other);
 
-		// Copy-operator
-		LayerPopupItem& operator=(const LayerPopupItem& other);
+        // Copy-operator
+        LayerPopupItem& operator=(const LayerPopupItem& other);
 
-		// Sets layer and updates view
-		void SetLayer(const Ref<SceneLayer>& layer);
+        // Sets layer and updates view
+        void SetLayer(const Ref<SceneLayer>& layer);
 
-		// Sets name edit box active
-		void BeginEditName();
+        // Sets name edit box active
+        void BeginEditName();
 
-		// Breaks name editing
-		void BreakEditName();
+        // Breaks name editing
+        void BreakEditName();
 
-		// Draws widget
-		void Draw() override;
+        // Draws widget
+        void Draw() override;
 
-		// Returns true if point is in this object
-		bool IsUnderPoint(const Vec2F& point) override;
+        // Returns true if point is in this object
+        bool IsUnderPoint(const Vec2F& point) override;
 
-		// Returns create menu category in editor
-		static String GetCreateMenuCategory();
+        // Returns create menu category in editor
+        static String GetCreateMenuCategory();
 
         SERIALIZABLE(LayerPopupItem);
         CLONEABLE_REF(LayerPopupItem);
 
-	private:		
+    private:        
         Ref<SceneLayer> mLayer;
 
         Ref<LayersPopup> mPopup;
@@ -138,32 +138,32 @@ namespace Editor
         float mDragInsertCoef = 0.0f;
         float mDragTargetInsertCoef = 0.0f;
 
-	private:
-		// Called when cursor double clicked
-		void OnCursorDblClicked(const Input::Cursor& cursor) override;
+    private:
+        // Called when cursor double clicked
+        void OnCursorDblClicked(const Input::Cursor& cursor) override;
 
-		// Called when started dragging
-		void OnDragStart(const Input::Cursor& cursor) override;
+        // Called when started dragging
+        void OnDragStart(const Input::Cursor& cursor) override;
 
-		// Called when dragged
-		void OnDragged(const Input::Cursor& cursor, const Ref<DragDropArea>& area) override;
+        // Called when dragged
+        void OnDragged(const Input::Cursor& cursor, const Ref<DragDropArea>& area) override;
 
-		// Called when dragging completed
-		void OnDragEnd(const Input::Cursor& cursor) override;
+        // Called when dragging completed
+        void OnDragEnd(const Input::Cursor& cursor) override;
 
-		// Called when name edit box has changed
-		void OnNameEditChanged(const WString& str);
+        // Called when name edit box has changed
+        void OnNameEditChanged(const WString& str);
 
-		// Called when visible toggle changed
-		void OnVisibleChanged(bool visible);
+        // Called when visible toggle changed
+        void OnVisibleChanged(bool visible);
 
-		// Called when remove button has pressed
+        // Called when remove button has pressed
         void OnRemovePressed();
 
         REF_COUNTERABLE_IMPL(Widget);
 
-		friend class LayersPopup;
-	};
+        friend class LayersPopup;
+    };
 }
 // --- META ---
 

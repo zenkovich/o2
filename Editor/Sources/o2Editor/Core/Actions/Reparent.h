@@ -8,62 +8,62 @@ using namespace o2;
 
 namespace o2
 {
-	class Actor;
-	class SceneEditableObject;
+    class Actor;
+    class SceneEditableObject;
 }
 
 namespace Editor
 {
-	// ------------------------------
-	// Change object's parents action
-	// Storing old and new parent and 
-	// index in parents
-	// ------------------------------
-	class ReparentAction: public IAction
-	{
-	public:
-		struct ObjectInfo
-		{
-			SceneUID objectId;           // Object id
-			SceneUID lastParentId;       // Previous parent id
-			SceneUID lastPrevObjectId;   // Previous object id in children
-			int      objectHierarchyIdx; // Object index in hierarchy
-			Basis    transform;          // Object transform
+    // ------------------------------
+    // Change object's parents action
+    // Storing old and new parent and 
+    // index in parents
+    // ------------------------------
+    class ReparentAction: public IAction
+    {
+    public:
+        struct ObjectInfo
+        {
+            SceneUID objectId;           // Object id
+            SceneUID lastParentId;       // Previous parent id
+            SceneUID lastPrevObjectId;   // Previous object id in children
+            int      objectHierarchyIdx; // Object index in hierarchy
+            Basis    transform;          // Object transform
 
-			bool operator==(const ObjectInfo& other) const
+            bool operator==(const ObjectInfo& other) const
             {
                 return objectId == other.objectId;
             }
-		};
+        };
 
-		Vector<ObjectInfo> objectsInfos;    // Changed objects info
-		SceneUID           newParentId;     // New parent id
-		SceneUID           newPrevObjectId; // New object id in children
+        Vector<ObjectInfo> objectsInfos;    // Changed objects info
+        SceneUID           newParentId;     // New parent id
+        SceneUID           newPrevObjectId; // New object id in children
 
-	public:
-		// Default constructor
-		ReparentAction();
+    public:
+        // Default constructor
+        ReparentAction();
 
-		// Constructor
-		ReparentAction(const Vector<Ref<SceneEditableObject>>& beginObjects);
+        // Constructor
+        ReparentAction(const Vector<Ref<SceneEditableObject>>& beginObjects);
 
-		// Destructor
-		~ReparentAction();
+        // Destructor
+        ~ReparentAction();
 
-		// Called when object are reparented, stores all required data to restore old objects' parents
-		void ObjectsReparented(const Ref<SceneEditableObject>& newParent, const Ref<SceneEditableObject>& prevObject);
+        // Called when object are reparented, stores all required data to restore old objects' parents
+        void ObjectsReparented(const Ref<SceneEditableObject>& newParent, const Ref<SceneEditableObject>& prevObject);
 
-		// Returns name of action
-		String GetName() const override;
+        // Returns name of action
+        String GetName() const override;
 
-		// Sets new parents again
-		void Redo() override;
+        // Sets new parents again
+        void Redo() override;
 
-		// Sets previous stored parents and index in children
-		void Undo() override;
+        // Sets previous stored parents and index in children
+        void Undo() override;
 
-		SERIALIZABLE(ReparentAction);
-	};
+        SERIALIZABLE(ReparentAction);
+    };
 }
 // --- META ---
 

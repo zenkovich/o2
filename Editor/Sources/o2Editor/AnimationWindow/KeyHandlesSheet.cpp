@@ -65,16 +65,16 @@ namespace Editor
         {
             auto offsets = mIsFrameSelecting ? mSelectionFrameCursorOffsets : mSelectionFrameOffsets;
             auto animationWindow = mAnimationWindow.Lock();
-			RectF selectionFrameRect = RectF(animationWindow->mTimeline->LocalToWorld(mSelectionRect.left) + offsets.left,
-											 animationWindow->mTree->GetLineWorldPosition(mSelectionRect.top) + offsets.top,
-											 animationWindow->mTimeline->LocalToWorld(mSelectionRect.right) + offsets.right,
-											 animationWindow->mTree->GetLineWorldPosition(mSelectionRect.bottom) + offsets.bottom);
+            RectF selectionFrameRect = RectF(animationWindow->mTimeline->LocalToWorld(mSelectionRect.left) + offsets.left,
+                                             animationWindow->mTree->GetLineWorldPosition(mSelectionRect.top) + offsets.top,
+                                             animationWindow->mTimeline->LocalToWorld(mSelectionRect.right) + offsets.right,
+                                             animationWindow->mTree->GetLineWorldPosition(mSelectionRect.bottom) + offsets.bottom);
 
             mSelectionFrame->SetRect(selectionFrameRect);
             mSelectionFrame->Draw();
 
-			mLeftFrameDragHandle->SetDrawablesSize(Vec2F(10, selectionFrameRect.Height()));
-			mRightFrameDragHandle->SetDrawablesSize(Vec2F(10, selectionFrameRect.Height()));
+            mLeftFrameDragHandle->SetDrawablesSize(Vec2F(10, selectionFrameRect.Height()));
+            mRightFrameDragHandle->SetDrawablesSize(Vec2F(10, selectionFrameRect.Height()));
 
             if (!mIsFrameSelecting)
             {
@@ -379,10 +379,10 @@ namespace Editor
 
     void KeyHandlesSheet::InitializeRightHandle()
     {
-		mRightFrameDragHandle = mmake<DragHandle>();
+        mRightFrameDragHandle = mmake<DragHandle>();
 
         mRightFrameDragHandle->SetDrawablesSizePivot(Vec2F(6, 19));
-		mRightFrameDragHandle->angle = Math::Deg2rad(180.0f);
+        mRightFrameDragHandle->angle = Math::Deg2rad(180.0f);
 
         mRightFrameDragHandle->localToScreenTransformFunc = [&](const Vec2F& point)
             {

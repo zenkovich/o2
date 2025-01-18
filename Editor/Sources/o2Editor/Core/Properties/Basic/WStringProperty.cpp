@@ -5,48 +5,48 @@
 
 namespace Editor
 {
-	WStringProperty::WStringProperty(RefCounter* refCounter):
-		TPropertyField<WString>(refCounter)
-	{}
+    WStringProperty::WStringProperty(RefCounter* refCounter):
+        TPropertyField<WString>(refCounter)
+    {}
 
-	WStringProperty::WStringProperty(RefCounter* refCounter, const WStringProperty& other):
-		TPropertyField<WString>(refCounter, other)
-	{
-		InitializeControls();
-	}
+    WStringProperty::WStringProperty(RefCounter* refCounter, const WStringProperty& other):
+        TPropertyField<WString>(refCounter, other)
+    {
+        InitializeControls();
+    }
 
-	WStringProperty& WStringProperty::operator=(const WStringProperty& other)
-	{
-		TPropertyField<WString>::operator=(other);
-		InitializeControls();
-		return *this;
-	}
+    WStringProperty& WStringProperty::operator=(const WStringProperty& other)
+    {
+        TPropertyField<WString>::operator=(other);
+        InitializeControls();
+        return *this;
+    }
 
-	void WStringProperty::InitializeControls()
-	{
-		mEditBox = FindChildByType<EditBox>();
-		if (mEditBox)
-		{
-			mEditBox->onChangeCompleted = THIS_FUNC(OnEdited);
-			mEditBox->text = "--";
-		}
-	}
+    void WStringProperty::InitializeControls()
+    {
+        mEditBox = FindChildByType<EditBox>();
+        if (mEditBox)
+        {
+            mEditBox->onChangeCompleted = THIS_FUNC(OnEdited);
+            mEditBox->text = "--";
+        }
+    }
 
-	void WStringProperty::UpdateValueView()
-	{
-		if (mValuesDifferent)
-			mEditBox->text = "--";
-		else
-			mEditBox->text = mCommonValue;
-	}
+    void WStringProperty::UpdateValueView()
+    {
+        if (mValuesDifferent)
+            mEditBox->text = "--";
+        else
+            mEditBox->text = mCommonValue;
+    }
 
-	void WStringProperty::OnEdited(const WString& data)
-	{
-		if (mValuesDifferent && data == "--")
-			return;
+    void WStringProperty::OnEdited(const WString& data)
+    {
+        if (mValuesDifferent && data == "--")
+            return;
 
-		SetValueByUser(data);
-	}
+        SetValueByUser(data);
+    }
 }
 
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::WString>);

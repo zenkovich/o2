@@ -22,13 +22,13 @@ namespace o2
         mInfo.meta->mId.Randomize();
     }
 
-	void Asset::PostRefConstruct()
-	{
-		if (Assets::IsSingletonInitialzed())
-			o2Assets.AddAssetCache(this);
-	}
+    void Asset::PostRefConstruct()
+    {
+        if (Assets::IsSingletonInitialzed())
+            o2Assets.AddAssetCache(this);
+    }
 
-	Asset& Asset::operator=(const Asset& other)
+    Asset& Asset::operator=(const Asset& other)
     {
         if (Assets::IsSingletonInitialzed())
             o2Assets.RemoveAssetCache(this);

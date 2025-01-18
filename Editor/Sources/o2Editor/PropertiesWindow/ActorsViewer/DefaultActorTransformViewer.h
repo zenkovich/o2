@@ -4,60 +4,60 @@
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(Vec2FProperty);
-	FORWARD_CLASS_REF(FloatProperty);
+    FORWARD_CLASS_REF(Vec2FProperty);
+    FORWARD_CLASS_REF(FloatProperty);
 
-	// -------------------------------------
-	// Default editor actor transform viewer
-	// -------------------------------------
-	class DefaultActorTransformViewer: public IActorTransformViewer
-	{
-	public:
-		// Default constructor. Initializes data widget
-		DefaultActorTransformViewer();
+    // -------------------------------------
+    // Default editor actor transform viewer
+    // -------------------------------------
+    class DefaultActorTransformViewer: public IActorTransformViewer
+    {
+    public:
+        // Default constructor. Initializes data widget
+        DefaultActorTransformViewer();
 
-		// Virtual destructor
-		~DefaultActorTransformViewer();
+        // Virtual destructor
+        ~DefaultActorTransformViewer();
 
-		// Sets target actors
-		void SetTargetActors(const Vector<Actor*>& actors) override;
+        // Sets target actors
+        void SetTargetActors(const Vector<Actor*>& actors) override;
 
-		// Updates properties values
-		void Refresh() override;
+        // Updates properties values
+        void Refresh() override;
 
-		IOBJECT(DefaultActorTransformViewer);
+        IOBJECT(DefaultActorTransformViewer);
 
-	protected:
-		Vector<Actor*> mTargetActors;
+    protected:
+        Vector<Actor*> mTargetActors;
 
-		Ref<Vec2FProperty> mPositionProperty;
-		Ref<Vec2FProperty> mPivotProperty;
-		Ref<Vec2FProperty> mScaleProperty;
-		Ref<Vec2FProperty> mSizeProperty;
-		Ref<FloatProperty> mRotationProperty;
-		Ref<FloatProperty> mShearProperty;
+        Ref<Vec2FProperty> mPositionProperty;
+        Ref<Vec2FProperty> mPivotProperty;
+        Ref<Vec2FProperty> mScaleProperty;
+        Ref<Vec2FProperty> mSizeProperty;
+        Ref<FloatProperty> mRotationProperty;
+        Ref<FloatProperty> mShearProperty;
 
-		bool               mLayoutEnabled = false;
-		Ref<Spoiler>       mLayoutSpoiler;
-		Ref<Vec2FProperty> mAnchorRightTopProperty;
-		Ref<Vec2FProperty> mAnchorLeftBottomProperty;
-		Ref<Vec2FProperty> mOffsetRightTopProperty;
-		Ref<Vec2FProperty> mOffsetLeftBottomProperty;
-		Ref<Vec2FProperty> mMinSizeProperty;
-		Ref<Vec2FProperty> mMaxSizeProperty;
-		Ref<Vec2FProperty> mWeightProperty;
+        bool               mLayoutEnabled = false;
+        Ref<Spoiler>       mLayoutSpoiler;
+        Ref<Vec2FProperty> mAnchorRightTopProperty;
+        Ref<Vec2FProperty> mAnchorLeftBottomProperty;
+        Ref<Vec2FProperty> mOffsetRightTopProperty;
+        Ref<Vec2FProperty> mOffsetLeftBottomProperty;
+        Ref<Vec2FProperty> mMinSizeProperty;
+        Ref<Vec2FProperty> mMaxSizeProperty;
+        Ref<Vec2FProperty> mWeightProperty;
 
-	protected:
-		// Enable viewer event function
-		void OnPropertiesEnabled() override;
+    protected:
+        // Enable viewer event function
+        void OnPropertiesEnabled() override;
 
-		// Disable viewer event function
-		void OnPropertiesDisabled() override;
+        // Disable viewer event function
+        void OnPropertiesDisabled() override;
 
-		// Called when some property changed, stores action for undo
-		void OnPropertyChangeCompleted(const String& path, const Vector<DataDocument>& prevValue,
-									   const Vector<DataDocument>& newValue);
-	};
+        // Called when some property changed, stores action for undo
+        void OnPropertyChangeCompleted(const String& path, const Vector<DataDocument>& prevValue,
+                                       const Vector<DataDocument>& newValue);
+    };
 }
 // --- META ---
 

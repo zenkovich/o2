@@ -219,11 +219,11 @@ namespace o2
         mNodeWidgetsBuf.Add(widgets);
     }
 
-	Tree::Tree(const Tree& other):
+    Tree::Tree(const Tree& other):
         Tree(nullptr, other)
-	{}
+    {}
 
-	Tree::~Tree()
+    Tree::~Tree()
     {}
 
     Tree& Tree::operator=(const Tree& other)
@@ -1769,7 +1769,7 @@ namespace o2
 
     void Tree::OnDeserialized(const DataValue& node)
     {
-		ScrollArea::OnDeserialized(node);
+        ScrollArea::OnDeserialized(node);
         mHighlightAnim->SetTarget(mHighlightSprite.Get());
         mHighlightAnim->SetClip(mHighlighClip);
     }

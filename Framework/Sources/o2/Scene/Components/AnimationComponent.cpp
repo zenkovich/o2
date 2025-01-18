@@ -36,7 +36,7 @@ namespace o2
             return;
 
         for (auto& state : mStates)
-			state->Update(dt);
+            state->Update(dt);
 
         for (auto& val : mValues)
             val->Update();
@@ -47,7 +47,7 @@ namespace o2
 
     Ref<IAnimationState> AnimationComponent::AddState(const Ref<IAnimationState>& state)
     {
-		state->Register(Ref(this));
+        state->Register(Ref(this));
         mStates.Add(state);
 
         return state;
@@ -71,7 +71,7 @@ namespace o2
 
     void AnimationComponent::RemoveState(const Ref<IAnimationState>& state)
     {
-		state->Unregister();
+        state->Unregister();
         mStates.Remove(state);
     }
 
@@ -102,17 +102,17 @@ namespace o2
         return mStates;
     }
 
-	Map<String, Ref<IAnimationState>> AnimationComponent::GetAllStates() const
-	{
+    Map<String, Ref<IAnimationState>> AnimationComponent::GetAllStates() const
+    {
         Map<String, Ref<IAnimationState>> result;
 
-		for (auto& state : mStates)
-			result[state->name] = state;
+        for (auto& state : mStates)
+            result[state->name] = state;
 
-		return result;
-	}
+        return result;
+    }
 
-	Ref<IAnimationState> AnimationComponent::Play(const Ref<AnimationClip>& animation, const String& name)
+    Ref<IAnimationState> AnimationComponent::Play(const Ref<AnimationClip>& animation, const String& name)
     {
         auto state = AddState(name, animation, AnimationMask(), 1.0f);
         state->GetPlayer().Play();
@@ -135,7 +135,7 @@ namespace o2
             return nullptr;
         }
 
-		state->GetPlayer().Play();
+        state->GetPlayer().Play();
 
         return state;
     }
@@ -236,19 +236,19 @@ namespace o2
         }
     }
 
-	void AnimationComponent::OnInitialized()
-	{
-		ReattachAnimationStates();
-		Component::OnInitialized();
-	}
+    void AnimationComponent::OnInitialized()
+    {
+        ReattachAnimationStates();
+        Component::OnInitialized();
+    }
 
-	void AnimationComponent::RegSubTrack(const Ref<AnimationSubTrack::Player>& player, const String& path,
+    void AnimationComponent::RegSubTrack(const Ref<AnimationSubTrack::Player>& player, const String& path,
                                          const Ref<AnimationState>& state)
-	{
-		RegTrack<void, AnimationSubTrack, SubTrackMixer>(player, path, state);
-	}
+    {
+        RegTrack<void, AnimationSubTrack, SubTrackMixer>(player, path, state);
+    }
 
-	void AnimationComponent::UnregTrack(const Ref<IAnimationTrack::IPlayer>& player, const String& path)
+    void AnimationComponent::UnregTrack(const Ref<IAnimationTrack::IPlayer>& player, const String& path)
     {
         for (auto& val : mValues)
         {
@@ -342,22 +342,22 @@ namespace o2
         target->SetValue(resValue);
     }
 
-	AnimationComponent::SubTrackMixer::~SubTrackMixer()
-	{}
+    AnimationComponent::SubTrackMixer::~SubTrackMixer()
+    {}
 
-	void AnimationComponent::SubTrackMixer::Update()
-	{
-	}
+    void AnimationComponent::SubTrackMixer::Update()
+    {
+    }
 
-	void AnimationComponent::SubTrackMixer::RemoveTrack(IAnimationTrack::IPlayer* track)
-	{
-		tracks.RemoveAll([&](const auto& x) { return x.second == track; });
-	}
+    void AnimationComponent::SubTrackMixer::RemoveTrack(IAnimationTrack::IPlayer* track)
+    {
+        tracks.RemoveAll([&](const auto& x) { return x.second == track; });
+    }
 
-	bool AnimationComponent::SubTrackMixer::IsEmpty() const
-	{
-		return tracks.IsEmpty();
-	}
+    bool AnimationComponent::SubTrackMixer::IsEmpty() const
+    {
+        return tracks.IsEmpty();
+    }
 
 }
 

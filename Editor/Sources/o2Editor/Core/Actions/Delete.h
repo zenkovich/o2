@@ -8,51 +8,51 @@ using namespace o2;
 
 namespace o2
 {
-	class SceneEditableObject;
+    class SceneEditableObject;
 }
 
 namespace Editor
 {
-	// ---------------------
-	// Delete objects action
-	// ---------------------
-	class DeleteAction: public IAction
-	{
-	public:
-		class ObjectInfo: public ISerializable
-		{
-		public:
-			DataDocument objectData;   // Serialized object @SERIALIZABLE
-			SceneUID     parentId;	   // Previous object parent @SERIALIZABLE
-			SceneUID     prevObjectId; // Previous object sibling @SERIALIZABLE
-			int          idx;          // Index in children @SERIALIZABLE
+    // ---------------------
+    // Delete objects action
+    // ---------------------
+    class DeleteAction: public IAction
+    {
+    public:
+        class ObjectInfo: public ISerializable
+        {
+        public:
+            DataDocument objectData;   // Serialized object @SERIALIZABLE
+            SceneUID     parentId;       // Previous object parent @SERIALIZABLE
+            SceneUID     prevObjectId; // Previous object sibling @SERIALIZABLE
+            int          idx;          // Index in children @SERIALIZABLE
 
-			bool operator==(const ObjectInfo& other) const;
+            bool operator==(const ObjectInfo& other) const;
 
-			SERIALIZABLE(ObjectInfo);
-		};
+            SERIALIZABLE(ObjectInfo);
+        };
 
-	public:
-		Vector<ObjectInfo> objectsInfos; // Deleted objects infos
+    public:
+        Vector<ObjectInfo> objectsInfos; // Deleted objects infos
 
-	public:
-		// Default constructor
-		DeleteAction();
+    public:
+        // Default constructor
+        DeleteAction();
 
-		// Constructor with objects, that will be deleted
-		DeleteAction(const Vector<Ref<SceneEditableObject>>& objects);
+        // Constructor with objects, that will be deleted
+        DeleteAction(const Vector<Ref<SceneEditableObject>>& objects);
 
-		// Returns name of action
-		String GetName() const override;
+        // Returns name of action
+        String GetName() const override;
 
-		// Deletes objects again
-		void Redo() override;
+        // Deletes objects again
+        void Redo() override;
 
-		// Reverting deleted objects
-		void Undo() override;
+        // Reverting deleted objects
+        void Undo() override;
 
-		SERIALIZABLE(DeleteAction);
-	};
+        SERIALIZABLE(DeleteAction);
+    };
 }
 // --- META ---
 

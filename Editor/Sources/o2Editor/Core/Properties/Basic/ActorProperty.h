@@ -8,115 +8,115 @@
 
 namespace o2
 {
-	class Actor;
-	class Text;
-	class Widget;
+    class Actor;
+    class Text;
+    class Widget;
 }
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(SceneHierarchyTree);
-	FORWARD_CLASS_REF(AssetsIconsScrollArea);
+    FORWARD_CLASS_REF(SceneHierarchyTree);
+    FORWARD_CLASS_REF(AssetsIconsScrollArea);
 
-	// ---------------------
-	// Editor actor property
-	// ---------------------
-	class ActorProperty: public TPropertyField<LinkRef<Actor>>, public KeyboardEventsListener, public DragDropArea
-	{
-	public:
-		// Default constructor
-		ActorProperty(RefCounter* refCounter);
+    // ---------------------
+    // Editor actor property
+    // ---------------------
+    class ActorProperty: public TPropertyField<LinkRef<Actor>>, public KeyboardEventsListener, public DragDropArea
+    {
+    public:
+        // Default constructor
+        ActorProperty(RefCounter* refCounter);
 
-		// Copy constructor
-		ActorProperty(RefCounter* refCounter, const ActorProperty& other);
+        // Copy constructor
+        ActorProperty(RefCounter* refCounter, const ActorProperty& other);
 
-		// Copy operator
-		ActorProperty& operator=(const ActorProperty& other);
+        // Copy operator
+        ActorProperty& operator=(const ActorProperty& other);
 
-		// Reverts value to prototype value
-		void Revert() override;
+        // Reverts value to prototype value
+        void Revert() override;
 
-		// Returns editing by this field type
-		const Type* GetValueType() const override;
+        // Returns editing by this field type
+        const Type* GetValueType() const override;
 
-		// Returns editing by this field type by static function, can't be changed during runtime
-		static const Type* GetValueTypeStatic();
+        // Returns editing by this field type by static function, can't be changed during runtime
+        static const Type* GetValueTypeStatic();
 
-		// Returns true if point is in this object
-		bool IsUnderPoint(const Vec2F& point) override;
+        // Returns true if point is in this object
+        bool IsUnderPoint(const Vec2F& point) override;
 
         SERIALIZABLE(ActorProperty);
         CLONEABLE_REF(ActorProperty);
 
-	protected:
-		const Type* mActorType = nullptr;  // Actor value type
+    protected:
+        const Type* mActorType = nullptr;  // Actor value type
 
-		Ref<Widget> mBox;      // Property edit box
-		Ref<Text>   mNameText; // Asset name text
+        Ref<Widget> mBox;      // Property edit box
+        Ref<Text>   mNameText; // Asset name text
 
-	protected:
-		// Called when type specialized during setting value proxy
-		void OnTypeSpecialized(const Type& type) override;
+    protected:
+        // Called when type specialized during setting value proxy
+        void OnTypeSpecialized(const Type& type) override;
 
-		// Returns value from proxy
-		LinkRef<Actor> GetProxy(const Ref<IAbstractValueProxy>& proxy) const override;
+        // Returns value from proxy
+        LinkRef<Actor> GetProxy(const Ref<IAbstractValueProxy>& proxy) const override;
 
-		// Sets value to proxy
-		void SetProxy(const Ref<IAbstractValueProxy>& proxy, const LinkRef<Actor>& value) override;
+        // Sets value to proxy
+        void SetProxy(const Ref<IAbstractValueProxy>& proxy, const LinkRef<Actor>& value) override;
 
-		// Checks is value can be reverted
-		bool IsValueRevertable() const override;
+        // Checks is value can be reverted
+        bool IsValueRevertable() const override;
 
-		// Updates value view
-		void UpdateValueView() override;
+        // Updates value view
+        void UpdateValueView() override;
 
-		// Called when cursor enters this object
-		void OnCursorEnter(const Input::Cursor& cursor) override;
+        // Called when cursor enters this object
+        void OnCursorEnter(const Input::Cursor& cursor) override;
 
-		// Called when cursor exits this object
-		void OnCursorExit(const Input::Cursor& cursor) override;
+        // Called when cursor exits this object
+        void OnCursorExit(const Input::Cursor& cursor) override;
 
-		// Called when cursor pressed on this
-		void OnCursorPressed(const Input::Cursor& cursor) override;
+        // Called when cursor pressed on this
+        void OnCursorPressed(const Input::Cursor& cursor) override;
 
-		// Called when key was pressed
-		void OnKeyPressed(const Input::Key& key) override;
+        // Called when key was pressed
+        void OnKeyPressed(const Input::Key& key) override;
 
-		// Called when some selectable listeners was dropped to this
-		void OnDropped(const Ref<ISelectableDragableObjectsGroup>& group) override;
+        // Called when some selectable listeners was dropped to this
+        void OnDropped(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
-		// Called when some drag listeners was entered to this area
-		void OnDragEnter(const Ref<ISelectableDragableObjectsGroup>& group) override;
+        // Called when some drag listeners was entered to this area
+        void OnDragEnter(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
-		// Called when some drag listeners was exited from this area
-		void OnDragExit(const Ref<ISelectableDragableObjectsGroup>& group) override;
+        // Called when some drag listeners was exited from this area
+        void OnDragExit(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
-		// Searches controls widgets and layers and initializes them
-		void InitializeControls();
+        // Searches controls widgets and layers and initializes them
+        void InitializeControls();
 
-		// Reverts target value to source
-		void RevertoToPrototype(const Ref<IAbstractValueProxy>& target, const Ref<IAbstractValueProxy>& source, IObject* targetOwner);
+        // Reverts target value to source
+        void RevertoToPrototype(const Ref<IAbstractValueProxy>& target, const Ref<IAbstractValueProxy>& source, IObject* targetOwner);
 
-		// Called when actors tree nodes was dragged and dropped to this
-		void OnDroppedFromActorsTree(const Ref<SceneHierarchyTree>& actorsTree);
+        // Called when actors tree nodes was dragged and dropped to this
+        void OnDroppedFromActorsTree(const Ref<SceneHierarchyTree>& actorsTree);
 
-		// Called when actors tree nodes was dragged and entered to this
-		void OnDragEnterFromActorsTree(const Ref<SceneHierarchyTree>& actorsTree);
+        // Called when actors tree nodes was dragged and entered to this
+        void OnDragEnterFromActorsTree(const Ref<SceneHierarchyTree>& actorsTree);
 
-		// Called when actors tree nodes was dragged and exited from this
-		void OnDragExitFromActorsTree(const Ref<SceneHierarchyTree>& actorsTree);
+        // Called when actors tree nodes was dragged and exited from this
+        void OnDragExitFromActorsTree(const Ref<SceneHierarchyTree>& actorsTree);
 
-		// Called when assets scroll icons was dragged and dropped to this
-		void OnDroppedFromAssetsScroll(const Ref<AssetsIconsScrollArea>& assetsIconsScroll);
+        // Called when assets scroll icons was dragged and dropped to this
+        void OnDroppedFromAssetsScroll(const Ref<AssetsIconsScrollArea>& assetsIconsScroll);
 
-		// Called when assets scroll icons was dragged and entered to this
-		void OnDragEnterFromAssetsScroll(const Ref<AssetsIconsScrollArea>& assetsIconsScroll);
+        // Called when assets scroll icons was dragged and entered to this
+        void OnDragEnterFromAssetsScroll(const Ref<AssetsIconsScrollArea>& assetsIconsScroll);
 
-		// Called when assets scroll icons was dragged and exited from this
-		void OnDragExitFromAssetsScroll(const Ref<AssetsIconsScrollArea>& assetsIconsScroll);
+        // Called when assets scroll icons was dragged and exited from this
+        void OnDragExitFromAssetsScroll(const Ref<AssetsIconsScrollArea>& assetsIconsScroll);
 
         REF_COUNTERABLE_IMPL(TPropertyField<LinkRef<Actor>>);
-	};
+    };
 }
 // --- META ---
 

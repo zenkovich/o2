@@ -181,8 +181,8 @@ namespace o2
             return;
 
         if (mParentRegistry)
-		{
-			auto parentRegistry = mParentRegistry.Lock();
+        {
+            auto parentRegistry = mParentRegistry.Lock();
             parentRegistry->mChildrenInheritedDepth.Remove(Ref(this));
             parentRegistry->mChildrenInheritedDepth.Add(Ref(this));
         }

@@ -9,12 +9,12 @@
 
 namespace Editor
 {
-	IEditorWindow::IEditorWindow():
-		IEditorWindow(nullptr)
-	{}
+    IEditorWindow::IEditorWindow():
+        IEditorWindow(nullptr)
+    {}
 
     IEditorWindow::IEditorWindow(RefCounter* refCounter):
-		RefCounterable(refCounter)
+        RefCounterable(refCounter)
     {
         mWindow = o2UI.CreateWidget<DockableWindow>();
         mWindow->layout->size = Vec2F(200, 200);
@@ -25,49 +25,49 @@ namespace Editor
     }
 
     IEditorWindow::IEditorWindow(RefCounter* refCounter, const IEditorWindow& other) :
-		RefCounterable(refCounter), mWindow(other.mWindow->CloneAsRef<DockableWindow>())
+        RefCounterable(refCounter), mWindow(other.mWindow->CloneAsRef<DockableWindow>())
     {
         if (mWindow)
             EditorUIRoot.AddWidget(mWindow);
     }
 
     IEditorWindow::IEditorWindow(const IEditorWindow& other):
-		IEditorWindow(nullptr, other)
+        IEditorWindow(nullptr, other)
     {}
 
     IEditorWindow::~IEditorWindow()
-	{}
+    {}
 
-	void IEditorWindow::Show()
-	{
-		SetVisible(true);
-	}
+    void IEditorWindow::Show()
+    {
+        SetVisible(true);
+    }
 
-	void IEditorWindow::Hide()
-	{
-		SetVisible(false);
-	}
+    void IEditorWindow::Hide()
+    {
+        SetVisible(false);
+    }
 
-	const Ref<DockableWindow>& IEditorWindow::GetWindow() const
-	{
-		return mWindow;
-	}
+    const Ref<DockableWindow>& IEditorWindow::GetWindow() const
+    {
+        return mWindow;
+    }
 
-	void IEditorWindow::SetVisible(bool visible)
-	{
-		mWindow->SetEnabled(visible);
-	}
+    void IEditorWindow::SetVisible(bool visible)
+    {
+        mWindow->SetEnabled(visible);
+    }
 
-	void IEditorWindow::Update(float dt)
-	{}
+    void IEditorWindow::Update(float dt)
+    {}
 
-	void IEditorWindow::Draw()
-	{}
+    void IEditorWindow::Draw()
+    {}
 
-	bool IEditorWindow::IsVisible()
-	{
-		return mWindow->IsEnabled();
-	}
+    bool IEditorWindow::IsVisible()
+    {
+        return mWindow->IsEnabled();
+    }
 
 }
 // --- META ---

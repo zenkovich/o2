@@ -131,9 +131,9 @@ namespace o2
 
     protected:
         Ref<Text>   mTextDrawable;                    // Text layer drawable. Getting from layer "text"
-		HorOverflow mHorOverflow = HorOverflow::None; // Text horizontal overflow logic @SERIALIZABLE
-		VerOverflow mVerOverflow = VerOverflow::None; // Text vertical overflow logic @SERIALIZABLE
-		Vec2F       mExpandBorder;                    // Expand overflow border size @SERIALIZABLE
+        HorOverflow mHorOverflow = HorOverflow::None; // Text horizontal overflow logic @SERIALIZABLE
+        VerOverflow mVerOverflow = VerOverflow::None; // Text vertical overflow logic @SERIALIZABLE
+        Vec2F       mExpandBorder;                    // Expand overflow border size @SERIALIZABLE
 
     protected:
         // Called when layer added and updates drawing sequence

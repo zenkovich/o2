@@ -9,113 +9,113 @@ using namespace o2;
 
 namespace o2
 {
-	class Widget;
+    class Widget;
 }
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(CurvePreview);
+    FORWARD_CLASS_REF(CurvePreview);
 
-	// ------------------------------
-	// Editor curve property edit box
-	// ------------------------------
-	class ColorGradientProperty: public TPropertyField<Ref<ColorGradient>>
-	{
-	public:
-		// Default constructor
-		ColorGradientProperty(RefCounter* refCounter);
+    // ------------------------------
+    // Editor curve property edit box
+    // ------------------------------
+    class ColorGradientProperty: public TPropertyField<Ref<ColorGradient>>
+    {
+    public:
+        // Default constructor
+        ColorGradientProperty(RefCounter* refCounter);
 
-		// Copy constructor
-		ColorGradientProperty(RefCounter* refCounter, const ColorGradientProperty& other);
+        // Copy constructor
+        ColorGradientProperty(RefCounter* refCounter, const ColorGradientProperty& other);
 
-		// Copy operator
-		ColorGradientProperty& operator=(const ColorGradientProperty& other);
+        // Copy operator
+        ColorGradientProperty& operator=(const ColorGradientProperty& other);
 
-		SERIALIZABLE(ColorGradientProperty);
-		CLONEABLE_REF(ColorGradientProperty);
+        SERIALIZABLE(ColorGradientProperty);
+        CLONEABLE_REF(ColorGradientProperty);
 
-	public:
-		// ---------------------------------------------------------------
-		// Gradient preview drawable, used as layer of property box widget
-		// ---------------------------------------------------------------
-		class GradientPreviewDrawable : public IRectDrawable
-		{
-		public:
-			// Sets gradient and updates mesh
-			void SetGradient(const Ref<ColorGradient>& gradient);
+    public:
+        // ---------------------------------------------------------------
+        // Gradient preview drawable, used as layer of property box widget
+        // ---------------------------------------------------------------
+        class GradientPreviewDrawable : public IRectDrawable
+        {
+        public:
+            // Sets gradient and updates mesh
+            void SetGradient(const Ref<ColorGradient>& gradient);
 
-			// Draws gradient
-			void Draw() override;
+            // Draws gradient
+            void Draw() override;
 
-			SERIALIZABLE(GradientPreviewDrawable);
-			CLONEABLE_REF(GradientPreviewDrawable);
+            SERIALIZABLE(GradientPreviewDrawable);
+            CLONEABLE_REF(GradientPreviewDrawable);
 
-		protected:
-			Ref<ColorGradient> mGradient;
-			Mesh               mMesh;
+        protected:
+            Ref<ColorGradient> mGradient;
+            Mesh               mMesh;
 
-		protected:
-			// Called when rectangle changed, updates gradient mesh
-			void BasisChanged() override;
+        protected:
+            // Called when rectangle changed, updates gradient mesh
+            void BasisChanged() override;
 
-			// Updates gradient mesh
-			void UpdateMesh();
-		};
+            // Updates gradient mesh
+            void UpdateMesh();
+        };
 
-	public:
-		enum class HandleType { Left, Middle, Right };
+    public:
+        enum class HandleType { Left, Middle, Right };
 
-	protected:
-		Ref<Widget>                  mBox;     // Gradient edit box 
-		Ref<GradientPreviewDrawable> mPreview; // Gradient preview drawable
+    protected:
+        Ref<Widget>                  mBox;     // Gradient edit box 
+        Ref<GradientPreviewDrawable> mPreview; // Gradient preview drawable
 
-		Vector<Pair<UInt64, Ref<WidgetDragHandle>>> mHandles; // List of handles, each for keys
+        Vector<Pair<UInt64, Ref<WidgetDragHandle>>> mHandles; // List of handles, each for keys
 
-		Ref<CursorEventsArea> mBoxArea; // Cursor events area for box
+        Ref<CursorEventsArea> mBoxArea; // Cursor events area for box
 
-		Ref<ContextMenu> mBoxContextMenu;    // Context menu for box
-		Ref<ContextMenu> mHandleContextMenu; // Context menu for handles
+        Ref<ContextMenu> mBoxContextMenu;    // Context menu for box
+        Ref<ContextMenu> mHandleContextMenu; // Context menu for handles
 
-		UInt64 mSelectedHandleUID = 0; // Selected handle UID
-		Input::Cursor mBoxPressedCursor; // Cursor when box was pressed
+        UInt64 mSelectedHandleUID = 0; // Selected handle UID
+        Input::Cursor mBoxPressedCursor; // Cursor when box was pressed
 
-	protected:
-		// Searches controls widgets and layers and initializes them
-		void InitializeControls();
+    protected:
+        // Searches controls widgets and layers and initializes them
+        void InitializeControls();
 
-		// Called when common curve changed in curve edit dialog, tells to drawing content
-		void OnValueChanged();
+        // Called when common curve changed in curve edit dialog, tells to drawing content
+        void OnValueChanged();
 
-		// Updates value view
-		void UpdateValueView() override;
+        // Updates value view
+        void UpdateValueView() override;
 
-		// Creates new handle
-		Ref<WidgetDragHandle> CreateHandle(HandleType type);
+        // Creates new handle
+        Ref<WidgetDragHandle> CreateHandle(HandleType type);
 
-		// Finds selected handle UID
-		UInt64 FindSelectedHandle();
+        // Finds selected handle UID
+        UInt64 FindSelectedHandle();
 
-		// Called when handle changed position and updates key position
-		void OnHandleChangedPos(const Vec2F& pos, UInt64 id);
+        // Called when handle changed position and updates key position
+        void OnHandleChangedPos(const Vec2F& pos, UInt64 id);
 
-		// Called when handle double clicked and opens color dialog
-		void OpenKeyColorPick(UInt64 id);
+        // Called when handle double clicked and opens color dialog
+        void OpenKeyColorPick(UInt64 id);
 
-		// Called when box double clicked and adds new key
-		void AddNewKey(const Input::Cursor& cursor);
+        // Called when box double clicked and adds new key
+        void AddNewKey(const Input::Cursor& cursor);
 
-		// Opens box context menu
-		void OpenBoxContextMenu(const Input::Cursor& cursor);
+        // Opens box context menu
+        void OpenBoxContextMenu(const Input::Cursor& cursor);
 
-		// Opens handle context menu
-		void OpenKeyContextMenu(UInt64 id, const Input::Cursor& cursor);
+        // Opens handle context menu
+        void OpenKeyContextMenu(UInt64 id, const Input::Cursor& cursor);
 
-		// Deletes key by UID
-		void DeleteKey(UInt64 keyUid);
+        // Deletes key by UID
+        void DeleteKey(UInt64 keyUid);
 
-		// Creates handles for all keys
-		void InitializeHandles();
-	};
+        // Creates handles for all keys
+        void InitializeHandles();
+    };
 }
 // --- META ---
 

@@ -4,49 +4,49 @@
 
 namespace o2
 {
-	class PopupWidget;
+    class PopupWidget;
 }
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(LayersPopup);
-	FORWARD_CLASS_REF(SceneEditScreen);
+    FORWARD_CLASS_REF(LayersPopup);
+    FORWARD_CLASS_REF(SceneEditScreen);
 
-	// --------------------
-	// Scene editing window
-	// --------------------
-	class SceneWindow: public IEditorWindow
-	{
-	public:
-		IOBJECT(SceneWindow);
+    // --------------------
+    // Scene editing window
+    // --------------------
+    class SceneWindow: public IEditorWindow
+    {
+    public:
+        IOBJECT(SceneWindow);
 
-	protected:
-		Ref<SceneEditScreen> mEditWidget; // Scene editing widget
+    protected:
+        Ref<SceneEditScreen> mEditWidget; // Scene editing widget
 
-		Ref<Widget> mUpPanel; // Upper panel
+        Ref<Widget> mUpPanel; // Upper panel
 
-		Ref<Button>      mLayersButton; // Layers button
-		Ref<LayersPopup> mLayersPopup;  // Layers popup
+        Ref<Button>      mLayersButton; // Layers button
+        Ref<LayersPopup> mLayersPopup;  // Layers popup
 
-		Ref<PopupWidget> mGizomsView; // Gizoms view
+        Ref<PopupWidget> mGizomsView; // Gizoms view
 
-	public:
-		// Default constructor
-		SceneWindow();
+    public:
+        // Default constructor
+        SceneWindow();
 
-		// Copy constructor
-		SceneWindow(const SceneWindow& other);
+        // Copy constructor
+        SceneWindow(const SceneWindow& other);
 
-		// Destructor
-		~SceneWindow();
+        // Destructor
+        ~SceneWindow();
 
-	protected:
-		// Initializes window and controls
-		void InitializeWindow();
+    protected:
+        // Initializes window and controls
+        void InitializeWindow();
 
-		// Called after that all windows was created
-		void PostInitializeWindow() override;
-	};
+        // Called after that all windows was created
+        void PostInitializeWindow() override;
+    };
 }
 // --- META ---
 

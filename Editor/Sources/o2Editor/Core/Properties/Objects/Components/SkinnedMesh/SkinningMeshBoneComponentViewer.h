@@ -9,48 +9,48 @@ using namespace o2;
 
 namespace o2
 {
-	class Spoiler;
-	class Button;
+    class Spoiler;
+    class Button;
 }
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(SceneDragHandle);
+    FORWARD_CLASS_REF(SceneDragHandle);
 
-	// ------------------------------
-	// Skinning Mesh component viewer
-	// ------------------------------
-	class SkinningMeshBoneComponentViewer: public TObjectPropertiesViewer<SkinningMeshBoneComponent>
-	{
-	public:
-		// Default constructor
-		SkinningMeshBoneComponentViewer();
+    // ------------------------------
+    // Skinning Mesh component viewer
+    // ------------------------------
+    class SkinningMeshBoneComponentViewer: public TObjectPropertiesViewer<SkinningMeshBoneComponent>
+    {
+    public:
+        // Default constructor
+        SkinningMeshBoneComponentViewer();
 
-		// Destructor
-		~SkinningMeshBoneComponentViewer();
+        // Destructor
+        ~SkinningMeshBoneComponentViewer();
 
-		// Copy operator
-		SkinningMeshBoneComponentViewer& operator=(const SkinningMeshBoneComponentViewer& other);
+        // Copy operator
+        SkinningMeshBoneComponentViewer& operator=(const SkinningMeshBoneComponentViewer& other);
 
-		IOBJECT(SkinningMeshBoneComponentViewer);
+        IOBJECT(SkinningMeshBoneComponentViewer);
 
-	protected:
-		Ref<MeshWeightsTool>         mWeightsTool;       // Mesh weights tool
-		Ref<SkinningMeshEditorLayer> mFrameTetxureLayer; // Frame texture drawing layer
+    protected:
+        Ref<MeshWeightsTool>         mWeightsTool;       // Mesh weights tool
+        Ref<SkinningMeshEditorLayer> mFrameTetxureLayer; // Frame texture drawing layer
 
-	protected:
-		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
-		void RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
+    protected:
+        // Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
+        void RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 
-		// Called when viewer is refreshed
-		void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
+        // Called when viewer is refreshed
+        void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 
-		// Enable viewer event function
-		void OnPropertiesEnabled() override;
+        // Enable viewer event function
+        void OnPropertiesEnabled() override;
 
-		// Disable viewer event function
-		void OnPropertiesDisabled() override;
-	};
+        // Disable viewer event function
+        void OnPropertiesDisabled() override;
+    };
 }
 // --- META ---
 

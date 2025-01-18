@@ -13,58 +13,58 @@ namespace o2
 {
     FORWARD_CLASS_REF(AnimationComponent);
 
-	// -----------------------------------------------------
-	// Animation state interface. Can be updated and blended
-	// -----------------------------------------------------
+    // -----------------------------------------------------
+    // Animation state interface. Can be updated and blended
+    // -----------------------------------------------------
     class IAnimationState: public ISerializable, public RefCounterable, public ICloneableRef
     {
-	public:
-		PROPERTIES(IAnimationState);
-		PROPERTY(float, weight, SetWeight, GetWeight); // State weight
+    public:
+        PROPERTIES(IAnimationState);
+        PROPERTY(float, weight, SetWeight, GetWeight); // State weight
 
     public:
-		String name;            // State name @SERIALIZABLE
-		bool   autoPlay = true; // True, if state should be played automatically @SERIALIZABLE
+        String name;            // State name @SERIALIZABLE
+        bool   autoPlay = true; // True, if state should be played automatically @SERIALIZABLE
 
-	public:
-		// Default constructor
+    public:
+        // Default constructor
         IAnimationState() = default;
 
-		// Constructor with name
+        // Constructor with name
         IAnimationState(const String& name);
 
-		// Updates state
+        // Updates state
         virtual void Update(float dt);
 
-		// Returns player
+        // Returns player
         virtual IAnimation& GetPlayer();
 
-		// Sets state weight (0...1) of blending
-		virtual void SetWeight(float weight);
+        // Sets state weight (0...1) of blending
+        virtual void SetWeight(float weight);
 
-		// Returns state weight (0...1) of blending
-		virtual float GetWeight() const;
+        // Returns state weight (0...1) of blending
+        virtual float GetWeight() const;
 
-		// Sets looped state
+        // Sets looped state
         virtual void SetLooped(bool looped);
 
-		// Returns looped state
-		virtual bool IsLooped() const;
+        // Returns looped state
+        virtual bool IsLooped() const;
 
-		SERIALIZABLE(IAnimationState);
-		CLONEABLE_REF(IAnimationState);
+        SERIALIZABLE(IAnimationState);
+        CLONEABLE_REF(IAnimationState);
 
-	protected:
-		WeakRef<AnimationComponent> mOwner; // Animation state owner component
+    protected:
+        WeakRef<AnimationComponent> mOwner; // Animation state owner component
 
-	protected:
-		// Registers animation in state
-		virtual void Register(const Ref<AnimationComponent>& owner);
+    protected:
+        // Registers animation in state
+        virtual void Register(const Ref<AnimationComponent>& owner);
 
-		// Removes animation state from component
-		virtual void Unregister();
+        // Removes animation state from component
+        virtual void Unregister();
 
-		friend class AnimationComponent;
+        friend class AnimationComponent;
     };
 
     // ---------------
@@ -81,25 +81,25 @@ namespace o2
         AnimationState() = default;
 
         // Constructor with name
-		AnimationState(const String& name);
+        AnimationState(const String& name);
 
-		// Updates state
-		void Update(float dt) override;
+        // Updates state
+        void Update(float dt) override;
 
-		// Returns player
-		IAnimation& GetPlayer() override;
+        // Returns player
+        IAnimation& GetPlayer() override;
 
         // Sets state weight
         void SetWeight(float weight) override;
 
         // Returns state weight
-		float GetWeight() const override;
+        float GetWeight() const override;
 
-		// Sets looped state
-		void SetLooped(bool looped) override;
+        // Sets looped state
+        void SetLooped(bool looped) override;
 
-		// Returns looped state
-		bool IsLooped() const override;
+        // Returns looped state
+        bool IsLooped() const override;
 
         // Sets animation
         void SetAnimation(const AssetRef<AnimationAsset>& animationAsset);
@@ -116,11 +116,11 @@ namespace o2
         float mWeight = 1.0f; // State weight @SERIALIZABLE @EDITOR_PROPERTY
 
     protected:
-		// Registers animation in state
-		void Register(const Ref<AnimationComponent>& owner) override;
+        // Registers animation in state
+        void Register(const Ref<AnimationComponent>& owner) override;
 
-		// Removes animation state from component
-		void Unregister() override;
+        // Removes animation state from component
+        void Unregister() override;
 
         // Called when animation changed from editor
         void OnAnimationChanged();
@@ -140,7 +140,7 @@ namespace o2
         template<typename _type>
         friend class AnimationTrack;
 
-		friend class AnimationSubTrack;
+        friend class AnimationSubTrack;
     };
 }
 // --- META ---

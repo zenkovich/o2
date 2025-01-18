@@ -196,12 +196,12 @@ namespace o2
         return res;
     }
 
-	Ref<RefCounterable> Type::CreateSampleRef() const
-	{
+    Ref<RefCounterable> Type::CreateSampleRef() const
+    {
         return nullptr;
-	}
+    }
 
-	void* Type::GetFieldPtr(void* object, const String& path, const FieldInfo*& fieldInfo) const
+    void* Type::GetFieldPtr(void* object, const String& path, const FieldInfo*& fieldInfo) const
     {
         int delPos = path.Find("/");
         String pathPart = path.SubStr(0, delPos);
@@ -209,8 +209,8 @@ namespace o2
         for (auto& field : mFields)
         {
             if (field.mName == pathPart)
-			{
-				fieldInfo = &field;
+            {
+                fieldInfo = &field;
 
                 if (delPos == -1)
                 {

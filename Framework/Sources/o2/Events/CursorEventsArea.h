@@ -61,13 +61,13 @@ namespace o2
         void OnCursorDblClicked(const Input::Cursor& cursor) override;
 
         // Called when cursor released outside this(only when cursor pressed this at previous time)
-		void OnCursorReleasedOutside(const Input::Cursor& cursor) override;
+        void OnCursorReleasedOutside(const Input::Cursor& cursor) override;
 
-		// Called when right mouse button was pressed on this
-		void OnCursorRightMousePressed(const Input::Cursor& cursor) override;
+        // Called when right mouse button was pressed on this
+        void OnCursorRightMousePressed(const Input::Cursor& cursor) override;
 
-		// Called when right mouse button was released (only when right mouse button pressed this at previous time)
-		void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
+        // Called when right mouse button was released (only when right mouse button pressed this at previous time)
+        void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
 
         REF_COUNTERABLE_IMPL(RefCounterable);
     };

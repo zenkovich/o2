@@ -5,16 +5,16 @@
 namespace o2
 {
     // -----------------------------------------------------
-	// Animation sub track. Controls nested animation tracks
+    // Animation sub track. Controls nested animation tracks
     // -----------------------------------------------------
     class AnimationSubTrack: public IAnimationTrack
     {
     public:
         PROPERTIES(AnimationSubTrack);
-		PROPERTY(float, beginTime, SetBeginTime, GetBeginTime);                               // Begin time
-		GETTER(float, subTrackDuration, GetSubTrackDuration)                                  // Sub track duration    
-		PROPERTY(float, subTrackBeginOffset, SetSubTrackBeginOffset, GetSubTrackBeginOffset); // Sub track begin offset
-		PROPERTY(float, subTrackEndOffset, SetSubTrackEndOffset, GetSubTrackEndOffset);       // Sub track end offset
+        PROPERTY(float, beginTime, SetBeginTime, GetBeginTime);                               // Begin time
+        GETTER(float, subTrackDuration, GetSubTrackDuration)                                  // Sub track duration    
+        PROPERTY(float, subTrackBeginOffset, SetSubTrackBeginOffset, GetSubTrackBeginOffset); // Sub track begin offset
+        PROPERTY(float, subTrackEndOffset, SetSubTrackEndOffset, GetSubTrackEndOffset);       // Sub track end offset
 
     public:
         // Default constructor
@@ -32,26 +32,26 @@ namespace o2
         // Creates track-type specific player
         Ref<IPlayer> CreatePlayer() const override;
 
-		// Sets track begin time
+        // Sets track begin time
         void SetBeginTime(float beginTime);
 
-		// Returns track begin time
-		float GetBeginTime() const;
+        // Returns track begin time
+        float GetBeginTime() const;
 
-		// Returns sub track duration
-		float GetSubTrackDuration() const;
+        // Returns sub track duration
+        float GetSubTrackDuration() const;
 
-		// Sets sub track begin offset
-		void SetSubTrackBeginOffset(float offset);
+        // Sets sub track begin offset
+        void SetSubTrackBeginOffset(float offset);
 
-		// Returns sub track begin offset
-		float GetSubTrackBeginOffset() const;
+        // Returns sub track begin offset
+        float GetSubTrackBeginOffset() const;
 
-		// Sets sub track end offset
-		void SetSubTrackEndOffset(float offset);
+        // Sets sub track end offset
+        void SetSubTrackEndOffset(float offset);
 
-		// Returns sub track end offset
-		float GetSubTrackEndOffset() const;
+        // Returns sub track end offset
+        float GetSubTrackEndOffset() const;
 
         SERIALIZABLE(AnimationSubTrack);
         CLONEABLE_REF(AnimationSubTrack);
@@ -93,12 +93,12 @@ namespace o2
             void SetTargetVoid(void* target, const Function<void()>& changeEvent) override;
 
             // Sets target property by void pointer
-			void SetTargetProxy(const Ref<IAbstractValueProxy>& targetProxy) override;
+            void SetTargetProxy(const Ref<IAbstractValueProxy>& targetProxy) override;
 
             // Sets animation track
-			void SetTrack(const Ref<IAnimationTrack>& track) override;
+            void SetTrack(const Ref<IAnimationTrack>& track) override;
 
-			// Adjusts target type to correct one. Casts to IAnimation
+            // Adjusts target type to correct one. Casts to IAnimation
             void* AdjustTargetType(void* target, const Type& type) override;
 
             // Returns animation track
@@ -121,15 +121,15 @@ namespace o2
             // Registering this in value mixer
             void RegMixer(const Ref<AnimationState>& state, const String& path) override;
 
-			// CHecks and updates sub track time
-			void UpdateSubTrackDuration();
+            // CHecks and updates sub track time
+            void UpdateSubTrackDuration();
         };
 
     protected:
-		float mSubTrackBeginTime = 0.0f;   // Begin sub tracktime @SERIALIZABLE
-		float mSubTrackDuration = 1.0f;    // Sub track duration @SERIALIZABLE
-		float mSubTrackBeginOffset = 0.0f; // Sub track begin offset @SERIALIZABLE
-		float mSubTrackEndOffset = 0.0f;   // Sub track end offset @SERIALIZABLE
+        float mSubTrackBeginTime = 0.0f;   // Begin sub tracktime @SERIALIZABLE
+        float mSubTrackDuration = 1.0f;    // Sub track duration @SERIALIZABLE
+        float mSubTrackBeginOffset = 0.0f; // Sub track begin offset @SERIALIZABLE
+        float mSubTrackEndOffset = 0.0f;   // Sub track end offset @SERIALIZABLE
 
     protected:
         // Completion deserialization callback

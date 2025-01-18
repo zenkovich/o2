@@ -8,34 +8,34 @@
 
 namespace o2
 {
-	class Button;
-	class EditBox;
-	class Sprite;
-	class Text;
-	class Window;
+    class Button;
+    class EditBox;
+    class Sprite;
+    class Text;
+    class Window;
 }
 
 using namespace o2;
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(MemoryAnalyzeTree);
+    FORWARD_CLASS_REF(MemoryAnalyzeTree);
 
-	class MemoryAnalyzerWindow : public Singleton<MemoryAnalyzerWindow>
-	{
-	public:
+    class MemoryAnalyzerWindow : public Singleton<MemoryAnalyzerWindow>
+    {
+    public:
         MemoryAnalyzerWindow(RefCounter* refCounter);
-		~MemoryAnalyzerWindow();
+        ~MemoryAnalyzerWindow();
 
-		static void Show(MemoryAnalyzer::MemoryNode* data);
+        static void Show(MemoryAnalyzer::MemoryNode* data);
 
-	private:
-		MemoryAnalyzer::MemoryNode* mData = nullptr;
-		MemoryAnalyzer::MemoryNode* mSelected = nullptr;
+    private:
+        MemoryAnalyzer::MemoryNode* mData = nullptr;
+        MemoryAnalyzer::MemoryNode* mSelected = nullptr;
 
         Ref<o2::Window> mWindow;
 
-		Ref<Widget>            mTreeWidget;
+        Ref<Widget>            mTreeWidget;
         Ref<EditBox>           mFilter;
         Ref<MemoryAnalyzeTree> mMemoryTree;
 
@@ -44,62 +44,62 @@ namespace Editor
         Ref<Label>          mAddressLabel;
         Ref<Label>          mSizeLabel;
         Ref<Button>         mReverseTreeButton;
-		Ref<EditBox>        mStackText;
-		Ref<VerticalLayout> mInspectorContainer;
+        Ref<EditBox>        mStackText;
+        Ref<VerticalLayout> mInspectorContainer;
 
-		Ref<IObjectPropertiesViewer> mObjectPropertiesViewer;
+        Ref<IObjectPropertiesViewer> mObjectPropertiesViewer;
 
         float mTreeViewWidth = 800.0f;    // Width of tree area. Changed by dragable separator
         float mMinTreeViewWidth = 250.0f; // Minimal tree width
 
         Ref<WidgetDragHandle> mTreeSeparatorHandle; // Tree separator handle. When it moves, it changes size of all dependent widgets
 
-	private:
-		// Initializes window and controls
+    private:
+        // Initializes window and controls
         void InitializeWindow();
 
-		// Initialized inspector widgets
-		void InitializeInspector();
+        // Initialized inspector widgets
+        void InitializeInspector();
 
-		// Initializes tree widget
+        // Initializes tree widget
         void InitializeTree();
 
         // Initializes separator handle view and events
         void InitializeSeparatorHandle();
 
-		// Updates inspector by selected node
-		void UpdateInspector(MemoryAnalyzer::MemoryNode* node);
+        // Updates inspector by selected node
+        void UpdateInspector(MemoryAnalyzer::MemoryNode* node);
 
-		// Called when tree reverse button pressed
-		void OnReversePressed();
-	};
+        // Called when tree reverse button pressed
+        void OnReversePressed();
+    };
 
-	class MemoryAnalyzeTree : public Tree
-	{
-	public:
-		Function<void(MemoryAnalyzer::MemoryNode* data)> onSelectedNode;
+    class MemoryAnalyzeTree : public Tree
+    {
+    public:
+        Function<void(MemoryAnalyzer::MemoryNode* data)> onSelectedNode;
 
-	public:
-		// Default constructor
+    public:
+        // Default constructor
         MemoryAnalyzeTree(RefCounter* refCounter);
 
-		// Copy-constructor
+        // Copy-constructor
         MemoryAnalyzeTree(RefCounter* refCounter, const MemoryAnalyzeTree& other);
 
         // Copy-constructor
         MemoryAnalyzeTree(const MemoryAnalyzeTree& other);
 
-		// Copy operator
-		MemoryAnalyzeTree& operator=(const MemoryAnalyzeTree& other);
+        // Copy operator
+        MemoryAnalyzeTree& operator=(const MemoryAnalyzeTree& other);
 
-		// Initializes data tree
-		void Initialize(MemoryAnalyzer::MemoryNode* data, bool reversed);
+        // Initializes data tree
+        void Initialize(MemoryAnalyzer::MemoryNode* data, bool reversed);
 
-		// Returns true if tree is reversed
-		bool IsTreeReversed() const;
+        // Returns true if tree is reversed
+        bool IsTreeReversed() const;
 
-		// Returns create menu category in editor
-		static String GetCreateMenuCategory();
+        // Returns create menu category in editor
+        static String GetCreateMenuCategory();
 
         SERIALIZABLE(MemoryAnalyzeTree);
         CLONEABLE_REF(MemoryAnalyzeTree);
@@ -107,52 +107,52 @@ namespace Editor
     private:
         WString mFilterStr; // Filtering string
 
-		MemoryAnalyzer::MemoryNode* mRoot = nullptr; // Root data node
+        MemoryAnalyzer::MemoryNode* mRoot = nullptr; // Root data node
 
-		bool mReversed = false; // Reversed tree view, from children to parents
+        bool mReversed = false; // Reversed tree view, from children to parents
 
-	private:
-		// Updates visible nodes (calculates range and initializes nodes), enables editor mode
-		void UpdateVisibleNodes() override;
+    private:
+        // Updates visible nodes (calculates range and initializes nodes), enables editor mode
+        void UpdateVisibleNodes() override;
 
-		// Gets tree node from pool or creates new, enables editor mode
-		Ref<TreeNode> CreateTreeNodeWidget() override;
+        // Gets tree node from pool or creates new, enables editor mode
+        Ref<TreeNode> CreateTreeNodeWidget() override;
 
-		// Returns object's parent
-		void* GetObjectParent(void* object) override;
+        // Returns object's parent
+        void* GetObjectParent(void* object) override;
 
-		// Returns object's children
-		Vector<void*> GetObjectChilds(void* object) override;
+        // Returns object's children
+        Vector<void*> GetObjectChilds(void* object) override;
 
-		// Returns debugging string for object
-		String GetObjectDebug(void* object) override;
+        // Returns debugging string for object
+        String GetObjectDebug(void* object) override;
 
-		// Sets nodeWidget data by object
-		void FillNodeDataByObject(const Ref<TreeNode>& nodeWidget, void* object) override;
+        // Sets nodeWidget data by object
+        void FillNodeDataByObject(const Ref<TreeNode>& nodeWidget, void* object) override;
 
-		// Called when list of selected objects was changed
-		void OnNodesSelectionChanged(Vector<void*> objects) override;
+        // Called when list of selected objects was changed
+        void OnNodesSelectionChanged(Vector<void*> objects) override;
 
-		friend class MemoryAnalyzeTreeNode;
-	};
+        friend class MemoryAnalyzeTreeNode;
+    };
 
-	class MemoryAnalyzeTreeNode : public TreeNode
-	{
-	public:
-		// Default constructor
+    class MemoryAnalyzeTreeNode : public TreeNode
+    {
+    public:
+        // Default constructor
         MemoryAnalyzeTreeNode(RefCounter* refCounter);
 
-		// Copy-constructor
+        // Copy-constructor
         MemoryAnalyzeTreeNode(RefCounter* refCounter, const MemoryAnalyzeTreeNode& other);
 
-		// Copy operator
-		MemoryAnalyzeTreeNode& operator=(const MemoryAnalyzeTreeNode& other);
+        // Copy operator
+        MemoryAnalyzeTreeNode& operator=(const MemoryAnalyzeTreeNode& other);
 
-		// Initializes node by data
-		void Setup(MemoryAnalyzer::MemoryNode* data, const Ref<MemoryAnalyzeTree>& tree);
+        // Initializes node by data
+        void Setup(MemoryAnalyzer::MemoryNode* data, const Ref<MemoryAnalyzeTree>& tree);
 
-		// Returns create menu category in editor
-		static String GetCreateMenuCategory();
+        // Returns create menu category in editor
+        static String GetCreateMenuCategory();
 
         SERIALIZABLE(MemoryAnalyzeTreeNode);
         CLONEABLE_REF(MemoryAnalyzeTreeNode);
@@ -162,19 +162,19 @@ namespace Editor
         Ref<Text> mAddress;
         Ref<Text> mSize;
 
-		MemoryAnalyzer::MemoryNode* mData; // Data node pointer
+        MemoryAnalyzer::MemoryNode* mData; // Data node pointer
 
-		WeakRef<MemoryAnalyzeTree> mTree; // Owner tree
+        WeakRef<MemoryAnalyzeTree> mTree; // Owner tree
 
-	private:
-		// Called on deserialization, initializes controls
-		void OnDeserialized(const DataValue& node) override;
+    private:
+        // Called on deserialization, initializes controls
+        void OnDeserialized(const DataValue& node) override;
 
-		// initializes controls and widgets
-		void InitializeControls();
+        // initializes controls and widgets
+        void InitializeControls();
 
-		friend class MemoryAnalyzeTree;
-	};
+        friend class MemoryAnalyzeTree;
+    };
 }
 // --- META ---
 

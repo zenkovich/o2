@@ -12,70 +12,70 @@
 namespace Editor
 {
 
-	ParticlesSplineEffectViewer::ParticlesSplineEffectViewer()
-	{
-		mSplineTool = mmake<SplineTool>();
-	}
+    ParticlesSplineEffectViewer::ParticlesSplineEffectViewer()
+    {
+        mSplineTool = mmake<SplineTool>();
+    }
 
-	ParticlesSplineEffectViewer::~ParticlesSplineEffectViewer()
-	{
-		o2EditorSceneScreen.RemoveTool(mSplineTool);
-	}
+    ParticlesSplineEffectViewer::~ParticlesSplineEffectViewer()
+    {
+        o2EditorSceneScreen.RemoveTool(mSplineTool);
+    }
 
-	const Type* ParticlesSplineEffectViewer::GetViewingObjectType() const
-	{
-		return GetViewingObjectTypeStatic();
-	}
+    const Type* ParticlesSplineEffectViewer::GetViewingObjectType() const
+    {
+        return GetViewingObjectTypeStatic();
+    }
 
-	const Type* ParticlesSplineEffectViewer::GetViewingObjectTypeStatic()
-	{
-		return &TypeOf(ParticlesSplineEffect);
-	}
+    const Type* ParticlesSplineEffectViewer::GetViewingObjectTypeStatic()
+    {
+        return &TypeOf(ParticlesSplineEffect);
+    }
 
-	void ParticlesSplineEffectViewer::RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets)
-	{
-		PushEditorScopeOnStack scope;
+    void ParticlesSplineEffectViewer::RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets)
+    {
+        PushEditorScopeOnStack scope;
 
-		DefaultObjectPropertiesViewer::RebuildProperties(targetObjets);
-	}
+        DefaultObjectPropertiesViewer::RebuildProperties(targetObjets);
+    }
 
-	void ParticlesSplineEffectViewer::OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets)
-	{
-		auto prevSplineEffect = mSplineEffect;
+    void ParticlesSplineEffectViewer::OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets)
+    {
+        auto prevSplineEffect = mSplineEffect;
 
-		mSplineEffect = !targetObjets.IsEmpty() ? Ref(dynamic_cast<ParticlesSplineEffect*>(targetObjets[0].first)) : nullptr;
+        mSplineEffect = !targetObjets.IsEmpty() ? Ref(dynamic_cast<ParticlesSplineEffect*>(targetObjets[0].first)) : nullptr;
 
-		DefaultObjectPropertiesViewer::OnRefreshed(targetObjets);
+        DefaultObjectPropertiesViewer::OnRefreshed(targetObjets);
 
-		if (!mTargetObjects.IsEmpty() && prevSplineEffect != mSplineEffect)
-		{
-			Function<Vec2F()> getOrigin = [=]() { return mSplineEffect->GetEmitter()->GetBasis().origin; };
+        if (!mTargetObjects.IsEmpty() && prevSplineEffect != mSplineEffect)
+        {
+            Function<Vec2F()> getOrigin = [=]() { return mSplineEffect->GetEmitter()->GetBasis().origin; };
 
-			// Spline tool
-			mSplineTool->SetSpline(mSplineEffect->spline, getOrigin);
-			mSplineTool->onChanged = [=]() { 
-				auto emitter = mSplineEffect->GetEmitter();
-				DynamicCast<ParticlesEmitterComponent>(emitter)->GetActor()->OnChanged();
-			};
-		}
-	}
+            // Spline tool
+            mSplineTool->SetSpline(mSplineEffect->spline, getOrigin);
+            mSplineTool->onChanged = [=]() { 
+                auto emitter = mSplineEffect->GetEmitter();
+                DynamicCast<ParticlesEmitterComponent>(emitter)->GetActor()->OnChanged();
+            };
+        }
+    }
 
-	void ParticlesSplineEffectViewer::OnPropertiesEnabled()
-	{
-		o2EditorSceneScreen.AddTool(mSplineTool);
+    void ParticlesSplineEffectViewer::OnPropertiesEnabled()
+    {
+        o2EditorSceneScreen.AddTool(mSplineTool);
 
-		mPrevSelectedTool = o2EditorSceneScreen.GetSelectedTool();
-		o2EditorSceneScreen.SelectTool<SplineTool>();
-	}
+        mPrevSelectedTool = o2EditorSceneScreen.GetSelectedTool();
+        o2EditorSceneScreen.SelectTool<SplineTool>();
+    }
 
-	void ParticlesSplineEffectViewer::OnPropertiesDisabled()
-	{
-		auto selectedTool = o2EditorSceneScreen.GetSelectedTool();
-		if (selectedTool == mSplineTool)
-			o2EditorSceneScreen.SelectTool(mPrevSelectedTool.Lock());
+    void ParticlesSplineEffectViewer::OnPropertiesDisabled()
+    {
+        auto selectedTool = o2EditorSceneScreen.GetSelectedTool();
+        if (selectedTool == mSplineTool)
+            o2EditorSceneScreen.SelectTool(mPrevSelectedTool.Lock());
 
-		o2EditorSceneScreen.RemoveTool(mSplineTool);
-	}
+        o2EditorSceneScreen.RemoveTool(mSplineTool);
+    }
 
 }
 // --- META ---

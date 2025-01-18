@@ -148,7 +148,7 @@ namespace Editor
         typedef Map<const Type*, const Type*> IObjectPropertiesViewersMap;
         typedef Map<const Type*, Vector<Ref<IObjectPropertiesViewer>>> TypeObjectPropertiesViewerMap;
 
-        int  mPropertyFieldsPoolStep = 5; // Field properties pools resize step						    
+        int  mPropertyFieldsPoolStep = 5; // Field properties pools resize step                            
         bool mPrivateVisible = false;     // Is private fields visible
 
         PropertiesFieldsMap         mAvailablePropertiesFields;        // Available properties fields samples

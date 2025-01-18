@@ -102,11 +102,11 @@ namespace Editor
         // Returns is property revertable - it's able to check difference between origin value and prototype
         bool IsRevertable() const;
 
-		// Sets property enabled or disabled
-		void SetPropertyEnabled(bool enabled);
+        // Sets property enabled or disabled
+        void SetPropertyEnabled(bool enabled);
 
-		// Returns is property enabled
-		bool IsPropertyEnabled() const;
+        // Returns is property enabled
+        bool IsPropertyEnabled() const;
 
         // Specializes field info
         virtual void SetFieldInfo(const FieldInfo* fieldInfo);
@@ -154,7 +154,7 @@ namespace Editor
         CLONEABLE_REF(IPropertyField);
 
     protected:
-		bool mPropertyEnabled = false; // Is property enabled
+        bool mPropertyEnabled = false; // Is property enabled
 
         const FieldInfo*           mFieldInfo = nullptr; // Specialized field info
         WeakRef<PropertiesContext> mParentContext;       // Parent context
@@ -191,13 +191,13 @@ namespace Editor
         virtual bool IsValueRevertable() const;
 
         // Called when field value changed
-		virtual void OnValueChanged();
+        virtual void OnValueChanged();
 
-		// Enable property event function
-		virtual void OnPropertyEnabled() {}
+        // Enable property event function
+        virtual void OnPropertyEnabled() {}
 
-		// Disable property event function
-		virtual void OnPropertyDisabled() {}
+        // Disable property event function
+        virtual void OnPropertyDisabled() {}
 
         // Frees values proxies
         void FreeValuesProxies();

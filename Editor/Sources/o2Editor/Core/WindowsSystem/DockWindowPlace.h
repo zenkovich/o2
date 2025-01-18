@@ -10,85 +10,85 @@ using namespace o2;
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(DockableWindow);
+    FORWARD_CLASS_REF(DockableWindow);
 
-	// ------------------------------------
-	// Dockable windows place for attaching
-	// ------------------------------------
-	class DockWindowPlace: public Widget, public DrawableCursorEventsListener
-	{
-	public:
-		// Default constructor
-		DockWindowPlace(RefCounter* refCounter);
+    // ------------------------------------
+    // Dockable windows place for attaching
+    // ------------------------------------
+    class DockWindowPlace: public Widget, public DrawableCursorEventsListener
+    {
+    public:
+        // Default constructor
+        DockWindowPlace(RefCounter* refCounter);
 
-		// Copy-constructor
-		DockWindowPlace(RefCounter* refCounter, const DockWindowPlace& other);
+        // Copy-constructor
+        DockWindowPlace(RefCounter* refCounter, const DockWindowPlace& other);
 
-		// Destructor
-		~DockWindowPlace();
+        // Destructor
+        ~DockWindowPlace();
 
-		// Copy-operator
-		DockWindowPlace& operator=(const DockWindowPlace& other);
+        // Copy-operator
+        DockWindowPlace& operator=(const DockWindowPlace& other);
 
-		// Draws widget
-		void Draw() override;
+        // Draws widget
+        void Draw() override;
 
-		// Sets resizible side and configures drag handle when draggable is true
-		void SetResizibleDir(TwoDirection dir, float border,
-							 const Ref<DockWindowPlace>& neighborMin, const Ref<DockWindowPlace>& neighborMax);
+        // Sets resizible side and configures drag handle when draggable is true
+        void SetResizibleDir(TwoDirection dir, float border,
+                             const Ref<DockWindowPlace>& neighborMin, const Ref<DockWindowPlace>& neighborMax);
 
-		// Returns resizible side
-		TwoDirection GetResizibleDir() const;
+        // Returns resizible side
+        TwoDirection GetResizibleDir() const;
 
-		// Arranging child windows as tabs
-		void ArrangeChildWindows();
+        // Arranging child windows as tabs
+        void ArrangeChildWindows();
 
-		// Sets target window as active tab
-		void SetActiveTab(const Ref<DockableWindow>& window);
+        // Sets target window as active tab
+        void SetActiveTab(const Ref<DockableWindow>& window);
 
-		// Returns true if point is in this object
-		bool IsUnderPoint(const Vec2F& point) override;
+        // Returns true if point is in this object
+        bool IsUnderPoint(const Vec2F& point) override;
 
-		// Updates layout
-		void UpdateSelfTransform() override;
+        // Updates layout
+        void UpdateSelfTransform() override;
 
-		// Returns create menu category in editor
-		static String GetCreateMenuCategory();
+        // Returns create menu category in editor
+        static String GetCreateMenuCategory();
 
         SERIALIZABLE(DockWindowPlace);
         CLONEABLE_REF(DockWindowPlace);
 
-	protected:
-		TwoDirection mResizibleDir; // Resizible dragable side
+    protected:
+        TwoDirection mResizibleDir; // Resizible dragable side
 
-		WeakRef<DockWindowPlace> mNeighborMin;         // Resizing neighbor, using when dragging this side
-		Ref<CursorEventsArea>    mDragHandleMin;       // Separator drag handle
-		Layout                   mDragHandleLayoutMin; // Separator drag handle layout
-		RectF                    mDragHandleAreaMin;   // Separator drag handle area calculated from mDragHandleLayout
+        WeakRef<DockWindowPlace> mNeighborMin;         // Resizing neighbor, using when dragging this side
+        Ref<CursorEventsArea>    mDragHandleMin;       // Separator drag handle
+        Layout                   mDragHandleLayoutMin; // Separator drag handle layout
+        RectF                    mDragHandleAreaMin;   // Separator drag handle area calculated from mDragHandleLayout
 
-		WeakRef<DockWindowPlace> mNeighborMax;         // Resizing neighbor, using when dragging this side
-		Ref<CursorEventsArea>    mDragHandleMax;       // Separator drag handle
-		Layout                   mDragHandleLayoutMax; // Separator drag handle layout
-		RectF                    mDragHandleAreaMax;   // Separator drag handle area calculated from mDragHandleLayout
+        WeakRef<DockWindowPlace> mNeighborMax;         // Resizing neighbor, using when dragging this side
+        Ref<CursorEventsArea>    mDragHandleMax;       // Separator drag handle
+        Layout                   mDragHandleLayoutMax; // Separator drag handle layout
+        RectF                    mDragHandleAreaMax;   // Separator drag handle area calculated from mDragHandleLayout
 
-	protected:
-		// Called when cursor drag handle was moved
-		void OnDragHandleMinMoved(const Vec2F& delta);
+    protected:
+        // Called when cursor drag handle was moved
+        void OnDragHandleMinMoved(const Vec2F& delta);
 
-		// Called when cursor drag handle was moved
-		void OnDragHandleMaxMoved(const Vec2F& delta);
+        // Called when cursor drag handle was moved
+        void OnDragHandleMaxMoved(const Vec2F& delta);
 
-		// Checks interactable. If childs more than 0 this will be not interactable
-		void CheckInteractable();
+        // Checks interactable. If childs more than 0 this will be not interactable
+        void CheckInteractable();
 
-		// Initializes drag handle
+        // Initializes drag handle
         void InitializeDragHandle();
 
         REF_COUNTERABLE_IMPL(Widget);
 
-		friend class DockableWindow;
-		friend class WindowsLayout;
-	};
+        friend class DockableWindow;
+        friend class WindowsLayout;
+    };
 }
 // --- META ---
 

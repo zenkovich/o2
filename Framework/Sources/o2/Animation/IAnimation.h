@@ -34,14 +34,14 @@ namespace o2
         // Default constructor
         IAnimation();
 
-		// Default constructor with ref counter
-		explicit IAnimation(RefCounter* refCounter);
+        // Default constructor with ref counter
+        explicit IAnimation(RefCounter* refCounter);
 
-		// Copy-constructor
-		IAnimation(const IAnimation& other);
+        // Copy-constructor
+        IAnimation(const IAnimation& other);
 
-		// Copy-constructor with ref counter
-		IAnimation(RefCounter* refCounter, const IAnimation& other);
+        // Copy-constructor with ref counter
+        IAnimation(RefCounter* refCounter, const IAnimation& other);
 
         // Virtual destructor
         virtual ~IAnimation();
@@ -52,11 +52,11 @@ namespace o2
         // Updates animation mTime and mInDurationTime, stops and calls events
         virtual void Update(float dt);
 
-		// Sets sub controlled flag
+        // Sets sub controlled flag
         virtual void SetSubControlled(bool subControlled);
 
-		// Returns true if animation is sub controlled
-		virtual bool IsSubControlled() const;
+        // Returns true if animation is sub controlled
+        virtual bool IsSubControlled() const;
 
         // Starting playing animation 
         virtual void Play();
@@ -118,8 +118,8 @@ namespace o2
         // Returns relative time: 0 - is start of animation, 1 - time at duration
         virtual float GetRelativeTime() const;
 
-		// Returns in duration time. When animtions is looped, in duration time is time from 0 to duration
-		virtual float GetInDurationTime() const;
+        // Returns in duration time. When animtions is looped, in duration time is time from 0 to duration
+        virtual float GetInDurationTime() const;
 
         // Sets animation time to begin
         virtual void GoToBegin();
@@ -168,14 +168,14 @@ namespace o2
     protected:
         float mTime = 0.0f;            // Current animation time, can be out of bounds
         float mInDurationTime = 0.0f ; // In duration time
-		float mDuration = 0.0f;        // Animation duration @SERIALIZABLE
-		float mBeginTime = 0.0f;       // Begin time @SERIALIZABLE
-		float mEndTime = 0.0f;         // End time @SERIALIZABLE
-		float mDirection = 1.0f;       // Animation direction: 1 - forward, -1 - reversed
-		float mSpeed = 1.0f;           // Animation speed, 1 is default @SERIALIZABLE
+        float mDuration = 0.0f;        // Animation duration @SERIALIZABLE
+        float mBeginTime = 0.0f;       // Begin time @SERIALIZABLE
+        float mEndTime = 0.0f;         // End time @SERIALIZABLE
+        float mDirection = 1.0f;       // Animation direction: 1 - forward, -1 - reversed
+        float mSpeed = 1.0f;           // Animation speed, 1 is default @SERIALIZABLE
         Loop  mLoop = Loop::None;      // Loop type @SERIALIZABLE
         bool  mPlaying = false;        // True if animation playing @SERIALIZABLE
-		bool  mSubControlled = false;  // True if animation is controlled by parent animation
+        bool  mSubControlled = false;  // True if animation is controlled by parent animation
 
         Vector<Pair<float, Function<void()>>> mTimeEvents; // Animation time events
 
@@ -186,13 +186,13 @@ namespace o2
         // Called for updating animated object, after updating time
         virtual void Evaluate() {}
 
-		// Called when animation starts playing
-		virtual void OnPlay() {}
+        // Called when animation starts playing
+        virtual void OnPlay() {}
 
-		// Called when animation stops playing
-		virtual void OnStop() {}
+        // Called when animation stops playing
+        virtual void OnStop() {}
 
-		// Called when animation loop state changed
+        // Called when animation loop state changed
         virtual void OnLoopChanged() {}
     };
 }

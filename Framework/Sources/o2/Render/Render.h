@@ -277,9 +277,9 @@ namespace o2
         // Draws mesh wire
         void DrawMeshWire(Mesh* mesh, const Color4& color = Color4::White());
 
-		// Draws mesh buffer wire
-		void DrawMeshBufferWire(Vertex* vertices, UInt verticesCount, VertexIndex* indexes, UInt elementsCount,
-								const Color4& color = Color4::White());
+        // Draws mesh buffer wire
+        void DrawMeshBufferWire(Vertex* vertices, UInt verticesCount, VertexIndex* indexes, UInt elementsCount,
+                                const Color4& color = Color4::White());
 
         // Draws hard poly line. Vertices - buffer of vertex pairs for each line
         void DrawPolyLine(Vertex* vertices, int count, float width = 1.0f);
@@ -308,7 +308,7 @@ namespace o2
 
     protected:
         PrimitiveType mCurrentPrimitiveType = PrimitiveType::Polygon; // Type of drawing primitives for next DIP
-		BlendMode     mCurrentBlendMode = BlendMode::Normal;          // Current blend mode for next DIP
+        BlendMode     mCurrentBlendMode = BlendMode::Normal;          // Current blend mode for next DIP
 
         TextureRef mCurrentDrawTexture = nullptr; // Stored texture ptr from last DIP
         UInt       mLastDrawVertex;               // Last vertex idx for next DIP

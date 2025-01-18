@@ -8,57 +8,57 @@ using namespace o2;
 
 namespace o2
 {
-	class SceneEditableObject;
+    class SceneEditableObject;
 }
 
 namespace Editor
 {
-	// ---------------------------
-	// Objects transforming action
-	// ---------------------------
-	class TransformAction: public IAction
-	{
-	public:
-		struct Transform
-		{
-			Basis  transform;
-			Layout layout;
+    // ---------------------------
+    // Objects transforming action
+    // ---------------------------
+    class TransformAction: public IAction
+    {
+    public:
+        struct Transform
+        {
+            Basis  transform;
+            Layout layout;
 
-			bool operator==(const Transform& other) const;
-		};
+            bool operator==(const Transform& other) const;
+        };
 
-		Vector<SceneUID>  objectsIds;       // Changed objects ids
-		Vector<Transform> beforeTransforms; // Transforms before changing
-		Vector<Transform> doneTransforms;   // Transforms after changing
+        Vector<SceneUID>  objectsIds;       // Changed objects ids
+        Vector<Transform> beforeTransforms; // Transforms before changing
+        Vector<Transform> doneTransforms;   // Transforms after changing
 
-	public:
-		// Default constructor
-		TransformAction();
+    public:
+        // Default constructor
+        TransformAction();
 
-		// Constructor with objects, stores theirs before changing transforms
-		TransformAction(const Vector<Ref<SceneEditableObject>>& objects);
+        // Constructor with objects, stores theirs before changing transforms
+        TransformAction(const Vector<Ref<SceneEditableObject>>& objects);
 
-		// Called when transform completed, stores changed transforms
-		void Completed();
+        // Called when transform completed, stores changed transforms
+        void Completed();
 
-		// Returns name of action
-		String GetName() const override;
+        // Returns name of action
+        String GetName() const override;
 
-		// Sets new transforms again
-		void Redo() override;
+        // Sets new transforms again
+        void Redo() override;
 
-		// Sets transformations before transform
-		void Undo() override;
+        // Sets transformations before transform
+        void Undo() override;
 
-		SERIALIZABLE(TransformAction);
+        SERIALIZABLE(TransformAction);
 
-	private:
-		// Gets objects transforms and puts into transforms vector
-		void GetTransforms(const Vector<SceneUID>& objectIds, Vector<Transform>& transforms);
+    private:
+        // Gets objects transforms and puts into transforms vector
+        void GetTransforms(const Vector<SceneUID>& objectIds, Vector<Transform>& transforms);
 
-		// Sets transformations and layouts to objects
-		void SetTransforms(const Vector<SceneUID>& objectIds, Vector<Transform>& transforms);
-	};
+        // Sets transformations and layouts to objects
+        void SetTransforms(const Vector<SceneUID>& objectIds, Vector<Transform>& transforms);
+    };
 }
 // --- META ---
 

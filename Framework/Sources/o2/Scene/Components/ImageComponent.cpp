@@ -102,12 +102,12 @@ namespace o2
         return "ui/UI4_image_component.png";
     }
 
-	Ref<o2::RefCounterable> ImageComponent::CastToRefCounterable(const Ref<ImageComponent>& ref)
-	{
+    Ref<o2::RefCounterable> ImageComponent::CastToRefCounterable(const Ref<ImageComponent>& ref)
+    {
         return DynamicCast<Component>(ref);
-	}
+    }
 
-	void ImageComponent::OnTransformUpdated()
+    void ImageComponent::OnTransformUpdated()
     {
         SetBasis(mOwner.Lock()->transform->GetWorldBasis());
     }

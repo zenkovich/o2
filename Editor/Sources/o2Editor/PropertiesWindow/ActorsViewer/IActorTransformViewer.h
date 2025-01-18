@@ -9,64 +9,64 @@ using namespace o2;
 
 namespace o2
 {
-	class Actor;
-	class Component;
-	class Widget;
+    class Actor;
+    class Component;
+    class Widget;
 }
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(SpoilerWithHead);
+    FORWARD_CLASS_REF(SpoilerWithHead);
 
-	// ---------------------------------------
-	// Editor actor transform viewer interface
-	// ---------------------------------------
-	class IActorTransformViewer: public IObject, virtual public RefCounterable
-	{
-	public:
-		// Default constructor. Initializes data widget
-		IActorTransformViewer();
+    // ---------------------------------------
+    // Editor actor transform viewer interface
+    // ---------------------------------------
+    class IActorTransformViewer: public IObject, virtual public RefCounterable
+    {
+    public:
+        // Default constructor. Initializes data widget
+        IActorTransformViewer();
 
-		// Virtual destructor
-		virtual ~IActorTransformViewer();
+        // Virtual destructor
+        virtual ~IActorTransformViewer();
 
-		// Sets target actors
-		virtual void SetTargetActors(const Vector<Actor*>& actors) {}
+        // Sets target actors
+        virtual void SetTargetActors(const Vector<Actor*>& actors) {}
 
-		// Returns data widget
-		virtual Ref<Widget> GetWidget() const;
+        // Returns data widget
+        virtual Ref<Widget> GetWidget() const;
 
-		// Expands view
-		void Expand();
+        // Expands view
+        void Expand();
 
-		// Collapse view
-		void Collapse();
+        // Collapse view
+        void Collapse();
 
-		// Updates properties values
-		virtual void Refresh();
+        // Updates properties values
+        virtual void Refresh();
 
-		// Sets viewer enabled
-		void SetPropertiesEnabled(bool enabled);
+        // Sets viewer enabled
+        void SetPropertiesEnabled(bool enabled);
 
-		// Returns is viewer enabled
-		bool IsPropertiesEnabled() const;
+        // Returns is viewer enabled
+        bool IsPropertiesEnabled() const;
 
-		IOBJECT(IActorTransformViewer);
+        IOBJECT(IActorTransformViewer);
 
-	protected:
-		Ref<SpoilerWithHead> mSpoiler;
+    protected:
+        Ref<SpoilerWithHead> mSpoiler;
 
-		bool mPropertiesEnabled = false; // Is viewer enabled 
+        bool mPropertiesEnabled = false; // Is viewer enabled 
 
-	protected:
-		// Enable viewer event function
-		virtual void OnPropertiesEnabled() {}
+    protected:
+        // Enable viewer event function
+        virtual void OnPropertiesEnabled() {}
 
-		// Disable viewer event function
-		virtual void OnPropertiesDisabled() {}
+        // Disable viewer event function
+        virtual void OnPropertiesDisabled() {}
 
-		friend class ActorViewer;
-	};
+        friend class ActorViewer;
+    };
 }
 // --- META ---
 

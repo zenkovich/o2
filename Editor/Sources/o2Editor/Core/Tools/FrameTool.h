@@ -57,23 +57,23 @@ namespace Editor
 
         const float mFrameMinimalSize = 0.001f;   // Minimal size of transforming frame
 
-        Ref<SceneDragHandle> mLeftTopRotateHandle;	  // Left top rotation handle
+        Ref<SceneDragHandle> mLeftTopRotateHandle;      // Left top rotation handle
         Ref<SceneDragHandle> mLeftBottomRotateHandle;  // Left bottom rotation handle
-        Ref<SceneDragHandle> mRightTopRotateHandle;	  // Right top rotation handle
+        Ref<SceneDragHandle> mRightTopRotateHandle;      // Right top rotation handle
         Ref<SceneDragHandle> mRightBottomRotateHandle; // Right bottom rotation handle
-        Ref<SceneDragHandle> mLeftTopHandle;			  // Left top corner frame handle
-        Ref<SceneDragHandle> mLeftHandle;			  // Left corner frame handle
-        Ref<SceneDragHandle> mLeftBottomHandle;		  // Left bottom corner frame handle
-        Ref<SceneDragHandle> mTopHandle;				  // Top corner frame handle
-        Ref<SceneDragHandle> mBottomHandle;			  // Bottom corner frame handle
-        Ref<SceneDragHandle> mRightTopHandle;		  // Right top corner frame handle
-        Ref<SceneDragHandle> mRightHandle;			  // Right corner frame handle
-        Ref<SceneDragHandle> mRightBottomHandle;		  // Right bottom corner frame handle
-        Ref<SceneDragHandle> mPivotHandle;			  // Frame or object pivot handle
+        Ref<SceneDragHandle> mLeftTopHandle;              // Left top corner frame handle
+        Ref<SceneDragHandle> mLeftHandle;              // Left corner frame handle
+        Ref<SceneDragHandle> mLeftBottomHandle;          // Left bottom corner frame handle
+        Ref<SceneDragHandle> mTopHandle;                  // Top corner frame handle
+        Ref<SceneDragHandle> mBottomHandle;              // Bottom corner frame handle
+        Ref<SceneDragHandle> mRightTopHandle;          // Right top corner frame handle
+        Ref<SceneDragHandle> mRightHandle;              // Right corner frame handle
+        Ref<SceneDragHandle> mRightBottomHandle;          // Right bottom corner frame handle
+        Ref<SceneDragHandle> mPivotHandle;              // Frame or object pivot handle
                                                           
-        Ref<SceneDragHandle> mAnchorsLeftTopHandle;	   // Anchors Left top corner frame handle
+        Ref<SceneDragHandle> mAnchorsLeftTopHandle;       // Anchors Left top corner frame handle
         Ref<SceneDragHandle> mAnchorsLeftBottomHandle;  // Anchors Left bottom corner frame handle
-        Ref<SceneDragHandle> mAnchorsRightTopHandle;	   // Anchors Right top corner frame handle
+        Ref<SceneDragHandle> mAnchorsRightTopHandle;       // Anchors Right top corner frame handle
         Ref<SceneDragHandle> mAnchorsRightBottomHandle; // Anchors Right bottom corner frame handle
         Ref<SceneDragHandle> mAnchorsCenter;            // Anchors center, enables when all anchors in one point and drags all of them
                                                           
@@ -87,7 +87,7 @@ namespace Editor
         Basis mBeginDraggingFrame;  // Frame before dragging any handle
         Vec2F mBeginDraggingOffset; // Offset at beginning dragging from frame origin to cursor
 
-        bool mIsDragging = false;	   // Is frame dragging
+        bool mIsDragging = false;       // Is frame dragging
         bool mChangedFromThis = false; // Is objects changed from this, needs to break circular updating
 
         Vector<Basis>        mBeforeTransforms; // Array of objects transformations before changing
@@ -95,12 +95,12 @@ namespace Editor
 
         Vector<SnapLine> mSnapLines; // Immediate drawing lines, used for drawing snapping
 
-	protected:
-		// Returns toggle in menu panel icon name
-		String GetPanelIcon() const override;
+    protected:
+        // Returns toggle in menu panel icon name
+        String GetPanelIcon() const override;
 
-		// Returns shortcut keys for toggle
-		ShortcutKeys GetShortcut() const override;
+        // Returns shortcut keys for toggle
+        ShortcutKeys GetShortcut() const override;
 
         // Draws tool
         void DrawScene() override;

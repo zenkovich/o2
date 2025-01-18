@@ -104,13 +104,13 @@ namespace o2
         o2Render.OnAtlasDestroyed(this);
     }
 
-	void AtlasAsset::PostRefConstruct()
+    void AtlasAsset::PostRefConstruct()
     {
         Asset::PostRefConstruct();
-		o2Render.OnAtlasCreated(this);
-	}
+        o2Render.OnAtlasCreated(this);
+    }
 
-	void AtlasAsset::OnDeserialized(const DataValue& node)
+    void AtlasAsset::OnDeserialized(const DataValue& node)
     {
         for (auto& page : mPages)
         {

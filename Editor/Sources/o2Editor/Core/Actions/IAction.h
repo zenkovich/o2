@@ -6,26 +6,26 @@ using namespace o2;
 
 namespace Editor
 {
-	// -----------------------------
-	// Basic editor action interface
-	// -----------------------------
-	class IAction: public ISerializable, public RefCounterable
-	{
-	public:
-		// VIrtual destructor
-		virtual ~IAction() {}
+    // -----------------------------
+    // Basic editor action interface
+    // -----------------------------
+    class IAction: public ISerializable, public RefCounterable
+    {
+    public:
+        // VIrtual destructor
+        virtual ~IAction() {}
 
-		// Returns name of action
-		virtual String GetName() const { return "Unknown"; }
+        // Returns name of action
+        virtual String GetName() const { return "Unknown"; }
 
-		// Does action again
-		virtual void Redo() {}
+        // Does action again
+        virtual void Redo() {}
 
-		// Undoing action
-		virtual void Undo() {}
+        // Undoing action
+        virtual void Undo() {}
 
-		SERIALIZABLE(IAction);
-	};
+        SERIALIZABLE(IAction);
+    };
 }
 // --- META ---
 

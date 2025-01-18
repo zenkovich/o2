@@ -10,20 +10,20 @@
 
 namespace o2
 {
-	class ParticlesEmitter;
+    class ParticlesEmitter;
 
     // ------------------------------------------------------------------------------------------------------
     // Basic particles container interface. Keeps list of particles, pooling, synchronizing particle graphics
     // ------------------------------------------------------------------------------------------------------
     class ParticlesContainer : public RefCounterable
-	{
-	public:
-		ParticlesEmitter* emitter = nullptr; // Emitter that uses this source
+    {
+    public:
+        ParticlesEmitter* emitter = nullptr; // Emitter that uses this source
 
     public:
-		virtual void OnParticleEmitted(Particle& particle) {}
-		virtual void OnParticleDied(Particle& particle) {}
-		virtual void SetBlendMode(BlendMode blendMode) {}
+        virtual void OnParticleEmitted(Particle& particle) {}
+        virtual void OnParticleDied(Particle& particle) {}
+        virtual void SetBlendMode(BlendMode blendMode) {}
 
         virtual void Update(Vector<Particle>& particles, int maxParticles) = 0;
         virtual void Draw() = 0;
@@ -34,86 +34,86 @@ namespace o2
     // --------------------------------------
     class ParticleSource: public ISerializable, public RefCounterable, public ICloneableRef
     {
-	public:
+    public:
         virtual ~ParticleSource() {}
 
-		virtual Ref<ParticlesContainer> CreateContainer() { return nullptr; }
+        virtual Ref<ParticlesContainer> CreateContainer() { return nullptr; }
 
-		SERIALIZABLE(ParticleSource);
-		CLONEABLE_REF(ParticleSource);
+        SERIALIZABLE(ParticleSource);
+        CLONEABLE_REF(ParticleSource);
     };
 
-	// ---------------------------------------------------------------------------
-	// Single sprite particle source. Generates particles with single sprite image
-	// ---------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------
+    // Single sprite particle source. Generates particles with single sprite image
+    // ---------------------------------------------------------------------------
     class SingleSpriteParticleSource : public ParticleSource
     {
     public:
         AssetRef<ImageAsset> image; // Particle sprite image @SERIALIZABLE
 
-	public:
+    public:
         Ref<ParticlesContainer> CreateContainer() override;
 
-		SERIALIZABLE(SingleSpriteParticleSource);
-		CLONEABLE_REF(SingleSpriteParticleSource);
-	};
+        SERIALIZABLE(SingleSpriteParticleSource);
+        CLONEABLE_REF(SingleSpriteParticleSource);
+    };
 
-	// ----------------------------------------------------------------------------
-	// Single sprite particles container. Contains mesh and rebuilds it every frame
-	// ----------------------------------------------------------------------------
-	class SingleSpriteParticlesContainer : public ParticlesContainer
-	{
-	public:
-		Ref<SingleSpriteParticleSource> source; // Source of particles
+    // ----------------------------------------------------------------------------
+    // Single sprite particles container. Contains mesh and rebuilds it every frame
+    // ----------------------------------------------------------------------------
+    class SingleSpriteParticlesContainer : public ParticlesContainer
+    {
+    public:
+        Ref<SingleSpriteParticleSource> source; // Source of particles
 
-	public:
-		void SetBlendMode(BlendMode blendMode) override;
-		void Update(Vector<Particle>& particles, int maxParticles) override;
-		void Draw() override;
+    public:
+        void SetBlendMode(BlendMode blendMode) override;
+        void Update(Vector<Particle>& particles, int maxParticles) override;
+        void Draw() override;
 
-	private:
-		Mesh mParticlesMesh; // Particles mesh
-	};
+    private:
+        Mesh mParticlesMesh; // Particles mesh
+    };
 
-	// ---------------------------------------------------------------------------------------
-	// Multi sprite particle source. Generates particles woth changing image sprites over time
-	// ---------------------------------------------------------------------------------------
-	class MultiSpriteParticleSource : public ParticleSource
-	{
-	public:
-		Vector<AssetRef<ImageAsset>> images; // Particle sprite images @SERIALIZABLE
+    // ---------------------------------------------------------------------------------------
+    // Multi sprite particle source. Generates particles woth changing image sprites over time
+    // ---------------------------------------------------------------------------------------
+    class MultiSpriteParticleSource : public ParticleSource
+    {
+    public:
+        Vector<AssetRef<ImageAsset>> images; // Particle sprite images @SERIALIZABLE
 
-	public:
-		Ref<ParticlesContainer> CreateContainer() override;
+    public:
+        Ref<ParticlesContainer> CreateContainer() override;
 
-		SERIALIZABLE(MultiSpriteParticleSource);
-		CLONEABLE_REF(MultiSpriteParticleSource);
-	};
+        SERIALIZABLE(MultiSpriteParticleSource);
+        CLONEABLE_REF(MultiSpriteParticleSource);
+    };
 
-	// ----------------------------------------------------------------------------
-	// Multi sprite particles container. Contains mesh and rebuilds it every frame
-	// ----------------------------------------------------------------------------
-	class MultiSpriteParticlesContainer : public ParticlesContainer
-	{
-	public:
-		Ref<MultiSpriteParticleSource> source; // Source of particles
+    // ----------------------------------------------------------------------------
+    // Multi sprite particles container. Contains mesh and rebuilds it every frame
+    // ----------------------------------------------------------------------------
+    class MultiSpriteParticlesContainer : public ParticlesContainer
+    {
+    public:
+        Ref<MultiSpriteParticleSource> source; // Source of particles
 
-	public:
-		void SetBlendMode(BlendMode blendMode) override;
-		void Update(Vector<Particle>& particles, int maxParticles) override;
-		void Draw() override;
+    public:
+        void SetBlendMode(BlendMode blendMode) override;
+        void Update(Vector<Particle>& particles, int maxParticles) override;
+        void Draw() override;
 
-	private:
-		struct ImageInfo
-		{
-			RectF uv;
-			Vec2F texSize;
-		};
+    private:
+        struct ImageInfo
+        {
+            RectF uv;
+            Vec2F texSize;
+        };
 
-		Mesh mParticlesMesh; // Particles mesh
+        Mesh mParticlesMesh; // Particles mesh
 
-		Vector<ImageInfo> mImagesCache; // Cached images info
-	};
+        Vector<ImageInfo> mImagesCache; // Cached images info
+    };
 }
 // --- META ---
 

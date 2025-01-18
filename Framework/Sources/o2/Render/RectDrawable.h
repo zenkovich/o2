@@ -16,8 +16,8 @@ namespace o2
     public:
         PROPERTIES(IRectDrawable);
         PROPERTY(Color4, color, SetColor, GetColor);                     // Color property @SCRIPTABLE
-		PROPERTY(float, transparency, SetTransparency, GetTransparency); // Transparency property, changing alpha in color @SCRIPTABLE @RANGE(0, 1)
-		PROPERTY(BlendMode, blendMode, SetBlendMode, GetBlendMode);      // Blend mode property @SCRIPTABLE
+        PROPERTY(float, transparency, SetTransparency, GetTransparency); // Transparency property, changing alpha in color @SCRIPTABLE @RANGE(0, 1)
+        PROPERTY(BlendMode, blendMode, SetBlendMode, GetBlendMode);      // Blend mode property @SCRIPTABLE
         PROPERTY(bool, enabled, SetEnabled, IsEnabled);                  // Enable property @SCRIPTABLE
 
     public:
@@ -56,11 +56,11 @@ namespace o2
         // Returns transparency(color alpha)
         virtual float GetTransparency() const;
 
-		// Sets blend mode
-		virtual void SetBlendMode(BlendMode blendMode);
+        // Sets blend mode
+        virtual void SetBlendMode(BlendMode blendMode);
 
-		// Returns blend mode
-		virtual BlendMode GetBlendMode() const;
+        // Returns blend mode
+        virtual BlendMode GetBlendMode() const;
 
         // Sets enabled
         virtual void SetEnabled(bool enabled);
@@ -76,15 +76,15 @@ namespace o2
 
     protected:
         Color4    mColor;                         // Color @SERIALIZABLE
-		BlendMode mBlendMode = BlendMode::Normal; // Blend mode @SERIALIZABLE
+        BlendMode mBlendMode = BlendMode::Normal; // Blend mode @SERIALIZABLE
         bool      mEnabled = true;                // True, when drawable enabled and needs to draw @SERIALIZABLE
 
     protected:
         // Called when color was changed
         virtual void ColorChanged() {}
 
-		// Called when blend mode was changed
-		virtual void BlendModeChanged() {}
+        // Called when blend mode was changed
+        virtual void BlendModeChanged() {}
 
         // Called when enabling changed
         virtual void EnableChanged() {}

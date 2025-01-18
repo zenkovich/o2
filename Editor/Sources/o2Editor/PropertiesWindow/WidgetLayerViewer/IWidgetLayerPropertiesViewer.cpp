@@ -8,65 +8,65 @@
 
 namespace Editor
 {
-	IWidgetLayerPropertiesViewer::IWidgetLayerPropertiesViewer()
-	{
-		PushEditorScopeOnStack scope;
+    IWidgetLayerPropertiesViewer::IWidgetLayerPropertiesViewer()
+    {
+        PushEditorScopeOnStack scope;
 
-		mSpoiler = o2UI.CreateWidget<SpoilerWithHead>();
+        mSpoiler = o2UI.CreateWidget<SpoilerWithHead>();
 
-		mSpoiler->expandHeight = false;
-		mSpoiler->expandWidth = true;
-		mSpoiler->fitByChildren = true;
-		mSpoiler->borderBottom = 5;
-		mSpoiler->SetCaption("Transform");
-		mSpoiler->GetIcon()->SetImageName("ui/UI4_transform_icon_white.png");
+        mSpoiler->expandHeight = false;
+        mSpoiler->expandWidth = true;
+        mSpoiler->fitByChildren = true;
+        mSpoiler->borderBottom = 5;
+        mSpoiler->SetCaption("Transform");
+        mSpoiler->GetIcon()->SetImageName("ui/UI4_transform_icon_white.png");
 
-		mSpoiler->SetExpanded(true);
-	}
+        mSpoiler->SetExpanded(true);
+    }
 
-	IWidgetLayerPropertiesViewer::~IWidgetLayerPropertiesViewer()
-	{}
+    IWidgetLayerPropertiesViewer::~IWidgetLayerPropertiesViewer()
+    {}
 
-	Ref<Widget> IWidgetLayerPropertiesViewer::GetWidget() const
-	{
-		return mSpoiler;
-	}
+    Ref<Widget> IWidgetLayerPropertiesViewer::GetWidget() const
+    {
+        return mSpoiler;
+    }
 
-	void IWidgetLayerPropertiesViewer::Expand()
-	{
-		mSpoiler->Expand();
-	}
+    void IWidgetLayerPropertiesViewer::Expand()
+    {
+        mSpoiler->Expand();
+    }
 
-	void IWidgetLayerPropertiesViewer::Collapse()
-	{
-		mSpoiler->Collapse();
-	}
+    void IWidgetLayerPropertiesViewer::Collapse()
+    {
+        mSpoiler->Collapse();
+    }
 
-	void IWidgetLayerPropertiesViewer::Refresh()
-	{}
+    void IWidgetLayerPropertiesViewer::Refresh()
+    {}
 
-	bool IWidgetLayerPropertiesViewer::IsEmpty() const
-	{
-		return true;
-	}
+    bool IWidgetLayerPropertiesViewer::IsEmpty() const
+    {
+        return true;
+    }
 
-	void IWidgetLayerPropertiesViewer::SetPropertiesEnabled(bool enabled)
-	{
-		if (mPropertiesEnabled == enabled)
-			return;
+    void IWidgetLayerPropertiesViewer::SetPropertiesEnabled(bool enabled)
+    {
+        if (mPropertiesEnabled == enabled)
+            return;
 
-		mPropertiesEnabled = enabled;
+        mPropertiesEnabled = enabled;
 
-		if (mPropertiesEnabled)
-			OnPropertiesEnabled();
-		else
-			OnPropertiesDisabled();
-	}
+        if (mPropertiesEnabled)
+            OnPropertiesEnabled();
+        else
+            OnPropertiesDisabled();
+    }
 
-	bool IWidgetLayerPropertiesViewer::IsPropertiesEnabled() const
-	{
-		return mPropertiesEnabled;
-	}
+    bool IWidgetLayerPropertiesViewer::IsPropertiesEnabled() const
+    {
+        return mPropertiesEnabled;
+    }
 
 }
 // --- META ---

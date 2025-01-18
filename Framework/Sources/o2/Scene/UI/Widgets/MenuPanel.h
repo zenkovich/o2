@@ -182,9 +182,9 @@ namespace o2
         void OnCursorMoved(const Input::Cursor& cursor) override;
 
         // Called when cursor exits this object
-		void OnCursorExit(const Input::Cursor& cursor) override;
+        void OnCursorExit(const Input::Cursor& cursor) override;
 
-		REF_COUNTERABLE_IMPL(Widget);
+        REF_COUNTERABLE_IMPL(Widget);
     };
 }
 // --- META ---

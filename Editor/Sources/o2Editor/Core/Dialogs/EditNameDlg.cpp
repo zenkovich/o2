@@ -16,74 +16,74 @@ DECLARE_SINGLETON(Editor::NameEditDlg);
 namespace Editor
 {
     NameEditDlg::NameEditDlg(RefCounter* refCounter):
-		Singleton<NameEditDlg>(refCounter), CursorEventsListener(refCounter)
-	{
-		mWindow = DynamicCast<o2::Window>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Enter name")));
+        Singleton<NameEditDlg>(refCounter), CursorEventsListener(refCounter)
+    {
+        mWindow = DynamicCast<o2::Window>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Enter name")));
 
-		InitializeControls();
+        InitializeControls();
 
-		mWindow->Hide(true);
-		mWindow->layout->size = Vec2F(300, 100);
+        mWindow->Hide(true);
+        mWindow->layout->size = Vec2F(300, 100);
 
-		mWindow->GetBackCursorListener().onCursorReleased = [&](const Input::Cursor& c) { OnCursorPressedOutside(); };
-		mWindow->onHide = MakeFunction(this, &NameEditDlg::OnHide);
-	}
+        mWindow->GetBackCursorListener().onCursorReleased = [&](const Input::Cursor& c) { OnCursorPressedOutside(); };
+        mWindow->onHide = MakeFunction(this, &NameEditDlg::OnHide);
+    }
 
-	NameEditDlg::~NameEditDlg()
-	{}
+    NameEditDlg::~NameEditDlg()
+    {}
 
-	void NameEditDlg::Show(const String& name, Function<void(const String&)> onCompleted, 
-						   Function<void()> onCancelled /*= Function<void()>()*/)
-	{
-		mInstance->mNameEditBox->SetText(name);
-		mInstance->mWindow->ShowModal();
-		mInstance->mOnCompletedCallback = onCompleted;
-		mInstance->mOnCancelledCallback = onCancelled;
-	}
+    void NameEditDlg::Show(const String& name, Function<void(const String&)> onCompleted, 
+                           Function<void()> onCancelled /*= Function<void()>()*/)
+    {
+        mInstance->mNameEditBox->SetText(name);
+        mInstance->mWindow->ShowModal();
+        mInstance->mOnCompletedCallback = onCompleted;
+        mInstance->mOnCancelledCallback = onCancelled;
+    }
 
-	void NameEditDlg::OnHide()
-	{
-		mOnCancelledCallback();
-	}
+    void NameEditDlg::OnHide()
+    {
+        mOnCancelledCallback();
+    }
 
-	void NameEditDlg::InitializeControls()
-	{
-		auto verLayout = o2UI.CreateVerLayout();
-		verLayout->spacing = 10;
+    void NameEditDlg::InitializeControls()
+    {
+        auto verLayout = o2UI.CreateVerLayout();
+        verLayout->spacing = 10;
 
-		mNameEditBox = o2UI.CreateEditBox("singleline");
-		verLayout->AddChild(mNameEditBox);
+        mNameEditBox = o2UI.CreateEditBox("singleline");
+        verLayout->AddChild(mNameEditBox);
 
-		auto horLayout =  o2UI.CreateHorLayout();
-		horLayout->spacing = 10;
-		
-		auto okButton = o2UI.CreateButton("Ok", MakeFunction(this, &NameEditDlg::OnOkPressed));
-		horLayout->AddChild(okButton);
+        auto horLayout =  o2UI.CreateHorLayout();
+        horLayout->spacing = 10;
+        
+        auto okButton = o2UI.CreateButton("Ok", MakeFunction(this, &NameEditDlg::OnOkPressed));
+        horLayout->AddChild(okButton);
 
-		auto cancelButton = o2UI.CreateButton("Cancel", MakeFunction(this, &NameEditDlg::OnCancelPressed));
-		horLayout->AddChild(cancelButton);
+        auto cancelButton = o2UI.CreateButton("Cancel", MakeFunction(this, &NameEditDlg::OnCancelPressed));
+        horLayout->AddChild(cancelButton);
 
-		verLayout->AddChild(horLayout);
+        verLayout->AddChild(horLayout);
 
-		mWindow->AddChild(verLayout);
-	}
+        mWindow->AddChild(verLayout);
+    }
 
-	void NameEditDlg::OnOkPressed()
-	{
-		mOnCompletedCallback(mNameEditBox->GetText());
-		mWindow->Hide();
-	}
+    void NameEditDlg::OnOkPressed()
+    {
+        mOnCompletedCallback(mNameEditBox->GetText());
+        mWindow->Hide();
+    }
 
-	void NameEditDlg::OnCancelPressed()
-	{
-		mOnCancelledCallback();
-		mWindow->Hide();
-	}
+    void NameEditDlg::OnCancelPressed()
+    {
+        mOnCancelledCallback();
+        mWindow->Hide();
+    }
 
-	void NameEditDlg::OnCursorPressedOutside()
-	{
-		mOnCancelledCallback();
-		mWindow->Hide();
-	}
+    void NameEditDlg::OnCursorPressedOutside()
+    {
+        mOnCancelledCallback();
+        mWindow->Hide();
+    }
 
 }

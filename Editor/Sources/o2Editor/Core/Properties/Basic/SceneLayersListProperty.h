@@ -5,48 +5,48 @@
 
 namespace o2
 {
-	class Button;
-	class ContextMenu;
-	class EditBox;
-	class Widget;
+    class Button;
+    class ContextMenu;
+    class EditBox;
+    class Widget;
 }
 
 namespace Editor
 {
-	// ---------------------------------
-	// Editor scene layers list property
-	// // ------------------------------
-	class SceneLayersListProperty: public TPropertyField<SceneLayersList>
-	{
-	public:
-		// Default constructor
-		SceneLayersListProperty(RefCounter* refCounter);
+    // ---------------------------------
+    // Editor scene layers list property
+    // // ------------------------------
+    class SceneLayersListProperty: public TPropertyField<SceneLayersList>
+    {
+    public:
+        // Default constructor
+        SceneLayersListProperty(RefCounter* refCounter);
 
-		// Copy constructor
-		SceneLayersListProperty(RefCounter* refCounter, const SceneLayersListProperty& other);
+        // Copy constructor
+        SceneLayersListProperty(RefCounter* refCounter, const SceneLayersListProperty& other);
 
-		// Copy operator
-		SceneLayersListProperty& operator=(const SceneLayersListProperty& other);
+        // Copy operator
+        SceneLayersListProperty& operator=(const SceneLayersListProperty& other);
 
         SERIALIZABLE(SceneLayersListProperty);
         CLONEABLE_REF(SceneLayersListProperty);
 
-	protected:
-		Ref<Button> mPropertyButton; // Property box with layers' names
-		Ref<Text>   mPropertyText;   // Text layer inside property box
+    protected:
+        Ref<Button> mPropertyButton; // Property box with layers' names
+        Ref<Text>   mPropertyText;   // Text layer inside property box
 
-		Ref<ContextMenu> mLayersContext; // Layers list toggles context
+        Ref<ContextMenu> mLayersContext; // Layers list toggles context
 
-	protected:
-		// Updates value view
-		void UpdateValueView() override;
+    protected:
+        // Updates value view
+        void UpdateValueView() override;
 
-		// Searches controls widgets and layers and initializes them
-		void InitializeControls();
+        // Searches controls widgets and layers and initializes them
+        void InitializeControls();
 
-		// Updates context layers list and opens
-		void OpenContext();
-	};
+        // Updates context layers list and opens
+        void OpenContext();
+    };
 }
 // --- META ---
 

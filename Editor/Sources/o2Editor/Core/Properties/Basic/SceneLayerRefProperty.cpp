@@ -6,131 +6,131 @@
 
 namespace Editor
 {
-	SceneLayerRefProperty::SceneLayerRefProperty(RefCounter* refCounter):
-		TPropertyField<Ref<SceneLayer>>(refCounter)
-	{
-		mCommonValue = Ref<SceneLayer>();
-	}
+    SceneLayerRefProperty::SceneLayerRefProperty(RefCounter* refCounter):
+        TPropertyField<Ref<SceneLayer>>(refCounter)
+    {
+        mCommonValue = Ref<SceneLayer>();
+    }
 
-	SceneLayerRefProperty::SceneLayerRefProperty(RefCounter* refCounter, const SceneLayerRefProperty& other) :
-		TPropertyField<Ref<SceneLayer>>(refCounter, other)
-	{
-		InitializeControls();
-	}
+    SceneLayerRefProperty::SceneLayerRefProperty(RefCounter* refCounter, const SceneLayerRefProperty& other) :
+        TPropertyField<Ref<SceneLayer>>(refCounter, other)
+    {
+        InitializeControls();
+    }
 
-	void SceneLayerRefProperty::SetSelectedInheritedValue(bool inherited)
-	{
-		if (mSelectedInheritedValue == inherited)
-			return;
+    void SceneLayerRefProperty::SetSelectedInheritedValue(bool inherited)
+    {
+        if (mSelectedInheritedValue == inherited)
+            return;
 
-		mSelectedInheritedValue = inherited;
+        mSelectedInheritedValue = inherited;
 
-		UpdateValueView();
-	}
+        UpdateValueView();
+    }
 
-	bool SceneLayerRefProperty::IsSelectedInheritedValue() const
-	{
-		return mSelectedInheritedValue;
-	}
+    bool SceneLayerRefProperty::IsSelectedInheritedValue() const
+    {
+        return mSelectedInheritedValue;
+    }
 
-	void SceneLayerRefProperty::SetUseInheritedValue(bool use)
-	{
-		mUseInheritedValue = use;
-	}
+    void SceneLayerRefProperty::SetUseInheritedValue(bool use)
+    {
+        mUseInheritedValue = use;
+    }
 
-	bool SceneLayerRefProperty::IsUseInheritedValue() const
-	{
-		return mUseInheritedValue;
-	}
+    bool SceneLayerRefProperty::IsUseInheritedValue() const
+    {
+        return mUseInheritedValue;
+    }
 
-	SceneLayerRefProperty& SceneLayerRefProperty::operator=(const SceneLayerRefProperty& other)
-	{
-		TPropertyField<Ref<SceneLayer>>::operator=(other);
-		InitializeControls();
-		return *this;
-	}
+    SceneLayerRefProperty& SceneLayerRefProperty::operator=(const SceneLayerRefProperty& other)
+    {
+        TPropertyField<Ref<SceneLayer>>::operator=(other);
+        InitializeControls();
+        return *this;
+    }
 
-	void SceneLayerRefProperty::InitializeControls()
-	{
-		mCommonValue = Ref<SceneLayer>();
+    void SceneLayerRefProperty::InitializeControls()
+    {
+        mCommonValue = Ref<SceneLayer>();
 
-		mDropDown = FindChildByType<DropDown>();
-		if (mDropDown)
-		{
-			mDropDown->onSelectedText = THIS_FUNC(SelectLayer);
-			mDropDown->onBeforeExpand = THIS_FUNC(UpdateLayersList);
-			mDropDown->SetState("undefined", true);
-		}
-	}
+        mDropDown = FindChildByType<DropDown>();
+        if (mDropDown)
+        {
+            mDropDown->onSelectedText = THIS_FUNC(SelectLayer);
+            mDropDown->onBeforeExpand = THIS_FUNC(UpdateLayersList);
+            mDropDown->SetState("undefined", true);
+        }
+    }
 
-	void SceneLayerRefProperty::UpdateValueView()
-	{
-		mUpdatingValue = true;
+    void SceneLayerRefProperty::UpdateValueView()
+    {
+        mUpdatingValue = true;
 
-		UpdateLayersList();
+        UpdateLayersList();
 
-		if (mValuesDifferent)
-		{
-			mDropDown->SelectItemAt(-1);
-			mDropDown->SetState("undefined", true);
-		}
-		else
-		{
-			if (mSelectedInheritedValue)
-				mDropDown->value = mInheritFromParentName;
-			else if (mCommonValue)
-				mDropDown->value = mCommonValue->GetName();
+        if (mValuesDifferent)
+        {
+            mDropDown->SelectItemAt(-1);
+            mDropDown->SetState("undefined", true);
+        }
+        else
+        {
+            if (mSelectedInheritedValue)
+                mDropDown->value = mInheritFromParentName;
+            else if (mCommonValue)
+                mDropDown->value = mCommonValue->GetName();
 
-			mDropDown->SetState("undefined", false);
-		}
+            mDropDown->SetState("undefined", false);
+        }
 
-		mUpdatingValue = false;
-	}
+        mUpdatingValue = false;
+    }
 
-	void SceneLayerRefProperty::UpdateLayersList()
-	{
-		auto layers = o2Scene.GetLayers();
-		auto dropdownLayers = mDropDown->GetAllItemsText();
-		for (auto itemName : dropdownLayers)
-		{
-			if (!layers.Contains([&](auto& x) { return x->GetName() == (String)itemName; }))
-				mDropDown->RemoveItem(itemName);
-		}
+    void SceneLayerRefProperty::UpdateLayersList()
+    {
+        auto layers = o2Scene.GetLayers();
+        auto dropdownLayers = mDropDown->GetAllItemsText();
+        for (auto itemName : dropdownLayers)
+        {
+            if (!layers.Contains([&](auto& x) { return x->GetName() == (String)itemName; }))
+                mDropDown->RemoveItem(itemName);
+        }
 
-		if (mUseInheritedValue)
-			mDropDown->AddItem(mInheritFromParentName);
+        if (mUseInheritedValue)
+            mDropDown->AddItem(mInheritFromParentName);
 
-		for (auto& layer : layers)
-		{
-			if (!dropdownLayers.Contains(layer->GetName()))
-				mDropDown->AddItem(layer->GetName());
-		}
-	}
+        for (auto& layer : layers)
+        {
+            if (!dropdownLayers.Contains(layer->GetName()))
+                mDropDown->AddItem(layer->GetName());
+        }
+    }
 
-	void SceneLayerRefProperty::SelectLayer(const WString& name)
-	{
-		if (mUpdatingValue)
-			return;
+    void SceneLayerRefProperty::SelectLayer(const WString& name)
+    {
+        if (mUpdatingValue)
+            return;
 
-		if (String(name) == mInheritFromParentName)
-		{
-			mSelectedInheritedValue = true;
-			onSelectedInheritedValue();
-			return;
-		}
+        if (String(name) == mInheritFromParentName)
+        {
+            mSelectedInheritedValue = true;
+            onSelectedInheritedValue();
+            return;
+        }
 
-		mSelectedInheritedValue = false;
+        mSelectedInheritedValue = false;
 
-		if (!mCommonValue)
-			mCommonValue = o2Scene.GetDefaultLayer();
+        if (!mCommonValue)
+            mCommonValue = o2Scene.GetDefaultLayer();
 
-		//SetValueByUser(Ref<SceneLayer>(name));
-	}
+        //SetValueByUser(Ref<SceneLayer>(name));
+    }
 
-	bool SceneLayerRefProperty::IsAlwaysRefresh() const
-	{
-		return false;
-	}
+    bool SceneLayerRefProperty::IsAlwaysRefresh() const
+    {
+        return false;
+    }
 
 }
 

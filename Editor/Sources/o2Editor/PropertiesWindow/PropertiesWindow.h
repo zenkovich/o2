@@ -8,9 +8,9 @@ using namespace o2;
 
 namespace o2
 {
-	class HorizontalLayout;
-	class Label;
-	class VerticalLayout;
+    class HorizontalLayout;
+    class Label;
+    class VerticalLayout;
 }
 
 // Editor properties window accessor macros
@@ -18,78 +18,78 @@ namespace o2
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(DefaultPropertiesViewer);
-	FORWARD_CLASS_REF(IPropertiesViewer);
-	FORWARD_CLASS_REF(PropertiesContext);
+    FORWARD_CLASS_REF(DefaultPropertiesViewer);
+    FORWARD_CLASS_REF(IPropertiesViewer);
+    FORWARD_CLASS_REF(PropertiesContext);
 
-	// ------------------------
-	// Editor properties window
-	// ------------------------
-	class PropertiesWindow: public Singleton<PropertiesWindow>, public IEditorWindow
-	{
-	public:
-		// Default constructor
+    // ------------------------
+    // Editor properties window
+    // ------------------------
+    class PropertiesWindow: public Singleton<PropertiesWindow>, public IEditorWindow
+    {
+    public:
+        // Default constructor
         PropertiesWindow(RefCounter* refCounter);
 
-		// Destructor
-		~PropertiesWindow();
+        // Destructor
+        ~PropertiesWindow();
 
-		// Resets targets objects
-		void ResetTargets();
+        // Resets targets objects
+        void ResetTargets();
 
-		// Sets target object
-		void SetTarget(IObject* target);
+        // Sets target object
+        void SetTarget(IObject* target);
 
-		// Sets target objects
-		void SetTargets(const Vector<IObject*>& targets, const Function<void()>& targetsChangedDelegate = Function<void()>());
+        // Sets target objects
+        void SetTargets(const Vector<IObject*>& targets, const Function<void()>& targetsChangedDelegate = Function<void()>());
 
-		// Returns target object
-		Vector<IObject*> GetTargets() const;
+        // Returns target object
+        Vector<IObject*> GetTargets() const;
 
-		// Updates window: check next viewer and targets and updates current viewer
-		void Update(float dt) override;
+        // Updates window: check next viewer and targets and updates current viewer
+        void Update(float dt) override;
 
-		// Draws current viewer
-		void Draw() override;
+        // Draws current viewer
+        void Draw() override;
 
-		// Returns is targets changed
+        // Returns is targets changed
         bool IsTargetsChanged() const;
 
         // Dynamic cast to RefCounterable via Singleton<PropertiesWindow>
         static Ref<RefCounterable> CastToRefCounterable(const Ref<PropertiesWindow>& ref);
 
         IOBJECT(PropertiesWindow); 
-		REF_COUNTERABLE_IMPL(IEditorWindow, Singleton<PropertiesWindow>);
+        REF_COUNTERABLE_IMPL(IEditorWindow, Singleton<PropertiesWindow>);
 
-	protected:
-		Vector<IObject*> mTargets; // Target objects
+    protected:
+        Vector<IObject*> mTargets; // Target objects
 
-		Ref<IPropertiesViewer>         mCurrentViewer; // Current properties viewer
-		Vector<Ref<IPropertiesViewer>> mViewers;       // All available object types viewers
-		Ref<DefaultPropertiesViewer>   mDefaultViewer; // Default properties viewer
+        Ref<IPropertiesViewer>         mCurrentViewer; // Current properties viewer
+        Vector<Ref<IPropertiesViewer>> mViewers;       // All available object types viewers
+        Ref<DefaultPropertiesViewer>   mDefaultViewer; // Default properties viewer
 
-		Function<void()> mOnTargetsChangedDelegate; // Called when targets array changing
-		bool             mTargetsChanged = false;   // True when targets was changed    
+        Function<void()> mOnTargetsChangedDelegate; // Called when targets array changing
+        bool             mTargetsChanged = false;   // True when targets was changed    
 
-		float mRefreshDelay = 0.5f;         // Values refreshing delay
-		float mRefreshRemainingTime = 0.5f; // Time to next values refreshing
+        float mRefreshDelay = 0.5f;         // Values refreshing delay
+        float mRefreshRemainingTime = 0.5f; // Time to next values refreshing
 
-	protected:
-		// Initializes window
-		void InitializeWindow();
+    protected:
+        // Initializes window
+        void InitializeWindow();
 
-		// Initializes window context menu
-		void InitializeWindowContext();
+        // Initializes window context menu
+        void InitializeWindowContext();
 
-		// Initializes viewers
-		void InitializeViewers();
+        // Initializes viewers
+        void InitializeViewers();
 
-		// Called when private fields visibility changed
-		void OnPrivateFieldsVisibleChanged(bool visible);
+        // Called when private fields visibility changed
+        void OnPrivateFieldsVisibleChanged(bool visible);
 
-		// Called when some property field was changed
-		void OnPropertyChanged(const Ref<IPropertyField>& field);
-	};
+        // Called when some property field was changed
+        void OnPropertyChanged(const Ref<IPropertyField>& field);
+    };
 }
 // --- META ---
 

@@ -7,21 +7,21 @@ using namespace o2;
 
 namespace o2
 {
-	class AnimationClip;
+    class AnimationClip;
 }
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(AnimationWindow);
-	FORWARD_CLASS_REF(KeyHandlesSheet);
+    FORWARD_CLASS_REF(AnimationWindow);
+    FORWARD_CLASS_REF(KeyHandlesSheet);
 
-	// ---------------------
-	// animation tracks tree
-	// ---------------------
-	class AnimationTree : public Tree
-	{
-	public:		
-		// Default constructor
+    // ---------------------
+    // animation tracks tree
+    // ---------------------
+    class AnimationTree : public Tree
+    {
+    public:        
+        // Default constructor
         AnimationTree(RefCounter* refCounter);
 
         // Copy-constructor
@@ -30,185 +30,185 @@ namespace Editor
         // Copy-constructor
         AnimationTree(const AnimationTree& other);
 
-		// Destructor. Clearing tree data
-		~AnimationTree();
+        // Destructor. Clearing tree data
+        ~AnimationTree();
 
-		// Copy-operator
-		AnimationTree& operator=(const AnimationTree& other);
+        // Copy-operator
+        AnimationTree& operator=(const AnimationTree& other);
 
-		// Draws widget
-		void Draw() override;
+        // Draws widget
+        void Draw() override;
 
-		// Sets animation and updates tree structure
-		void SetAnimation(const Ref<AnimationClip>& animation);
+        // Sets animation and updates tree structure
+        void SetAnimation(const Ref<AnimationClip>& animation);
 
-		// Called when animation changed, checks count of animation tracks, updates tree structure if needed
-		void OnAnimationChanged();
+        // Called when animation changed, checks count of animation tracks, updates tree structure if needed
+        void OnAnimationChanged();
 
-		// Sets width of tree part
-		void SetTreeWidth(float width);
+        // Sets width of tree part
+        void SetTreeWidth(float width);
 
-		// Sets color of track by path
-		void SetAnimationValueColor(const String& path, const Color4& color);
+        // Sets color of track by path
+        void SetAnimationValueColor(const String& path, const Color4& color);
 
-		// Returns Animation track line number by world position, dependent on scroll
-		float GetLineNumber(float worldPosition) const;
+        // Returns Animation track line number by world position, dependent on scroll
+        float GetLineNumber(float worldPosition) const;
 
-		// Returns world position of Animation track line
-		float GetLineWorldPosition(float lineNumber) const;
+        // Returns world position of Animation track line
+        float GetLineWorldPosition(float lineNumber) const;
 
-		// Returns create menu category in editor
-		static String GetCreateMenuCategory();
+        // Returns create menu category in editor
+        static String GetCreateMenuCategory();
 
-		SERIALIZABLE(AnimationTree);
-		CLONEABLE_REF(AnimationTree);
+        SERIALIZABLE(AnimationTree);
+        CLONEABLE_REF(AnimationTree);
 
-	public:
-		struct TrackNode: public RefCounterable
-		{
-			String name;
-			String path;
+    public:
+        struct TrackNode: public RefCounterable
+        {
+            String name;
+            String path;
 
-			Color4 color;
+            Color4 color;
 
-			Ref<IAnimationTrack>          track;
-			Ref<IAnimationTrack::IPlayer> player;
+            Ref<IAnimationTrack>          track;
+            Ref<IAnimationTrack::IPlayer> player;
 
-			Ref<ITrackControl> trackControl; 
+            Ref<ITrackControl> trackControl; 
 
-			WeakRef<TrackNode>     parent;
-			Vector<Ref<TrackNode>> children;
-		};
+            WeakRef<TrackNode>     parent;
+            Vector<Ref<TrackNode>> children;
+        };
 
-	private:
-		Ref<AnimationWindow> mAnimationWindow; // Animation window
+    private:
+        Ref<AnimationWindow> mAnimationWindow; // Animation window
 
-		int mAnimationValuesCount = 0; // Last stored animation tracks count. Used in checking of animation changes for tracking new values
+        int mAnimationValuesCount = 0; // Last stored animation tracks count. Used in checking of animation changes for tracking new values
 
-		Ref<TrackNode> mRootValue;     // Root animation properties tree node
-		Ref<ContextMenu> mContextMenu; // Context menu
+        Ref<TrackNode> mRootValue;     // Root animation properties tree node
+        Ref<ContextMenu> mContextMenu; // Context menu
 
-		Vector<Ref<TrackNode>> mPrevSelectedNodes; // Previous selected nodes before new selection
+        Vector<Ref<TrackNode>> mPrevSelectedNodes; // Previous selected nodes before new selection
 
-		float mTreeWidth = 100.0f; // Tree - part width
+        float mTreeWidth = 100.0f; // Tree - part width
 
-	private:
-		// Initializes context menu
-		void InitializeContext();
+    private:
+        // Initializes context menu
+        void InitializeContext();
 
-		// Rebuilds animation tracks tree - mRootValues
-		void RebuildAnimationTree();
+        // Rebuilds animation tracks tree - mRootValues
+        void RebuildAnimationTree();
 
-		// Adds Animation track to tree. Creates intermediate nodes when required
-		void AddAnimationTrack(const Ref<IAnimationTrack>& track, const Ref<IAnimationTrack::IPlayer>& player = nullptr);
+        // Adds Animation track to tree. Creates intermediate nodes when required
+        void AddAnimationTrack(const Ref<IAnimationTrack>& track, const Ref<IAnimationTrack::IPlayer>& player = nullptr);
 
-		//Updates tree node width
-		void UpdateTreeWidth();
+        //Updates tree node width
+        void UpdateTreeWidth();
 
-		// Sets curve view mode
-		void SetCurveViewMode(bool enable);
+        // Sets curve view mode
+        void SetCurveViewMode(bool enable);
 
-		// Returns object's parent
-		void* GetObjectParent(void* object) override;
+        // Returns object's parent
+        void* GetObjectParent(void* object) override;
 
-		// Returns object's children
-		Vector<void*> GetObjectChilds(void* object) override;
+        // Returns object's children
+        Vector<void*> GetObjectChilds(void* object) override;
 
-		// Returns debugging string for object
-		String GetObjectDebug(void* object) override;
+        // Returns debugging string for object
+        String GetObjectDebug(void* object) override;
 
-		// Sets nodeWidget data by object
-		void FillNodeDataByObject(const Ref<TreeNode>& nodeWidget, void* object) override;
+        // Sets nodeWidget data by object
+        void FillNodeDataByObject(const Ref<TreeNode>& nodeWidget, void* object) override;
 
-		// Free node data
-		void FreeNodeData(const Ref<TreeNode>& nodeWidget, void* object) override;
+        // Free node data
+        void FreeNodeData(const Ref<TreeNode>& nodeWidget, void* object) override;
 
-		// Updates visible nodes (calculates range and initializes nodes), updates tree width on visible nodes
-		void UpdateVisibleNodes() override;
+        // Updates visible nodes (calculates range and initializes nodes), updates tree width on visible nodes
+        void UpdateVisibleNodes() override;
 
-		// Called when tree node clicked by right button, opening context menu
-		void OnNodeRBClick(const Ref<TreeNode>& node) override;
+        // Called when tree node clicked by right button, opening context menu
+        void OnNodeRBClick(const Ref<TreeNode>& node) override;
 
-		// Called when list of selected objects was changed
-		void OnNodesSelectionChanged(Vector<void*> objects) override;
+        // Called when list of selected objects was changed
+        void OnNodesSelectionChanged(Vector<void*> objects) override;
 
-		// Gets tree node from pool or creates new, in editor scope
-		Ref<TreeNode> CreateTreeNodeWidget() override;
+        // Gets tree node from pool or creates new, in editor scope
+        Ref<TreeNode> CreateTreeNodeWidget() override;
 
-		// Removes selected property
-		void OnDeletePropertyPressed();
+        // Removes selected property
+        void OnDeletePropertyPressed();
 
-		friend class AnimationTreeNode;
-		friend class AnimationWindow;
-	};
+        friend class AnimationTreeNode;
+        friend class AnimationWindow;
+    };
 
-	// -------------------
-	// Animation tree node
-	// -------------------
-	class AnimationTreeNode : public TreeNode
-	{
-	public:
-		// Default constructor
-		AnimationTreeNode(RefCounter* refCounter);
+    // -------------------
+    // Animation tree node
+    // -------------------
+    class AnimationTreeNode : public TreeNode
+    {
+    public:
+        // Default constructor
+        AnimationTreeNode(RefCounter* refCounter);
 
-		// Copy-constructor
-		AnimationTreeNode(RefCounter* refCounter, const AnimationTreeNode& other);
+        // Copy-constructor
+        AnimationTreeNode(RefCounter* refCounter, const AnimationTreeNode& other);
 
-		// Copy operator
-		AnimationTreeNode& operator=(const AnimationTreeNode& other);
+        // Copy operator
+        AnimationTreeNode& operator=(const AnimationTreeNode& other);
 
-		// Sets object and updates track control
-		void Setup(const Ref<AnimationTree::TrackNode>& node, const Ref<AnimationTimeline>& timeline, const Ref<KeyHandlesSheet>& handlesSheet);
+        // Sets object and updates track control
+        void Setup(const Ref<AnimationTree::TrackNode>& node, const Ref<AnimationTimeline>& timeline, const Ref<KeyHandlesSheet>& handlesSheet);
 
-		// Free node, unregister track control
-		void Free();
+        // Free node, unregister track control
+        void Free();
 
-		// Sets width of tree part and control part
-		void SetTreeWidth(float width);
+        // Sets width of tree part and control part
+        void SetTreeWidth(float width);
 
-		// Called from handles sheet, when user double clicked, creates new key under cursor
-		void OnDoubleClicked(const Input::Cursor& cursor);
+        // Called from handles sheet, when user double clicked, creates new key under cursor
+        void OnDoubleClicked(const Input::Cursor& cursor);
 
-		// Returns create menu category in editor
-		static String GetCreateMenuCategory();
+        // Returns create menu category in editor
+        static String GetCreateMenuCategory();
 
         SERIALIZABLE(AnimationTreeNode);
         CLONEABLE_REF(AnimationTreeNode);
 
-	protected:
-		float mPropertyBorder = 2.0f;
-		float mAddKeyButtonSize = 25.0f;
-		float mPropertySize = 130.0f;
+    protected:
+        float mPropertyBorder = 2.0f;
+        float mAddKeyButtonSize = 25.0f;
+        float mPropertySize = 130.0f;
 
-		Ref<AnimationTree::TrackNode> mData; // Editing Animation track data
+        Ref<AnimationTree::TrackNode> mData; // Editing Animation track data
 
-		Ref<AnimationTimeline> mTimeline;     // Animation timeline pointer, passes into track controller
-		Ref<KeyHandlesSheet>   mHandlesSheet; // Handles sheet group, passes into track controller
+        Ref<AnimationTimeline> mTimeline;     // Animation timeline pointer, passes into track controller
+        Ref<KeyHandlesSheet>   mHandlesSheet; // Handles sheet group, passes into track controller
 
-		Ref<Text> mNameDrawable; // Object name drawable
+        Ref<Text> mNameDrawable; // Object name drawable
 
-		Ref<ITrackControl> mTrackControl;     // Animation track editor
+        Ref<ITrackControl> mTrackControl;     // Animation track editor
 
-		static Map<const Type*, Vector<Ref<ITrackControl>>> mTrackControlsCache; // Shared track controls cache
+        static Map<const Type*, Vector<Ref<ITrackControl>>> mTrackControlsCache; // Shared track controls cache
 
-	protected:
-		// Called on deserialization, initializes controls
-		void OnDeserialized(const DataValue& node) override;
+    protected:
+        // Called on deserialization, initializes controls
+        void OnDeserialized(const DataValue& node) override;
 
-		// initializes controls and widgets
-		void InitializeControls();
+        // initializes controls and widgets
+        void InitializeControls();
 
-		// Initializes suitable track control for Animation track by type. Caching track controls
-		void InitilizeTrackControl();
+        // Initializes suitable track control for Animation track by type. Caching track controls
+        void InitilizeTrackControl();
 
-		// Free track control and put it unto buffer
-		void FreeTrackControl();
+        // Free track control and put it unto buffer
+        void FreeTrackControl();
 
-		// Updates drag handles positions on timeline
-		void UpdateTrackControlView();
+        // Updates drag handles positions on timeline
+        void UpdateTrackControlView();
 
-		friend class AnimationTree;
-	};
+        friend class AnimationTree;
+    };
 }
 // --- META ---
 

@@ -6,39 +6,39 @@ using namespace o2;
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(ObjectViewer);
+    FORWARD_CLASS_REF(ObjectViewer);
 
-	// -------------------------
-	// Default properties viewer
-	// -------------------------
-	class DefaultPropertiesViewer : public IPropertiesViewer
-	{
-	public:
-		DefaultPropertiesViewer();
+    // -------------------------
+    // Default properties viewer
+    // -------------------------
+    class DefaultPropertiesViewer : public IPropertiesViewer
+    {
+    public:
+        DefaultPropertiesViewer();
 
-		// Virtual destructor
-		~DefaultPropertiesViewer();
+        // Virtual destructor
+        ~DefaultPropertiesViewer();
 
-		// Updates properties values
-		void Refresh() override;
+        // Updates properties values
+        void Refresh() override;
 
-		IOBJECT(DefaultPropertiesViewer);
+        IOBJECT(DefaultPropertiesViewer);
 
-	protected:
-		Ref<ObjectViewer> mViewer; // Object viewer
+    protected:
+        Ref<ObjectViewer> mViewer; // Object viewer
 
-		Vector<IObject*> mTargets; // Viewing targets
+        Vector<IObject*> mTargets; // Viewing targets
 
-	protected:
-		// Sets target objects
-		void SetTargets(const Vector<IObject*>& targets) override;
+    protected:
+        // Sets target objects
+        void SetTargets(const Vector<IObject*>& targets) override;
 
-		// Enable viewer event function
-		void OnPropertiesEnabled() override;
+        // Enable viewer event function
+        void OnPropertiesEnabled() override;
 
-		// Disable viewer event function
-		void OnPropertiesDisabled() override;
-	};
+        // Disable viewer event function
+        void OnPropertiesDisabled() override;
+    };
 
 }
 // --- META ---

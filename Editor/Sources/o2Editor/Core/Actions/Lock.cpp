@@ -6,39 +6,39 @@
 
 namespace Editor
 {
-	LockAction::LockAction()
-	{}
+    LockAction::LockAction()
+    {}
 
-	LockAction::LockAction(const Vector<Ref<SceneEditableObject>>& objects, bool lock):
-		lock(lock)
-	{
-		objectsIds = objects.Convert<SceneUID>([](auto& x) { return x->GetID(); });
-	}
+    LockAction::LockAction(const Vector<Ref<SceneEditableObject>>& objects, bool lock):
+        lock(lock)
+    {
+        objectsIds = objects.Convert<SceneUID>([](auto& x) { return x->GetID(); });
+    }
 
-	String LockAction::GetName() const
-	{
-		return lock ? "Lock actors" : "Unlock actors";
-	}
+    String LockAction::GetName() const
+    {
+        return lock ? "Lock actors" : "Unlock actors";
+    }
 
-	void LockAction::Redo()
-	{
-		for (auto& id : objectsIds)
-		{
-			auto object = o2Scene.GetEditableObjectByID(id);
-			if (object)
-				object->SetLocked(lock);
-		}
-	}
+    void LockAction::Redo()
+    {
+        for (auto& id : objectsIds)
+        {
+            auto object = o2Scene.GetEditableObjectByID(id);
+            if (object)
+                object->SetLocked(lock);
+        }
+    }
 
-	void LockAction::Undo()
-	{
-		for (auto& id : objectsIds)
-		{
-			auto object = o2Scene.GetEditableObjectByID(id);
-			if (object)
-				object->SetLocked(!lock);
-		}
-	}
+    void LockAction::Undo()
+    {
+        for (auto& id : objectsIds)
+        {
+            auto object = o2Scene.GetEditableObjectByID(id);
+            if (object)
+                object->SetLocked(!lock);
+        }
+    }
 
 }
 // --- META ---

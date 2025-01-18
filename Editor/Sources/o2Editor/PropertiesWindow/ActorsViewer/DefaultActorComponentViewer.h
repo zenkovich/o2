@@ -6,76 +6,76 @@
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(IObjectPropertiesViewer);
+    FORWARD_CLASS_REF(IObjectPropertiesViewer);
 
-	// ------------------------------
-	// Default actor component viewer
-	// ------------------------------
-	class DefaultActorComponentViewer: public IActorComponentViewer
-	{
-	public:
-		// Default constructor. Initializes data widget
-		DefaultActorComponentViewer();
+    // ------------------------------
+    // Default actor component viewer
+    // ------------------------------
+    class DefaultActorComponentViewer: public IActorComponentViewer
+    {
+    public:
+        // Default constructor. Initializes data widget
+        DefaultActorComponentViewer();
 
-		// Virtual destructor
-		~DefaultActorComponentViewer();
+        // Virtual destructor
+        ~DefaultActorComponentViewer();
 
-		// Sets target actors
-		void SetTargetComponents(const Vector<Ref<Component>>& components) override;
+        // Sets target actors
+        void SetTargetComponents(const Vector<Ref<Component>>& components) override;
 
-		// Returns viewing component type 
-		const Type* GetComponentType() const override;
+        // Returns viewing component type 
+        const Type* GetComponentType() const override;
 
-		// Updates all component values
-		void Refresh() override;
+        // Updates all component values
+        void Refresh() override;
 
-		IOBJECT(DefaultActorComponentViewer);
+        IOBJECT(DefaultActorComponentViewer);
 
-	protected:
-		const Type* mComponentType = nullptr; // Target component type
+    protected:
+        const Type* mComponentType = nullptr; // Target component type
 
-		Ref<IObjectPropertiesViewer> mViewer; //Component properties viewer
+        Ref<IObjectPropertiesViewer> mViewer; //Component properties viewer
 
-	protected:
-		// Called when some property changed, marks Actor as changed and calls default Undo create callback
-		void OnPropertyChanged(const String& path, const Vector<DataDocument>& before, 
-							   const Vector<DataDocument>& after);
+    protected:
+        // Called when some property changed, marks Actor as changed and calls default Undo create callback
+        void OnPropertyChanged(const String& path, const Vector<DataDocument>& before, 
+                               const Vector<DataDocument>& after);
 
-		// Enable viewer event function
-		void OnPropertiesEnabled() override;
+        // Enable viewer event function
+        void OnPropertiesEnabled() override;
 
-		// Disable viewer event function
-		void OnPropertiesDisabled() override;
-	};
+        // Disable viewer event function
+        void OnPropertiesDisabled() override;
+    };
 
-	template<typename _component_type>
-	class TActorComponentViewer: public DefaultActorComponentViewer
-	{
-	public:
-		// Sets target actors
-		void SetTargetComponents(const Vector<Ref<Component>>& components) override;
+    template<typename _component_type>
+    class TActorComponentViewer: public DefaultActorComponentViewer
+    {
+    public:
+        // Sets target actors
+        void SetTargetComponents(const Vector<Ref<Component>>& components) override;
 
-		// Returns viewing component type 
-		const Type* GetComponentType() const override;
+        // Returns viewing component type 
+        const Type* GetComponentType() const override;
 
-		IOBJECT(TActorComponentViewer<_component_type>);
+        IOBJECT(TActorComponentViewer<_component_type>);
 
-	protected:
-		Vector<Ref<_component_type>> mTargetComponents;
-	};
+    protected:
+        Vector<Ref<_component_type>> mTargetComponents;
+    };
 
-	template<typename _component_type>
-	void TActorComponentViewer<_component_type>::SetTargetComponents(const Vector<Ref<Component>>& components)
-	{
-		DefaultActorComponentViewer::SetTargetComponents(components);
-		mTargetComponents = DynamicCastVector<_component_type>(components);
-	}
+    template<typename _component_type>
+    void TActorComponentViewer<_component_type>::SetTargetComponents(const Vector<Ref<Component>>& components)
+    {
+        DefaultActorComponentViewer::SetTargetComponents(components);
+        mTargetComponents = DynamicCastVector<_component_type>(components);
+    }
 
-	template<typename _component_type>
-	const Type* TActorComponentViewer<_component_type>::GetComponentType() const
-	{
-		return &TypeOf(_component_type);
-	}
+    template<typename _component_type>
+    const Type* TActorComponentViewer<_component_type>::GetComponentType() const
+    {
+        return &TypeOf(_component_type);
+    }
 }
 // --- META ---
 

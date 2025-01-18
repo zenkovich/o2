@@ -15,70 +15,70 @@
 
 namespace Editor
 {
-	EditorConfig::EditorConfig(RefCounter* refCounter):
-		Singleton<EditorConfig>(refCounter)
-	{}
+    EditorConfig::EditorConfig(RefCounter* refCounter):
+        Singleton<EditorConfig>(refCounter)
+    {}
 
-	EditorConfig::~EditorConfig()
-	{}
+    EditorConfig::~EditorConfig()
+    {}
 
-	void EditorConfig::SaveGlobalConfigs()
-	{
-		DataDocument data;
+    void EditorConfig::SaveGlobalConfigs()
+    {
+        DataDocument data;
 
-		globalConfig.mAvailableLayouts = o2EditorWindows.mAvailableLayouts;
+        globalConfig.mAvailableLayouts = o2EditorWindows.mAvailableLayouts;
 
-		data = globalConfig;
-		data.SaveToFile(mGlobalConfigPath);
-	}
+        data = globalConfig;
+        data.SaveToFile(mGlobalConfigPath);
+    }
 
-	void EditorConfig::SaveProjectConfigs()
-	{
-		if (!WindowsManager::IsSingletonInitialzed())
-			return;
-			
-		projectConfig.mLayout = o2EditorWindows.GetWindowsLayout();
+    void EditorConfig::SaveProjectConfigs()
+    {
+        if (!WindowsManager::IsSingletonInitialzed())
+            return;
+            
+        projectConfig.mLayout = o2EditorWindows.GetWindowsLayout();
 
-		DataDocument data;
-		data = projectConfig;
-		data.SaveToFile(mConfigPath);
-	}
+        DataDocument data;
+        data = projectConfig;
+        data.SaveToFile(mConfigPath);
+    }
 
-	void EditorConfig::LoadConfigs()
-	{
-		LoadGlobalConfig();
-		LoadProjectConfig();
+    void EditorConfig::LoadConfigs()
+    {
+        LoadGlobalConfig();
+        LoadProjectConfig();
 
-		mConfigsLoaded = true;
-	}
+        mConfigsLoaded = true;
+    }
 
-	void EditorConfig::LoadProjectConfig()
-	{
-		DataDocument data;
+    void EditorConfig::LoadProjectConfig()
+    {
+        DataDocument data;
 
-		if (data.LoadFromFile(mConfigPath))
-			projectConfig = data;
-		else
-		{
-			projectConfig = ProjectConfig();
-		}
-	}
+        if (data.LoadFromFile(mConfigPath))
+            projectConfig = data;
+        else
+        {
+            projectConfig = ProjectConfig();
+        }
+    }
 
-	void EditorConfig::LoadGlobalConfig()
-	{
-		DataDocument data;
-		if (data.LoadFromFile(mGlobalConfigPath))
-			globalConfig = data;
-		else
-			globalConfig = GlobalConfig();
-	}
+    void EditorConfig::LoadGlobalConfig()
+    {
+        DataDocument data;
+        if (data.LoadFromFile(mGlobalConfigPath))
+            globalConfig = data;
+        else
+            globalConfig = GlobalConfig();
+    }
 
-	void EditorConfig::OnWindowChange()
-	{
-		projectConfig.mWindowPosition = o2Application.GetWindowPosition();
-		projectConfig.mWindowSize = o2Application.GetWindowSize();
-		projectConfig.mMaximized = o2Application.IsMaximized();
-	}
+    void EditorConfig::OnWindowChange()
+    {
+        projectConfig.mWindowPosition = o2Application.GetWindowPosition();
+        projectConfig.mWindowSize = o2Application.GetWindowSize();
+        projectConfig.mMaximized = o2Application.IsMaximized();
+    }
 
 }
 // --- META ---

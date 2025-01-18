@@ -6,54 +6,54 @@
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(IObjectPropertiesViewer);
+    FORWARD_CLASS_REF(IObjectPropertiesViewer);
 
-	// -------------------------------
-	// Default actor properties viewer
-	// -------------------------------
-	class DefaultActorPropertiesViewer: public IActorPropertiesViewer
-	{
-	public:
-		// Default constructor. Initializes data widget
-		DefaultActorPropertiesViewer();
+    // -------------------------------
+    // Default actor properties viewer
+    // -------------------------------
+    class DefaultActorPropertiesViewer: public IActorPropertiesViewer
+    {
+    public:
+        // Default constructor. Initializes data widget
+        DefaultActorPropertiesViewer();
 
-		// Virtual destructor
-		~DefaultActorPropertiesViewer();
+        // Virtual destructor
+        ~DefaultActorPropertiesViewer();
 
-		// Sets target actors
-		void SetTargetActors(const Vector<Actor*>& actors) override;
+        // Sets target actors
+        void SetTargetActors(const Vector<Actor*>& actors) override;
 
-		// Returns viewing actor type 
-		const Type* GetActorType() const override;
+        // Returns viewing actor type 
+        const Type* GetActorType() const override;
 
-		// Specialize viewing actor type. Creates all using properties
-		void SpecializeActorType(const Type* type);
+        // Specialize viewing actor type. Creates all using properties
+        void SpecializeActorType(const Type* type);
 
-		// Updates all actor values
-		void Refresh() override;
+        // Updates all actor values
+        void Refresh() override;
 
-		// Returns is there no properties
-		bool IsEmpty() const override;
+        // Returns is there no properties
+        bool IsEmpty() const override;
 
-		IOBJECT(DefaultActorPropertiesViewer);
+        IOBJECT(DefaultActorPropertiesViewer);
 
-	protected:
-		Vector<Actor*> mTargetActors;        // Target actors
-		const Type*    mActorType = nullptr; // Target actor type
+    protected:
+        Vector<Actor*> mTargetActors;        // Target actors
+        const Type*    mActorType = nullptr; // Target actor type
 
-		Ref<IObjectPropertiesViewer> mViewer; // Actor properties viewer
+        Ref<IObjectPropertiesViewer> mViewer; // Actor properties viewer
 
-	protected:
-		// Called when some property changed, marks Actor as changed and calls default Undo create callback
-		void OnPropertyChanged(const String& path, const Vector<DataDocument>& before,
-							   const Vector<DataDocument>& after);
+    protected:
+        // Called when some property changed, marks Actor as changed and calls default Undo create callback
+        void OnPropertyChanged(const String& path, const Vector<DataDocument>& before,
+                               const Vector<DataDocument>& after);
 
-		// Enable viewer event function
-		void OnPropertiesEnabled() override;
+        // Enable viewer event function
+        void OnPropertiesEnabled() override;
 
-		// Disable viewer event function
-		void OnPropertiesDisabled() override;
-	};
+        // Disable viewer event function
+        void OnPropertiesDisabled() override;
+    };
 }
 // --- META ---
 

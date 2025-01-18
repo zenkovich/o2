@@ -9,121 +9,121 @@ using namespace o2;
 
 namespace o2
 {
-	class SceneEditableObject;
-	class Toggle;
+    class SceneEditableObject;
+    class Toggle;
 }
 
 namespace Editor
 {
-	// ---------------------
-	// Editor tool interface
-	// ---------------------
-	class IEditTool: public IObject, public RefCounterable
-	{
-	public:
-		// Default constructor
-		IEditTool() {}
+    // ---------------------
+    // Editor tool interface
+    // ---------------------
+    class IEditTool: public IObject, public RefCounterable
+    {
+    public:
+        // Default constructor
+        IEditTool() {}
 
-		// Constructor with ref counter
-		IEditTool(RefCounter* refCounter) : RefCounterable(refCounter) {}
+        // Constructor with ref counter
+        IEditTool(RefCounter* refCounter) : RefCounterable(refCounter) {}
 
-		// Destructor
-		virtual ~IEditTool() {}
+        // Destructor
+        virtual ~IEditTool() {}
 
-		// Creates if required and returns toggle button for menu panel
-		virtual const Ref<Toggle>& GetPanelToggle() const;
+        // Creates if required and returns toggle button for menu panel
+        virtual const Ref<Toggle>& GetPanelToggle() const;
 
-		IOBJECT(IEditTool);
+        IOBJECT(IEditTool);
 
-	protected:
-		bool mNeedRedraw = false; // True when need redraw scene
+    protected:
+        bool mNeedRedraw = false; // True when need redraw scene
 
-		mutable Ref<Toggle> mPanelToggle; // Toggle button in menu panel
+        mutable Ref<Toggle> mPanelToggle; // Toggle button in menu panel
 
-	protected:
-		// Creates toggle button for menu panel
-		virtual Ref<Toggle> CreatePanelToggle() const;
+    protected:
+        // Creates toggle button for menu panel
+        virtual Ref<Toggle> CreatePanelToggle() const;
 
-		// Returns toggle in menu panel icon name
-		virtual String GetPanelIcon() const;
+        // Returns toggle in menu panel icon name
+        virtual String GetPanelIcon() const;
 
-		// Returns shortcut keys for toggle
-		virtual ShortcutKeys GetShortcut() const;
+        // Returns shortcut keys for toggle
+        virtual ShortcutKeys GetShortcut() const;
 
-		// Draws tool
-		virtual void DrawScene() {}
+        // Draws tool
+        virtual void DrawScene() {}
 
-		// Draws tool
-		virtual void DrawScreen() {}
+        // Draws tool
+        virtual void DrawScreen() {}
 
-		// Called when scene actors was changed
-		virtual void OnSceneChanged(const Vector<Ref<SceneEditableObject>>& changedObjects) {}
+        // Called when scene actors was changed
+        virtual void OnSceneChanged(const Vector<Ref<SceneEditableObject>>& changedObjects) {}
 
-		// Updates tool
-		virtual void Update(float dt) {}
+        // Updates tool
+        virtual void Update(float dt) {}
 
-		// Called when tool was enabled
-		virtual void OnEnabled() {}
+        // Called when tool was enabled
+        virtual void OnEnabled() {}
 
-		// Called when tool was disabled
-		virtual void OnDisabled() {}
+        // Called when tool was disabled
+        virtual void OnDisabled() {}
 
-		// Called when objects selection was changed
-		virtual void OnObjectsSelectionChanged(const Vector<Ref<SceneEditableObject>>& objects) {}
+        // Called when objects selection was changed
+        virtual void OnObjectsSelectionChanged(const Vector<Ref<SceneEditableObject>>& objects) {}
 
-		// Called when cursor pressed on this
-		virtual void OnCursorPressed(const Input::Cursor& cursor) {}
+        // Called when cursor pressed on this
+        virtual void OnCursorPressed(const Input::Cursor& cursor) {}
 
-		// Called when cursor released (only when cursor pressed this at previous time)
-		virtual void OnCursorReleased(const Input::Cursor& cursor) {}
+        // Called when cursor released (only when cursor pressed this at previous time)
+        virtual void OnCursorReleased(const Input::Cursor& cursor) {}
 
-		// Called when cursor pressing was broken (when scrolled scroll area or some other)
-		virtual void OnCursorPressBreak(const Input::Cursor& cursor) {}
+        // Called when cursor pressing was broken (when scrolled scroll area or some other)
+        virtual void OnCursorPressBreak(const Input::Cursor& cursor) {}
 
-		// Called when cursor stay down during frame
-		virtual void OnCursorStillDown(const Input::Cursor& cursor) {}
+        // Called when cursor stay down during frame
+        virtual void OnCursorStillDown(const Input::Cursor& cursor) {}
 
-		// Called when cursor moved on this (or moved outside when this was pressed)
-		virtual void OnCursorMoved(const Input::Cursor& cursor) {}
+        // Called when cursor moved on this (or moved outside when this was pressed)
+        virtual void OnCursorMoved(const Input::Cursor& cursor) {}
 
-		// Called when cursor enters this object
-		virtual void OnCursorEnter(const Input::Cursor& cursor) {}
+        // Called when cursor enters this object
+        virtual void OnCursorEnter(const Input::Cursor& cursor) {}
 
-		// Called when cursor exits this object
-		virtual void OnCursorExit(const Input::Cursor& cursor) {}
+        // Called when cursor exits this object
+        virtual void OnCursorExit(const Input::Cursor& cursor) {}
 
-		// Called when right mouse button was pressed on this
-		virtual void OnCursorRightMousePressed(const Input::Cursor& cursor) {}
+        // Called when right mouse button was pressed on this
+        virtual void OnCursorRightMousePressed(const Input::Cursor& cursor) {}
 
-		// Called when right mouse button stay down on this
-		virtual void OnCursorRightMouseStayDown(const Input::Cursor& cursor) {}
+        // Called when right mouse button stay down on this
+        virtual void OnCursorRightMouseStayDown(const Input::Cursor& cursor) {}
 
-		// Called when right mouse button was released (only when right mouse button pressed this at previous time)
-		virtual void OnCursorRightMouseReleased(const Input::Cursor& cursor) {}
+        // Called when right mouse button was released (only when right mouse button pressed this at previous time)
+        virtual void OnCursorRightMouseReleased(const Input::Cursor& cursor) {}
 
-		// Called when middle mouse button was pressed on this
-		virtual void OnCursorMiddleMousePressed(const Input::Cursor& cursor) {}
+        // Called when middle mouse button was pressed on this
+        virtual void OnCursorMiddleMousePressed(const Input::Cursor& cursor) {}
 
-		// Called when middle mouse button stay down on this
-		virtual void OnCursorMiddleMouseStayDown(const Input::Cursor& cursor) {}
+        // Called when middle mouse button stay down on this
+        virtual void OnCursorMiddleMouseStayDown(const Input::Cursor& cursor) {}
 
-		// Called when middle mouse button was released (only when middle mouse button pressed this at previous time)
-		virtual void OnCursorMiddleMouseReleased(const Input::Cursor& cursor) {}
+        // Called when middle mouse button was released (only when middle mouse button pressed this at previous time)
+        virtual void OnCursorMiddleMouseReleased(const Input::Cursor& cursor) {}
 
-		// Called when scrolling
-		virtual void OnScrolled(float scroll) {}
+        // Called when scrolling
+        virtual void OnScrolled(float scroll) {}
 
-		// Called when key was pressed
-		virtual void OnKeyPressed(const Input::Key& key) {}
+        // Called when key was pressed
+        virtual void OnKeyPressed(const Input::Key& key) {}
 
-		// Called when key was released
-		virtual void OnKeyReleased(const Input::Key& key) {}
+        // Called when key was released
+        virtual void OnKeyReleased(const Input::Key& key) {}
 
-		// Called when key stay down during frame
-		virtual void OnKeyStayDown(const Input::Key& key) {}
+        // Called when key stay down during frame
+        virtual void OnKeyStayDown(const Input::Key& key) {}
 
-		friend class SceneEditScreen;
-	};
+        friend class SceneEditScreen;
+    };
 }
 // --- META ---
 

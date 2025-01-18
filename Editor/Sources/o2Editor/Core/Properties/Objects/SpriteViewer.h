@@ -8,29 +8,29 @@ using namespace o2;
 
 namespace o2
 {
-	class Sprite;
-	class Spoiler;
+    class Sprite;
+    class Spoiler;
 }
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(AssetProperty);
-	FORWARD_CLASS_REF(BorderIProperty);
-	FORWARD_CLASS_REF(ColorProperty);
-	FORWARD_CLASS_REF(EnumProperty);
-	FORWARD_CLASS_REF(FloatProperty);
-	FORWARD_CLASS_REF(ImageSlicesEditorWidget);
-	FORWARD_CLASS_REF(Vec2FProperty);
+    FORWARD_CLASS_REF(AssetProperty);
+    FORWARD_CLASS_REF(BorderIProperty);
+    FORWARD_CLASS_REF(ColorProperty);
+    FORWARD_CLASS_REF(EnumProperty);
+    FORWARD_CLASS_REF(FloatProperty);
+    FORWARD_CLASS_REF(ImageSlicesEditorWidget);
+    FORWARD_CLASS_REF(Vec2FProperty);
 
-	// --------------------
-	// Editor sprite viewer
-	// --------------------
-	class SpriteViewer : public TObjectPropertiesViewer<Sprite>
-	{
-	public:
-		IOBJECT(SpriteViewer);
+    // --------------------
+    // Editor sprite viewer
+    // --------------------
+    class SpriteViewer : public TObjectPropertiesViewer<Sprite>
+    {
+    public:
+        IOBJECT(SpriteViewer);
 
-	protected:
+    protected:
         Ref<VerticalLayout> mHiddenProperties; // Hidden properties container
 
         Ref<AssetProperty> mImageProperty;     // Image asset property
@@ -50,16 +50,16 @@ namespace Editor
         Ref<Spoiler>       mTiledPropertiesSpoiler; // Tiled properties spoiler
         Ref<FloatProperty> mTileScaleProperty;      // Tile scale property
 
-	protected:
-		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
-		void RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
+    protected:
+        // Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
+        void RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 
-		// Called when viewer is refreshed
-		void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
+        // Called when viewer is refreshed
+        void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 
-		// Called when type enum selected, shows required property spoiler
-		void OnModeSelected();
-	};
+        // Called when type enum selected, shows required property spoiler
+        void OnModeSelected();
+    };
 }
 // --- META ---
 

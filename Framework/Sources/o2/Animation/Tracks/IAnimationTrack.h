@@ -37,8 +37,8 @@ namespace o2
             // Sets animation track
             virtual void SetTrack(const Ref<IAnimationTrack>& track);
 
-			// Adjusts target type to correct one
-			virtual void* AdjustTargetType(void* target, const Type& type) { return target; }
+            // Adjusts target type to correct one
+            virtual void* AdjustTargetType(void* target, const Type& type) { return target; }
 
             // Returns animation track
             virtual Ref<IAnimationTrack> GetTrack() const { return nullptr; }

@@ -160,7 +160,7 @@ namespace o2
         SetTarget((Vec2F*)target, changeEvent);
     }
 
-	void AnimationTrack<Vec2F>::Player::SetTargetProxy(const Ref<IAbstractValueProxy>& targetProxy)
+    void AnimationTrack<Vec2F>::Player::SetTargetProxy(const Ref<IAbstractValueProxy>& targetProxy)
     {
         SetTargetProxy(DynamicCast<IValueProxy<Vec2F>>(targetProxy));
     }

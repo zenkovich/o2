@@ -9,70 +9,70 @@ using namespace o2;
 
 namespace o2
 {
-	class Actor;
-	class Component;
-	class Widget;
+    class Actor;
+    class Component;
+    class Widget;
 }
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(SpoilerWithHead);
+    FORWARD_CLASS_REF(SpoilerWithHead);
 
-	// ----------------------------------------
-	// Editor actor properties viewer interface
-	// ----------------------------------------
-	class IActorPropertiesViewer: public IObject, virtual public RefCounterable
-	{
-	public:
-		// Default constructor. Initializes data widget
-		IActorPropertiesViewer();
+    // ----------------------------------------
+    // Editor actor properties viewer interface
+    // ----------------------------------------
+    class IActorPropertiesViewer: public IObject, virtual public RefCounterable
+    {
+    public:
+        // Default constructor. Initializes data widget
+        IActorPropertiesViewer();
 
-		// Virtual destructor
-		virtual ~IActorPropertiesViewer();
+        // Virtual destructor
+        virtual ~IActorPropertiesViewer();
 
-		// Sets target actors
-		virtual void SetTargetActors(const Vector<Actor*>& actors) {}
+        // Sets target actors
+        virtual void SetTargetActors(const Vector<Actor*>& actors) {}
 
-		// Returns viewing actor type 
-		virtual const Type* GetActorType() const { return nullptr; }
+        // Returns viewing actor type 
+        virtual const Type* GetActorType() const { return nullptr; }
 
-		// Returns data widget
-		virtual Ref<Widget> GetWidget() const;
+        // Returns data widget
+        virtual Ref<Widget> GetWidget() const;
 
-		// Expands view
-		void Expand();
+        // Expands view
+        void Expand();
 
-		// Collapse view
-		void Collapse();
+        // Collapse view
+        void Collapse();
 
-		// Updates all actor values
-		virtual void Refresh();
+        // Updates all actor values
+        virtual void Refresh();
 
-		// Returns is there no properties
-		virtual bool IsEmpty() const;
+        // Returns is there no properties
+        virtual bool IsEmpty() const;
 
-		// Sets viewer enabled
-		void SetPropertiesEnabled(bool enabled);
+        // Sets viewer enabled
+        void SetPropertiesEnabled(bool enabled);
 
-		// Returns is viewer enabled
-		bool IsPropertiesEnabled() const;
+        // Returns is viewer enabled
+        bool IsPropertiesEnabled() const;
 
-		IOBJECT(IActorPropertiesViewer);
+        IOBJECT(IActorPropertiesViewer);
 
-	protected:
-		Ref<SpoilerWithHead> mSpoiler;
+    protected:
+        Ref<SpoilerWithHead> mSpoiler;
 
-		bool mPropertiesEnabled = false; // Is viewer enabled 
+        bool mPropertiesEnabled = false; // Is viewer enabled 
 
-	protected:
-		// Enable viewer event function
-		virtual void OnPropertiesEnabled() {}
+    protected:
+        // Enable viewer event function
+        virtual void OnPropertiesEnabled() {}
 
-		// Disable viewer event function
-		virtual void OnPropertiesDisabled() {}
+        // Disable viewer event function
+        virtual void OnPropertiesDisabled() {}
 
-		friend class ActorViewer;
-	};
+        friend class ActorViewer;
+    };
 }
 // --- META ---
 

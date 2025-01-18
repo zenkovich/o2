@@ -48,10 +48,10 @@ namespace o2
         explicit Sprite(const Color4& color);
 
         // Constructor from bitmap
-		explicit Sprite(const Bitmap& bitmap);
+        explicit Sprite(const Bitmap& bitmap);
 
-		// Constructor from texture and source rectangle
-		Sprite(TextureRef texture, const RectI& srcRect = RectI());
+        // Constructor from texture and source rectangle
+        Sprite(TextureRef texture, const RectI& srcRect = RectI());
 
         // Copy-constructor
         Sprite(const Sprite& other);
@@ -208,9 +208,9 @@ namespace o2
         void BasisChanged() override;
 
         // Called when color was changed
-		void ColorChanged() override;
+        void ColorChanged() override;
 
-		// Called when blend mode was changed
+        // Called when blend mode was changed
         void BlendModeChanged() override;
 
         // Initialized texture by image: uses atlas part or texture

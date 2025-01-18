@@ -6,173 +6,173 @@ using namespace o2;
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(DockWindowPlace);
+    FORWARD_CLASS_REF(DockWindowPlace);
 
-	// -----------------------------
-	// Dockable editor window widget
-	// -----------------------------
+    // -----------------------------
+    // Dockable editor window widget
+    // -----------------------------
     class DockableWindow: public o2::Window
-	{
-	public:
-		// Default constructor
-		DockableWindow(RefCounter* refCounter);
+    {
+    public:
+        // Default constructor
+        DockableWindow(RefCounter* refCounter);
 
-		// Copy-constructor
-		DockableWindow(RefCounter* refCounter, const DockableWindow& other);
+        // Copy-constructor
+        DockableWindow(RefCounter* refCounter, const DockableWindow& other);
 
-		// Destructor
-		~DockableWindow();
+        // Destructor
+        ~DockableWindow();
 
-		// Copy-operator
-		DockableWindow& operator=(const DockableWindow& other);
+        // Copy-operator
+        DockableWindow& operator=(const DockableWindow& other);
 
-		// Updates drawables, states and widget
-		void Update(float dt) override;
+        // Updates drawables, states and widget
+        void Update(float dt) override;
 
-		// Draws widget
-		void Draw() override;
+        // Draws widget
+        void Draw() override;
 
-		// Returns is window docked
-		bool IsDocked() const;
+        // Returns is window docked
+        bool IsDocked() const;
 
-		// Return pointer to docking sample sprite
-		const Ref<Sprite>& GetDockingFrameSample() const; 
+        // Return pointer to docking sample sprite
+        const Ref<Sprite>& GetDockingFrameSample() const; 
 
-		// Sets icon sprite
-		void SetIcon(const Ref<Sprite>& icon) override;
+        // Sets icon sprite
+        void SetIcon(const Ref<Sprite>& icon) override;
 
-		// Returns icon sprite
-		Ref<Sprite> GetIcon() const override;
+        // Returns icon sprite
+        Ref<Sprite> GetIcon() const override;
 
-		// Sets icon layer layout
-		void SetIconLayout(const Layout& layout) override;
+        // Sets icon layer layout
+        void SetIconLayout(const Layout& layout) override;
 
-		// Returns icon layer layout
-		Layout GetIconLayout() const override;
+        // Returns icon layer layout
+        Layout GetIconLayout() const override;
 
-		// Sets caption text
-		void SetCaption(const WString& caption) override;
+        // Sets caption text
+        void SetCaption(const WString& caption) override;
 
-		// Returns caption text
-		WString GetCaption() const override;
+        // Returns caption text
+        WString GetCaption() const override;
 
-		// Sets tab size
-		void SetTabWidth(float width);
+        // Sets tab size
+        void SetTabWidth(float width);
 
-		// Sets tab width
-		float GetTabWidth() const;
+        // Sets tab width
+        float GetTabWidth() const;
 
-		// Sets current window tab as active tab
-		void SetTabActive();
+        // Sets current window tab as active tab
+        void SetTabActive();
 
-		// Returns is this window active and tabbed and tab is active
-		bool IsTabActive() const;
+        // Returns is this window active and tabbed and tab is active
+        bool IsTabActive() const;
 
-		// Sets Automatically calculating tab width when changing caption
-		void SetAutoCalcuclatingTabWidth(bool enable);
+        // Sets Automatically calculating tab width when changing caption
+        void SetAutoCalcuclatingTabWidth(bool enable);
 
-		// Is Automatically calculating tab width when changing caption
-		bool IsAutoCalcuclatingTabWidth() const;
+        // Is Automatically calculating tab width when changing caption
+        bool IsAutoCalcuclatingTabWidth() const;
 
-		// Places this into empty dock
-		void PlaceDock(const Ref<DockWindowPlace>& targetDock);
+        // Places this into empty dock
+        void PlaceDock(const Ref<DockWindowPlace>& targetDock);
 
-		// Undocks this window, using when window moved out from dock
-		void Undock();
+        // Undocks this window, using when window moved out from dock
+        void Undock();
 
-		// Updates layout
-		void UpdateSelfTransform() override;
+        // Updates layout
+        void UpdateSelfTransform() override;
 
-		// Returns true if point is under drawable
-		bool IsUnderPoint(const Vec2F& point) override;
+        // Returns true if point is under drawable
+        bool IsUnderPoint(const Vec2F& point) override;
 
-		// Returns create menu category in editor
-		static String GetCreateMenuCategory();
+        // Returns create menu category in editor
+        static String GetCreateMenuCategory();
 
-		SERIALIZABLE(DockableWindow);
-		CLONEABLE_REF(DockableWindow);
+        SERIALIZABLE(DockableWindow);
+        CLONEABLE_REF(DockableWindow);
 
-	protected:
-		const String mTabLayerPath = "tab/main";
-		const String mTabIconLayerPath = "tab/main/icon";
-		const String mTabCaptionLayerPath = "tab/main/caption";
-		const String mIconLayerPath = "back/icon";
-		const String mCaptionLayerPath = "back/caption";
+    protected:
+        const String mTabLayerPath = "tab/main";
+        const String mTabIconLayerPath = "tab/main/icon";
+        const String mTabCaptionLayerPath = "tab/main/caption";
+        const String mIconLayerPath = "back/icon";
+        const String mCaptionLayerPath = "back/caption";
 
-		const float mDockSizeCoef = 0.2f;
-		const float mDockBorder = 1.5f;
+        const float mDockSizeCoef = 0.2f;
+        const float mDockBorder = 1.5f;
 
-		bool        mDocked = false;      // Is window docked
-		Ref<Sprite> mDockingFrameSample;  // Docking frame sample @SERIALIZABLE
-		RectF       mDockingFrameCurrent; // Docking sample current frame
-		RectF       mDockingFrameTarget;  // Docking sample target  frame
+        bool        mDocked = false;      // Is window docked
+        Ref<Sprite> mDockingFrameSample;  // Docking frame sample @SERIALIZABLE
+        RectF       mDockingFrameCurrent; // Docking sample current frame
+        RectF       mDockingFrameTarget;  // Docking sample target  frame
 
-		Ref<AnimationPlayer> mDockingFrameAppearance = mmake<AnimationPlayer>(); // Docking frame appearance tween
+        Ref<AnimationPlayer> mDockingFrameAppearance = mmake<AnimationPlayer>(); // Docking frame appearance tween
 
-		Vec2F mNonDockSize; // Size of widget before docking
-		Vec2F mDragOffset;  // Offset from cursor to dragging anchor point
+        Vec2F mNonDockSize; // Size of widget before docking
+        Vec2F mDragOffset;  // Offset from cursor to dragging anchor point
 
-		bool  mTabState = false;             // Is window as tab
-		int   mTabPosition = 0;              // Tab index
-		bool  mTabActive = false;            // Is active tab
-		float mTabWidth = 150.0f;            // Width of tab layer "tab/main"
-		bool  mAutoCalculateTabWidth = true; // Automatically calculating tab width when changing caption
+        bool  mTabState = false;             // Is window as tab
+        int   mTabPosition = 0;              // Tab index
+        bool  mTabActive = false;            // Is active tab
+        float mTabWidth = 150.0f;            // Width of tab layer "tab/main"
+        bool  mAutoCalculateTabWidth = true; // Automatically calculating tab width when changing caption
 
-	protected:
-		// Called when visible was changed
-		void OnEnabled() override;
+    protected:
+        // Called when visible was changed
+        void OnEnabled() override;
 
-		// Called when visible was changed, undocks
-		void OnDisabled() override;
+        // Called when visible was changed, undocks
+        void OnDisabled() override;
 
-		// Called when widget was selected, enables active tab
-		void OnFocused() override;
+        // Called when widget was selected, enables active tab
+        void OnFocused() override;
 
-		//Initialize animation for frame appearance
-		void InitializeDockFrameAppearanceAnim();
+        //Initialize animation for frame appearance
+        void InitializeDockFrameAppearanceAnim();
 
-		// Initializes drag handles
-		void InitializeDragHandles();
+        // Initializes drag handles
+        void InitializeDragHandles();
 
-		// Called when head handle double clicked, trying to dock window
-		void OnHeadDblCKicked(const Input::Cursor& cursor);
+        // Called when head handle double clicked, trying to dock window
+        void OnHeadDblCKicked(const Input::Cursor& cursor);
 
-		// Called when window was moved
-		void OnMoved(const Input::Cursor& cursor);
+        // Called when window was moved
+        void OnMoved(const Input::Cursor& cursor);
 
-		// Called when window moving was completed
-		void OnMoveCompleted(const Input::Cursor&);
+        // Called when window moving was completed
+        void OnMoveCompleted(const Input::Cursor&);
 
-		// Called when window going to move
-		void OnMoveBegin(const Input::Cursor&);
+        // Called when window going to move
+        void OnMoveBegin(const Input::Cursor&);
 
-		// Searches dock place under cursor and returns parameters of them
-		bool TraceDock(Ref<DockWindowPlace>& targetDock, Side& dockPosition, RectF& dockZoneRect);
+        // Searches dock place under cursor and returns parameters of them
+        bool TraceDock(Ref<DockWindowPlace>& targetDock, Side& dockPosition, RectF& dockZoneRect);
 
-		// Places this into target dock as non line arranged
-		void PlaceNonLineDock(const Ref<DockWindowPlace>& targetDock, Side dockPosition);
+        // Places this into target dock as non line arranged
+        void PlaceNonLineDock(const Ref<DockWindowPlace>& targetDock, Side dockPosition);
 
-		// Places this into target dock as line arranged
-		void PlaceLineDock(const Ref<DockWindowPlace>& targetDock, Side dockPosition, RectF dockZoneRect);
+        // Places this into target dock as line arranged
+        void PlaceLineDock(const Ref<DockWindowPlace>& targetDock, Side dockPosition, RectF dockZoneRect);
 
-		// Sets window as one of tab
-		void SetTabState(float offset, int position, bool isFirst);
+        // Sets window as one of tab
+        void SetTabState(float offset, int position, bool isFirst);
 
-		// Sets window regular state, not as tab
-		void SetNonTabState();
+        // Sets window regular state, not as tab
+        void SetNonTabState();
 
-		// Sets tab as active
-		void SetActiveTab();
+        // Sets tab as active
+        void SetActiveTab();
 
-		// Sets window docked
-		void SetDocked(bool docked);
+        // Sets window docked
+        void SetDocked(bool docked);
 
-		// Recalculates tab width by caption size
-		void RecalculateTabWidth();
+        // Recalculates tab width by caption size
+        void RecalculateTabWidth();
 
-		friend class WindowsLayout;
-		friend class DockWindowPlace;
-	};
+        friend class WindowsLayout;
+        friend class DockWindowPlace;
+    };
 }
 // --- META ---
 

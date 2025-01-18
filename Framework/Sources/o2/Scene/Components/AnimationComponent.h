@@ -22,7 +22,7 @@ namespace o2
     {
     public:
         PROPERTIES(AnimationComponent);
-		ACCESSOR(Ref<IAnimationState>, state, String, GetState, GetAllStates); // Animation states accessor by name
+        ACCESSOR(Ref<IAnimationState>, state, String, GetState, GetAllStates); // Animation states accessor by name
 
     public:
         // Default constructor @SCRIPTABLE
@@ -63,10 +63,10 @@ namespace o2
         Ref<IAnimationState> GetState(const String& name);
 
         // Returns all states array
-		const Vector<Ref<IAnimationState>>& GetStates() const;
+        const Vector<Ref<IAnimationState>>& GetStates() const;
 
-		// Returns all states
-		Map<String, Ref<IAnimationState>> GetAllStates() const;
+        // Returns all states
+        Map<String, Ref<IAnimationState>> GetAllStates() const;
 
         // Creates new state and plays him
         Ref<IAnimationState> Play(const Ref<AnimationClip>& animation, const String& name);
@@ -158,29 +158,29 @@ namespace o2
 
             // Returns is agent hasn't no values
             bool IsEmpty() const override;
-		};
+        };
 
-		// ------------------------------
-		// Template value assigning agent
-		// ------------------------------
-		struct SubTrackMixer : public ITrackMixer
-		{
-		public:
-			Vector<Pair<AnimationState*, typename AnimationSubTrack::Player*>> tracks; // Animation tracks associated with animation states
+        // ------------------------------
+        // Template value assigning agent
+        // ------------------------------
+        struct SubTrackMixer : public ITrackMixer
+        {
+        public:
+            Vector<Pair<AnimationState*, typename AnimationSubTrack::Player*>> tracks; // Animation tracks associated with animation states
 
-		public:
-			// Destructor
-			~SubTrackMixer();
+        public:
+            // Destructor
+            ~SubTrackMixer();
 
-			// Updates value and blend
-			void Update() override;
+            // Updates value and blend
+            void Update() override;
 
-			// Removes Animation track from agent
-			void RemoveTrack(IAnimationTrack::IPlayer* track) override;
+            // Removes Animation track from agent
+            void RemoveTrack(IAnimationTrack::IPlayer* track) override;
 
-			// Returns is agent hasn't no values
-			bool IsEmpty() const override;
-		};
+            // Returns is agent hasn't no values
+            bool IsEmpty() const override;
+        };
 
         // ----------------------
         // Blend state parameters
@@ -208,21 +208,21 @@ namespace o2
 
     protected:
         // Called when component started, checks states auto play
-		void OnStart() override;
+        void OnStart() override;
 
-		// Called when actor initialized, reattaches animation states
+        // Called when actor initialized, reattaches animation states
         void OnInitialized() override;
 
-		// Registers track by path and state
-		template<typename _valueType, typename _trackType, typename _mixerType>
-		void RegTrack(const Ref<typename _trackType::Player>& player, const String& path, const Ref<AnimationState>& state);
+        // Registers track by path and state
+        template<typename _valueType, typename _trackType, typename _mixerType>
+        void RegTrack(const Ref<typename _trackType::Player>& player, const String& path, const Ref<AnimationState>& state);
 
-		// Registers value track by path and state
-		template<typename _valueType>
-		void RegValueTrack(const Ref<typename AnimationTrack<_valueType>::Player>& player, const String& path, const Ref<AnimationState>& state);
+        // Registers value track by path and state
+        template<typename _valueType>
+        void RegValueTrack(const Ref<typename AnimationTrack<_valueType>::Player>& player, const String& path, const Ref<AnimationState>& state);
 
-		// Registers sub track by path and state
-		void RegSubTrack(const Ref<AnimationSubTrack::Player>& player, const String& path, const Ref<AnimationState>& state);
+        // Registers sub track by path and state
+        void RegSubTrack(const Ref<AnimationSubTrack::Player>& player, const String& path, const Ref<AnimationState>& state);
 
         // Removes Animation track from agent by path
         void UnregTrack(const Ref<IAnimationTrack::IPlayer>& player, const String& path);
@@ -233,10 +233,10 @@ namespace o2
         // Called when track is removing from animation state, unregisters track player from mixer
         void OnStateAnimationTrackRemoved(const Ref<AnimationState>& state, const Ref<IAnimationTrack::IPlayer>& player);
 
-		// Reattaches animation states to component, used to start and update animations
+        // Reattaches animation states to component, used to start and update animations
         virtual void ReattachAnimationStates();
 
-		REF_COUNTERABLE_IMPL(Component);
+        REF_COUNTERABLE_IMPL(Component);
 
         friend class AnimationClip;
         friend class AnimationState;
@@ -245,7 +245,7 @@ namespace o2
         template<typename _type>
         friend class AnimationTrack;
 
-		friend class AnimationSubTrack;
+        friend class AnimationSubTrack;
     };
 }
 
@@ -253,8 +253,8 @@ namespace o2
 
 namespace o2
 {
-	template<typename _valueType, typename _trackType, typename _mixerType>
-	void AnimationComponent::RegTrack(const Ref<typename _trackType::Player>& player, const String& path, const Ref<AnimationState>& state)
+    template<typename _valueType, typename _trackType, typename _mixerType>
+    void AnimationComponent::RegTrack(const Ref<typename _trackType::Player>& player, const String& path, const Ref<AnimationState>& state)
     {
         for (auto& val : mValues)
         {
@@ -292,13 +292,13 @@ namespace o2
             newAgent->target = DynamicCast<IValueProxy<_valueType>>(fieldInfo->GetType()->GetValueProxy(fieldPtr));
     }
 
-	template<typename _valueType>
-	void AnimationComponent::RegValueTrack(const Ref<typename AnimationTrack<_valueType>::Player>& player, const String& path, const Ref<AnimationState>& state)
-	{
-		RegTrack<_valueType, AnimationTrack<_valueType>, TrackMixer<_valueType>>(player, path, state);
-	}
+    template<typename _valueType>
+    void AnimationComponent::RegValueTrack(const Ref<typename AnimationTrack<_valueType>::Player>& player, const String& path, const Ref<AnimationState>& state)
+    {
+        RegTrack<_valueType, AnimationTrack<_valueType>, TrackMixer<_valueType>>(player, path, state);
+    }
 
-	template<typename _type>
+    template<typename _type>
     AnimationComponent::TrackMixer<_type>::~TrackMixer()
     {}
 
@@ -334,8 +334,8 @@ namespace o2
             auto valueState = tracks[i].first;
             auto value = tracks[i].second;
 
-			weightsSum += valueState->mWeight*valueState->mask.GetNodeWeight(path);
-			valueSum += value->GetValue();
+            weightsSum += valueState->mWeight*valueState->mask.GetNodeWeight(path);
+            valueSum += value->GetValue();
         }
 
         _type resValue = valueSum / weightsSum;

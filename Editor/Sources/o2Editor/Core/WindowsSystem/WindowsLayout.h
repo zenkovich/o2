@@ -7,55 +7,55 @@ using namespace o2;
 
 namespace o2
 {
-	class Widget;
+    class Widget;
 }
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(DockWindowPlace);
+    FORWARD_CLASS_REF(DockWindowPlace);
 
-	// ---------------------------------------
-	// Class that stores layout of all windows
-	// ---------------------------------------
-	class WindowsLayout : public ISerializable
-	{
-	public:
-		class WindowDockPlaceInfo : public ISerializable
-		{
-		public:
-			RectF                       anchors; // Anchors coefficients @SERIALIZABLE
-			Vector<String>              windows; // List of windows inside this place @SERIALIZABLE
-			String                      active;  // Name active window @SERIALIZABLE
-			Vector<WindowDockPlaceInfo> childs;	 // Children places @SERIALIZABLE
+    // ---------------------------------------
+    // Class that stores layout of all windows
+    // ---------------------------------------
+    class WindowsLayout : public ISerializable
+    {
+    public:
+        class WindowDockPlaceInfo : public ISerializable
+        {
+        public:
+            RectF                       anchors; // Anchors coefficients @SERIALIZABLE
+            Vector<String>              windows; // List of windows inside this place @SERIALIZABLE
+            String                      active;  // Name active window @SERIALIZABLE
+            Vector<WindowDockPlaceInfo> childs;     // Children places @SERIALIZABLE
 
-		public:
-			// Gets layout from widget 
-			void RetrieveLayout(const Ref<Widget>& widget);
+        public:
+            // Gets layout from widget 
+            void RetrieveLayout(const Ref<Widget>& widget);
 
-			// Compares two dock places
-			bool operator==(const WindowDockPlaceInfo& other) const;
+            // Compares two dock places
+            bool operator==(const WindowDockPlaceInfo& other) const;
 
-			SERIALIZABLE(WindowDockPlaceInfo);
-		};
+            SERIALIZABLE(WindowDockPlaceInfo);
+        };
 
-	public:
-		WindowDockPlaceInfo       mainDock; // Root dock place @SERIALIZABLE
-		Map<String, WidgetLayout> windows;  // List of non-docked windows @SERIALIZABLE
+    public:
+        WindowDockPlaceInfo       mainDock; // Root dock place @SERIALIZABLE
+        Map<String, WidgetLayout> windows;  // List of non-docked windows @SERIALIZABLE
 
-		// Equal operator
-		bool operator==(const WindowsLayout& other) const;
+        // Equal operator
+        bool operator==(const WindowsLayout& other) const;
 
-		SERIALIZABLE(WindowsLayout);
+        SERIALIZABLE(WindowsLayout);
 
-	protected:
-		// Restores dock recursively
-		void RestoreDock(WindowDockPlaceInfo& dockDef, DockWindowPlace& dockWidget);
+    protected:
+        // Restores dock recursively
+        void RestoreDock(WindowDockPlaceInfo& dockDef, DockWindowPlace& dockWidget);
 
-		// Removes all children empty dock places
-		void CleanEmptyDocks(DockWindowPlace& dockPlace);
+        // Removes all children empty dock places
+        void CleanEmptyDocks(DockWindowPlace& dockPlace);
 
-		friend class WindowsManager;
-	};
+        friend class WindowsManager;
+    };
 
 }
 // --- META ---

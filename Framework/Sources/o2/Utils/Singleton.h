@@ -30,10 +30,10 @@ namespace o2
         static void InitializeSingleton();
                                 
         // Returns true if singleton was initialized
-		static bool IsSingletonInitialzed();
+        static bool IsSingletonInitialzed();
 
-		// Destroys singleton. Required to be called with last reference to singleton
-		static void DestroySingleton(Ref<_class_type>& lastReference);
+        // Destroys singleton. Required to be called with last reference to singleton
+        static void DestroySingleton(Ref<_class_type>& lastReference);
 
     public:
         static _class_type* mInstance; // Instance of singleton
@@ -96,18 +96,18 @@ namespace o2
     bool Singleton<_class_type>::IsSingletonInitialzed()
     { 
         return mInstance != nullptr;
-	}
+    }
 
-	template <typename _class_type>
-	void Singleton<_class_type>::DestroySingleton(Ref<_class_type>& lastReference)
-	{
-		if (lastReference->GetStrongReferencesCount() != 2)
-		{
-			Assert(false, "DestroySingleton: lastReference must have only one strong reference");
-			return;
-		}
+    template <typename _class_type>
+    void Singleton<_class_type>::DestroySingleton(Ref<_class_type>& lastReference)
+    {
+        if (lastReference->GetStrongReferencesCount() != 2)
+        {
+            Assert(false, "DestroySingleton: lastReference must have only one strong reference");
+            return;
+        }
 
-		GetSingletonsList().Remove(lastReference);
-		lastReference = nullptr;
-	}
+        GetSingletonsList().Remove(lastReference);
+        lastReference = nullptr;
+    }
 }

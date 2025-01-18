@@ -75,14 +75,14 @@ namespace o2
 
             // Check equals operator
             bool operator==(const QuadNode& other);
-		};
+        };
 
-		Vec2F mMaxSize; // Max page size
+        Vec2F mMaxSize; // Max page size
 
-		Pool<Rect>   mRectsPool; // Rectangles pool
-		Vector<Ref<Rect>> mRects;     // Rectangles
+        Pool<Rect>   mRectsPool; // Rectangles pool
+        Vector<Ref<Rect>> mRects;     // Rectangles
 
-		Vector<Ref<QuadNode>> mQuadNodes; // Quad nodes 
+        Vector<Ref<QuadNode>> mQuadNodes; // Quad nodes 
 
     protected:
         // Tries to insert rectangle

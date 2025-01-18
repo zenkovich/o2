@@ -7,39 +7,39 @@ using namespace o2;
 
 namespace o2
 {
-	class Toggle;
+    class Toggle;
 }
 
 namespace Editor
 {
-	// -----------------------
-	// Editor boolean property
-	// -----------------------
-	class BooleanProperty: public TPropertyField<bool>
-	{
-	public:
-		// Default constructor
-		BooleanProperty(RefCounter* refCounter);
+    // -----------------------
+    // Editor boolean property
+    // -----------------------
+    class BooleanProperty: public TPropertyField<bool>
+    {
+    public:
+        // Default constructor
+        BooleanProperty(RefCounter* refCounter);
 
-		// Copy constructor
-		BooleanProperty(RefCounter* refCounter, const BooleanProperty& other);
+        // Copy constructor
+        BooleanProperty(RefCounter* refCounter, const BooleanProperty& other);
 
-		// Copy operator
-		BooleanProperty& operator=(const BooleanProperty& other);
+        // Copy operator
+        BooleanProperty& operator=(const BooleanProperty& other);
 
         SERIALIZABLE(BooleanProperty);
         CLONEABLE_REF(BooleanProperty);
 
-	protected:
-		Ref<Toggle> mToggle; // Toggle 
+    protected:
+        Ref<Toggle> mToggle; // Toggle 
 
-	protected:
-		// Updates value view
-		void UpdateValueView() override;
+    protected:
+        // Updates value view
+        void UpdateValueView() override;
 
-		// Searches controls widgets and layers and initializes them
-		void InitializeControls();
-	};
+        // Searches controls widgets and layers and initializes them
+        void InitializeControls();
+    };
 }
 // --- META ---
 

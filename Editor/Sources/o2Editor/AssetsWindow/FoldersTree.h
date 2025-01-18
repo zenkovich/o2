@@ -8,105 +8,105 @@ using namespace o2;
 
 namespace o2
 {
-	class ContextMenu;
+    class ContextMenu;
 }
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(FoldersTree);
+    FORWARD_CLASS_REF(FoldersTree);
 
-	// --------------------------
-	// Assets folders tree widget
-	// --------------------------
-	class AssetsFoldersTree: public Widget, public KeyboardEventsListener
-	{
-	public:
-		// Default constructor
-		AssetsFoldersTree(RefCounter* refCounter);
+    // --------------------------
+    // Assets folders tree widget
+    // --------------------------
+    class AssetsFoldersTree: public Widget, public KeyboardEventsListener
+    {
+    public:
+        // Default constructor
+        AssetsFoldersTree(RefCounter* refCounter);
 
-		// Copy-constructor
-		AssetsFoldersTree(RefCounter* refCounter, const AssetsFoldersTree& other);
+        // Copy-constructor
+        AssetsFoldersTree(RefCounter* refCounter, const AssetsFoldersTree& other);
 
-		// Destructor
-		~AssetsFoldersTree();
+        // Destructor
+        ~AssetsFoldersTree();
 
-		// Copy-operator
-		AssetsFoldersTree& operator=(const AssetsFoldersTree& other);
+        // Copy-operator
+        AssetsFoldersTree& operator=(const AssetsFoldersTree& other);
 
-		// Returns create menu category in editor
-		static String GetCreateMenuCategory();
+        // Returns create menu category in editor
+        static String GetCreateMenuCategory();
 
         SERIALIZABLE(AssetsFoldersTree);
         CLONEABLE_REF(AssetsFoldersTree);
 
-	protected:
-		Ref<Tree>        mFoldersTree; // Folders tree
-		Ref<ContextMenu> mContextMenu; // Context menu
-		String           mCurrentPath; // Current viewing path
+    protected:
+        Ref<Tree>        mFoldersTree; // Folders tree
+        Ref<ContextMenu> mContextMenu; // Context menu
+        String           mCurrentPath; // Current viewing path
 
-		bool mOpengingFolderFromThis = false;
+        bool mOpengingFolderFromThis = false;
 
-	protected:
-		// Selects and expands folder
-		void SelectAndExpandFolder(const String& path);
+    protected:
+        // Selects and expands folder
+        void SelectAndExpandFolder(const String& path);
 
-		// Rebuilds folders tree
-		void UpdateView();
+        // Rebuilds folders tree
+        void UpdateView();
 
-		// Initializes assets context menu
-		void InitializeContext();
+        // Initializes assets context menu
+        void InitializeContext();
 
-		// Returns folder parent (for folders tree)
-		void* GetFoldersTreeNodeParent(void* object);
+        // Returns folder parent (for folders tree)
+        void* GetFoldersTreeNodeParent(void* object);
 
-		// Returns folder childs (for folders tree)
-		Vector<void*> GetFoldersTreeNodeChilds(void* object);
+        // Returns folder childs (for folders tree)
+        Vector<void*> GetFoldersTreeNodeChilds(void* object);
 
-		// Setups tree node by folder (for folders tree)
-		void SetupFoldersTreeNode(const Ref<TreeNode>& node, void* object);
+        // Setups tree node by folder (for folders tree)
+        void SetupFoldersTreeNode(const Ref<TreeNode>& node, void* object);
 
-		// Called when folder item double clicked (for folders tree)
-		void OnFoldersTreeNodeDblClick(const Ref<TreeNode>& node);
+        // Called when folder item double clicked (for folders tree)
+        void OnFoldersTreeNodeDblClick(const Ref<TreeNode>& node);
 
-		// Called when folder item clicked (for folders tree)
-		void OnFoldersTreeSelect(Vector<void*> nodes);
+        // Called when folder item clicked (for folders tree)
+        void OnFoldersTreeSelect(Vector<void*> nodes);
 
-		// Called when folders tree clicked by right button
-		void OnFoldersTreeRightClick(const Ref<TreeNode>& node);
+        // Called when folders tree clicked by right button
+        void OnFoldersTreeRightClick(const Ref<TreeNode>& node);
 
-		// Called when context copy pressed
-		void OnContextCopyPressed();
+        // Called when context copy pressed
+        void OnContextCopyPressed();
 
-		// Called when context cut pressed
-		void OnContextCutPressed();
+        // Called when context cut pressed
+        void OnContextCutPressed();
 
-		// Called when context paste pressed
-		void OnContextPastePressed();
+        // Called when context paste pressed
+        void OnContextPastePressed();
 
-		// Called when context delete pressed
-		void OnContextDeletePressed();
+        // Called when context delete pressed
+        void OnContextDeletePressed();
 
-		// Called when context open pressed
-		void OnContextOpenPressed();
+        // Called when context open pressed
+        void OnContextOpenPressed();
 
-		// Called when context show in explorer pressed
-		void OnContextShowInExplorerPressed();
+        // Called when context show in explorer pressed
+        void OnContextShowInExplorerPressed();
 
-		// Called when context create folder pressed
-		void OnContextCreateFolderPressed();
+        // Called when context create folder pressed
+        void OnContextCreateFolderPressed();
 
-		// Called when key was released
-		void OnKeyReleased(const Input::Key& key) override;
-		
-		REF_COUNTERABLE_IMPL(Widget);
+        // Called when key was released
+        void OnKeyReleased(const Input::Key& key) override;
+        
+        REF_COUNTERABLE_IMPL(Widget);
 
-		friend class AssetsWindow;
-	};
+        friend class AssetsWindow;
+    };
 
-	class FoldersTree : public Tree
-	{
-	public:
-		// Default constructor
+    class FoldersTree : public Tree
+    {
+    public:
+        // Default constructor
         FoldersTree(RefCounter* refCounter);
 
         // Copy-constructor
@@ -118,13 +118,13 @@ namespace Editor
         SERIALIZABLE(FoldersTree);
         CLONEABLE_REF(FoldersTree);
 
-	protected:
-		// Updates visible nodes (calculates range and initializes nodes), enables editor mode
-		void UpdateVisibleNodes() override;
+    protected:
+        // Updates visible nodes (calculates range and initializes nodes), enables editor mode
+        void UpdateVisibleNodes() override;
 
-		// Returns create menu category in editor
-		static String GetCreateMenuCategory();
-	};
+        // Returns create menu category in editor
+        static String GetCreateMenuCategory();
+    };
 }
 // --- META ---
 

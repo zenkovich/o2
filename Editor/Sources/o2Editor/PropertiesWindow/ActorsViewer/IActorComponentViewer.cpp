@@ -12,90 +12,90 @@
 
 namespace Editor
 {
-	IActorComponentViewer::IActorComponentViewer()
-	{
-		PushEditorScopeOnStack scope;
+    IActorComponentViewer::IActorComponentViewer()
+    {
+        PushEditorScopeOnStack scope;
 
-		mSpoiler = o2UI.CreateWidget<SpoilerWithHead>();
+        mSpoiler = o2UI.CreateWidget<SpoilerWithHead>();
 
-		mSpoiler->expandHeight = false;
-		mSpoiler->expandWidth = true;
-		mSpoiler->fitByChildren = true;
-		mSpoiler->borderBottom = 5;
-		mSpoiler->SetCaption("Component");
-		mSpoiler->GetIcon()->SetImageName("ui/UI4_component_icon.png");
-		mSpoiler->GetIcon()->layout->center -= Vec2F(2, 0);
-		mSpoiler->GetIcon()->GetImage()->SetColor(Color4(235, 255, 253));
+        mSpoiler->expandHeight = false;
+        mSpoiler->expandWidth = true;
+        mSpoiler->fitByChildren = true;
+        mSpoiler->borderBottom = 5;
+        mSpoiler->SetCaption("Component");
+        mSpoiler->GetIcon()->SetImageName("ui/UI4_component_icon.png");
+        mSpoiler->GetIcon()->layout->center -= Vec2F(2, 0);
+        mSpoiler->GetIcon()->GetImage()->SetColor(Color4(235, 255, 253));
 
-		mRemoveButton = o2UI.CreateButton("", THIS_FUNC(RemoveTargetComponents), "close");
-		*mRemoveButton->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(1, 0));
-		mSpoiler->AddInternalWidget(mRemoveButton);
+        mRemoveButton = o2UI.CreateButton("", THIS_FUNC(RemoveTargetComponents), "close");
+        *mRemoveButton->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(1, 0));
+        mSpoiler->AddInternalWidget(mRemoveButton);
 
-		mSpoiler->SetExpanded(true);
-	}
+        mSpoiler->SetExpanded(true);
+    }
 
-	IActorComponentViewer::~IActorComponentViewer()
-	{}
+    IActorComponentViewer::~IActorComponentViewer()
+    {}
 
-	void IActorComponentViewer::SetTargetComponents(const Vector<Ref<Component>>& components)
-	{
-		mTargetComponents = components;
+    void IActorComponentViewer::SetTargetComponents(const Vector<Ref<Component>>& components)
+    {
+        mTargetComponents = components;
 
-		if (!components.IsEmpty())
-		{
-			String caption = components[0]->GetType().InvokeStatic<String>("GetName");
-			if (caption.IsEmpty())
-				caption = GetSmartName(components[0]->GetType().GetName());
+        if (!components.IsEmpty())
+        {
+            String caption = components[0]->GetType().InvokeStatic<String>("GetName");
+            if (caption.IsEmpty())
+                caption = GetSmartName(components[0]->GetType().GetName());
 
-			mSpoiler->SetCaption(caption);
-			mSpoiler->GetIcon()->SetImageName(components[0]->GetType().InvokeStatic<String>("GetIcon"));
-		}
-	}
+            mSpoiler->SetCaption(caption);
+            mSpoiler->GetIcon()->SetImageName(components[0]->GetType().InvokeStatic<String>("GetIcon"));
+        }
+    }
 
-	Ref<Widget> IActorComponentViewer::GetWidget() const
-	{
-		return mSpoiler;
-	}
+    Ref<Widget> IActorComponentViewer::GetWidget() const
+    {
+        return mSpoiler;
+    }
 
-	void IActorComponentViewer::Expand()
-	{
-		mSpoiler->Expand();
-	}
+    void IActorComponentViewer::Expand()
+    {
+        mSpoiler->Expand();
+    }
 
-	void IActorComponentViewer::Collapse()
-	{
-		mSpoiler->Collapse();
-	}
+    void IActorComponentViewer::Collapse()
+    {
+        mSpoiler->Collapse();
+    }
 
-	void IActorComponentViewer::Refresh()
-	{	}
+    void IActorComponentViewer::Refresh()
+    {    }
 
-	void IActorComponentViewer::SetPropertiesEnabled(bool enabled)
-	{
-		if (mPropertiesEnabled == enabled)
-			return;
+    void IActorComponentViewer::SetPropertiesEnabled(bool enabled)
+    {
+        if (mPropertiesEnabled == enabled)
+            return;
 
-		mPropertiesEnabled = enabled;
+        mPropertiesEnabled = enabled;
 
-		if (mPropertiesEnabled)
-			OnPropertiesEnabled();
-		else
-			OnPropertiesDisabled();
-	}
+        if (mPropertiesEnabled)
+            OnPropertiesEnabled();
+        else
+            OnPropertiesDisabled();
+    }
 
-	bool IActorComponentViewer::IsPropertiesEnabled() const
-	{
-		return mPropertiesEnabled;
-	}
+    bool IActorComponentViewer::IsPropertiesEnabled() const
+    {
+        return mPropertiesEnabled;
+    }
 
-	void IActorComponentViewer::RemoveTargetComponents()
-	{
-		for (auto& comp : mTargetComponents)
-			comp->GetActor()->RemoveComponent(comp);
+    void IActorComponentViewer::RemoveTargetComponents()
+    {
+        for (auto& comp : mTargetComponents)
+            comp->GetActor()->RemoveComponent(comp);
 
-		mTargetComponents.Clear();
+        mTargetComponents.Clear();
 
-	}
+    }
 
 }
 // --- META ---

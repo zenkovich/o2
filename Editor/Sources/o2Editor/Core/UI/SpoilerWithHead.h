@@ -6,49 +6,49 @@ using namespace o2;
 
 namespace o2
 {
-	class Button;
-	class Image;
+    class Button;
+    class Image;
 }
 
 namespace Editor
 {
-	// -----------------------------------------------
-	// Editor properties spoiler with head and caption
-	// -----------------------------------------------
-	class SpoilerWithHead : public Spoiler
-	{
-	public:
-		Function<void()> onOptionsPressed; // Options button pressed event
-		Function<void()> onSavePressed;    // Save button pressed event
+    // -----------------------------------------------
+    // Editor properties spoiler with head and caption
+    // -----------------------------------------------
+    class SpoilerWithHead : public Spoiler
+    {
+    public:
+        Function<void()> onOptionsPressed; // Options button pressed event
+        Function<void()> onSavePressed;    // Save button pressed event
 
-	public:
-		// Default constructor
-		SpoilerWithHead(RefCounter* refCounter);
+    public:
+        // Default constructor
+        SpoilerWithHead(RefCounter* refCounter);
 
-		// Copy constructor
-		SpoilerWithHead(RefCounter* refCounter, const SpoilerWithHead& other);
+        // Copy constructor
+        SpoilerWithHead(RefCounter* refCounter, const SpoilerWithHead& other);
 
-		// Copy operator
-		SpoilerWithHead& operator=(const SpoilerWithHead& other);
+        // Copy operator
+        SpoilerWithHead& operator=(const SpoilerWithHead& other);
 
-		// Returns icon
-		const Ref<Image>& GetIcon() const;
+        // Returns icon
+        const Ref<Image>& GetIcon() const;
 
-		// Returns create menu category in editor
-		static String GetCreateMenuCategory();
+        // Returns create menu category in editor
+        static String GetCreateMenuCategory();
 
         SERIALIZABLE(SpoilerWithHead);
         CLONEABLE_REF(SpoilerWithHead);
 
-	private:
-		Ref<Button> mOptionsBtn; // Component option button
-		Ref<Button> mSaveBtn;    // Save prototype button
-		Ref<Image>  mIcon;       // Component icon
+    private:
+        Ref<Button> mOptionsBtn; // Component option button
+        Ref<Button> mSaveBtn;    // Save prototype button
+        Ref<Image>  mIcon;       // Component icon
 
-	private:
-		// Initializes controls: options, save button and icon
-		void InitializeControls();
-	};
+    private:
+        // Initializes controls: options, save button and icon
+        void InitializeControls();
+    };
 }
 // --- META ---
 

@@ -5,10 +5,10 @@
 
 namespace o2
 {
-	AnimationAsset::AnimationAsset()
-	{
-		animation = mmake<AnimationClip>();
-	}
+    AnimationAsset::AnimationAsset()
+    {
+        animation = mmake<AnimationClip>();
+    }
 
     AnimationAsset::AnimationAsset(const AnimationAsset& other):
         AssetWithDefaultMeta<AnimationAsset>(other), animation(other.animation->CloneAsRef<AnimationClip>())
@@ -18,7 +18,7 @@ namespace o2
         AssetWithDefaultMeta<AnimationAsset>(), animation(clip)
     {}
 
-	AnimationAsset& AnimationAsset::operator=(const AnimationAsset& other)
+    AnimationAsset& AnimationAsset::operator=(const AnimationAsset& other)
     {
         Asset::operator=(other);
         animation = other.animation->CloneAsRef<AnimationClip>();

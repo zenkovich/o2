@@ -161,7 +161,7 @@ namespace o2
 
     void CursorAreaEventListenersLayer::UnregDragListener(DragableObject* listener)
     {
-		mDragListeners.RemoveFirst([&](auto& x) { return x == listener; });
+        mDragListeners.RemoveFirst([&](auto& x) { return x == listener; });
     }
 
     Vector<Ref<CursorAreaEventsListener>> CursorAreaEventListenersLayer::GetAllCursorListenersUnderCursor(const Vec2F& cursorPos) const

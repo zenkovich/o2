@@ -10,37 +10,37 @@ namespace Editor
     {}
 
     IPropertiesViewer::IPropertiesViewer(RefCounter* refCounter):
-		RefCounterable(refCounter)
+        RefCounterable(refCounter)
     {}
 
     IPropertiesViewer::~IPropertiesViewer()
-	{}
+    {}
 
-	const Type* IPropertiesViewer::GetViewingObjectType() const
-	{
-		return nullptr;
-	}
+    const Type* IPropertiesViewer::GetViewingObjectType() const
+    {
+        return nullptr;
+    }
 
-	void IPropertiesViewer::Refresh()
-	{}
+    void IPropertiesViewer::Refresh()
+    {}
 
-	void IPropertiesViewer::SetPropertiesEnabled(bool enabled)
-	{
-		if (mPropertiesEnabled == enabled)
-			return;
+    void IPropertiesViewer::SetPropertiesEnabled(bool enabled)
+    {
+        if (mPropertiesEnabled == enabled)
+            return;
 
-		mPropertiesEnabled = enabled;
+        mPropertiesEnabled = enabled;
 
-		if (mPropertiesEnabled)
-			OnPropertiesEnabled();
-		else
-			OnPropertiesDisabled();
-	}
+        if (mPropertiesEnabled)
+            OnPropertiesEnabled();
+        else
+            OnPropertiesDisabled();
+    }
 
-	bool IPropertiesViewer::IsEnabled() const
-	{
-		return mPropertiesEnabled;
-	}
+    bool IPropertiesViewer::IsEnabled() const
+    {
+        return mPropertiesEnabled;
+    }
 
 }
 // --- META ---

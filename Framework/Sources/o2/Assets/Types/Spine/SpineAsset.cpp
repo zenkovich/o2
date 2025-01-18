@@ -13,22 +13,22 @@ namespace o2
     {}
 
     SpineAsset::SpineAsset(const SpineAsset& other):
-		AssetWithDefaultMeta<SpineAsset>(other)
+        AssetWithDefaultMeta<SpineAsset>(other)
     {}
 
     SpineAsset::~SpineAsset()
     {
-		if (mSkeletonData)
-		{
-			delete mSkeletonData;
-			mSkeletonData = nullptr;
-		}
+        if (mSkeletonData)
+        {
+            delete mSkeletonData;
+            mSkeletonData = nullptr;
+        }
 
-		if (mAnimationStateData)
-		{
-			delete mAnimationStateData;
-			mAnimationStateData = nullptr;
-		}
+        if (mAnimationStateData)
+        {
+            delete mAnimationStateData;
+            mAnimationStateData = nullptr;
+        }
     }
 
     SpineAsset& SpineAsset::operator=(const SpineAsset& other)
@@ -37,50 +37,50 @@ namespace o2
         return *this;
     }
 
-	spine::SkeletonData* SpineAsset::GetSpineSkeletonData()
-	{
-		return mSkeletonData;
-	}
+    spine::SkeletonData* SpineAsset::GetSpineSkeletonData()
+    {
+        return mSkeletonData;
+    }
 
-	spine::AnimationStateData* SpineAsset::GetSpineAnimationStateData()
-	{
-		return mAnimationStateData;
-	}
+    spine::AnimationStateData* SpineAsset::GetSpineAnimationStateData()
+    {
+        return mAnimationStateData;
+    }
 
-	Vector<String> SpineAsset::GetFileExtensions()
+    Vector<String> SpineAsset::GetFileExtensions()
     {
         return { "spine-json" };
     }
 
     void SpineAsset::LoadData(const String& path)
-	{
-		auto atlasAssetPath = o2FileSystem.GetFileNameWithoutExtension(GetPath()) + ".spine-atlas";
-		auto atlasAsset = o2Assets.GetAssetRefByType<SpineAtlasAsset>(atlasAssetPath);
+    {
+        auto atlasAssetPath = o2FileSystem.GetFileNameWithoutExtension(GetPath()) + ".spine-atlas";
+        auto atlasAsset = o2Assets.GetAssetRefByType<SpineAtlasAsset>(atlasAssetPath);
 
         if (!atlasAsset)
         {
-			o2Debug.LogError("Spine asset %s has no atlas", atlasAssetPath.Data());
-			return;
-		}
+            o2Debug.LogError("Spine asset %s has no atlas", atlasAssetPath.Data());
+            return;
+        }
 
-		auto spineAtlas = atlasAsset->GetSpineAtlas();
-		if (spineAtlas == nullptr)
-		{
-			o2Debug.LogError("Failed to load spine atlas for spine asset: %s", path.Data());
-			return;
-		}
+        auto spineAtlas = atlasAsset->GetSpineAtlas();
+        if (spineAtlas == nullptr)
+        {
+            o2Debug.LogError("Failed to load spine atlas for spine asset: %s", path.Data());
+            return;
+        }
 
-		spine::SkeletonJson json(spineAtlas);
-		mSkeletonData = json.readSkeletonDataFile(path.Data());
+        spine::SkeletonJson json(spineAtlas);
+        mSkeletonData = json.readSkeletonDataFile(path.Data());
 
-		if (!mSkeletonData)
-		{
-			o2Debug.LogError("Failed to load spine asset: %s", path.Data());
-			return;
-		}
+        if (!mSkeletonData)
+        {
+            o2Debug.LogError("Failed to load spine asset: %s", path.Data());
+            return;
+        }
 
-		mAnimationStateData = new spine::AnimationStateData(mSkeletonData);
-	}
+        mAnimationStateData = new spine::AnimationStateData(mSkeletonData);
+    }
 
     void SpineAsset::SaveData(const String& path) const
     {}

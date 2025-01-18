@@ -158,7 +158,7 @@ namespace o2
         Map<String, AssetRef<Asset>> mCachedAssetsByPath; // Current cached assets by path
         Map<UID, AssetRef<Asset>>    mCachedAssetsByUID;  // Current cached assets by uid
 
-		Ref<SpineManager> mSpineManager; // Spine manager
+        Ref<SpineManager> mSpineManager; // Spine manager
 
     protected:
         // Loads asset infos
@@ -199,8 +199,8 @@ namespace o2
         Vector<UID> ReloadAssetsTree();
 #endif
 
-		template<typename _asset_type>
-		friend class AssetRef;
+        template<typename _asset_type>
+        friend class AssetRef;
 
         friend class Asset;
         friend class FolderAsset;

@@ -16,11 +16,11 @@ namespace o2
 
     SpineAtlasAsset::~SpineAtlasAsset()
     {
-		if (mAtlas)
-		{
-			delete mAtlas;
-			mAtlas = nullptr;
-		}
+        if (mAtlas)
+        {
+            delete mAtlas;
+            mAtlas = nullptr;
+        }
     }
 
     SpineAtlasAsset& SpineAtlasAsset::operator=(const SpineAtlasAsset& other)
@@ -29,26 +29,26 @@ namespace o2
         return *this;
     }
 
-	spine::Atlas* SpineAtlasAsset::GetSpineAtlas()
-	{
-		return mAtlas;
-	}
+    spine::Atlas* SpineAtlasAsset::GetSpineAtlas()
+    {
+        return mAtlas;
+    }
 
-	Vector<String> SpineAtlasAsset::GetFileExtensions()
+    Vector<String> SpineAtlasAsset::GetFileExtensions()
     {
         return { "spine-atlas" };
     }
 
     void SpineAtlasAsset::LoadData(const String& path)
-	{
-		mAtlas = new spine::Atlas(path.Data(), &SpineManager::Instance().textureLoader);
+    {
+        mAtlas = new spine::Atlas(path.Data(), &SpineManager::Instance().textureLoader);
 
-		if (mAtlas->getPages().size() == 0)
-		{
-			o2Debug.LogError("Failed to load spine atlas: %s", path.Data());
+        if (mAtlas->getPages().size() == 0)
+        {
+            o2Debug.LogError("Failed to load spine atlas: %s", path.Data());
             delete mAtlas;
-			mAtlas = nullptr;
-		}
+            mAtlas = nullptr;
+        }
     }
 
     void SpineAtlasAsset::SaveData(const String& path) const

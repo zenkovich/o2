@@ -7,150 +7,150 @@
 
 namespace Editor
 {
-	FORWARD_REF_IMPL(IPropertyField);
+    FORWARD_REF_IMPL(IPropertyField);
 
-	IObjectPropertiesViewer::IObjectPropertiesViewer()
-	{
-		mPropertiesContext = mmake<PropertiesContext>();
+    IObjectPropertiesViewer::IObjectPropertiesViewer()
+    {
+        mPropertiesContext = mmake<PropertiesContext>();
 
-		mOnChildFieldChangeCompleted =
-			MakeFunction<IObjectPropertiesViewer, void, const String&,
-			const Vector<DataDocument>&, const Vector<DataDocument>&>(this, &IObjectPropertiesViewer::OnFieldChangeCompleted);
-	}
+        mOnChildFieldChangeCompleted =
+            MakeFunction<IObjectPropertiesViewer, void, const String&,
+            const Vector<DataDocument>&, const Vector<DataDocument>&>(this, &IObjectPropertiesViewer::OnFieldChangeCompleted);
+    }
 
-	void IObjectPropertiesViewer::SetHeaderEnabled(bool enabled)
-	{
-		mHeaderEnabled = enabled;
+    void IObjectPropertiesViewer::SetHeaderEnabled(bool enabled)
+    {
+        mHeaderEnabled = enabled;
 
-		auto spoiler = GetSpoiler();
-		if (mHeaderEnabled)
-		{
-			spoiler->SetHeadHeight(20);
-			spoiler->GetLayerDrawable<Text>("caption")->enabled = true;
-			spoiler->GetInternalWidget("expand")->enabledForcibly = true;
-			spoiler->borderLeft = 10;
-			spoiler->borderTop = 2;
-		}
-		else
-		{
-			spoiler->SetHeadHeight(0);
-			spoiler->GetLayerDrawable<Text>("caption")->enabled = false;
-			spoiler->GetInternalWidget("expand")->enabledForcibly = false;
-			spoiler->borderLeft = 0;
-			spoiler->borderTop = 0;
-			spoiler->Expand();
-		}
+        auto spoiler = GetSpoiler();
+        if (mHeaderEnabled)
+        {
+            spoiler->SetHeadHeight(20);
+            spoiler->GetLayerDrawable<Text>("caption")->enabled = true;
+            spoiler->GetInternalWidget("expand")->enabledForcibly = true;
+            spoiler->borderLeft = 10;
+            spoiler->borderTop = 2;
+        }
+        else
+        {
+            spoiler->SetHeadHeight(0);
+            spoiler->GetLayerDrawable<Text>("caption")->enabled = false;
+            spoiler->GetInternalWidget("expand")->enabledForcibly = false;
+            spoiler->borderLeft = 0;
+            spoiler->borderTop = 0;
+            spoiler->Expand();
+        }
 
-		OnHeaderEnableChanged(enabled);
-	}
+        OnHeaderEnableChanged(enabled);
+    }
 
-	bool IObjectPropertiesViewer::IsHeaderEnabled() const
-	{
-		return mHeaderEnabled;
-	}
+    bool IObjectPropertiesViewer::IsHeaderEnabled() const
+    {
+        return mHeaderEnabled;
+    }
 
-	void IObjectPropertiesViewer::Refresh(const Vector<Pair<IObject*, IObject*>>& targetObjets)
-	{
-		mTargetObjects = targetObjets;
-		auto spoiler = GetSpoiler();
+    void IObjectPropertiesViewer::Refresh(const Vector<Pair<IObject*, IObject*>>& targetObjets)
+    {
+        mTargetObjects = targetObjets;
+        auto spoiler = GetSpoiler();
 
-		if (!mHeaderEnabled || spoiler->IsExpanded())
-		{
-			bool force = CheckBuildProperties(targetObjets);
-			mPropertiesContext->Set(targetObjets, force);
-		}
+        if (!mHeaderEnabled || spoiler->IsExpanded())
+        {
+            bool force = CheckBuildProperties(targetObjets);
+            mPropertiesContext->Set(targetObjets, force);
+        }
 
-		if (!targetObjets.IsEmpty())
-			mRealObjectType = &(targetObjets[0].first)->GetType();
+        if (!targetObjets.IsEmpty())
+            mRealObjectType = &(targetObjets[0].first)->GetType();
 
-		OnRefreshed(targetObjets);
-	}
+        OnRefreshed(targetObjets);
+    }
 
-	const Type* IObjectPropertiesViewer::GetViewingObjectType() const
-	{
-		if (mRealObjectType)
-			return mRealObjectType;
+    const Type* IObjectPropertiesViewer::GetViewingObjectType() const
+    {
+        if (mRealObjectType)
+            return mRealObjectType;
 
-		return GetViewingObjectTypeStatic();
-	}
+        return GetViewingObjectTypeStatic();
+    }
 
-	const Type* IObjectPropertiesViewer::GetViewingObjectTypeStatic()
-	{
-		return nullptr;
-	}
+    const Type* IObjectPropertiesViewer::GetViewingObjectTypeStatic()
+    {
+        return nullptr;
+    }
 
-	void IObjectPropertiesViewer::SetParentContext(const Ref<PropertiesContext>& context)
-	{
-		mPropertiesContext->parent = context;
-	}
+    void IObjectPropertiesViewer::SetParentContext(const Ref<PropertiesContext>& context)
+    {
+        mPropertiesContext->parent = context;
+    }
 
-	const Ref<Spoiler>& IObjectPropertiesViewer::GetSpoiler()
-	{
-		return mSpoiler;
-	}
+    const Ref<Spoiler>& IObjectPropertiesViewer::GetSpoiler()
+    {
+        return mSpoiler;
+    }
 
-	void IObjectPropertiesViewer::SetExpanded(bool expanded)
-	{
-		GetSpoiler()->SetExpanded(expanded);
-	}
+    void IObjectPropertiesViewer::SetExpanded(bool expanded)
+    {
+        GetSpoiler()->SetExpanded(expanded);
+    }
 
-	bool IObjectPropertiesViewer::IsExpanded() const
-	{
-		return const_cast<IObjectPropertiesViewer*>(this)->GetSpoiler()->IsExpanded();
-	}
+    bool IObjectPropertiesViewer::IsExpanded() const
+    {
+        return const_cast<IObjectPropertiesViewer*>(this)->GetSpoiler()->IsExpanded();
+    }
 
-	void IObjectPropertiesViewer::SetCaption(const WString& caption)
-	{
-		GetSpoiler()->SetCaption(caption);
-	}
+    void IObjectPropertiesViewer::SetCaption(const WString& caption)
+    {
+        GetSpoiler()->SetCaption(caption);
+    }
 
-	const WString& IObjectPropertiesViewer::GetCaption() const
-	{
-		return const_cast<IObjectPropertiesViewer*>(this)->GetSpoiler()->GetCaption();
-	}
+    const WString& IObjectPropertiesViewer::GetCaption() const
+    {
+        return const_cast<IObjectPropertiesViewer*>(this)->GetSpoiler()->GetCaption();
+    }
 
-	bool IObjectPropertiesViewer::IsEmpty() const
-	{
-		return mSpoiler->GetChildren().IsEmpty();
-	}
+    bool IObjectPropertiesViewer::IsEmpty() const
+    {
+        return mSpoiler->GetChildren().IsEmpty();
+    }
 
-	void IObjectPropertiesViewer::OnPropertiesEnabled()
-	{
-		mPropertiesContext->SetPropertiesEnabled(true);
-	}
+    void IObjectPropertiesViewer::OnPropertiesEnabled()
+    {
+        mPropertiesContext->SetPropertiesEnabled(true);
+    }
 
-	void IObjectPropertiesViewer::OnPropertiesDisabled()
-	{
-		mPropertiesContext->SetPropertiesEnabled(false);
-	}
+    void IObjectPropertiesViewer::OnPropertiesDisabled()
+    {
+        mPropertiesContext->SetPropertiesEnabled(false);
+    }
 
-	Ref<Spoiler> IObjectPropertiesViewer::CreateSpoiler(const Ref<Widget>& parent)
-	{
-		mSpoiler = o2UI.CreateWidget<Spoiler>("expand with caption");
-		mSpoiler->onExpand = [&]() { Refresh(mTargetObjects); };
-		parent->AddChild(mSpoiler);
+    Ref<Spoiler> IObjectPropertiesViewer::CreateSpoiler(const Ref<Widget>& parent)
+    {
+        mSpoiler = o2UI.CreateWidget<Spoiler>("expand with caption");
+        mSpoiler->onExpand = [&]() { Refresh(mTargetObjects); };
+        parent->AddChild(mSpoiler);
 
-		return mSpoiler;
-	}
+        return mSpoiler;
+    }
 
-	bool IObjectPropertiesViewer::CheckBuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets)
-	{
-		if (mPropertiesBuilt)
-			return false;
+    bool IObjectPropertiesViewer::CheckBuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets)
+    {
+        if (mPropertiesBuilt)
+            return false;
 
-		PushEditorScopeOnStack scope;
-		RebuildProperties(targetObjets);
+        PushEditorScopeOnStack scope;
+        RebuildProperties(targetObjets);
 
-		mPropertiesBuilt = true;
+        mPropertiesBuilt = true;
 
-		return true;
-	}
+        return true;
+    }
 
-	void IObjectPropertiesViewer::OnFieldChangeCompleted(const String& path, const Vector<DataDocument>& before,
-														 const Vector<DataDocument>& after)
-	{
-		onChangeCompleted(this->path + "/" + path, before, after);
-	}
+    void IObjectPropertiesViewer::OnFieldChangeCompleted(const String& path, const Vector<DataDocument>& before,
+                                                         const Vector<DataDocument>& after)
+    {
+        onChangeCompleted(this->path + "/" + path, before, after);
+    }
 
 }
 // --- META ---

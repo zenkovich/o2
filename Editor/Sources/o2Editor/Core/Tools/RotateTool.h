@@ -9,125 +9,125 @@ using namespace o2;
 
 namespace o2
 {
-	class Mesh;
-	class SceneEditableObject;
+    class Mesh;
+    class SceneEditableObject;
 }
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(TransformAction);
+    FORWARD_CLASS_REF(TransformAction);
 
-	// -------------------
-	// Rotate objects tool
-	// -------------------
-	class RotateTool: public SelectionTool
-	{
-	public:
-		float angleSnapStep = 15.0f; // Rotation angle step in degree
+    // -------------------
+    // Rotate objects tool
+    // -------------------
+    class RotateTool: public SelectionTool
+    {
+    public:
+        float angleSnapStep = 15.0f; // Rotation angle step in degree
 
-	public:
-		// Default constructor
-		RotateTool();
+    public:
+        // Default constructor
+        RotateTool();
 
-		// Copy-operator
-		RotateTool& operator=(const RotateTool& other) { return *this; }
+        // Copy-operator
+        RotateTool& operator=(const RotateTool& other) { return *this; }
 
-		// Destructor
-		~RotateTool();
+        // Destructor
+        ~RotateTool();
 
-		IOBJECT(RotateTool);
+        IOBJECT(RotateTool);
 
-	protected:
-		const float  mRotateRingInsideRadius = 60;						    // Rotate ring inside radius in pixels
-		const float  mRotateRingOutsideRadius = 100;				        // Rotate ring outside radius in pixels
-		const int    mRotateRingSegs = 50;								    // Rotate ring segments
-		const Color4 mRotateRingsColor = Color4(220, 220, 220, 255);	    // Rotate ring border color
-		const Color4 mRotateRingsFillColor = Color4(220, 220, 220, 50);	    // Rotate ring color 1
-		const Color4 mRotateRingsFillColor2 = Color4(220, 220, 220, 100);   // Rotate ring color 2
-		const Color4 mRotateMeshClockwiseColor = Color4(211, 87, 40, 100);  // Rotate angle clockwise rotation color
-		const Color4 mRotateMeshCClockwiseColor = Color4(87, 211, 40, 100); // Rotate angle counter clockwise rotation color
-						 
-		Ref<Mesh> mRotateRingFillMesh; // Rotate ring mesh
-		Ref<Mesh> mAngleMesh;          // Rotation angle mesh
-		Vec2F     mScenePivot;		   // Rotation pivot in scene space
-						 							   
-		Ref<SceneDragHandle> mPivotDragHandle; // Pivot drag handle
+    protected:
+        const float  mRotateRingInsideRadius = 60;                            // Rotate ring inside radius in pixels
+        const float  mRotateRingOutsideRadius = 100;                        // Rotate ring outside radius in pixels
+        const int    mRotateRingSegs = 50;                                    // Rotate ring segments
+        const Color4 mRotateRingsColor = Color4(220, 220, 220, 255);        // Rotate ring border color
+        const Color4 mRotateRingsFillColor = Color4(220, 220, 220, 50);        // Rotate ring color 1
+        const Color4 mRotateRingsFillColor2 = Color4(220, 220, 220, 100);   // Rotate ring color 2
+        const Color4 mRotateMeshClockwiseColor = Color4(211, 87, 40, 100);  // Rotate angle clockwise rotation color
+        const Color4 mRotateMeshCClockwiseColor = Color4(87, 211, 40, 100); // Rotate angle counter clockwise rotation color
+                         
+        Ref<Mesh> mRotateRingFillMesh; // Rotate ring mesh
+        Ref<Mesh> mAngleMesh;          // Rotation angle mesh
+        Vec2F     mScenePivot;           // Rotation pivot in scene space
+                                                        
+        Ref<SceneDragHandle> mPivotDragHandle; // Pivot drag handle
 
-        float mPressAngle;				   // Angle at cursor pressing
-        float mCurrentRotateAngle;		   // Current rotation angle
-        bool  mRingPressed = false;		   // Is rotate ring was pressed
+        float mPressAngle;                   // Angle at cursor pressing
+        float mCurrentRotateAngle;           // Current rotation angle
+        bool  mRingPressed = false;           // Is rotate ring was pressed
         float mSnapAngleAccumulated = 0.0f; // Snapping angle accumulated
-						 
-		Vector<Basis>        mBeforeTransforms; // Array of objects' transformations before changing
-		Ref<TransformAction> mTransformAction;  // Current transform action. Creates when transform started
+                         
+        Vector<Basis>        mBeforeTransforms; // Array of objects' transformations before changing
+        Ref<TransformAction> mTransformAction;  // Current transform action. Creates when transform started
 
-	public:
-		// Returns toggle in menu panel icon name
-		String GetPanelIcon() const override;
+    public:
+        // Returns toggle in menu panel icon name
+        String GetPanelIcon() const override;
 
-		// Returns shortcut keys for toggle
-		ShortcutKeys GetShortcut() const override;
+        // Returns shortcut keys for toggle
+        ShortcutKeys GetShortcut() const override;
 
-		// Updates tool
-		void Update(float dt) override;
+        // Updates tool
+        void Update(float dt) override;
 
-		// Draws tool
-		void DrawScreen() override;
+        // Draws tool
+        void DrawScreen() override;
 
-		// Called when tool was enabled
-		void OnEnabled() override;
+        // Called when tool was enabled
+        void OnEnabled() override;
 
-		// Called when tool was disabled
-		void OnDisabled() override;
+        // Called when tool was disabled
+        void OnDisabled() override;
 
-		// Called when scene objects was changed
-		void OnSceneChanged(const Vector<Ref<SceneEditableObject>>& changedObjects) override;
+        // Called when scene objects was changed
+        void OnSceneChanged(const Vector<Ref<SceneEditableObject>>& changedObjects) override;
 
-		// Called when objects selection was changed
-		void OnObjectsSelectionChanged(const Vector<Ref<SceneEditableObject>>& objects) override;
+        // Called when objects selection was changed
+        void OnObjectsSelectionChanged(const Vector<Ref<SceneEditableObject>>& objects) override;
 
-		// Updates ring and angle meshes
-		void UpdateMeshes();
+        // Updates ring and angle meshes
+        void UpdateMeshes();
 
-		// Calculates rotate pivot in objects center
-		void CalcPivotByObjectsCenter();
+        // Calculates rotate pivot in objects center
+        void CalcPivotByObjectsCenter();
 
-		// Called when pivot handle moved
-		void OnPivotDragHandleMoved(const Vec2F& position);
+        // Called when pivot handle moved
+        void OnPivotDragHandleMoved(const Vec2F& position);
 
-		// Returns is point inside rotate ring
-		bool IsPointInRotateRing(const Vec2F& point) const;
+        // Returns is point inside rotate ring
+        bool IsPointInRotateRing(const Vec2F& point) const;
 
-		// Called when cursor pressed on this
-		void OnCursorPressed(const Input::Cursor& cursor) override;
+        // Called when cursor pressed on this
+        void OnCursorPressed(const Input::Cursor& cursor) override;
 
-		// Called when cursor released (only when cursor pressed this at previous time)
-		void OnCursorReleased(const Input::Cursor& cursor) override;
+        // Called when cursor released (only when cursor pressed this at previous time)
+        void OnCursorReleased(const Input::Cursor& cursor) override;
 
-		// Called when cursor pressing was broken (when scrolled scroll area or some other)
-		void OnCursorPressBreak(const Input::Cursor& cursor) override;
+        // Called when cursor pressing was broken (when scrolled scroll area or some other)
+        void OnCursorPressBreak(const Input::Cursor& cursor) override;
 
-		// Called when cursor stay down during frame
-		void OnCursorStillDown(const Input::Cursor& cursor) override;
+        // Called when cursor stay down during frame
+        void OnCursorStillDown(const Input::Cursor& cursor) override;
 
-		// Called when key was pressed
-		void OnKeyPressed(const Input::Key& key) override;
+        // Called when key was pressed
+        void OnKeyPressed(const Input::Key& key) override;
 
-		// Called when key stay down during frame
-		void OnKeyStayDown(const Input::Key& key) override;
+        // Called when key stay down during frame
+        void OnKeyStayDown(const Input::Key& key) override;
 
-		// Rotates objects on angle
-		void RotateObjects(float angleDelta);
+        // Rotates objects on angle
+        void RotateObjects(float angleDelta);
 
-		// Rotates objects on angle separated
-		void RotateObjectsSeparated(float angleDelta);
+        // Rotates objects on angle separated
+        void RotateObjectsSeparated(float angleDelta);
 
-		// Rotates objects on angle
-		void RotateObjectsWithAction(float angleDelta);
+        // Rotates objects on angle
+        void RotateObjectsWithAction(float angleDelta);
 
-		// Rotates objects on angle separated
-		void RotateObjectsSeparatedWithAction(float angleDelta);
-	};
+        // Rotates objects on angle separated
+        void RotateObjectsSeparatedWithAction(float angleDelta);
+    };
 }
 // --- META ---
 

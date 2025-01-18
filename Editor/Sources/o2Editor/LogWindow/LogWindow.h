@@ -7,112 +7,112 @@ using namespace o2;
 
 namespace o2
 {
-	class Label;
-	class LongList;
-	class Text;
+    class Label;
+    class LongList;
+    class Text;
 }
 
 namespace Editor
 {
-	// ----------------
-	// Log window class
-	// ----------------
-	class LogWindow : public IEditorWindow, public LogStream
-	{
-		IOBJECT(LogWindow);
+    // ----------------
+    // Log window class
+    // ----------------
+    class LogWindow : public IEditorWindow, public LogStream
+    {
+        IOBJECT(LogWindow);
 
-	public:
-		// -----------------------------------------------------------------------------------
-		// LogMessage class represents a log message with its type, message content, and index
-		// -----------------------------------------------------------------------------------		
-		class LogMessage
-		{
-		public:
-			// Enum to represent the type of log message (Regular, Warning, Error)
-			enum class Type { Regular, Warning, Error };
+    public:
+        // -----------------------------------------------------------------------------------
+        // LogMessage class represents a log message with its type, message content, and index
+        // -----------------------------------------------------------------------------------        
+        class LogMessage
+        {
+        public:
+            // Enum to represent the type of log message (Regular, Warning, Error)
+            enum class Type { Regular, Warning, Error };
 
-			Type   type;     // Type of the log message
-			String message;  // Content of the log message
-			int    idx;      // Index of the log message
+            Type   type;     // Type of the log message
+            String message;  // Content of the log message
+            int    idx;      // Index of the log message
 
-			// Overloading the equality operator to compare two LogMessage objects
-			bool operator==(const LogMessage& other) const;
+            // Overloading the equality operator to compare two LogMessage objects
+            bool operator==(const LogMessage& other) const;
         };
 
-	public:
+    public:
         // Default constructor
         LogWindow(RefCounter* refCounter);
 
         // Destructor
         ~LogWindow();
 
-		// Updates window logic
+        // Updates window logic
         void Update(float dt) override;
 
         // Dynamic cast to RefCounterable via IEditorWindow
         static Ref<RefCounterable> CastToRefCounterable(const Ref<LogWindow>& ref);
 
-	protected:
-		Ref<LongList> mList;            // Reference to the LongList widget
-		Ref<Widget>   mLastMessageView; // Reference to the last message view widget
+    protected:
+        Ref<LongList> mList;            // Reference to the LongList widget
+        Ref<Widget>   mLastMessageView; // Reference to the last message view widget
 
-		Ref<Text> mMessagesCountLabel; // Reference to the label displaying the count of all messages
-		Ref<Text> mWarningsCountLabel; // Reference to the label displaying the count of warning messages
-		Ref<Text> mErrorsCountLabel;   // Reference to the label displaying the count of error messages
+        Ref<Text> mMessagesCountLabel; // Reference to the label displaying the count of all messages
+        Ref<Text> mWarningsCountLabel; // Reference to the label displaying the count of warning messages
+        Ref<Text> mErrorsCountLabel;   // Reference to the label displaying the count of error messages
 
-		Vector<LogMessage> mAllMessages;    // Vector storing all log messages
-		Vector<LogMessage> mVisibleMessages;// Vector storing visible log messages
+        Vector<LogMessage> mAllMessages;    // Vector storing all log messages
+        Vector<LogMessage> mVisibleMessages;// Vector storing visible log messages
 
-		bool mRegularMessagesEnabled = true; // Flag indicating if regular messages are enabled
-		bool mWarningMessagesEnabled = true; // Flag indicating if warning messages are enabled
-		bool mErrorMessagesEnabled = true;   // Flag indicating if error messages are enabled
+        bool mRegularMessagesEnabled = true; // Flag indicating if regular messages are enabled
+        bool mWarningMessagesEnabled = true; // Flag indicating if warning messages are enabled
+        bool mErrorMessagesEnabled = true;   // Flag indicating if error messages are enabled
 
-		int mRegularMessagesCount = 0; // Count of regular messages
-		int mWarningMessagesCount = 0; // Count of warning messages
-		int mErrorMessagesCount = 0;   // Count of error messages
+        int mRegularMessagesCount = 0; // Count of regular messages
+        int mWarningMessagesCount = 0; // Count of warning messages
+        int mErrorMessagesCount = 0;   // Count of error messages
 
-	protected:
-		// Initializes window
-		void InitializeWindow();
+    protected:
+        // Initializes window
+        void InitializeWindow();
 
-		// Called when clear button pressed
-		void OnClearPressed();
+        // Called when clear button pressed
+        void OnClearPressed();
 
-		// Called when regular messages toggled
-		void OnRegularMessagesToggled(bool value);
+        // Called when regular messages toggled
+        void OnRegularMessagesToggled(bool value);
 
-		// Called when warning messages toggled
-		void OnWarningMessagesToggled(bool value);
+        // Called when warning messages toggled
+        void OnWarningMessagesToggled(bool value);
 
-		// Called when error messages toggled
-		void OnErrorMessagesToggled(bool value);
+        // Called when error messages toggled
+        void OnErrorMessagesToggled(bool value);
 
-		// Updates visible messages
-		void UpdateVisibleMessages();
+        // Updates visible messages
+        void UpdateVisibleMessages();
 
-		// Returns visible items count
-		int GetVisibleMessagesCount();
+        // Returns visible items count
+        int GetVisibleMessagesCount();
 
-		// Returns array of visible messages in range from min to max
-		Vector<void*> GetVisibleMessagesRange(int min, int max);
+        // Returns array of visible messages in range from min to max
+        Vector<void*> GetVisibleMessagesRange(int min, int max);
 
-		// Sets list item by message
-		void SetupListMessage(const Ref<Widget>& item, void* object);
+        // Sets list item by message
+        void SetupListMessage(const Ref<Widget>& item, void* object);
 
-		// Outs string to stream
-		void OutStrEx(const WString& str) override;
+        // Outs string to stream
+        void OutStrEx(const WString& str) override;
 
-		// Outs error to stream
-		void OutErrorEx(const WString& str) override;
+        // Outs error to stream
+        void OutErrorEx(const WString& str) override;
 
-		// Outs warning to stream
-		void OutWarningEx(const WString& str) override;
+        // Outs warning to stream
+        void OutWarningEx(const WString& str) override;
 
-		// Updates last message view
-		void UpdateLastMessageView();
+        // Updates last message view
+        void UpdateLastMessageView();
 
-		REF_COUNTERABLE_IMPL(IEditorWindow, LogStream);
-	};
+        REF_COUNTERABLE_IMPL(IEditorWindow, LogStream);
+    };
 }
 // --- META ---
 

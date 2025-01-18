@@ -239,10 +239,10 @@ namespace o2
         void DrawInternal();
 
         // Called when cursor pressed on this
-		void OnCursorPressed(const Input::Cursor& cursor) override;
+        void OnCursorPressed(const Input::Cursor& cursor) override;
 
-		// Called when cursor double clicked
-		void OnCursorDblClicked(const Input::Cursor& cursor) override;
+        // Called when cursor double clicked
+        void OnCursorDblClicked(const Input::Cursor& cursor) override;
 
         // Called when cursor released (only when cursor pressed this at previous time)
         void OnCursorReleased(const Input::Cursor& cursor) override;

@@ -37,12 +37,12 @@ namespace o2
         mPlayer->relTime = mState ? 1.0f : 0.0f;
     }
 
-	const Ref<AnimationPlayer>& WidgetState::GetAnimationPlayer()
-	{
+    const Ref<AnimationPlayer>& WidgetState::GetAnimationPlayer()
+    {
         return mPlayer;
-	}
+    }
 
-	void WidgetState::SetAnimationAsset(const AssetRef<AnimationAsset>& asset)
+    void WidgetState::SetAnimationAsset(const AssetRef<AnimationAsset>& asset)
     {
         mAnimation = asset;
         mPlayer->SetClip(mAnimation ? mAnimation->animation : nullptr);

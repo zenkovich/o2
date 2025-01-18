@@ -94,8 +94,8 @@ namespace o2
 
         Ref<ContextMenu> mOptionsMenu; // Window options context menu
 
-		Ref<CursorEventsArea> mBackCursorArea;   // Cursor area listener at back of window, for catching events
-		Ref<CursorEventsArea> mWindowCursorArea; // Cursor area listener for window frame
+        Ref<CursorEventsArea> mBackCursorArea;   // Cursor area listener at back of window, for catching events
+        Ref<CursorEventsArea> mWindowCursorArea; // Cursor area listener for window frame
 
         Ref<CursorEventsArea> mHeadDragHandle;     // Head drag handle, for moving window
         Layout                mHeadDragAreaLayout; // Head drag handle layout @SERIALIZABLE
@@ -126,11 +126,11 @@ namespace o2
         RectF                 mRightTopDragAreaRect;   // Right Top drag handle rect
                                                     
         Ref<CursorEventsArea> mLeftBottomDragHandle;     // Left Bottom drag handle, for resizing window
-		Layout                mLeftBottomDragAreaLayout; // Left Bottom drag handle layout @SERIALIZABLE
-		RectF                 mLeftBottomDragAreaRect;   // Left Bottom drag handle rect
+        Layout                mLeftBottomDragAreaLayout; // Left Bottom drag handle layout @SERIALIZABLE
+        RectF                 mLeftBottomDragAreaRect;   // Left Bottom drag handle rect
                                                      
         Ref<CursorEventsArea> mRightBottomDragHandle;     // Right Bottom drag handle, for resizing window
-		Layout                mRightBottomDragAreaLayout; // Right Bottom drag handle layout @SERIALIZABLE
+        Layout                mRightBottomDragAreaLayout; // Right Bottom drag handle layout @SERIALIZABLE
         RectF                 mRightBottomDragAreaRect;   // Right Bottom drag handle rect
 
     protected:

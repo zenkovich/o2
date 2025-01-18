@@ -6,56 +6,56 @@
 
 namespace o2
 {
-	FORWARD_CLASS_REF(Button);
+    FORWARD_CLASS_REF(Button);
 }
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(IObjectPropertiesViewer);
+    FORWARD_CLASS_REF(IObjectPropertiesViewer);
 
-	// --------------------------------------
-	// Default widget layer properties viewer
-	// -------------------------------
-	class DefaultWidgetLayerPropertiesViewer : public IWidgetLayerPropertiesViewer
-	{
-	public:
-		// Default constructor. Initializes data widget
-		DefaultWidgetLayerPropertiesViewer();
+    // --------------------------------------
+    // Default widget layer properties viewer
+    // -------------------------------
+    class DefaultWidgetLayerPropertiesViewer : public IWidgetLayerPropertiesViewer
+    {
+    public:
+        // Default constructor. Initializes data widget
+        DefaultWidgetLayerPropertiesViewer();
 
-		// Virtual destructor
-		~DefaultWidgetLayerPropertiesViewer();
+        // Virtual destructor
+        ~DefaultWidgetLayerPropertiesViewer();
 
-		// Sets target actors
-		void SetTargetLayers(const Vector<WidgetLayer*>& layers) override;
+        // Sets target actors
+        void SetTargetLayers(const Vector<WidgetLayer*>& layers) override;
 
-		// Returns viewing layer drawable type 
-		const Type* GetDrawableType() const override;
+        // Returns viewing layer drawable type 
+        const Type* GetDrawableType() const override;
 
-		// Updates all actor values
-		void Refresh() override;
+        // Updates all actor values
+        void Refresh() override;
 
-		// Returns is there no properties
-		bool IsEmpty() const override;
+        // Returns is there no properties
+        bool IsEmpty() const override;
 
-		IOBJECT(DefaultWidgetLayerPropertiesViewer);
+        IOBJECT(DefaultWidgetLayerPropertiesViewer);
 
-	protected:
-		Vector<WidgetLayer*> mLayers;                 // Target widget layers
-		const Type*          mDrawableType = nullptr; // Target drawable type
+    protected:
+        Vector<WidgetLayer*> mLayers;                 // Target widget layers
+        const Type*          mDrawableType = nullptr; // Target drawable type
 
-		Ref<IObjectPropertiesViewer> mViewer;        // Properties viewer
-		Ref<Button>                  mFitSizeButton; // Fit size of layer by drawable size
+        Ref<IObjectPropertiesViewer> mViewer;        // Properties viewer
+        Ref<Button>                  mFitSizeButton; // Fit size of layer by drawable size
 
-	protected:
-		// Enable viewer event function
-		void OnPropertiesEnabled() override;
+    protected:
+        // Enable viewer event function
+        void OnPropertiesEnabled() override;
 
-		// Disable viewer event function
-		void OnPropertiesDisabled() override;
+        // Disable viewer event function
+        void OnPropertiesDisabled() override;
 
-		// Fits layer size by drawable size, Called when mFitSizeButton were pressed
-		void FitLayerByDrawable();
-	};
+        // Fits layer size by drawable size, Called when mFitSizeButton were pressed
+        void FitLayerByDrawable();
+    };
 }
 // --- META ---
 

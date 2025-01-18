@@ -7,93 +7,93 @@
 
 namespace Editor
 {
-	// -------------------------
-	// Mesh weights editing tool
-	// -------------------------
-	struct MeshWeightsTool: public IEditTool
-	{
-		// ----------------------
-		// Scene layer for editor
-		// ----------------------
-		struct SceneLayer: public SceneEditorLayer
-		{
-			WeakRef<MeshWeightsTool> tool; // Reference to tool
+    // -------------------------
+    // Mesh weights editing tool
+    // -------------------------
+    struct MeshWeightsTool: public IEditTool
+    {
+        // ----------------------
+        // Scene layer for editor
+        // ----------------------
+        struct SceneLayer: public SceneEditorLayer
+        {
+            WeakRef<MeshWeightsTool> tool; // Reference to tool
 
-		public:
-			// Draws editor over scene
-			void DrawScene() override;
+        public:
+            // Draws editor over scene
+            void DrawScene() override;
 
-			// Draws mesh wire
-			void DrawMeshWire(auto& mesh);
+            // Draws mesh wire
+            void DrawMeshWire(auto& mesh);
 
-			// Updates editor
-			void Update(float dt) override;
+            // Updates editor
+            void Update(float dt) override;
 
-			// Updates brush
-			void UpdateBrush(float dt);
+            // Updates brush
+            void UpdateBrush(float dt);
 
-			// Returns order of layer
-			int GetOrder() const override;
+            // Returns order of layer
+            int GetOrder() const override;
 
-			// Returns true if layer is enabled
-			bool IsEnabled() const override;
+            // Returns true if layer is enabled
+            bool IsEnabled() const override;
 
-			// Returns name of layer
-			const String& GetName() const override;
+            // Returns name of layer
+            const String& GetName() const override;
 
-			// Returns icon name of layer
-			const String& GetIconName() const override;
-		};
+            // Returns icon name of layer
+            const String& GetIconName() const override;
+        };
 
-	public:
-		Ref<SkinningMeshBoneComponent> boneComponent; // Reference to selected bone component
+    public:
+        Ref<SkinningMeshBoneComponent> boneComponent; // Reference to selected bone component
 
-		Ref<SceneLayer> sceneLayer = mmake<SceneLayer>(); // Scene layer for drawing spline
+        Ref<SceneLayer> sceneLayer = mmake<SceneLayer>(); // Scene layer for drawing spline
 
-		bool         isEnabled = false; // Is tool enabled now       
+        bool         isEnabled = false; // Is tool enabled now       
 
-	public:
-		// Default constructor
-		explicit MeshWeightsTool(RefCounter* refCounter);
+    public:
+        // Default constructor
+        explicit MeshWeightsTool(RefCounter* refCounter);
 
-		// Empty copy operator
-		MeshWeightsTool& operator=(const MeshWeightsTool& other) { return *this; }
+        // Empty copy operator
+        MeshWeightsTool& operator=(const MeshWeightsTool& other) { return *this; }
 
-		// Returns toggle in menu panel icon name
-		String GetPanelIcon() const override;
+        // Returns toggle in menu panel icon name
+        String GetPanelIcon() const override;
 
-		// Called when tool was enabled
-		void OnEnabled() override;
+        // Called when tool was enabled
+        void OnEnabled() override;
 
-		// Called when tool was disabled
-		void OnDisabled() override;
+        // Called when tool was disabled
+        void OnDisabled() override;
 
-		IOBJECT(MeshWeightsTool);
+        IOBJECT(MeshWeightsTool);
 
-	private:
-		Vec2F mCursosPos;            // Current cursor position, used for brush
-		bool  mPressed = false;      // Is brush pressed
-		float mBrushReadius = 50;    // Current brush radius
-		float mBrushStrength = 1.0f; // Strength of brush
+    private:
+        Vec2F mCursosPos;            // Current cursor position, used for brush
+        bool  mPressed = false;      // Is brush pressed
+        float mBrushReadius = 50;    // Current brush radius
+        float mBrushStrength = 1.0f; // Strength of brush
 
-		Mesh mWeightsDebugMesh; // Mesh for drawing debug colors of weights
+        Mesh mWeightsDebugMesh; // Mesh for drawing debug colors of weights
 
-	private:
-		// Called when cursor pressed on this
-		void OnCursorPressed(const Input::Cursor& cursor) override;
+    private:
+        // Called when cursor pressed on this
+        void OnCursorPressed(const Input::Cursor& cursor) override;
 
-		// Called when cursor released (only when cursor pressed this at previous time)
-		void OnCursorReleased(const Input::Cursor& cursor) override;
+        // Called when cursor released (only when cursor pressed this at previous time)
+        void OnCursorReleased(const Input::Cursor& cursor) override;
 
-		// Called when cursor pressing was broken (when scrolled scroll area or some other)
-		void OnCursorPressBreak(const Input::Cursor& cursor) override;
+        // Called when cursor pressing was broken (when scrolled scroll area or some other)
+        void OnCursorPressBreak(const Input::Cursor& cursor) override;
 
-		// Called when cursor stay down during frame
-		void OnCursorStillDown(const Input::Cursor& cursor) override;
+        // Called when cursor stay down during frame
+        void OnCursorStillDown(const Input::Cursor& cursor) override;
 
-		// Called when cursor moved on this (or moved outside when this was pressed)
-		void OnCursorMoved(const Input::Cursor& cursor) override;
-	};
+        // Called when cursor moved on this (or moved outside when this was pressed)
+        void OnCursorMoved(const Input::Cursor& cursor) override;
+    };
 }
 // --- META ---
 

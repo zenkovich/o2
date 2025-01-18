@@ -11,7 +11,7 @@ using namespace o2;
 
 namespace o2
 {
-	class MenuPanel;
+    class MenuPanel;
 }
 
 // Editor application access macros
@@ -19,61 +19,61 @@ namespace o2
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(EditorConfig);
-	FORWARD_CLASS_REF(IAction);
-	FORWARD_CLASS_REF(MenuPanel);
-	FORWARD_CLASS_REF(Properties);
-	FORWARD_CLASS_REF(ToolsPanel);
-	FORWARD_CLASS_REF(UIRoot);
-	FORWARD_CLASS_REF(WindowsManager);
+    FORWARD_CLASS_REF(EditorConfig);
+    FORWARD_CLASS_REF(IAction);
+    FORWARD_CLASS_REF(MenuPanel);
+    FORWARD_CLASS_REF(Properties);
+    FORWARD_CLASS_REF(ToolsPanel);
+    FORWARD_CLASS_REF(UIRoot);
+    FORWARD_CLASS_REF(WindowsManager);
 
-	// ------------------
-	// Editor application
-	// ------------------
-	class EditorApplication: public Application, public ActionsList
-	{
-	public:
-		bool isPaused = false;  // Is editor scene paused
-		bool step = false;      // Is needed to do one update step
+    // ------------------
+    // Editor application
+    // ------------------
+    class EditorApplication: public Application, public ActionsList
+    {
+    public:
+        bool isPaused = false;  // Is editor scene paused
+        bool step = false;      // Is needed to do one update step
 
-	public:
-		// Default constructor. Initializes all editor components
+    public:
+        // Default constructor. Initializes all editor components
         EditorApplication(RefCounter* refCounter);
 
-		// Destructor
-		~EditorApplication();
+        // Destructor
+        ~EditorApplication();
 
-		// Returns current scene name
-		const String& GetLoadedSceneName() const;
+        // Returns current scene name
+        const String& GetLoadedSceneName() const;
 
-		// Loads scene from file
-		void LoadScene(const AssetRef<SceneAsset>& scene);
+        // Loads scene from file
+        void LoadScene(const AssetRef<SceneAsset>& scene);
 
-		// Saves current scene
-		void SaveScene();
+        // Saves current scene
+        void SaveScene();
 
-		// Saves scene from file
-		void SaveSceneAs(const String& path);
+        // Saves scene from file
+        void SaveSceneAs(const String& path);
 
-		// Makes new scene
-		void MakeNewScene();
+        // Makes new scene
+        void MakeNewScene();
 
-		// Returns is current scene was changed
-		bool IsSceneChanged() const;
+        // Returns is current scene was changed
+        bool IsSceneChanged() const;
 
-		// Runs or stops scene playing. Saving scene into temporary file before playing, restoring after stopping
-		void SetPlaying(bool playing);
+        // Runs or stops scene playing. Saving scene into temporary file before playing, restoring after stopping
+        void SetPlaying(bool playing);
 
-		// Is scene playing
+        // Is scene playing
         bool IsPlaying() const;
 
         // Dynamic cast to RefCounterable via Application
         static Ref<RefCounterable> CastToRefCounterable(const Ref<EditorApplication>& ref);
 
         IOBJECT(EditorApplication);
-		REF_COUNTERABLE_IMPL(Application, ActionsList);
+        REF_COUNTERABLE_IMPL(Application, ActionsList);
 
-	protected:
+    protected:
         Ref<Sprite> mBackground; // Background sprite
         Ref<Sprite> mBackSign;   // Background o2 signature
 
@@ -85,87 +85,87 @@ namespace Editor
 
         Ref<Properties> mProperties; // Properties manager
 
-		AssetRef<SceneAsset> mLoadedScene; // Current loaded scene
+        AssetRef<SceneAsset> mLoadedScene; // Current loaded scene
 
-		DataDocument mSceneDump; // Scene dump, created before playing
+        DataDocument mSceneDump; // Scene dump, created before playing
 
-		bool mIsPlaying = false;      // Is editor scene playing
-		bool mPlayingChanged = false; // True when need to update playing mode on update
-		bool mUpdateStep = false;     // True when frame updating available on this frame
+        bool mIsPlaying = false;      // Is editor scene playing
+        bool mPlayingChanged = false; // True when need to update playing mode on update
+        bool mUpdateStep = false;     // True when frame updating available on this frame
 
-		int mDrawCalls = 0;       // Draw calls count, stored before beginning rendering
-		int mDrawnPrimitives = 0; // DRaw promitives at frame
+        int mDrawCalls = 0;       // Draw calls count, stored before beginning rendering
+        int mDrawnPrimitives = 0; // DRaw promitives at frame
 
-	protected:
-		// Initializing all systems and log. Sets up editor settings for some systems
-		void InitalizeSystems() override;
+    protected:
+        // Initializing all systems and log. Sets up editor settings for some systems
+        void InitalizeSystems() override;
 
-		// Check style rebuilding and loads editor UI style
-		void LoadUIStyle();
+        // Check style rebuilding and loads editor UI style
+        void LoadUIStyle();
 
-		// Before update physics
-		void PreUpdatePhysics() override;
+        // Before update physics
+        void PreUpdatePhysics() override;
 
-		// Updates physics
-		void UpdatePhysics(float dt) override;
+        // Updates physics
+        void UpdatePhysics(float dt) override;
 
-		// After update physics
-		void PostUpdatePhysics() override;
+        // After update physics
+        void PostUpdatePhysics() override;
 
-		// Updates scene
-		void UpdateScene(float dt) override;
+        // Updates scene
+        void UpdateScene(float dt) override;
 
-		// Updates scene with fixed delta time
-		void FixedUpdateScene(float dt) override;
+        // Updates scene with fixed delta time
+        void FixedUpdateScene(float dt) override;
 
-		// Draws scene
-		void DrawScene() override;
+        // Draws scene
+        void DrawScene() override;
 
-		// Draws UI manager
-		void DrawUIManager() override;
+        // Draws UI manager
+        void DrawUIManager() override;
 
-		// Draw debug empty stub
-		void DrawDebug() override;
+        // Draw debug empty stub
+        void DrawDebug() override;
 
-		// Updates debug inly in play mode
-		void UpdateDebug(float dt) override;
+        // Updates debug inly in play mode
+        void UpdateDebug(float dt) override;
 
-		// Updates event system
-		void UpdateEventSystem() override;
+        // Updates event system
+        void UpdateEventSystem() override;
 
-		// Post updates event system
-		void PostUpdateEventSystem() override;
+        // Post updates event system
+        void PostUpdateEventSystem() override;
 
-		// Calling on updating
-		void OnUpdate(float dt) override;
+        // Calling on updating
+        void OnUpdate(float dt) override;
 
-		// Calling on drawing
-		void OnDraw() override;
+        // Calling on drawing
+        void OnDraw() override;
 
-		// Calling when application activated
-		void OnActivated() override;
+        // Calling when application activated
+        void OnActivated() override;
 
-		// Calling when application deactivated
-		void OnDeactivated() override;
+        // Calling when application deactivated
+        void OnDeactivated() override;
 
-		// Calling when application is starting
-		void OnStarted() override;
+        // Calling when application is starting
+        void OnStarted() override;
 
-		// Calling when application is closing
-		void OnClosing() override;
+        // Calling when application is closing
+        void OnClosing() override;
 
-		// Calling when application window resized. Ignoring on mobiles/tablets
-		void OnResizing() override;
+        // Calling when application window resized. Ignoring on mobiles/tablets
+        void OnResizing() override;
 
-		// Calling when application window moved. Ignoring on mobiles/tablets
-		void OnMoved() override;
+        // Calling when application window moved. Ignoring on mobiles/tablets
+        void OnMoved() override;
 
-		// Processing frame update, drawing and input messages without scene
-		void ProcessFrame() override;
+        // Processing frame update, drawing and input messages without scene
+        void ProcessFrame() override;
 
-		// Checks that required to switch playing mode
-		void CheckPlayingSwitch();
-	};
+        // Checks that required to switch playing mode
+        void CheckPlayingSwitch();
+    };
 }
 // --- META ---
 

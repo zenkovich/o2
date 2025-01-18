@@ -114,9 +114,9 @@ namespace o2
         bool mNeedUpdateMesh = false;  // True, when mesh data is dirty and need to rebuild
         bool mNeedUpdateBones = false; // True, when bones need to be updated
 
-	protected:
-		// Draws sprite 
-		void OnDraw() override;
+    protected:
+        // Draws sprite 
+        void OnDraw() override;
 
         // Called when component starts, updates bones
         void OnStart() override;

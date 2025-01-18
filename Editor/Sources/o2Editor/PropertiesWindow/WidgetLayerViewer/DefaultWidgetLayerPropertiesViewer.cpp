@@ -12,77 +12,77 @@
 namespace Editor
 {
 
-	DefaultWidgetLayerPropertiesViewer::DefaultWidgetLayerPropertiesViewer()
-	{
-		PushEditorScopeOnStack scope;
-		mFitSizeButton = o2UI.CreateButton("Fit size by drawable", THIS_FUNC(FitLayerByDrawable));
-	}
+    DefaultWidgetLayerPropertiesViewer::DefaultWidgetLayerPropertiesViewer()
+    {
+        PushEditorScopeOnStack scope;
+        mFitSizeButton = o2UI.CreateButton("Fit size by drawable", THIS_FUNC(FitLayerByDrawable));
+    }
 
-	DefaultWidgetLayerPropertiesViewer::~DefaultWidgetLayerPropertiesViewer()
-	{}
+    DefaultWidgetLayerPropertiesViewer::~DefaultWidgetLayerPropertiesViewer()
+    {}
 
-	void DefaultWidgetLayerPropertiesViewer::SetTargetLayers(const Vector<WidgetLayer*>& layers)
-	{
-		mLayers = layers;
-		Refresh();
-	}
+    void DefaultWidgetLayerPropertiesViewer::SetTargetLayers(const Vector<WidgetLayer*>& layers)
+    {
+        mLayers = layers;
+        Refresh();
+    }
 
-	const Type* DefaultWidgetLayerPropertiesViewer::GetDrawableType() const
-	{
-		return mDrawableType;
-	}
+    const Type* DefaultWidgetLayerPropertiesViewer::GetDrawableType() const
+    {
+        return mDrawableType;
+    }
 
-	void DefaultWidgetLayerPropertiesViewer::Refresh()
-	{
-		if (!mViewer)
-		{
-			mViewer = o2EditorProperties.CreateObjectViewer(&TypeOf(WidgetLayer), "");
-			mViewer->SetHeaderEnabled(false);
-			mSpoiler->AddChild(mViewer->GetSpoiler());
-			mFitSizeButton->SetParent(mSpoiler);
-		}
+    void DefaultWidgetLayerPropertiesViewer::Refresh()
+    {
+        if (!mViewer)
+        {
+            mViewer = o2EditorProperties.CreateObjectViewer(&TypeOf(WidgetLayer), "");
+            mViewer->SetHeaderEnabled(false);
+            mSpoiler->AddChild(mViewer->GetSpoiler());
+            mFitSizeButton->SetParent(mSpoiler);
+        }
 
-		if (mViewer)
-		{
-			mViewer->Refresh(mLayers.Convert<Pair<IObject*, IObject*>>([](WidgetLayer* x) {
-				return Pair<IObject*, IObject*>(dynamic_cast<IObject*>(x), nullptr);
-			}));
-		}
-	}
+        if (mViewer)
+        {
+            mViewer->Refresh(mLayers.Convert<Pair<IObject*, IObject*>>([](WidgetLayer* x) {
+                return Pair<IObject*, IObject*>(dynamic_cast<IObject*>(x), nullptr);
+            }));
+        }
+    }
 
-	bool DefaultWidgetLayerPropertiesViewer::IsEmpty() const
-	{
-		return mSpoiler->GetChildren().Count() == 0;
-	}
+    bool DefaultWidgetLayerPropertiesViewer::IsEmpty() const
+    {
+        return mSpoiler->GetChildren().Count() == 0;
+    }
 
-	void DefaultWidgetLayerPropertiesViewer::OnPropertiesEnabled()
-	{
-		if (mViewer)
-			mViewer->OnPropertiesEnabled();
-	}
+    void DefaultWidgetLayerPropertiesViewer::OnPropertiesEnabled()
+    {
+        if (mViewer)
+            mViewer->OnPropertiesEnabled();
+    }
 
-	void DefaultWidgetLayerPropertiesViewer::OnPropertiesDisabled()
-	{
-		if (mViewer)
-			mViewer->OnPropertiesDisabled();
-	}
+    void DefaultWidgetLayerPropertiesViewer::OnPropertiesDisabled()
+    {
+        if (mViewer)
+            mViewer->OnPropertiesDisabled();
+    }
 
-	void DefaultWidgetLayerPropertiesViewer::FitLayerByDrawable()
-	{
-		auto action = mmake<TransformAction>(mLayers.Convert<Ref<SceneEditableObject>>([](WidgetLayer* layer) { return Ref(dynamic_cast<SceneEditableObject*>(layer)); }));
+    void DefaultWidgetLayerPropertiesViewer::FitLayerByDrawable()
+    {
+        auto action = mmake<TransformAction>(mLayers.Convert<Ref<SceneEditableObject>>([](WidgetLayer* layer) { return Ref(dynamic_cast<SceneEditableObject*>(layer)); }));
 
-		for (auto& layer : mLayers)
-		{
-			if (auto sprite = DynamicCast<Sprite>(layer->GetDrawable()))
-				layer->layout.size = sprite->GetImageAsset()->GetSize();
+        for (auto& layer : mLayers)
+        {
+            if (auto sprite = DynamicCast<Sprite>(layer->GetDrawable()))
+                layer->layout.size = sprite->GetImageAsset()->GetSize();
 
-			if (auto text = DynamicCast<Text>(layer->GetDrawable()))
-				layer->layout.size = text->GetRealSize();
-		}
+            if (auto text = DynamicCast<Text>(layer->GetDrawable()))
+                layer->layout.size = text->GetRealSize();
+        }
 
-		action->Completed();
-		o2EditorApplication.DoneAction(action);
-	}
+        action->Completed();
+        o2EditorApplication.DoneAction(action);
+    }
 
 }
 // --- META ---

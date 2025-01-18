@@ -13,30 +13,30 @@ using namespace o2;
 
 namespace o2
 {
-	class SceneEditableObject;
-	class Sprite;
-	class ContextMenu;
-	class GridLayout;
+    class SceneEditableObject;
+    class Sprite;
+    class ContextMenu;
+    class GridLayout;
 }
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(ActorProperty);
-	FORWARD_CLASS_REF(ComponentProperty);
-	FORWARD_CLASS_REF(SceneHierarchyTree);
-	FORWARD_CLASS_REF(AssetIcon);
+    FORWARD_CLASS_REF(ActorProperty);
+    FORWARD_CLASS_REF(ComponentProperty);
+    FORWARD_CLASS_REF(SceneHierarchyTree);
+    FORWARD_CLASS_REF(AssetIcon);
 
-	// ------------------------
-	// Assets icons scroll area
-	// ------------------------
-	class AssetsIconsScrollArea: public GridLayoutScrollArea, public DragDropArea, public KeyboardEventsListener, 
-		public ISelectableDragableObjectsGroup
-	{
-	public:
-		Function<void(const Vector<String>&)> onAssetsSelected; // Assets selected event
+    // ------------------------
+    // Assets icons scroll area
+    // ------------------------
+    class AssetsIconsScrollArea: public GridLayoutScrollArea, public DragDropArea, public KeyboardEventsListener, 
+        public ISelectableDragableObjectsGroup
+    {
+    public:
+        Function<void(const Vector<String>&)> onAssetsSelected; // Assets selected event
 
-	public:
-		// Default constructor
+    public:
+        // Default constructor
         AssetsIconsScrollArea(RefCounter* refCounter);
 
         // Copy-constructor
@@ -45,315 +45,315 @@ namespace Editor
         // Copy-constructor
         AssetsIconsScrollArea(const AssetsIconsScrollArea& other);
 
-		// Destructor
-		~AssetsIconsScrollArea();
+        // Destructor
+        ~AssetsIconsScrollArea();
 
-		// Copy-operator
-		AssetsIconsScrollArea& operator=(const AssetsIconsScrollArea& other);
+        // Copy-operator
+        AssetsIconsScrollArea& operator=(const AssetsIconsScrollArea& other);
 
-		// Draws widget
-		void Draw() override;
+        // Draws widget
+        void Draw() override;
 
-		// Updates widget
-		void Update(float dt) override;
+        // Updates widget
+        void Update(float dt) override;
 
-		// Sets current assets viewing path
-		void SetViewingPath(const String& path);
+        // Sets current assets viewing path
+        void SetViewingPath(const String& path);
 
-		// Returns viewing path
-		const String& GetViewingPath() const;
+        // Returns viewing path
+        const String& GetViewingPath() const;
 
-		// Updates assets path contents
-		void UpdateAssetsByCurrentPath();
+        // Updates assets path contents
+        void UpdateAssetsByCurrentPath();
 
-		// Creates asset and starts renaming
-		void CreateAsset(const Type* assetType);
+        // Creates asset and starts renaming
+        void CreateAsset(const Type* assetType);
 
-		// Highlights asset
-		void HighlightAsset(const UID& id);
+        // Highlights asset
+        void HighlightAsset(const UID& id);
 
-		// Selects asset
-		void SelectAsset(const UID& id, bool scroll = true);
+        // Selects asset
+        void SelectAsset(const UID& id, bool scroll = true);
 
-		// Deselects all assets
-		void DeselectAllAssets();
+        // Deselects all assets
+        void DeselectAllAssets();
 
-		// Returns selected assets infos
-		const Vector<Ref<AssetInfo>>& GetSelectedAssets() const;
+        // Returns selected assets infos
+        const Vector<Ref<AssetInfo>>& GetSelectedAssets() const;
 
-		// Return asset icon under point
-		Ref<AssetIcon> GetIconUnderPoint(const Vec2F& point) const;
+        // Return asset icon under point
+        Ref<AssetIcon> GetIconUnderPoint(const Vec2F& point) const;
 
-		// Returns node highlight drawable
-		const Ref<Sprite>& GetHighlightDrawable() const;
+        // Returns node highlight drawable
+        const Ref<Sprite>& GetHighlightDrawable() const;
 
-		// Sets highlight animation
-		void SetHighlightAnimation(const Ref<AnimationClip>& animation);
+        // Sets highlight animation
+        void SetHighlightAnimation(const Ref<AnimationClip>& animation);
 
-		// Sets highlight layout
-		void SetHighlightLayout(const Layout& layout);
+        // Sets highlight layout
+        void SetHighlightLayout(const Layout& layout);
 
-		// Returns selecting rectangle drawable
-		const Ref<Sprite>& GetSelectingDrawable() const;
+        // Returns selecting rectangle drawable
+        const Ref<Sprite>& GetSelectingDrawable() const;
 
-		// Returns is this widget can be selected
-		bool IsFocusable() const override;
+        // Returns is this widget can be selected
+        bool IsFocusable() const override;
 
-		// Returns true if point is in this object
-		bool IsUnderPoint(const Vec2F& point) override;
+        // Returns true if point is in this object
+        bool IsUnderPoint(const Vec2F& point) override;
 
-		// Updates layout
-		void UpdateSelfTransform() override;
+        // Updates layout
+        void UpdateSelfTransform() override;
 
-		// Returns is listener scrollable
-		bool IsScrollable() const override;
+        // Returns is listener scrollable
+        bool IsScrollable() const override;
 
-		// Returns true when input events can be handled by down listeners
-		bool IsInputTransparent() const override;
+        // Returns true when input events can be handled by down listeners
+        bool IsInputTransparent() const override;
 
-		// Returns create menu category in editor
-		static String GetCreateMenuCategory();
+        // Returns create menu category in editor
+        static String GetCreateMenuCategory();
 
         SERIALIZABLE(AssetsIconsScrollArea);
         CLONEABLE_REF(AssetsIconsScrollArea);
 
-	protected:
-		const Vec2F mAssetIconSize = Vec2F(50, 60);
-						        
-		String mCurrentPath = "_"; // Current viewing path
+    protected:
+        const Vec2F mAssetIconSize = Vec2F(50, 60);
+                                
+        String mCurrentPath = "_"; // Current viewing path
 
         Vector<Ref<AssetInfo>> mAssetInfos;        // Asset infos in path @IGNORE
         Vector<Ref<AssetIcon>> mVisibleAssetIcons; // Visible asset icons
 
-		Ref<ContextMenu> mContextMenu; // Assets Context menu
-						        
-		Vector<Ref<AssetInfo>> mSelectedAssets;          // Selected assets icons @IGNORE
-		Vector<AssetRef<Asset>>     mSelectedPreloadedAssets; // Preloaded selected assets
+        Ref<ContextMenu> mContextMenu; // Assets Context menu
+                                
+        Vector<Ref<AssetInfo>> mSelectedAssets;          // Selected assets icons @IGNORE
+        Vector<AssetRef<Asset>>     mSelectedPreloadedAssets; // Preloaded selected assets
 
-		AssetRef<Asset> mNewAsset; // Temporary new asset. Used when creating new asset
-						        
-		Ref<AssetIcon>       mHighlightIcon;                            // Current highlighting asset icon
-		Ref<AnimationClip>   mHighlighClip;                             // Node highlight animation clip @SERIALIZABLE 
-		Ref<AnimationPlayer> mHighlightAnim = mmake<AnimationPlayer>(); // Icon highlight animation
-		Ref<Sprite>          mHighlightSprite;                          // Icon highlight sprite @SERIALIZABLE
-		Layout               mHighlightLayout;                          // Icon highlight sprite layout @SERIALIZABLE
-						        
-		Map<String, Vector<Ref<AssetIcon>>> mIconsPool; // Assets icons pool
-						        
-		Ref<Sprite>            mSelectionSprite;       // Icons selection rectangle sprite @SERIALIZABLE
-		bool                   mSelecting = false;     // Is selecting icons 
-		Vec2F                  mPressedPoint;          // Pressed point
-		Vector<Ref<AssetInfo>> mCurrentSelectingInfos; // Selecting icons at current selection @IGNORE
-						        
-		bool                             mIsDraggingIcons = false;      // Is dragging icons
-		bool                             mDragEnded = false;            // Is dragging ended
-		Ref<AssetIcon>                   mDragIcon;                     // Dragging icon
-		Vec2F                            mDragOffset;                   // Dragging offset from cursor to icon center
-		Vector<Ref<SceneEditableObject>> mInstantiatedSceneDragObjects; // Instantiated objects when dragging asset above scene
+        AssetRef<Asset> mNewAsset; // Temporary new asset. Used when creating new asset
+                                
+        Ref<AssetIcon>       mHighlightIcon;                            // Current highlighting asset icon
+        Ref<AnimationClip>   mHighlighClip;                             // Node highlight animation clip @SERIALIZABLE 
+        Ref<AnimationPlayer> mHighlightAnim = mmake<AnimationPlayer>(); // Icon highlight animation
+        Ref<Sprite>          mHighlightSprite;                          // Icon highlight sprite @SERIALIZABLE
+        Layout               mHighlightLayout;                          // Icon highlight sprite layout @SERIALIZABLE
+                                
+        Map<String, Vector<Ref<AssetIcon>>> mIconsPool; // Assets icons pool
+                                
+        Ref<Sprite>            mSelectionSprite;       // Icons selection rectangle sprite @SERIALIZABLE
+        bool                   mSelecting = false;     // Is selecting icons 
+        Vec2F                  mPressedPoint;          // Pressed point
+        Vector<Ref<AssetInfo>> mCurrentSelectingInfos; // Selecting icons at current selection @IGNORE
+                                
+        bool                             mIsDraggingIcons = false;      // Is dragging icons
+        bool                             mDragEnded = false;            // Is dragging ended
+        Ref<AssetIcon>                   mDragIcon;                     // Dragging icon
+        Vec2F                            mDragOffset;                   // Dragging offset from cursor to icon center
+        Vector<Ref<SceneEditableObject>> mInstantiatedSceneDragObjects; // Instantiated objects when dragging asset above scene
 
-		Vector<Pair<UID, String>> mCuttingAssets; // Current cutted assets
-						        
-		bool mChangePropertiesTargetsFromThis = false;
+        Vector<Pair<UID, String>> mCuttingAssets; // Current cutted assets
+                                
+        bool mChangePropertiesTargetsFromThis = false;
 
-	protected:
-		// Returns items count, calls getItemsCountFunc
-		int GetItemsCount() const override;
+    protected:
+        // Returns items count, calls getItemsCountFunc
+        int GetItemsCount() const override;
 
-		// Returns items in range from start to end, calls getItemsRangeFunc
-		Vector<void*> GetItemsRange(int start, int end) const override;
+        // Returns items in range from start to end, calls getItemsRangeFunc
+        Vector<void*> GetItemsRange(int start, int end) const override;
 
-		// Sets item widget, calls setupItemFunc
-		void SetupItemWidget(const Ref<Widget>& widget, void* item) override;
+        // Sets item widget, calls setupItemFunc
+        void SetupItemWidget(const Ref<Widget>& widget, void* item) override;
 
-		// Updates visible items
-		void UpdateVisibleItems() override;
+        // Updates visible items
+        void UpdateVisibleItems() override;
 
-		// Called when widget was selected
-		void OnFocused() override;
+        // Called when widget was selected
+        void OnFocused() override;
 
-		// Called when widget was deselected
-		void OnUnfocused() override;
+        // Called when widget was deselected
+        void OnUnfocused() override;
 
-		// Called when cursor pressed on this
-		void OnCursorPressed(const Input::Cursor& cursor) override;
+        // Called when cursor pressed on this
+        void OnCursorPressed(const Input::Cursor& cursor) override;
 
-		// Called when cursor released (only when cursor pressed this at previous time)
-		void OnCursorReleased(const Input::Cursor& cursor) override;
+        // Called when cursor released (only when cursor pressed this at previous time)
+        void OnCursorReleased(const Input::Cursor& cursor) override;
 
-		// Called when cursor pressing was broken (when scrolled scroll area or some other)
-		void OnCursorPressBreak(const Input::Cursor& cursor) override;
+        // Called when cursor pressing was broken (when scrolled scroll area or some other)
+        void OnCursorPressBreak(const Input::Cursor& cursor) override;
 
-		// Called when cursor stay down during frame
-		void OnCursorStillDown(const Input::Cursor& cursor) override;
+        // Called when cursor stay down during frame
+        void OnCursorStillDown(const Input::Cursor& cursor) override;
 
-		// Called when cursor moved on this (or moved outside when this was pressed)
-		void OnCursorMoved(const Input::Cursor& cursor) override;
+        // Called when cursor moved on this (or moved outside when this was pressed)
+        void OnCursorMoved(const Input::Cursor& cursor) override;
 
-		// Called when right mouse button was released (only when right mouse button pressed this at previous time)
-		void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
+        // Called when right mouse button was released (only when right mouse button pressed this at previous time)
+        void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
 
-		// Called when scrolling
-		void OnScrolled(float scroll) override;
+        // Called when scrolling
+        void OnScrolled(float scroll) override;
 
-		// Called when key was released
-		void OnKeyReleased(const Input::Key& key) override;
+        // Called when key was released
+        void OnKeyReleased(const Input::Key& key) override;
 
-		// Called when assets selection was changed
-		void OnAssetsSelected();
+        // Called when assets selection was changed
+        void OnAssetsSelected();
 
-		// Updates cutting assets
-		void UpdateCuttingAssets();
+        // Updates cutting assets
+        void UpdateCuttingAssets();
 
-		// Begins selecting icons
-		void BeginSelecting();
+        // Begins selecting icons
+        void BeginSelecting();
 
-		// Updates selection frame
-		void UpdateSelection(const Input::Cursor& cursor);
+        // Updates selection frame
+        void UpdateSelection(const Input::Cursor& cursor);
 
-		// Completes selecting
-		void CompleteSelecting();
+        // Completes selecting
+        void CompleteSelecting();
 
-		// Sorts current asset infos
-		void SortAssetInfos();
+        // Sorts current asset infos
+        void SortAssetInfos();
 
-		// Registers objects creation undo action
-		void RegObjectsCreationAction();
+        // Registers objects creation undo action
+        void RegObjectsCreationAction();
 
-		// Initializes assets context menu
-		void InitializeContext();
+        // Initializes assets context menu
+        void InitializeContext();
 
-		// Initializes assets create context menu
-		void InitializeCreateContext();
+        // Initializes assets create context menu
+        void InitializeCreateContext();
 
-		// Returns asset icon from pool or creates new by style name
-		Ref<AssetIcon> GetAssetIconFromPool(const String& style);
+        // Returns asset icon from pool or creates new by style name
+        Ref<AssetIcon> GetAssetIconFromPool(const String& style);
 
-		// Frees icon to pool
-		void FreeAssetIconToPool(const Ref<AssetIcon>& icon);
+        // Frees icon to pool
+        void FreeAssetIconToPool(const Ref<AssetIcon>& icon);
 
-		// Returns asset icon if visible
-		Ref<AssetIcon> FindVisibleIcon(const Ref<AssetInfo>& info);
+        // Returns asset icon if visible
+        Ref<AssetIcon> FindVisibleIcon(const Ref<AssetInfo>& info);
 
-		// Called when asset icon double clicked, starting editing name
-		void OnAssetDblClick(const Ref<AssetIcon>& icon);
+        // Called when asset icon double clicked, starting editing name
+        void OnAssetDblClick(const Ref<AssetIcon>& icon);
 
-		// Starts asset icon renaming, calls onCompletedwhen completed
-		void StartAssetRenaming(const Ref<AssetIcon>& icon, const String& name, const Function<void(const String&)>& onCompleted);
+        // Starts asset icon renaming, calls onCompletedwhen completed
+        void StartAssetRenaming(const Ref<AssetIcon>& icon, const String& name, const Function<void(const String&)>& onCompleted);
 
-		// Called when context copy pressed
-		void OnContextCopyPressed();
+        // Called when context copy pressed
+        void OnContextCopyPressed();
 
-		// Called when context cut pressed
-		void OnContextCutPressed();
+        // Called when context cut pressed
+        void OnContextCutPressed();
 
-		// Called when context paste pressed
-		void OnContextPastePressed();
+        // Called when context paste pressed
+        void OnContextPastePressed();
 
-		// Called when context delete pressed
-		void OnContextDeletePressed();
+        // Called when context delete pressed
+        void OnContextDeletePressed();
 
-		// Called when context open pressed
-		void OnContextOpenPressed();
+        // Called when context open pressed
+        void OnContextOpenPressed();
 
-		// Called when context show in explorer pressed
-		void OnContextShowInExplorerPressed();
+        // Called when context show in explorer pressed
+        void OnContextShowInExplorerPressed();
 
-		// Instantiates dragging assets
-		void InstantiateDraggingAssets();
+        // Instantiates dragging assets
+        void InstantiateDraggingAssets();
 
-		// Removes and clears instantiated dragging assets
-		void ClearInstantiatedDraggingAssets();
+        // Removes and clears instantiated dragging assets
+        void ClearInstantiatedDraggingAssets();
 
-		// Instantiate actor from asset info
-		Ref<Actor> InstantiateAsset(const AssetInfo& assetInfo);
+        // Instantiate actor from asset info
+        Ref<Actor> InstantiateAsset(const AssetInfo& assetInfo);
 
-		// Dummy asset instantiate function from asset
-		template<typename _type>
-		Ref<Actor> InstantiateAsset(const _type& asset);
+        // Dummy asset instantiate function from asset
+        template<typename _type>
+        Ref<Actor> InstantiateAsset(const _type& asset);
 
-		// Instantiate actor from image asset
-		Ref<Actor> InstantiateAsset(const AssetRef<ImageAsset>& asset);
+        // Instantiate actor from image asset
+        Ref<Actor> InstantiateAsset(const AssetRef<ImageAsset>& asset);
 
-		// Instantiate actor from actor asset
-		Ref<Actor> InstantiateAsset(const AssetRef<ActorAsset>& asset);
+        // Instantiate actor from actor asset
+        Ref<Actor> InstantiateAsset(const AssetRef<ActorAsset>& asset);
 
-		// Called when assets was changed from properties
-		void OnAssetsPropertiesChanged();
+        // Called when assets was changed from properties
+        void OnAssetsPropertiesChanged();
 
-		// Checks preloaded assets for saving
-		void CheckPreloadedAssetsSaving();
-		
+        // Checks preloaded assets for saving
+        void CheckPreloadedAssetsSaving();
+        
 // ISelectableDragableObjectsGroup implementation
 
-		// Returns selected objects in group
-		Vector<Ref<SelectableDragableObject>> GetSelectedDragObjects() const override;
+        // Returns selected objects in group
+        Vector<Ref<SelectableDragableObject>> GetSelectedDragObjects() const override;
 
-		// Returns all objects in group 
-		Vector<Ref<SelectableDragableObject>> GetAllObjects() const override;
+        // Returns all objects in group 
+        Vector<Ref<SelectableDragableObject>> GetAllObjects() const override;
 
-		// Selects object
-		void Select(const Ref<SelectableDragableObject>& object) override;
+        // Selects object
+        void Select(const Ref<SelectableDragableObject>& object) override;
 
-		// Selects object
-		void Select(const Ref<SelectableDragableObject>& object, bool sendOnSelectionChanged);
+        // Selects object
+        void Select(const Ref<SelectableDragableObject>& object, bool sendOnSelectionChanged);
 
-		// Deselects object
-		void Deselect(const Ref<SelectableDragableObject>& object) override;
+        // Deselects object
+        void Deselect(const Ref<SelectableDragableObject>& object) override;
 
-		// Adds selectable object to group
-		void AddSelectableObject(const Ref<SelectableDragableObject>& object) override;
+        // Adds selectable object to group
+        void AddSelectableObject(const Ref<SelectableDragableObject>& object) override;
 
-		// Removes selectable object from group
-		void RemoveSelectableObject(SelectableDragableObject* object) override;
+        // Removes selectable object from group
+        void RemoveSelectableObject(SelectableDragableObject* object) override;
 
-		// Called when selectable draggable object was released
-		void OnSelectableObjectCursorReleased(const Ref<SelectableDragableObject>& object, const Input::Cursor& cursor) override;
+        // Called when selectable draggable object was released
+        void OnSelectableObjectCursorReleased(const Ref<SelectableDragableObject>& object, const Input::Cursor& cursor) override;
 
-		// Called when selectable object was began to drag
-		void OnSelectableObjectBeganDragging(const Ref<SelectableDragableObject>& object) override;
+        // Called when selectable object was began to drag
+        void OnSelectableObjectBeganDragging(const Ref<SelectableDragableObject>& object) override;
 
 // DragDropArea implementation
-		// Called when some drag listeners was entered to this area
-		void OnDragEnter(const Ref<ISelectableDragableObjectsGroup>& group) override;
+        // Called when some drag listeners was entered to this area
+        void OnDragEnter(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
-		// Called when some drag listeners was dragged above this area
-		void OnDraggedAbove(const Ref<ISelectableDragableObjectsGroup>& group) override;
+        // Called when some drag listeners was dragged above this area
+        void OnDraggedAbove(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
-		// Called when some drag listeners was exited from this area
-		void OnDragExit(const Ref<ISelectableDragableObjectsGroup>& group) override;
+        // Called when some drag listeners was exited from this area
+        void OnDragExit(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
-		// Called when some selectable listeners was dropped to this
-		void OnDropped(const Ref<ISelectableDragableObjectsGroup>& group) override;
+        // Called when some selectable listeners was dropped to this
+        void OnDropped(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
-		// Called when dropped dragged scene tree nodes selected and started dragging from scene tree
-		void OnDroppedFromSceneTree(const Ref<SceneHierarchyTree>& sceneTree);
+        // Called when dropped dragged scene tree nodes selected and started dragging from scene tree
+        void OnDroppedFromSceneTree(const Ref<SceneHierarchyTree>& sceneTree);
 
-		// Called when dropped dragged assets icons selected and started dragging from this
-		void OnDroppedFromThis();
+        // Called when dropped dragged assets icons selected and started dragging from this
+        void OnDroppedFromThis();
 
-		// Begins dragging selected items
-		void BeginDragging(const Ref<AssetIcon>& icon);
+        // Begins dragging selected items
+        void BeginDragging(const Ref<AssetIcon>& icon);
 
-		// Ends dragging items
-		void EndDragging(bool droppedToThis = false);
+        // Ends dragging items
+        void EndDragging(bool droppedToThis = false);
 
-		// Updates dragging graphics
-		void UpdateDraggingGraphics(); 
-		
-		REF_COUNTERABLE_IMPL(GridLayoutScrollArea);
+        // Updates dragging graphics
+        void UpdateDraggingGraphics(); 
+        
+        REF_COUNTERABLE_IMPL(GridLayoutScrollArea);
 
-		friend class AssetsWindow;
-		friend class SceneEditScreen;
-		friend class SceneHierarchyTree;
-		friend class AssetIcon;
-		friend class SceneTree;
-	};
+        friend class AssetsWindow;
+        friend class SceneEditScreen;
+        friend class SceneHierarchyTree;
+        friend class AssetIcon;
+        friend class SceneTree;
+    };
 
-	template<typename _type>
-	Ref<Actor> AssetsIconsScrollArea::InstantiateAsset(const _type& asset)
-	{
-		return nullptr;
-	}
+    template<typename _type>
+    Ref<Actor> AssetsIconsScrollArea::InstantiateAsset(const _type& asset)
+    {
+        return nullptr;
+    }
 }
 // --- META ---
 

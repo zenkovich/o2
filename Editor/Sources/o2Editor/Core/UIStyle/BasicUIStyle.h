@@ -5,45 +5,45 @@
 
 namespace o2
 {
-	class BasicUIStyleBuilder: public IObject
-	{
-	public:
-		void RebuildButtonStyle();
-		void RebuildCloseButtonStyle();
-		void RebuildArrowButtonStyle();
-		void RebuildHorSeparatorStyle();
-		void RebuildHorProgressBarStyle();
-		void RebuildVerProgressBarStyle();
-		void RebuildHorScrollBarStyle();
-		void RebuildVerScrollBarStyle();
-		void RebuildCheckboxStyle();
-		void RebuildCheckboxWithoutCaptionStyle();
-		void RebuildScrollAreaStyle();
-		void RebuildScrollAreaStraightBarsStyle();
-		void RebuildPopupStyle();
-		void RebuildLabelStyle();
-		void RebuildEditBoxStyle();
-		void RebuildCustomListStyle();
-		void RebuildLongListStyle();
-		void RebuildListStyle();
-		void RebuildCustomDropDownStyle();
-		void RebuildDropDownStyle();
-		void RebuildWindowStyle();
-		void RebuildTreeStyle();
-		void RebuildMenuPanelStyle();
+    class BasicUIStyleBuilder: public IObject
+    {
+    public:
+        void RebuildButtonStyle();
+        void RebuildCloseButtonStyle();
+        void RebuildArrowButtonStyle();
+        void RebuildHorSeparatorStyle();
+        void RebuildHorProgressBarStyle();
+        void RebuildVerProgressBarStyle();
+        void RebuildHorScrollBarStyle();
+        void RebuildVerScrollBarStyle();
+        void RebuildCheckboxStyle();
+        void RebuildCheckboxWithoutCaptionStyle();
+        void RebuildScrollAreaStyle();
+        void RebuildScrollAreaStraightBarsStyle();
+        void RebuildPopupStyle();
+        void RebuildLabelStyle();
+        void RebuildEditBoxStyle();
+        void RebuildCustomListStyle();
+        void RebuildLongListStyle();
+        void RebuildListStyle();
+        void RebuildCustomDropDownStyle();
+        void RebuildDropDownStyle();
+        void RebuildWindowStyle();
+        void RebuildTreeStyle();
+        void RebuildMenuPanelStyle();
         void RebuildBacklessDropdown();
         void RebuildBacklessEditbox();
         void RebuildBacklessMultilineEditbox();
-		void RebuildSinglelineEditbox();
-		void RebuildBacklessScrollarea();
-		void RebuildContextMenuStyle();
-		void RebuildExpandButton();
-		void RebuildExpandDownButton();
-		void RebuildExpandWhiteButton();
-		void RebuildSpoiler();
+        void RebuildSinglelineEditbox();
+        void RebuildBacklessScrollarea();
+        void RebuildContextMenuStyle();
+        void RebuildExpandButton();
+        void RebuildExpandDownButton();
+        void RebuildExpandWhiteButton();
+        void RebuildSpoiler();
 
-		IOBJECT(BasicUIStyleBuilder);
-	};
+        IOBJECT(BasicUIStyleBuilder);
+    };
 }
 // --- META ---
 

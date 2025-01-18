@@ -4,22 +4,22 @@
 
 namespace Editor
 {
-	// ------------------------------------------------------------
-	// Default object properties viewer. Builds field by reflection
-	// ------------------------------------------------------------
-	class DefaultObjectPropertiesViewer: public IObjectPropertiesViewer
-	{
-	public:
-		IOBJECT(DefaultObjectPropertiesViewer);
+    // ------------------------------------------------------------
+    // Default object properties viewer. Builds field by reflection
+    // ------------------------------------------------------------
+    class DefaultObjectPropertiesViewer: public IObjectPropertiesViewer
+    {
+    public:
+        IOBJECT(DefaultObjectPropertiesViewer);
 
-	protected:
-		const Type* mBuiltObjectType = &TypeOf(IObject); // Type of built object properties
-		bool        mBuiltWithHiddenProperties = false;  // Is properties was built with hidden properties section
+    protected:
+        const Type* mBuiltObjectType = &TypeOf(IObject); // Type of built object properties
+        bool        mBuiltWithHiddenProperties = false;  // Is properties was built with hidden properties section
 
-	protected:
-		// Checks if properties need to be rebuilt, rebuilds if necessary
-		bool CheckBuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
-	};
+    protected:
+        // Checks if properties need to be rebuilt, rebuilds if necessary
+        bool CheckBuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
+    };
 }
 // --- META ---
 

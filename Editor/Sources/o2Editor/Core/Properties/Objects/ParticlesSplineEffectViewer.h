@@ -6,50 +6,50 @@ using namespace o2;
 
 namespace o2
 {
-	class Button;
+    class Button;
 }
 
 namespace Editor
 {
-	// ------------------------------
-	// Particles spline effect viewer
-	// ------------------------------
-	class ParticlesSplineEffectViewer : public DefaultObjectPropertiesViewer
-	{
-	public:
-		// Default constructor
-		ParticlesSplineEffectViewer();
+    // ------------------------------
+    // Particles spline effect viewer
+    // ------------------------------
+    class ParticlesSplineEffectViewer : public DefaultObjectPropertiesViewer
+    {
+    public:
+        // Default constructor
+        ParticlesSplineEffectViewer();
 
-		// Default constructor, removes spline tool
-		~ParticlesSplineEffectViewer() override;
+        // Default constructor, removes spline tool
+        ~ParticlesSplineEffectViewer() override;
 
-		// Returns viewing objects type
-		const Type* GetViewingObjectType() const override;
+        // Returns viewing objects type
+        const Type* GetViewingObjectType() const override;
 
-		// Returns viewing objects base type by static function
-		static const Type* GetViewingObjectTypeStatic();
+        // Returns viewing objects base type by static function
+        static const Type* GetViewingObjectTypeStatic();
 
-		IOBJECT(ParticlesSplineEffectViewer);
+        IOBJECT(ParticlesSplineEffectViewer);
 
-	private:
-		Ref<SplineTool>    mSplineTool;       // Spline tool
-		WeakRef<IEditTool> mPrevSelectedTool; // Previous selected tool, for restore
+    private:
+        Ref<SplineTool>    mSplineTool;       // Spline tool
+        WeakRef<IEditTool> mPrevSelectedTool; // Previous selected tool, for restore
 
-		Ref<ParticlesSplineEffect> mSplineEffect; // Current effect
+        Ref<ParticlesSplineEffect> mSplineEffect; // Current effect
 
-	private:
-		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
-		void RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
+    private:
+        // Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
+        void RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 
-		// Called when viewer is refreshed
-		void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
+        // Called when viewer is refreshed
+        void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 
-		// Enable viewer event function
-		void OnPropertiesEnabled() override;
+        // Enable viewer event function
+        void OnPropertiesEnabled() override;
 
-		// Disable viewer event function
-		void OnPropertiesDisabled() override;
-	};
+        // Disable viewer event function
+        void OnPropertiesDisabled() override;
+    };
 }
 // --- META ---
 

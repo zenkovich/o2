@@ -167,9 +167,9 @@ namespace o2
 
         Vector<Page> mPages; // Pages @SERIALIZABLE
 
-	protected:
-		// It is called after reference initialization at object construction, registers atlas in render
-		void PostRefConstruct();
+    protected:
+        // It is called after reference initialization at object construction, registers atlas in render
+        void PostRefConstruct();
 
         // Completion deserialization callback
         void OnDeserialized(const DataValue& node) override;

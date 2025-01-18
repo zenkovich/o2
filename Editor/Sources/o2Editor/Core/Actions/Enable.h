@@ -7,38 +7,38 @@ using namespace o2;
 
 namespace o2
 {
-	class SceneEditableObject;
+    class SceneEditableObject;
 }
 
 namespace Editor
 {
-	// -------------------------------
-	// Enable or disable scene objects
-	// -------------------------------
-	class EnableAction: public IAction
-	{
-	public:
-		Vector<SceneUID> objectsIds; // Changed objects
-		bool             enable;     // Enabled or disabled
+    // -------------------------------
+    // Enable or disable scene objects
+    // -------------------------------
+    class EnableAction: public IAction
+    {
+    public:
+        Vector<SceneUID> objectsIds; // Changed objects
+        bool             enable;     // Enabled or disabled
 
-	public:
-		// Default constructor
-		EnableAction();
+    public:
+        // Default constructor
+        EnableAction();
 
-		// COnstructor with enabled or disabled objects
-		EnableAction(const Vector<Ref<SceneEditableObject>>& objects, bool enable);
+        // COnstructor with enabled or disabled objects
+        EnableAction(const Vector<Ref<SceneEditableObject>>& objects, bool enable);
 
-		// Returns name of action
-		String GetName() const override;
+        // Returns name of action
+        String GetName() const override;
 
-		// Enable or disable again
-		void Redo() override;
+        // Enable or disable again
+        void Redo() override;
 
-		// Reverts objects to previous state
-		void Undo() override;
+        // Reverts objects to previous state
+        void Undo() override;
 
-		SERIALIZABLE(EnableAction);
-	};
+        SERIALIZABLE(EnableAction);
+    };
 }
 // --- META ---
 

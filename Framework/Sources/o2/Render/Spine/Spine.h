@@ -18,54 +18,54 @@ namespace o2
     // EsotericSoftware Spine animation
     // --------------------------------
     class Spine : public virtual IDrawable, public virtual RefCounterable, public ICloneableRef
-	{
+    {
     public:
         PROPERTIES(Spine);
 
     public:
-		// ---------------------
-		// Spine animation track
-		// ---------------------
-		class Track: public IAnimation
+        // ---------------------
+        // Spine animation track
+        // ---------------------
+        class Track: public IAnimation
         {
         public:
-			// Default constructor
-			Track() = default;
+            // Default constructor
+            Track() = default;
 
-			// Constructor
-			Track(const Ref<Spine>& owner, int trackIndex, const String& name);
+            // Constructor
+            Track(const Ref<Spine>& owner, int trackIndex, const String& name);
 
-			// Sets time
-			void SetTime(float time) override;
+            // Sets time
+            void SetTime(float time) override;
 
-			// Sets animation weight for blending
-			void SetWeight(float weight);
+            // Sets animation weight for blending
+            void SetWeight(float weight);
 
-			// Returns animation weight
-			float GetWeight() const;
+            // Returns animation weight
+            float GetWeight() const;
 
-			SERIALIZABLE(Track);
+            SERIALIZABLE(Track);
 
-		private:
-			WeakRef<Spine> mOwner; // Spine reference
+        private:
+            WeakRef<Spine> mOwner; // Spine reference
 
-			String mAnimationName;   // Animation name
-			int    mTrackIndex = -1; // Spine track index
+            String mAnimationName;   // Animation name
+            int    mTrackIndex = -1; // Spine track index
 
-			spine::TrackEntry* mTrackEntry = nullptr; // Spine track entry
+            spine::TrackEntry* mTrackEntry = nullptr; // Spine track entry
 
-		private:
-			// Called for updating animated object, after updating time
-			void Evaluate() override;
+        private:
+            // Called for updating animated object, after updating time
+            void Evaluate() override;
 
-			// Called when animation starts playing
-			void OnPlay() override;
+            // Called when animation starts playing
+            void OnPlay() override;
 
-			// Called when animation stops playing
-			void OnStop() override;
+            // Called when animation stops playing
+            void OnStop() override;
 
-			// Called when animation loop state changed
-			void OnLoopChanged() override;
+            // Called when animation loop state changed
+            void OnLoopChanged() override;
         };
 
     public:
@@ -75,8 +75,8 @@ namespace o2
         // Constructor
         explicit Spine(RefCounter* refCounter);
 
-		// Constructor with spine asset
-		Spine(RefCounter* refCounter, const AssetRef<SpineAsset>& spine);
+        // Constructor with spine asset
+        Spine(RefCounter* refCounter, const AssetRef<SpineAsset>& spine);
 
         // Copy-constructor
         Spine(RefCounter* refCounter, const Spine& other);
@@ -87,36 +87,36 @@ namespace o2
         // Assign operator
         Spine& operator=(const Spine& other);
 
-		// Load spine skeleton
-		void Load(const AssetRef<SpineAsset>& spine);
+        // Load spine skeleton
+        void Load(const AssetRef<SpineAsset>& spine);
 
-		// Unload spine skeleton
-		void Unload();
+        // Unload spine skeleton
+        void Unload();
 
         // Drawing SkinnableMesh
         void Draw() override;
 
-		// Updates spine animation
-		void Update(float dt);
+        // Updates spine animation
+        void Update(float dt);
 
-		// Returns spine animation names
-		const Vector<String>& GetAnimationNames() const;
+        // Returns spine animation names
+        const Vector<String>& GetAnimationNames() const;
 
-		// Returns spine animation track
-		Ref<Track> GetTrack(const String& name);
+        // Returns spine animation track
+        Ref<Track> GetTrack(const String& name);
 
         CLONEABLE_REF(Spine);
 
     protected:
-		AssetRef<SpineAsset> mSpineAsset; // Spine asset @SERIALIZABLE @EDITOR_PROPERTY
+        AssetRef<SpineAsset> mSpineAsset; // Spine asset @SERIALIZABLE @EDITOR_PROPERTY
 
-		spine::Skeleton*       mSkeleton = nullptr;       // Spine skeleton
-		spine::AnimationState* mAnimationState = nullptr; // Spine animation state
+        spine::Skeleton*       mSkeleton = nullptr;       // Spine skeleton
+        spine::AnimationState* mAnimationState = nullptr; // Spine animation state
 
-		Vector<String> mAnimationNames; // Animation names
+        Vector<String> mAnimationNames; // Animation names
 
-		Vector<Vertex>      mVertices; // Vertices buffer
-		Vector<VertexIndex> mIndices;  // Indices buffer
+        Vector<Vertex>      mVertices; // Vertices buffer
+        Vector<VertexIndex> mIndices;  // Indices buffer
 
         friend class Render;
     };

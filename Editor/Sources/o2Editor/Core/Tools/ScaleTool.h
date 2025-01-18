@@ -26,12 +26,12 @@ namespace Editor
         IOBJECT(ScaleTool);
 
     protected:
-		Ref<SceneDragHandle> mHorDragHandle;  // Horizontal scale drag handle
-		Ref<SceneDragHandle> mVerDragHandle;  // Vertical scale drag handle
-		Ref<SceneDragHandle> mBothDragHandle; // Bot axis scale drag handle
+        Ref<SceneDragHandle> mHorDragHandle;  // Horizontal scale drag handle
+        Ref<SceneDragHandle> mVerDragHandle;  // Vertical scale drag handle
+        Ref<SceneDragHandle> mBothDragHandle; // Bot axis scale drag handle
 
-        float mHandlesAngle = 0.0f;			  // Handles angle in radians
-        Vec2F mSceneHandlesPos;				  // Scene space handles position
+        float mHandlesAngle = 0.0f;              // Handles angle in radians
+        Vec2F mSceneHandlesPos;                  // Scene space handles position
         Vec2F mHandlesSize = Vec2F(100, 100); // Handles size in screen space
 
         Vec2F mLastHorHandlePos;  // Last horizontal handle position
@@ -41,12 +41,12 @@ namespace Editor
         Vector<Basis>        mBeforeTransforms; // Array of objects' transformations before changing
         Ref<TransformAction> mTransformAction;  // Current transform action. Creates when transform started
 
-	protected:
-		// Returns toggle in menu panel icon name
-		String GetPanelIcon() const override;
+    protected:
+        // Returns toggle in menu panel icon name
+        String GetPanelIcon() const override;
 
-		// Returns shortcut keys for toggle
-		ShortcutKeys GetShortcut() const override;
+        // Returns shortcut keys for toggle
+        ShortcutKeys GetShortcut() const override;
 
         // Updates tool
         void Update(float dt) override;
@@ -100,7 +100,7 @@ namespace Editor
         void HandlePressed();
 
         // Called when handle was released, completes transformation action
-		void HandleReleased();
+        void HandleReleased();
     };
 }
 // --- META ---

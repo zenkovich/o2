@@ -5,91 +5,91 @@
 
 namespace o2
 {
-	class Toggle;
-	class EditBox;
-	class Button;
+    class Toggle;
+    class EditBox;
+    class Button;
 }
 
 namespace Editor
 {
-	using namespace o2;
+    using namespace o2;
 
-	FORWARD_CLASS_REF(TagsProperty);
-	FORWARD_CLASS_REF(SceneLayerRefProperty);
-	FORWARD_CLASS_REF(BooleanProperty);
-	FORWARD_CLASS_REF(StringProperty);
-	FORWARD_CLASS_REF(AssetProperty);
-	FORWARD_CLASS_REF(FloatProperty);
+    FORWARD_CLASS_REF(TagsProperty);
+    FORWARD_CLASS_REF(SceneLayerRefProperty);
+    FORWARD_CLASS_REF(BooleanProperty);
+    FORWARD_CLASS_REF(StringProperty);
+    FORWARD_CLASS_REF(AssetProperty);
+    FORWARD_CLASS_REF(FloatProperty);
 
-	// ---------------------------
-	// Default actor header viewer
-	// ---------------------------
-	class DefaultActorHeaderViewer: public IActorHeaderViewer
-	{
-	public:
-		// Default constructor
-		DefaultActorHeaderViewer();
+    // ---------------------------
+    // Default actor header viewer
+    // ---------------------------
+    class DefaultActorHeaderViewer: public IActorHeaderViewer
+    {
+    public:
+        // Default constructor
+        DefaultActorHeaderViewer();
 
-		// Virtual destructor
-		~DefaultActorHeaderViewer();
+        // Virtual destructor
+        ~DefaultActorHeaderViewer();
 
-		// Sets target actors
-		void SetTargetActors(const Vector<Actor*>& actors) override;
+        // Sets target actors
+        void SetTargetActors(const Vector<Actor*>& actors) override;
 
-		// Returns data widget
-		Ref<Widget> GetWidget() const override;
+        // Returns data widget
+        Ref<Widget> GetWidget() const override;
 
-		// Updates properties values
-		void Refresh() override;
+        // Updates properties values
+        void Refresh() override;
 
-		IOBJECT(DefaultActorHeaderViewer);
+        IOBJECT(DefaultActorHeaderViewer);
 
-	public: 
-		Vector<Actor*> mActors;
+    public: 
+        Vector<Actor*> mActors;
 
-		Ref<Widget> mDataView;
+        Ref<Widget> mDataView;
 
-		Ref<BooleanProperty>       mEnableProperty;
-		Ref<StringProperty>        mNameProperty;
-		Ref<BooleanProperty>       mLockProperty;
-		Ref<AssetProperty>         mPrototypeProperty;
-		Ref<TagsProperty>          mTagsProperty;
-		Ref<SceneLayerRefProperty> mLayerProperty;
-		Ref<FloatProperty>         mDepthProperty;
+        Ref<BooleanProperty>       mEnableProperty;
+        Ref<StringProperty>        mNameProperty;
+        Ref<BooleanProperty>       mLockProperty;
+        Ref<AssetProperty>         mPrototypeProperty;
+        Ref<TagsProperty>          mTagsProperty;
+        Ref<SceneLayerRefProperty> mLayerProperty;
+        Ref<FloatProperty>         mDepthProperty;
 
-		Ref<Button> mPrototypeApplyBtn;
-		Ref<Button> mPrototypeRevertBtn;
-		Ref<Button> mPrototypeBreakBtn;
+        Ref<Button> mPrototypeApplyBtn;
+        Ref<Button> mPrototypeRevertBtn;
+        Ref<Button> mPrototypeBreakBtn;
 
-	protected:
-		// Enable viewer event function
-		void OnPropertiesEnabled() override;
+    protected:
+        // Enable viewer event function
+        void OnPropertiesEnabled() override;
 
-		// Disable viewer event function
-		void OnPropertiesDisabled() override;
+        // Disable viewer event function
+        void OnPropertiesDisabled() override;
 
-		// Refreshes layer property
-		void RefreshLayer();
+        // Refreshes layer property
+        void RefreshLayer();
 
-		// Called when apply button pressed, and applies changes to prototype
-		void OnApplyPrototypePressed();
+        // Called when apply button pressed, and applies changes to prototype
+        void OnApplyPrototypePressed();
 
-		// Called when revert button pressed and reverts actor to prototype
-		void OnRevertPrototypePressed();
+        // Called when revert button pressed and reverts actor to prototype
+        void OnRevertPrototypePressed();
 
-		// Called when break prototype buttons pressed and break prototype link
-		void OnBreakPrototypePressed();
+        // Called when break prototype buttons pressed and break prototype link
+        void OnBreakPrototypePressed();
 
-		// Called when selected inherit from parent layer
-		void OnSelectedInheritedLayer();
+        // Called when selected inherit from parent layer
+        void OnSelectedInheritedLayer();
 
-		// Returns actor applying roots
-		Vector<Actor*> GetRootApplyActors();
+        // Returns actor applying roots
+        Vector<Actor*> GetRootApplyActors();
 
-		// Called when some property changed, stores action for undo
-		void OnPropertyChanged(const String& path, const Vector<DataDocument>& prevValue, 
-							   const Vector<DataDocument>& newValue);
-	};
+        // Called when some property changed, stores action for undo
+        void OnPropertyChanged(const String& path, const Vector<DataDocument>& prevValue, 
+                               const Vector<DataDocument>& newValue);
+    };
 }
 // --- META ---
 

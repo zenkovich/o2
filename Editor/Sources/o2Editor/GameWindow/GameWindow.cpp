@@ -9,69 +9,69 @@
 
 namespace Editor
 {
-	GameWindow::GameWindow():
-		IEditorWindow()
-	{
-		InitializeWindow();
-	}
+    GameWindow::GameWindow():
+        IEditorWindow()
+    {
+        InitializeWindow();
+    }
 
-	GameWindow::GameWindow(const GameWindow& other):
-		IEditorWindow(other)
-	{
-		InitializeWindow();
-	}
+    GameWindow::GameWindow(const GameWindow& other):
+        IEditorWindow(other)
+    {
+        InitializeWindow();
+    }
 
-	GameWindow::~GameWindow()
-	{}
+    GameWindow::~GameWindow()
+    {}
 
-	void GameWindow::InitializeWindow()
-	{
-		mWindow->caption = "Game";
-		mWindow->name = "game window";
-		mWindow->SetIcon(mmake<Sprite>("ui/UI4_game_icon.png"));
-		mWindow->SetIconLayout(Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-1, 2)));
-		mWindow->SetViewLayout(Layout::BothStretch(-1, 0, 0, 18));
+    void GameWindow::InitializeWindow()
+    {
+        mWindow->caption = "Game";
+        mWindow->name = "game window";
+        mWindow->SetIcon(mmake<Sprite>("ui/UI4_game_icon.png"));
+        mWindow->SetIconLayout(Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-1, 2)));
+        mWindow->SetViewLayout(Layout::BothStretch(-1, 0, 0, 18));
 
-		mGameView = mmake<GameView>();
-		*mGameView->layout = WidgetLayout::BothStretch(0, 0, 0, 19);
-		mWindow->AddChild(mGameView);
+        mGameView = mmake<GameView>();
+        *mGameView->layout = WidgetLayout::BothStretch(0, 0, 0, 19);
+        mWindow->AddChild(mGameView);
 
-		InitializeDevicesMenu();
+        InitializeDevicesMenu();
 
-		auto upPanel = mmake<HorizontalLayout>();
-		upPanel->name = "up panel";
-		upPanel->baseCorner = BaseCorner::Right;
-		upPanel->expandWidth = false;
-		upPanel->spacing = 5;
-		*upPanel->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, 0);
-		upPanel->AddLayer("back", mmake<Sprite>("ui/UI4_small_panel_back.png"), Layout::BothStretch(-5, -4, -4, -5));
-		mWindow->AddChild(upPanel);
+        auto upPanel = mmake<HorizontalLayout>();
+        upPanel->name = "up panel";
+        upPanel->baseCorner = BaseCorner::Right;
+        upPanel->expandWidth = false;
+        upPanel->spacing = 5;
+        *upPanel->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, 0);
+        upPanel->AddLayer("back", mmake<Sprite>("ui/UI4_small_panel_back.png"), Layout::BothStretch(-5, -4, -4, -5));
+        mWindow->AddChild(upPanel);
 
-		mResolutionsButton = o2UI.CreateWidget<Button>("panel down");
-		mResolutionsButton->caption = "Resolution";
-		mResolutionsButton->layout->minWidth = 300;
-		mResolutionsButton->onClick = [=]() { mDevicesMenu->Show(mResolutionsButton->layout->GetWorldLeftBottom()); };
-		upPanel->AddChild(mResolutionsButton);
+        mResolutionsButton = o2UI.CreateWidget<Button>("panel down");
+        mResolutionsButton->caption = "Resolution";
+        mResolutionsButton->layout->minWidth = 300;
+        mResolutionsButton->onClick = [=]() { mDevicesMenu->Show(mResolutionsButton->layout->GetWorldLeftBottom()); };
+        upPanel->AddChild(mResolutionsButton);
 
-		auto resolutionLabel = o2UI.CreateLabel("Resolution:");
-		resolutionLabel->horOverflow = Label::HorOverflow::Expand;
-		upPanel->AddChild(resolutionLabel);
+        auto resolutionLabel = o2UI.CreateLabel("Resolution:");
+        resolutionLabel->horOverflow = Label::HorOverflow::Expand;
+        upPanel->AddChild(resolutionLabel);
 
-		OnCurrentWindowSize(true);
-	}
+        OnCurrentWindowSize(true);
+    }
 
-	void GameWindow::InitializeDevicesMenu()
-	{
-		DataDocument doc;
-		doc.LoadFromFile(GetEditorAssetsPath() + String("SimulationDevicesList.json"));
+    void GameWindow::InitializeDevicesMenu()
+    {
+        DataDocument doc;
+        doc.LoadFromFile(GetEditorAssetsPath() + String("SimulationDevicesList.json"));
 
-		Vector<SimulationDevice> devicesList;
-		devicesList = doc["list"];
+        Vector<SimulationDevice> devicesList;
+        devicesList = doc["list"];
 
-		for (auto& device: devicesList)
-			mDevicesList[device.deviceName] = device;
+        for (auto& device: devicesList)
+            mDevicesList[device.deviceName] = device;
 
-		mDevicesMenu = o2UI.CreateWidget<ContextMenu>();
+        mDevicesMenu = o2UI.CreateWidget<ContextMenu>();
 
         mCurrentWindowSizeItem = mDevicesMenu->AddToggleItem("Current window size", true, THIS_FUNC(OnCurrentWindowSize));
 
@@ -91,97 +91,97 @@ namespace Editor
             item->onChecked = [=](bool checked) { OnDeviceSelected(kv.first, item); };
         }
 
-		mWindow->AddChild(mDevicesMenu);
-	}
+        mWindow->AddChild(mDevicesMenu);
+    }
 
-	void GameWindow::SetResolution(const Vec2I& resolution)
-	{
-		mGameView->fixedResolution = true;
-		mGameView->resolution = resolution;
-		mGameView->UpdateRenderTargetSize();
-	}
+    void GameWindow::SetResolution(const Vec2I& resolution)
+    {
+        mGameView->fixedResolution = true;
+        mGameView->resolution = resolution;
+        mGameView->UpdateRenderTargetSize();
+    }
 
-	void GameWindow::OnCurrentWindowSize(bool enabled)
-	{
-		SetDeviceMenuCheckedItem(mCurrentWindowSizeItem);
-		mResolutionsButton->caption = "Current window size";
+    void GameWindow::OnCurrentWindowSize(bool enabled)
+    {
+        SetDeviceMenuCheckedItem(mCurrentWindowSizeItem);
+        mResolutionsButton->caption = "Current window size";
         mGameView->fixedResolution = false;
         mGameView->UpdateRenderTargetSize();
-	}
+    }
 
-	void GameWindow::OnCustomResolution(bool enabled)
-	{
-		SetDeviceMenuCheckedItem(mCustomSizeItem);
-		mResolutionsButton->caption = "Fixed " + (String)mCustomSizeProperty->GetCommonValue();
-		SetResolution(mCustomSizeProperty->GetCommonValue());
-	}
+    void GameWindow::OnCustomResolution(bool enabled)
+    {
+        SetDeviceMenuCheckedItem(mCustomSizeItem);
+        mResolutionsButton->caption = "Fixed " + (String)mCustomSizeProperty->GetCommonValue();
+        SetResolution(mCustomSizeProperty->GetCommonValue());
+    }
 
-	void GameWindow::OnDeviceSelected(const String& name, const Ref<ContextMenu::Item>& item)
-	{
-		SetDeviceMenuCheckedItem(item);
-		mResolutionsButton->caption = item->text;
-		SetResolution(mDevicesList[name].resolution);
-	}
+    void GameWindow::OnDeviceSelected(const String& name, const Ref<ContextMenu::Item>& item)
+    {
+        SetDeviceMenuCheckedItem(item);
+        mResolutionsButton->caption = item->text;
+        SetResolution(mDevicesList[name].resolution);
+    }
 
-	void GameWindow::SetDeviceMenuCheckedItem(const Ref<ContextMenu::Item>& item)
-	{
-		for (auto& child : mDevicesMenu->GetItemsLayout()->GetChildren())
-		{
-			if (auto childItem = DynamicCast<ContextMenuItem>(child))
-			{
-				if (childItem->IsCheckable())
-					childItem->SetChecked(childItem == item->widget.Lock());
-			}
-		}
-	}
+    void GameWindow::SetDeviceMenuCheckedItem(const Ref<ContextMenu::Item>& item)
+    {
+        for (auto& child : mDevicesMenu->GetItemsLayout()->GetChildren())
+        {
+            if (auto childItem = DynamicCast<ContextMenuItem>(child))
+            {
+                if (childItem->IsCheckable())
+                    childItem->SetChecked(childItem == item->widget.Lock());
+            }
+        }
+    }
 
-	GameWindow::GameView::GameView(RefCounter* refCounter):
-		Widget(refCounter)
-	{
-		mRenderTarget = TextureRef(Vec2I(256, 256), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
-		mRenderTargetSprite = mmake<Sprite>(mRenderTarget, RectI(0, 0, 256, 256));
-	}
+    GameWindow::GameView::GameView(RefCounter* refCounter):
+        Widget(refCounter)
+    {
+        mRenderTarget = TextureRef(Vec2I(256, 256), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
+        mRenderTargetSprite = mmake<Sprite>(mRenderTarget, RectI(0, 0, 256, 256));
+    }
 
-	void GameWindow::GameView::Draw()
-	{
-		Widget::Draw();
+    void GameWindow::GameView::Draw()
+    {
+        Widget::Draw();
 
-		o2Render.BindRenderTexture(mRenderTarget);
+        o2Render.BindRenderTexture(mRenderTarget);
 
-		int editorDepth = EditorScope::GetDepth();
-		EditorScope::Exit(editorDepth);
+        int editorDepth = EditorScope::GetDepth();
+        EditorScope::Exit(editorDepth);
 
-		o2Scene.Draw();
+        o2Scene.Draw();
 
-		if (!o2Scene.GetCameras().IsEmpty())
-		{
-			auto prevCamera = o2Render.GetCamera();
-			auto cameraActor = o2Scene.GetCameras()[0].Lock();
-			cameraActor->Setup();
-			
-			if (o2Input.IsKeyDown(VK_F1))
-			{
-				auto localCursor = cameraActor->listenersLayer->ScreenToLocal(o2Input.GetCursorPos());
-				o2Render.DrawCross(localCursor, 25.0f, Color4::Red());
-				o2Debug.Log((String)localCursor);
-			}
+        if (!o2Scene.GetCameras().IsEmpty())
+        {
+            auto prevCamera = o2Render.GetCamera();
+            auto cameraActor = o2Scene.GetCameras()[0].Lock();
+            cameraActor->Setup();
+            
+            if (o2Input.IsKeyDown(VK_F1))
+            {
+                auto localCursor = cameraActor->listenersLayer->ScreenToLocal(o2Input.GetCursorPos());
+                o2Render.DrawCross(localCursor, 25.0f, Color4::Red());
+                o2Debug.Log((String)localCursor);
+            }
 
-			o2Render.SetCamera(prevCamera);
-		}
+            o2Render.SetCamera(prevCamera);
+        }
 
-		EditorScope::Enter(editorDepth);
+        EditorScope::Enter(editorDepth);
 
-		o2Render.UnbindRenderTexture();
+        o2Render.UnbindRenderTexture();
 
-		mRenderTargetSprite->Draw();
+        mRenderTargetSprite->Draw();
 
-		EditorScope::Exit(editorDepth);
+        EditorScope::Exit(editorDepth);
 
-		for (auto& camera : o2Scene.GetCameras())
-			camera.Lock()->listenersLayer->OnDrawn(mRenderTargetSprite->GetBasis());
+        for (auto& camera : o2Scene.GetCameras())
+            camera.Lock()->listenersLayer->OnDrawn(mRenderTargetSprite->GetBasis());
 
-		EditorScope::Enter(editorDepth);
-	}
+        EditorScope::Enter(editorDepth);
+    }
 
     void GameWindow::GameView::UpdateRenderTargetSize()
     {
@@ -200,20 +200,20 @@ namespace Editor
     }
 
     String GameWindow::GameView::GetCreateMenuCategory()
-	{
-		return "UI/Editor";
-	}
+    {
+        return "UI/Editor";
+    }
 
-	void GameWindow::GameView::OnTransformUpdated()
-	{
-		Widget::OnTransformUpdated();
-		UpdateRenderTargetSize();
-	}
+    void GameWindow::GameView::OnTransformUpdated()
+    {
+        Widget::OnTransformUpdated();
+        UpdateRenderTargetSize();
+    }
 
-	bool GameWindow::SimulationDevice::operator==(const SimulationDevice& other) const
-	{
-		return deviceName == other.deviceName;
-	}
+    bool GameWindow::SimulationDevice::operator==(const SimulationDevice& other) const
+    {
+        return deviceName == other.deviceName;
+    }
 }
 
 DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::GameWindow::GameView>);

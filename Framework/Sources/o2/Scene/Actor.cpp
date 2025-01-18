@@ -653,7 +653,7 @@ namespace o2
         }
     }
 
-	void Actor::RemoveAllChildren()
+    void Actor::RemoveAllChildren()
     {
         for (auto& child : mChildren)
         {
@@ -714,7 +714,7 @@ namespace o2
 #endif
     }
 
-	void Actor::RemoveAllComponents()
+    void Actor::RemoveAllComponents()
     {
         auto components = mComponents;
         mComponents.Clear();
@@ -863,10 +863,10 @@ namespace o2
     void Actor::OnDestroy()
     {}
 
-	void Actor::OnDraw()
-	{}
+    void Actor::OnDraw()
+    {}
 
-	void Actor::OnUpdate(float dt)
+    void Actor::OnUpdate(float dt)
     {}
 
     void Actor::OnFixedUpdate(float dt)

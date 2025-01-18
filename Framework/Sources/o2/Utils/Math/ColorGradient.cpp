@@ -7,7 +7,7 @@
 namespace o2
 {
     ColorGradient::ColorGradient():
-		ColorGradient(Color4::White(), Color4::White())
+        ColorGradient(Color4::White(), Color4::White())
     { }
 
     ColorGradient::ColorGradient(const Color4& beginColor, const Color4& endColor)
@@ -94,7 +94,7 @@ namespace o2
         for (auto& key : mKeys)
             key.position += offset;
 
-		onKeysChanged();
+        onKeysChanged();
     }
 
     void ColorGradient::MoveKeysFrom(float begin, float offset)
@@ -105,7 +105,7 @@ namespace o2
                 key.position += offset;
         }
 
-		onKeysChanged();
+        onKeysChanged();
     }
 
     void ColorGradient::AppendCurve(const ColorGradient& gradient)
@@ -141,7 +141,7 @@ namespace o2
             mKeys.Add(key);
         }
 
-		onKeysChanged();
+        onKeysChanged();
     }
 
     void ColorGradient::PrependKeys(const Vector<Pair<float, Color4>>& values)
@@ -162,7 +162,7 @@ namespace o2
 
         mKeys.Insert(keys, 0);
 
-		onKeysChanged();
+        onKeysChanged();
     }
 
     void ColorGradient::InsertKeys(const Vector<Pair<float, Color4>>& values, float position)
@@ -193,9 +193,9 @@ namespace o2
 
         float offset = keys.Last().position - keys[0].position;
         for (int i = pos + keys.Count(); i < mKeys.Count(); i++)
-			mKeys[i].position += offset;
+            mKeys[i].position += offset;
 
-		onKeysChanged();
+        onKeysChanged();
     }
 
     int ColorGradient::InsertKey(const Key& key)
@@ -211,9 +211,9 @@ namespace o2
         }
 
         pos = Math::Clamp(pos, 0, mKeys.Count());
-		mKeys.Insert(key, pos);
+        mKeys.Insert(key, pos);
 
-		onKeysChanged();
+        onKeysChanged();
 
         return pos;
     }
@@ -231,17 +231,17 @@ namespace o2
         }
 
         pos = Math::Clamp(pos, 0, mKeys.Count());
-		mKeys.Insert(Key(value, position), pos);
+        mKeys.Insert(Key(value, position), pos);
 
-		onKeysChanged();
+        onKeysChanged();
 
         return pos;
     }
 
     int ColorGradient::AppendKey(float offset, const Color4& value)
     {
-		mKeys.Add(Key(value, (mKeys.IsEmpty() ? 0.0f : mKeys.Last().position) + offset));
-		onKeysChanged();
+        mKeys.Add(Key(value, (mKeys.IsEmpty() ? 0.0f : mKeys.Last().position) + offset));
+        onKeysChanged();
         return mKeys.Count() - 1;
     }
 
@@ -252,9 +252,9 @@ namespace o2
         for (auto& key : mKeys)
             key.position += offset;
 
-		mKeys.Add(Key(value, begin));
+        mKeys.Add(Key(value, begin));
 
-		onKeysChanged();
+        onKeysChanged();
 
         return 0;
     }
@@ -309,8 +309,8 @@ namespace o2
         {
             if (Math::Equals(mKeys[i].position, position))
             {
-				mKeys.RemoveAt(i);
-				onKeysChanged();
+                mKeys.RemoveAt(i);
+                onKeysChanged();
                 return true;
             }
         }
@@ -323,8 +323,8 @@ namespace o2
         if (idx < 0 || idx >= mKeys.Count())
             return false;
 
-		mKeys.RemoveAt(idx);
-		onKeysChanged();
+        mKeys.RemoveAt(idx);
+        onKeysChanged();
 
         return true;
     }
@@ -353,9 +353,9 @@ namespace o2
 
     void ColorGradient::SetKeys(const Vector<Key>& keys)
     {
-		mKeys = keys;
-		SortKeys();
-		onKeysChanged();
+        mKeys = keys;
+        SortKeys();
+        onKeysChanged();
     }
 
     void ColorGradient::SetKey(const Key& key, int idx)
@@ -363,9 +363,9 @@ namespace o2
         if (idx < 0 || idx > mKeys.Count() - 1)
             return;
 
-		mKeys[idx] = key;
-		SortKeys();
-		onKeysChanged();
+        mKeys[idx] = key;
+        SortKeys();
+        onKeysChanged();
     }
 
     float ColorGradient::Length() const
@@ -392,12 +392,12 @@ namespace o2
         return Key();
     }
 
-	void ColorGradient::SortKeys()
-	{
+    void ColorGradient::SortKeys()
+    {
         mKeys.Sort([](const Key& a, const Key& b) { return a.position < b.position; });
-	}
+    }
 
-	ColorGradient::Key::Key() :
+    ColorGradient::Key::Key() :
         uid(Math::Random()), color(), position(0)
     { }
 

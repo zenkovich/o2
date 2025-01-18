@@ -262,7 +262,7 @@ namespace o2
         SetTarget((float*)target, changeEvent);
     }
 
-	void AnimationTrack<float>::Player::SetTargetProxy(const Ref<IAbstractValueProxy>& targetProxy)
+    void AnimationTrack<float>::Player::SetTargetProxy(const Ref<IAbstractValueProxy>& targetProxy)
     {
         SetTargetProxy(DynamicCast<IValueProxy<float>>(targetProxy));
     }

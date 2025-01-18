@@ -3,7 +3,7 @@
 
 namespace o2
 {
-	DECLARE_SINGLETON(ShortcutKeysListenersManager);
+    DECLARE_SINGLETON(ShortcutKeysListenersManager);
 
        ShortcutKeysListener::~ShortcutKeysListener()
     {

@@ -8,58 +8,58 @@ using namespace o2;
 
 namespace o2
 {
-	class EditBox;
+    class EditBox;
 }
 
 namespace Editor
 {
-	// --------------------------------
-	// Editor integer property edit box
-	// --------------------------------
-	class IntegerProperty: public TPropertyField<int>, public KeyboardEventsListener
-	{
-	public:
-		// Default constructor
-		IntegerProperty(RefCounter* refCounter);
+    // --------------------------------
+    // Editor integer property edit box
+    // --------------------------------
+    class IntegerProperty: public TPropertyField<int>, public KeyboardEventsListener
+    {
+    public:
+        // Default constructor
+        IntegerProperty(RefCounter* refCounter);
 
-		// Copy constructor
-		IntegerProperty(RefCounter* refCounter, const IntegerProperty& other);
+        // Copy constructor
+        IntegerProperty(RefCounter* refCounter, const IntegerProperty& other);
 
-		// Copy operator
-		IntegerProperty& operator=(const IntegerProperty& other);
+        // Copy operator
+        IntegerProperty& operator=(const IntegerProperty& other);
 
-		SERIALIZABLE(IntegerProperty);
+        SERIALIZABLE(IntegerProperty);
         CLONEABLE_REF(IntegerProperty);
 
-	protected:
-		Ref<EditBox>          mEditBox;    // Edit box 
-		Ref<CursorEventsArea> mDragHangle; // Value changing drag handle
+    protected:
+        Ref<EditBox>          mEditBox;    // Edit box 
+        Ref<CursorEventsArea> mDragHangle; // Value changing drag handle
 
-	protected:
-		// Updates value view
-		void UpdateValueView() override;
+    protected:
+        // Updates value view
+        void UpdateValueView() override;
 
-		// Called when key was released
-		void OnKeyReleased(const Input::Key& key) override;
+        // Called when key was released
+        void OnKeyReleased(const Input::Key& key) override;
 
-		// Searches controls widgets and layers and initializes them
-		void InitializeControls();
+        // Searches controls widgets and layers and initializes them
+        void InitializeControls();
 
-		// Edit box change event
-		void OnEdited(const WString& data);
+        // Edit box change event
+        void OnEdited(const WString& data);
 
-		// Called when drag handle was moved and changes the property value
-		void OnDragHandleMoved(const Input::Cursor& cursor);
+        // Called when drag handle was moved and changes the property value
+        void OnDragHandleMoved(const Input::Cursor& cursor);
 
-		// Called when change value move handle pressed, sets cursor infinite mode and stores value to data
-		void OnMoveHandlePressed(const Input::Cursor& cursor);
+        // Called when change value move handle pressed, sets cursor infinite mode and stores value to data
+        void OnMoveHandlePressed(const Input::Cursor& cursor);
 
-		// Called when change value move handle  released, turns off cursor infinite mode, 
-		// checks value was changed then calls value change completed event
+        // Called when change value move handle  released, turns off cursor infinite mode, 
+        // checks value was changed then calls value change completed event
         void OnMoveHandleReleased(const Input::Cursor& cursor);
 
         REF_COUNTERABLE_IMPL(TPropertyField<int>);
-	};
+    };
 }
 // --- META ---
 

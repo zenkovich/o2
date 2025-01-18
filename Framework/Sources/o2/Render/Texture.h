@@ -140,8 +140,8 @@ namespace o2
 
         String mFileName; // Source file name
 
-		UID mAtlasAssetId; // Atlas asset id. Equals 0 if it isn't atlas texture
-		int mAtlasPage;    // Atlas page
+        UID mAtlasAssetId; // Atlas asset id. Equals 0 if it isn't atlas texture
+        int mAtlasPage;    // Atlas page
 
         bool mReady; // Is texture ready to use
 
@@ -173,8 +173,8 @@ namespace o2
         // Loads texture from DDS file
         void LoadDDS(const String& fileName);
 
-		friend class Render;
-		friend class TextureRef;
+        friend class Render;
+        friend class TextureRef;
 
         FRIEND_REF_MAKE();
     };

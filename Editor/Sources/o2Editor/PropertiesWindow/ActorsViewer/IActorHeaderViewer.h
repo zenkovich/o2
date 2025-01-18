@@ -8,50 +8,50 @@ using namespace o2;
 
 namespace o2
 {
-	class Actor;
-	class Widget;
+    class Actor;
+    class Widget;
 }
 
 namespace Editor
 {
-	// ------------------------------------
-	// Editor actor header viewer interface
-	// ------------------------------------
-	class IActorHeaderViewer: public IObject, virtual public RefCounterable
-	{
-	public:
-		// Virtual destructor
-		virtual ~IActorHeaderViewer() {}
+    // ------------------------------------
+    // Editor actor header viewer interface
+    // ------------------------------------
+    class IActorHeaderViewer: public IObject, virtual public RefCounterable
+    {
+    public:
+        // Virtual destructor
+        virtual ~IActorHeaderViewer() {}
 
-		// Sets target actors
-		virtual void SetTargetActors(const Vector<Actor*>& actors) {}
+        // Sets target actors
+        virtual void SetTargetActors(const Vector<Actor*>& actors) {}
 
-		// Returns data widget
-		virtual Ref<Widget> GetWidget() const { return nullptr; }
+        // Returns data widget
+        virtual Ref<Widget> GetWidget() const { return nullptr; }
 
-		// Updates properties values
-		virtual void Refresh() {}
+        // Updates properties values
+        virtual void Refresh() {}
 
-		// Sets viewer enabled
-		void SetPropertiesEnabled(bool enabled);
+        // Sets viewer enabled
+        void SetPropertiesEnabled(bool enabled);
 
-		// Returns is viewer enabled
-		bool IsPropertiesEnabled() const;
+        // Returns is viewer enabled
+        bool IsPropertiesEnabled() const;
 
-		IOBJECT(IActorHeaderViewer);
+        IOBJECT(IActorHeaderViewer);
 
-	protected:
-		bool mPropertiesEnabled = false; // Is viewer enabled 
+    protected:
+        bool mPropertiesEnabled = false; // Is viewer enabled 
 
-	protected:
-		// Enable viewer event function
-		virtual void OnPropertiesEnabled() {}
+    protected:
+        // Enable viewer event function
+        virtual void OnPropertiesEnabled() {}
 
-		// Disable viewer event function
-		virtual void OnPropertiesDisabled() {}
+        // Disable viewer event function
+        virtual void OnPropertiesDisabled() {}
 
-		friend class ActorViewer;
-	};
+        friend class ActorViewer;
+    };
 }
 // --- META ---
 

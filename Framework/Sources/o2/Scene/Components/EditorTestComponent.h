@@ -29,8 +29,8 @@ namespace o2
         public:
             float mFloat = 1.2f;                // @SERIALIZABLE @SCRIPTABLE
             String mString = String("bla bla"); // @SERIALIZABLE @SCRIPTABLE
-			WString mWString;                   // @SERIALIZABLE @SCRIPTABLE
-			bool mBool = true;                  // @SERIALIZABLE @SCRIPTABLE
+            WString mWString;                   // @SERIALIZABLE @SCRIPTABLE
+            bool mBool = true;                  // @SERIALIZABLE @SCRIPTABLE
              
             Ref<Component> mComponent; // @SERIALIZABLE @SCRIPTABLE
             Ref<RigidBody> mRigidBody; // @SERIALIZABLE @SCRIPTABLE
@@ -42,33 +42,33 @@ namespace o2
 
             SERIALIZABLE(TestInside);
             CLONEABLE_REF(TestInside);
-		};
+        };
 
-		class TestDerivedInside : public TestInside
-		{
-		public:
-			float mFloatDerived = 1.2f;                // @SERIALIZABLE @SCRIPTABLE
-			String mStringDerived = String("bla bla"); // @SERIALIZABLE @SCRIPTABLE
-			WString mWStringDerived;                   // @SERIALIZABLE @SCRIPTABLE
-			bool mBoolDerived = true;                  // @SERIALIZABLE @SCRIPTABLE
+        class TestDerivedInside : public TestInside
+        {
+        public:
+            float mFloatDerived = 1.2f;                // @SERIALIZABLE @SCRIPTABLE
+            String mStringDerived = String("bla bla"); // @SERIALIZABLE @SCRIPTABLE
+            WString mWStringDerived;                   // @SERIALIZABLE @SCRIPTABLE
+            bool mBoolDerived = true;                  // @SERIALIZABLE @SCRIPTABLE
 
-			Ref<Component> mComponentDerived; // @SERIALIZABLE @SCRIPTABLE
-			Ref<RigidBody> mRigidBodyDerived; // @SERIALIZABLE @SCRIPTABLE
+            Ref<Component> mComponentDerived; // @SERIALIZABLE @SCRIPTABLE
+            Ref<RigidBody> mRigidBodyDerived; // @SERIALIZABLE @SCRIPTABLE
 
-			// @SCRIPTABLE
+            // @SCRIPTABLE
             TestDerivedInside() {}
 
-			SERIALIZABLE(TestDerivedInside);
-			CLONEABLE_REF(TestDerivedInside);
-		};
+            SERIALIZABLE(TestDerivedInside);
+            CLONEABLE_REF(TestDerivedInside);
+        };
 
-	public:
-		Ref<IRectDrawable> mDrawable;                 // @SERIALIZABLE
-		AssetRef<ImageAsset> mImageAsset;                       // @SERIALIZABLE
-		LinkRef<Component> mComponent;                          // @SERIALIZABLE
-		LinkRef<RigidBody> mRigidBody;                          // @SERIALIZABLE
-		LinkRef<ImageComponent> mImageComponent;                // @SERIALIZABLE
-		LinkRef<ParticlesEmitterComponent> mParticlesComponent; // @SERIALIZABLE
+    public:
+        Ref<IRectDrawable> mDrawable;                 // @SERIALIZABLE
+        AssetRef<ImageAsset> mImageAsset;                       // @SERIALIZABLE
+        LinkRef<Component> mComponent;                          // @SERIALIZABLE
+        LinkRef<RigidBody> mRigidBody;                          // @SERIALIZABLE
+        LinkRef<ImageComponent> mImageComponent;                // @SERIALIZABLE
+        LinkRef<ParticlesEmitterComponent> mParticlesComponent; // @SERIALIZABLE
 
         PROPERTIES(EditorTestComponent);
         PROPERTY(Ref<Sprite>, spritePropPtr, SetSpritePtr, GetSpritePtr);
@@ -85,7 +85,7 @@ namespace o2
         AssetRef<ActorAsset> mActorAsset;                      // @SERIALIZABLE
         AssetRef<DataAsset> mDataAsset;                        // @SERIALIZABLE
         AssetRef<AnimationAsset> mAnimationAsset;              // @SERIALIZABLE
-		Ref<Sprite> mSprite = mmake<Sprite>();                 // @SERIALIZABLE @DONT_DELETE
+        Ref<Sprite> mSprite = mmake<Sprite>();                 // @SERIALIZABLE @DONT_DELETE
         Ref<Actor> mActor;                                     // @SERIALIZABLE
         TagGroup mTags;                                        // @SERIALIZABLE
         Ref<SceneLayer> mLayer;                                // @SERIALIZABLE
@@ -97,10 +97,10 @@ namespace o2
         RectI mRectI;                                          // @SERIALIZABLE
         BorderF mBorderF;                                      // @SERIALIZABLE
         BorderI mBorderI;                                      // @SERIALIZABLE
-		Ref<Curve> mCurve = mmake<Curve>(Curve::EaseInOut());  // @SERIALIZABLE
+        Ref<Curve> mCurve = mmake<Curve>(Curve::EaseInOut());  // @SERIALIZABLE
         Ref<ColorGradient> mGradient;                          // @SERIALIZABLE
-		TestInside mTestInside;                                // @SERIALIZABLE
-		TestEnum mTestEnum = TestEnum::A;                                    // @SERIALIZABLE
+        TestInside mTestInside;                                // @SERIALIZABLE
+        TestEnum mTestEnum = TestEnum::A;                                    // @SERIALIZABLE
         Ref<TestInside> mTestInsideRef;                        // @SERIALIZABLE
 
         Vector<int> mIntVector;                         // @SERIALIZABLE
@@ -112,14 +112,14 @@ namespace o2
         Vector<Vector<TestInside*>> mVectorOfVector; // @SERIALIZABLE
 
         Map<String, String> mDictionary;    // @SERIALIZABLE
-		float mFloat2 = 0.0f;                      // @SERIALIZABLE @RANGE(0, 10)
-		float mFloat3 = 0.0f;                      // @SERIALIZABLE
-		float mFloat4 = 0.0f;                      // @SERIALIZABLE
-		float mFloat5 = 0.0f;                      // @SERIALIZABLE
-		float mFloat6 = 0.0f;                      // @SERIALIZABLE
-		float mFloat7 = 0.0f;                      // @SERIALIZABLE
-		float mFloat8 = 0.0f;                      // @SERIALIZABLE
-		float mFloat9 = 0.0f;                      // @SERIALIZABLE
+        float mFloat2 = 0.0f;                      // @SERIALIZABLE @RANGE(0, 10)
+        float mFloat3 = 0.0f;                      // @SERIALIZABLE
+        float mFloat4 = 0.0f;                      // @SERIALIZABLE
+        float mFloat5 = 0.0f;                      // @SERIALIZABLE
+        float mFloat6 = 0.0f;                      // @SERIALIZABLE
+        float mFloat7 = 0.0f;                      // @SERIALIZABLE
+        float mFloat8 = 0.0f;                      // @SERIALIZABLE
+        float mFloat9 = 0.0f;                      // @SERIALIZABLE
 
     public:
         static String GetCategory();

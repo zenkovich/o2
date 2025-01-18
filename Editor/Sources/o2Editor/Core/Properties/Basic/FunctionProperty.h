@@ -8,130 +8,130 @@ using namespace o2;
 
 namespace o2
 {
-	class Spoiler;
+    class Spoiler;
 }
 
 namespace Editor
 {
-	FORWARD_CLASS_REF(IObjectPropertiesViewer);
-	FORWARD_CLASS_REF(ActorProperty);
+    FORWARD_CLASS_REF(IObjectPropertiesViewer);
+    FORWARD_CLASS_REF(ActorProperty);
 
-	// ------------------------
-	// Editor function property
-	// ------------------------
-	class FunctionProperty : public IPropertyField
-	{
-	public:
-		// Default constructor
-		FunctionProperty(RefCounter* refCounter);
+    // ------------------------
+    // Editor function property
+    // ------------------------
+    class FunctionProperty : public IPropertyField
+    {
+    public:
+        // Default constructor
+        FunctionProperty(RefCounter* refCounter);
 
-		// Copy constructor
-		FunctionProperty(RefCounter* refCounter, const FunctionProperty& other);
+        // Copy constructor
+        FunctionProperty(RefCounter* refCounter, const FunctionProperty& other);
 
-		// Copy operator
-		FunctionProperty& operator=(const FunctionProperty& other);
+        // Copy operator
+        FunctionProperty& operator=(const FunctionProperty& other);
 
-		// Destructor
-		~FunctionProperty();
+        // Destructor
+        ~FunctionProperty();
 
-		// Sets fields
-		void SetValueAndPrototypeProxy(const TargetsVec& targets) override;
+        // Sets fields
+        void SetValueAndPrototypeProxy(const TargetsVec& targets) override;
 
-		// Updates and checks value
-		void Refresh() override;
+        // Updates and checks value
+        void Refresh() override;
 
-		// Returns editing by this field type
-		const Type* GetValueType() const override;
+        // Returns editing by this field type
+        const Type* GetValueType() const override;
 
-		// Returns editing by this field type by static function, can't be changed during runtime
-		static const Type* GetValueTypeStatic();
+        // Returns editing by this field type by static function, can't be changed during runtime
+        static const Type* GetValueTypeStatic();
 
-		// Specializes field info, processing attributes
-		void SetFieldInfo(const FieldInfo* fieldInfo) override;
+        // Specializes field info, processing attributes
+        void SetFieldInfo(const FieldInfo* fieldInfo) override;
 
-		// Sets property caption
-		void SetCaption(const WString& text) override;
+        // Sets property caption
+        void SetCaption(const WString& text) override;
 
-		// Returns property caption
-		WString GetCaption() const override;
+        // Returns property caption
+        WString GetCaption() const override;
 
-		// Adds remove button
-		Ref<Button> GetRemoveButton() override;
+        // Adds remove button
+        Ref<Button> GetRemoveButton() override;
 
-		// Expands property fields
-		void Expand();
+        // Expands property fields
+        void Expand();
 
-		// Collapses property field
-		void Collapse();
+        // Collapses property field
+        void Collapse();
 
-		// Sets properties expanding
-		void SetExpanded(bool expanded);
+        // Sets properties expanding
+        void SetExpanded(bool expanded);
 
-		// Returns is properties expanded
-		bool IsExpanded() const;
+        // Returns is properties expanded
+        bool IsExpanded() const;
 
-		SERIALIZABLE(FunctionProperty);
+        SERIALIZABLE(FunctionProperty);
         CLONEABLE_REF(FunctionProperty);
 
-	protected:
-		struct FunctionInstance: public RefCounterable
-		{
-			Ref<HorizontalLayout> layout;
-			Ref<Label>            caption;
-			Ref<ActorProperty>    refProperty;
-			Ref<CustomDropDown>   funcDropDown;
-			Ref<Button>           removeBtn;
+    protected:
+        struct FunctionInstance: public RefCounterable
+        {
+            Ref<HorizontalLayout> layout;
+            Ref<Label>            caption;
+            Ref<ActorProperty>    refProperty;
+            Ref<CustomDropDown>   funcDropDown;
+            Ref<Button>           removeBtn;
 
-			Vector<Pair<IActorSubscription*, IActorSubscription*>> values;
-			Vector<Pair<Ref<Component>, String>> functionsDropdownMap;
+            Vector<Pair<IActorSubscription*, IActorSubscription*>> values;
+            Vector<Pair<Ref<Component>, String>> functionsDropdownMap;
 
-		public:
-			// Called when an actor is selected, updates the functions list
-			void UpdateFunctionsList(const Ref<Actor>& actor, const Ref<Component>& selectedComponent, const String& selectedMethod);
+        public:
+            // Called when an actor is selected, updates the functions list
+            void UpdateFunctionsList(const Ref<Actor>& actor, const Ref<Component>& selectedComponent, const String& selectedMethod);
 
-			// Called when a function is selected, remembers the link to the component and the name from the list of functionsDropdownMap
-			void OnFunctionSelected(int idx);
+            // Called when a function is selected, remembers the link to the component and the name from the list of functionsDropdownMap
+            void OnFunctionSelected(int idx);
 
-			bool operator==(const FunctionInstance& other) const;
-		};
+            bool operator==(const FunctionInstance& other) const;
+        };
 
-		Ref<Spoiler>          mSpoiler;         // Properties spoiler
-		Ref<HorizontalLayout> mHeaderContainer; // Count property and other controls container
-		Ref<Button>           mAddButton;       // Add button, adds new element at end
+        Ref<Spoiler>          mSpoiler;         // Properties spoiler
+        Ref<HorizontalLayout> mHeaderContainer; // Count property and other controls container
+        Ref<Button>           mAddButton;       // Add button, adds new element at end
 
-		Vector<Ref<FunctionInstance>> mInstances; // List of containers with pointers to serializable fields and interfaces
+        Vector<Ref<FunctionInstance>> mInstances; // List of containers with pointers to serializable fields and interfaces
 
-		Ref<HorizontalLayout>         mWidgetSample;  // Subscription widget sample
-		Vector<Ref<HorizontalLayout>> mWidgetsBuffer; // Buffer of cached widgets
+        Ref<HorizontalLayout>         mWidgetSample;  // Subscription widget sample
+        Vector<Ref<HorizontalLayout>> mWidgetsBuffer; // Buffer of cached widgets
 
-		bool mIsRefreshing = false; // Is currently refreshing content. Need to prevent cycled size changing
+        bool mIsRefreshing = false; // Is currently refreshing content. Need to prevent cycled size changing
 
-	protected:
-		// Called when property puts in buffer. Here you can release your shared resources
-		void OnFreeProperty() override;
+    protected:
+        // Called when property puts in buffer. Here you can release your shared resources
+        void OnFreeProperty() override;
 
-		// Searches controls widgets and layers and initializes them
-		void InitializeControls();
+        // Searches controls widgets and layers and initializes them
+        void InitializeControls();
 
-		// Updates list of instances by target values
-		void RefreshInstances();
+        // Updates list of instances by target values
+        void RefreshInstances();
 
-		// Creates new widget for subscription
-		Ref<FunctionInstance> CreateWidget();
+        // Creates new widget for subscription
+        Ref<FunctionInstance> CreateWidget();
 
-		// Called when add button has pressed
-		void OnAddPressed();
+        // Called when add button has pressed
+        void OnAddPressed();
 
-		// Called when remove subscription pressed
-		void OnRemovePressed(const Ref<FunctionInstance>& instance);
+        // Called when remove subscription pressed
+        void OnRemovePressed(const Ref<FunctionInstance>& instance);
 
-		// Called when expanding spoiler, refreshing array properties
-		void OnExpand();
+        // Called when expanding spoiler, refreshing array properties
+        void OnExpand();
 
-		// Called when some property changed, sets value via proxy
-		void OnPropertyChanged(const String& path, const Vector<DataDocument>& before,
-							   const Vector<DataDocument>& after);
-	};
+        // Called when some property changed, sets value via proxy
+        void OnPropertyChanged(const String& path, const Vector<DataDocument>& before,
+                               const Vector<DataDocument>& after);
+    };
 }
 // --- META ---
 

@@ -4,7 +4,7 @@
 
 namespace o2
 {
-	template<>
+    template<>
     struct DataValue::Converter<std::nullptr_t>
     {
         static constexpr bool isSupported = false;
@@ -549,13 +549,13 @@ namespace o2
             {
                 if (auto valueNode = data.FindMember("Value"))
                 {
-					String typeName = *typeNode;
+                    String typeName = *typeNode;
                     auto type = Reflection::GetType(typeName);
-					if (!type)
-					{
-						o2Debug.LogError("Failed to deserialize unknown type: " + typeName);
-						return;
-					}
+                    if (!type)
+                    {
+                        o2Debug.LogError("Failed to deserialize unknown type: " + typeName);
+                        return;
+                    }
 
                     auto sample = type->CreateSampleRef();
                     value = DynamicCast<_ref_type>(sample);

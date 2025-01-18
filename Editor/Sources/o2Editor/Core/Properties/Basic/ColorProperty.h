@@ -8,45 +8,45 @@ using namespace o2;
 
 namespace o2
 {
-	class Image;
-	class Widget;
+    class Image;
+    class Widget;
 }
 
 namespace Editor
 {
-	// ------------------------------
-	// Editor color property edit box
-	// ------------------------------
-	class ColorProperty: public TPropertyField<Color4>
-	{
-	public:
-		// Default constructor
-		ColorProperty(RefCounter* refCounter);
+    // ------------------------------
+    // Editor color property edit box
+    // ------------------------------
+    class ColorProperty: public TPropertyField<Color4>
+    {
+    public:
+        // Default constructor
+        ColorProperty(RefCounter* refCounter);
 
-		// Copy constructor
-		ColorProperty(RefCounter* refCounter, const ColorProperty& other);
+        // Copy constructor
+        ColorProperty(RefCounter* refCounter, const ColorProperty& other);
 
-		// Copy operator
-		ColorProperty& operator=(const ColorProperty& other);
+        // Copy operator
+        ColorProperty& operator=(const ColorProperty& other);
 
-		SERIALIZABLE(ColorProperty);
+        SERIALIZABLE(ColorProperty);
         CLONEABLE_REF(ColorProperty);
 
-	protected:
-		Ref<Widget>           mEditBox;     // Edit box 
-		Ref<Image>            mColorSprite; // Color preview sprite
-		Ref<CursorEventsArea> mClickArea;   // Box click area
+    protected:
+        Ref<Widget>           mEditBox;     // Edit box 
+        Ref<Image>            mColorSprite; // Color preview sprite
+        Ref<CursorEventsArea> mClickArea;   // Box click area
 
-	protected:
-		// Updates value view
-		void UpdateValueView() override;
+    protected:
+        // Updates value view
+        void UpdateValueView() override;
 
-		// Searches controls widgets and layers and initializes them
-		void InitializeControls();
+        // Searches controls widgets and layers and initializes them
+        void InitializeControls();
 
-		// Called when box pressed and shows color picking dialog
-		void OnClicked();
-	};
+        // Called when box pressed and shows color picking dialog
+        void OnClicked();
+    };
 }
 // --- META ---
 

@@ -36,10 +36,10 @@ namespace o2
         explicit ImageComponent(const Bitmap& bitmap);
 
         // Constructor from sprite
-		explicit ImageComponent(const Sprite& sprite);
+        explicit ImageComponent(const Sprite& sprite);
 
-		// Constructor from texture and source rectangle
-		ImageComponent(TextureRef texture, const RectI& srcRect);
+        // Constructor from texture and source rectangle
+        ImageComponent(TextureRef texture, const RectI& srcRect);
 
         // Copy-constructor
         ImageComponent(const ImageComponent& other);
@@ -63,19 +63,19 @@ namespace o2
         static String GetCategory();
 
         // Returns name of component icon
-		static String GetIcon();
+        static String GetIcon();
 
-		// Dynamic cast to RefCounterable via Component
-		static Ref<RefCounterable> CastToRefCounterable(const Ref<ImageComponent>& ref);
+        // Dynamic cast to RefCounterable via Component
+        static Ref<RefCounterable> CastToRefCounterable(const Ref<ImageComponent>& ref);
 
         SERIALIZABLE(ImageComponent);
         CLONEABLE_REF(ImageComponent);
 
         using Sprite::onDraw;
 
-	protected:
-		// Draws sprite 
-		void OnDraw() override;
+    protected:
+        // Draws sprite 
+        void OnDraw() override;
 
         // Called when actor's transform was changed
         void OnTransformUpdated() override;
@@ -95,7 +95,7 @@ namespace o2
         // Completion deserialization delta callback
         void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;    
 
-		REF_COUNTERABLE_IMPL(Component, Sprite);
+        REF_COUNTERABLE_IMPL(Component, Sprite);
     };
 }
 // --- META ---

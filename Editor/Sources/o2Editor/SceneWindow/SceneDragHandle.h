@@ -6,54 +6,54 @@ using namespace o2;
 
 namespace Editor
 {
-	// -----------------
-	// Scene drag handle
-	// -----------------
-	class SceneDragHandle : public DragHandle
-	{
-	public:
-		// Handle drawing type. 
-		// ScreenSpace - draws without zooming, in screen space coordinates
-		// SceneSpace - draws with zooming and depends on camera, in local scene coordinates
-		enum class Mode { ScreenSpace, SceneSpace };
+    // -----------------
+    // Scene drag handle
+    // -----------------
+    class SceneDragHandle : public DragHandle
+    {
+    public:
+        // Handle drawing type. 
+        // ScreenSpace - draws without zooming, in screen space coordinates
+        // SceneSpace - draws with zooming and depends on camera, in local scene coordinates
+        enum class Mode { ScreenSpace, SceneSpace };
 
-	public:
-		Mode mode = Mode::ScreenSpace; // Handle drawing mode, screen or scene space
+    public:
+        Mode mode = Mode::ScreenSpace; // Handle drawing mode, screen or scene space
 
-	public:
-		// Default constructor
+    public:
+        // Default constructor
         SceneDragHandle(RefCounter* refCounter);
 
-		// Constructor with views
-		SceneDragHandle(RefCounter* refCounter, const Ref<IRectDrawable>& regular, const Ref<IRectDrawable>& hover = nullptr, const Ref<IRectDrawable>& pressed = nullptr);
+        // Constructor with views
+        SceneDragHandle(RefCounter* refCounter, const Ref<IRectDrawable>& regular, const Ref<IRectDrawable>& hover = nullptr, const Ref<IRectDrawable>& pressed = nullptr);
 
-		// Copy-constructor
-		SceneDragHandle(RefCounter* refCounter, const SceneDragHandle& other);
+        // Copy-constructor
+        SceneDragHandle(RefCounter* refCounter, const SceneDragHandle& other);
 
-		// Destructor
-		~SceneDragHandle();
+        // Destructor
+        ~SceneDragHandle();
 
-		// Copy-operator
-		SceneDragHandle& operator=(const SceneDragHandle& other);
+        // Copy-operator
+        SceneDragHandle& operator=(const SceneDragHandle& other);
 
-		// Draws handle, applies scale if mode is scene space
-		void Draw() override;
+        // Draws handle, applies scale if mode is scene space
+        void Draw() override;
 
-		// Set handle enabled. Disabled handle don't drawn and interact
-		void SetEnabled(bool enabled) override;
+        // Set handle enabled. Disabled handle don't drawn and interact
+        void SetEnabled(bool enabled) override;
 
-		// Converts point from screen to local space
-		Vec2F ScreenToLocal(const Vec2F& point) override;
+        // Converts point from screen to local space
+        Vec2F ScreenToLocal(const Vec2F& point) override;
 
-		// Converts point from local to screen space
-		Vec2F LocalToScreen(const Vec2F& point) override;
+        // Converts point from local to screen space
+        Vec2F LocalToScreen(const Vec2F& point) override;
 
         SERIALIZABLE(SceneDragHandle);
         CLONEABLE_REF(SceneDragHandle);
 
-	protected:
-		friend class SceneEditScreen;
-	};
+    protected:
+        friend class SceneEditScreen;
+    };
 }
 // --- META ---
 
