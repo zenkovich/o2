@@ -112,12 +112,15 @@ namespace o2
 #if IS_EDITOR
 		mIsUpdating = true;
 
-		if (mRandomSeed == 0 || true)
+		if (mRandomSeed == 0)
 		{
 			mRandomSeed = ::time(0);
 			srand(mRandomSeed);
 		}
 #endif
+
+		if (!mParticlesContainer)
+			CreateParticlesContainer();
 
 		if (!mSubControlled)
 		{
@@ -141,9 +144,6 @@ namespace o2
 		}
 
 		IAnimation::Update(dt);
-
-		if (!mParticlesContainer)
-			CreateParticlesContainer();
 
 		mParticlesContainer->Update(mParticles, mParticlesNumLimit);
 
@@ -733,7 +733,7 @@ namespace o2
 			mBakedFrames[frameIdx].numAliveParticles = mNumAliveParticles;
 			mBakedFrames[frameIdx].emitTimeBuffer = mEmitTimeBuffer;
 
-			o2Debug.Log("Baked frame %i with %i particles, time: %f", frameIdx, mParticles.Count(), mTime);
+			//o2Debug.Log("Baked frame %i with %i particles, time: %f", frameIdx, mParticles.Count(), mTime);
 		}
 		else
 		{
@@ -748,7 +748,7 @@ namespace o2
 
 	void ParticlesEmitter::CheckBakedFrames(int maxFrameIdx)
 	{
-		o2Debug.Log("Baked frames count: %i, max frame index: %i", mBakedFrames.Count(), maxFrameIdx);
+		//o2Debug.Log("Baked frames count: %i, max frame index: %i", mBakedFrames.Count(), maxFrameIdx);
 
 		if (mBakedFrames.Count() > maxFrameIdx || maxFrameIdx < 1)
 			return;
@@ -775,9 +775,9 @@ namespace o2
 			mNumAliveParticles = mBakedFrames[startIdx].numAliveParticles;
 			mEmitTimeBuffer = mBakedFrames[startIdx].emitTimeBuffer;
 
-			o2Debug.Log("Setup particles: %i", mNumAliveParticles);
-			for (auto& p : mParticles)
-				o2Debug.Log("   Particle: %i, %f, %f", p.index, p.timeLeft, p.lifetime);
+// 			o2Debug.Log("Setup particles: %i", mNumAliveParticles);
+// 			for (auto& p : mParticles)
+// 				o2Debug.Log("   Particle: %i, %f, %f", p.index, p.timeLeft, p.lifetime);
 		}
 		else
 		{
@@ -787,7 +787,7 @@ namespace o2
 			mEmitTimeBuffer = 0.0f;
 		}
 
-		o2Debug.Log("Start baked frame index: %i, time: %f", startIdx, mTime);
+		//o2Debug.Log("Start baked frame index: %i, time: %f", startIdx, mTime);
 
 		// Prepare to update particles
 		bool prevPlaying = mPlaying;
@@ -804,7 +804,7 @@ namespace o2
 		// Update and bake frames
 		for (int i = startIdx; i <= maxFrameIdx; i++)
 		{
-			o2Debug.Log("To bake frame: %i", i);
+			//o2Debug.Log("To bake frame: %i", i);
 			Update(1.0f/(float)mBakedFPS);
 		}
 
@@ -821,7 +821,7 @@ namespace o2
 
 	void ParticlesEmitter::RestoreBakedFrame(int frameIdx)
 	{
-		o2Debug.Log("\n------------------------\nRestore baked frame %i", frameIdx);
+		//o2Debug.Log("\n------------------------\nRestore baked frame %i", frameIdx);
 
 		CheckBakedFrames(frameIdx);
 

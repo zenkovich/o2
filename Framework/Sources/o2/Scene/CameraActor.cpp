@@ -71,7 +71,7 @@ namespace o2
                     if (!actor)
                     {
                         if (auto component = DynamicCast<Component>(drawable))
-                            actor = component->GetOwnerActor();
+                            actor = component->GetActor();
                     }
 
                     while (actor)

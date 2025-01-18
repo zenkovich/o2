@@ -98,15 +98,16 @@ namespace o2
 			mVertices.Clear();
 			mIndices.Clear();
 
-			for (int i = 0, j = 0, n = command->numVertices * 2; i < n; ++i, j += 2) 
+			for (int i = 0; i < command->numVertices; ++i)
 			{
-				Vec2F position(positions[j], positions[j + 1]);
+				int ii = i*2;
+				Vec2F position(positions[ii], positions[ii + 1]);
 				position = transform * position;
 
 				vertex.x = position.x;
 				vertex.y = position.y;
-				vertex.tu = uvs[j];
-				vertex.tv = 1.0f - uvs[j + 1];
+				vertex.tu = uvs[ii];
+				vertex.tv = 1.0f - uvs[ii + 1];
 				vertex.color = colors[i];
 				mVertices.Add(vertex);
 			}

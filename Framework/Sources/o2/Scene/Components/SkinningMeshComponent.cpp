@@ -59,7 +59,7 @@ namespace o2
     void SkinningMeshComponent::UpdateBonesTransforms()
     {
         for (auto& bone : mBonesMapping)
-            bone.second->releaseTransform = bone.second->baseTransform.Inverted()*bone.first.Lock()->GetOwnerActor()->transform->GetWorldNonSizedBasis();
+            bone.second->releaseTransform = bone.second->baseTransform.Inverted()*bone.first.Lock()->GetActor()->transform->GetWorldNonSizedBasis();
     }
 
     void SkinningMeshComponent::UpdateBones()
@@ -89,7 +89,7 @@ namespace o2
         {
             mBonesMapping[i].second = &mMesh.bones[i + 1];
             mBonesMapping[i].second->baseTransform = 
-                mBonesMapping[i].first.Lock()->GetOwnerActor()->transform->GetWorldNonSizedBasis();
+                mBonesMapping[i].first.Lock()->GetActor()->transform->GetWorldNonSizedBasis();
 
             for (auto& weightPair : mBonesMapping[i].first.Lock()->vertexWeights)
             {

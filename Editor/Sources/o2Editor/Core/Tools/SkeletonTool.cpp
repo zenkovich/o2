@@ -26,7 +26,7 @@ namespace Editor
 			auto boneHandle = mmake<BoneHandle>();
 			boneHandle->boneComponent = bones.first.Lock();
 
-			auto compTransform = skinningMeshComponent->GetOwnerActor()->transform;
+			auto compTransform = skinningMeshComponent->GetActor()->transform;
 
 			const float handleSize = 5;
 			Vec2F drawableSize(bones.first.Lock()->length, handleSize);
@@ -170,7 +170,7 @@ namespace Editor
 		handle->GetHoverDrawable()->pivot = Vec2F(0, 0.5f);
 		handle->GetPressedDrawable()->pivot = Vec2F(0, 0.5f);
 
-		handle->onPressed = [&]() { pressedTransform = boneComponent->GetOwnerActor()->transform->worldBasis; };
+		handle->onPressed = [&]() { pressedTransform = boneComponent->GetActor()->transform->worldBasis; };
 		handle->onChangedPos = [&](const Vec2F& p) { OnHandleChangedPos(p); };
 	}
 
@@ -179,7 +179,7 @@ namespace Editor
 
 	void SkeletonTool::BoneHandle::UpdatePosition()
 	{
-		auto compTransform = boneComponent->GetOwnerActor()->transform;
+		auto compTransform = boneComponent->GetActor()->transform;
 		float angle = compTransform->GetWorldBasis().GetAngle();
 		handle->position = compTransform->worldPosition;
 
@@ -200,7 +200,7 @@ namespace Editor
 		// 		o2Debug.DrawLine(origin, pressedPos, Color4::Red(), 0.2f);
 		// 		o2Debug.DrawLine(origin, currentPos, Color4::Green(), 0.2f);
 
-		auto compTransform = boneComponent->GetOwnerActor()->transform;
+		auto compTransform = boneComponent->GetActor()->transform;
 		auto worldPos = compTransform->GetWorldPosition();
 		Basis transform = Basis::Translated(worldPos*-1.0f)
 			*Basis::Rotated(angle)
@@ -208,7 +208,7 @@ namespace Editor
 
 		compTransform->worldBasis = pressedTransform*transform;
 		compTransform->worldPosition = worldPos;
-		boneComponent->GetOwnerActor()->UpdateTransform();
+		boneComponent->GetActor()->UpdateTransform();
 
 		UpdatePosition();
 	}

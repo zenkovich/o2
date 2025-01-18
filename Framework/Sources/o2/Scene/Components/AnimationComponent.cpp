@@ -8,7 +8,8 @@ namespace o2
     AnimationComponent::AnimationComponent()
     {}
 
-    AnimationComponent::AnimationComponent(const AnimationComponent& other)
+    AnimationComponent::AnimationComponent(RefCounter* refCounter, const AnimationComponent& other):
+        Component(refCounter, other)
     {
         for (auto& state : other.mStates)
             AddState(state->CloneAsRef<AnimationState>());

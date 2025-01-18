@@ -8,19 +8,27 @@
 namespace o2
 {
     Component::Component() :
-        mId(Math::Random())
-    {
-        ActorRefResolver::ComponentCreated(this);
-    }
+		Component(nullptr)
+    {}
 
-    Component::Component(const Component& other) :
-        mEnabled(other.mEnabled), mEnabledInHierarchy(false), mId(Math::Random()),
+    Component::Component(RefCounter* refCounter, const Component& other) :
+        RefCounterable(refCounter), mEnabled(other.mEnabled), mEnabledInHierarchy(false), mId(Math::Random()),
         actor(this), enabled(this), enabledInHierarchy(this)
     {
         ActorRefResolver::ComponentCreated(this);
     }
 
-    Component::~Component()
+	Component::Component(RefCounter* refCounter):
+		RefCounterable(refCounter), mId(Math::Random())
+	{
+		ActorRefResolver::ComponentCreated(this);
+	}
+
+	Component::Component(const Component& other):
+		Component(other.GetRefCounter(), other)
+	{}
+
+	Component::~Component()
     {}
 
     Component& Component::operator=(const Component& other)
@@ -102,7 +110,7 @@ namespace o2
         return false;
     }
 
-    Ref<Actor> Component::GetOwnerActor() const
+    Ref<Actor> Component::GetActor() const
     {
         return mOwner.Lock();
     }

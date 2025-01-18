@@ -218,7 +218,7 @@ namespace Editor
 				[](IActorSubscription* s)
 			{
 				if (!s->actorRef && s->componentRef)
-					s->actorRef = s->componentRef->GetOwnerActor();
+					s->actorRef = s->componentRef->GetActor();
 
 				return &s->actorRef;
 			}

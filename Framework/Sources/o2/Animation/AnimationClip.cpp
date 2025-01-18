@@ -103,7 +103,7 @@ namespace o2
         else
         {
             auto animTypeName = "o2::AnimationTrack<" + type.GetName() + ">";
-            auto animType = dynamic_cast<const ObjectType*>(o2Reflection.GetType(animTypeName));
+            animType = dynamic_cast<const ObjectType*>(o2Reflection.GetType(animTypeName));
         }
 
         if (!animType)

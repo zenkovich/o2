@@ -91,7 +91,7 @@ namespace Editor
 	void IActorComponentViewer::RemoveTargetComponents()
 	{
 		for (auto& comp : mTargetComponents)
-			comp->GetOwnerActor()->RemoveComponent(comp);
+			comp->GetActor()->RemoveComponent(comp);
 
 		mTargetComponents.Clear();
 

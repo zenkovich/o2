@@ -55,7 +55,7 @@ namespace Editor
 														const Vector<DataDocument>& after)
 	{
 		for (auto& component : mTargetComponents)
-			component->GetOwnerActor()->OnChanged();
+			component->GetActor()->OnChanged();
 
 		o2EditorApplication.DoneActorPropertyChangeAction(path, before, after);
 	}

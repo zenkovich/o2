@@ -147,7 +147,7 @@ namespace Editor
 			}
 			else
 			{
-				mNameText->text = mCommonValue->GetOwnerActor()->GetName();
+				mNameText->text = mCommonValue->GetActor()->GetName();
 				mBox->layer["caption"]->transparency = 1.0f;
 			}
 		}
@@ -160,7 +160,7 @@ namespace Editor
 			return;
 
 		Ref<Component> sourceComponent = GetProxy(source);
-		auto topSourceActor = sourceComponent->GetOwnerActor();
+		auto topSourceActor = sourceComponent->GetActor();
 		while (topSourceActor->GetParent())
 			topSourceActor = topSourceActor->GetParent().Lock();
 
@@ -172,7 +172,7 @@ namespace Editor
 			while (topTargetActor->GetPrototypeLink() != topSourceActor && topTargetActor->GetParent())
 				topTargetActor = topTargetActor->GetParent().Lock();
 
-			auto sameToProtoSourceActor = topTargetActor->FindLinkedActor(sourceComponent->GetOwnerActor());
+			auto sameToProtoSourceActor = topTargetActor->FindLinkedActor(sourceComponent->GetActor());
 
 			if (sameToProtoSourceActor)
 			{
@@ -187,7 +187,7 @@ namespace Editor
 			}
 		}
 
-		if (sourceComponent->GetOwnerActor()->IsOnScene())
+		if (sourceComponent->GetActor()->IsOnScene())
 			SetProxy(target, sourceComponent);
 	}
 
@@ -207,7 +207,7 @@ namespace Editor
 
 		if (mCommonValue)
 		{
-			auto ownerActor = mCommonValue->GetOwnerActor();
+			auto ownerActor = mCommonValue->GetActor();
 
 			if (ownerActor)
 			{

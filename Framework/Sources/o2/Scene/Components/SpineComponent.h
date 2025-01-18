@@ -52,7 +52,7 @@ namespace o2
 			Ref<Spine::Track> mTrack; // Spine track @EDITOR_PROPERTY
 
 			bool mLooped = false; // State looped @SERIALIZABLE
-			float mWeight = 1.0f; // State weight @SERIALIZABLE
+			float mWeight = 1.0f; // State weight @SERIALIZABLE @RANGE(0, 1)
 
 		protected:
 			// Registers animation in state
@@ -165,7 +165,7 @@ CLASS_FIELDS_META(o2::SpineComponent::AnimationState)
     FIELD().PUBLIC().NAME(looped);
     FIELD().PRIVATE().EDITOR_PROPERTY_ATTRIBUTE().NAME(mTrack);
     FIELD().PRIVATE().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(false).NAME(mLooped);
-    FIELD().PRIVATE().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(mWeight);
+    FIELD().PRIVATE().RANGE_ATTRIBUTE(0, 1).SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(mWeight);
 }
 END_META;
 CLASS_METHODS_META(o2::SpineComponent::AnimationState)

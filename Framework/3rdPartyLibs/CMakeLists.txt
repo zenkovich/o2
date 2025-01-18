@@ -13,7 +13,7 @@ else()
 
     add_compile_options(-Wall -Wno-error=format -Wno-error=format-extra-args -Wno-error=conversion
                         -Wno-error=incompatible-pointer-types -Wno-error=sign-conversion -Wno-error=pointer-sign
-                        -Wno-error=class-memaccess -Wno-error=misleading-indentation)
+                        -Wno-error=class-memaccess -Wno-error=misleading-indentation -frtti)
 
     if(GCC_MAJOR_INT GREATER_EQUAL 12 AND GCC_MINOR_INT GREATER_EQUAL 1)
         add_compile_options(-Wno-error=dangling-pointer)

@@ -47,12 +47,12 @@ namespace Editor
 		if (!mTypeTargetObjects.IsEmpty() && prevTargetObjects != mTypeTargetObjects)
 		{
 			Function<Vec2F()> getOrigin = [&]() {
-				return mTypeTargetObjects[0].first->GetOwnerActor()->transform->GetWorldNonSizedBasis().origin;
+				return mTypeTargetObjects[0].first->GetActor()->transform->GetWorldNonSizedBasis().origin;
 			};
 
 			// Spline tool
 			mSplineTool->SetSpline(mTypeTargetObjects[0].first->spline, getOrigin);
-			mSplineTool->onChanged = [&]() { mTypeTargetObjects[0].first->GetOwnerActor()->OnChanged(); };
+			mSplineTool->onChanged = [&]() { mTypeTargetObjects[0].first->GetActor()->OnChanged(); };
 
 			// Frame tool
 			mFrameTool->SetFrame(Basis(mTypeTargetObjects[0].first->GetMappingFrame()));
@@ -60,7 +60,7 @@ namespace Editor
 			mFrameTool->getOrigin = getOrigin;
 			mFrameTool->onChanged = [&](const Basis& b) {
 				mTypeTargetObjects[0].first->SetMappingFrame(b.AABB());
-				mTypeTargetObjects[0].first->GetOwnerActor()->OnChanged();
+				mTypeTargetObjects[0].first->GetActor()->OnChanged();
 			};
 
 			mFrameTetxureLayer->viewer = Ref(this);
@@ -68,10 +68,10 @@ namespace Editor
 			// Topology tool
 			auto mesh = mTypeTargetObjects[0].first;
 			mTopologyTool->Setup([=]() { return mesh->GetExtraPoints(); },
-								 [=](int idx, Vec2F p) { mesh->SetExtraPoint(idx, p); mesh->GetOwnerActor()->OnChanged(); },
-								 [=]() { return mesh->GetOwnerActor()->transform->GetWorldNonSizedBasis(); },
-								 [=](Vec2F p) { mesh->AddExtraPoint(p); mesh->GetOwnerActor()->OnChanged(); },
-								 [=](int idx) { mesh->RemoveExtraPoint(idx); mesh->GetOwnerActor()->OnChanged(); });
+								 [=](int idx, Vec2F p) { mesh->SetExtraPoint(idx, p); mesh->GetActor()->OnChanged(); },
+								 [=]() { return mesh->GetActor()->transform->GetWorldNonSizedBasis(); },
+								 [=](Vec2F p) { mesh->AddExtraPoint(p); mesh->GetActor()->OnChanged(); },
+								 [=](int idx) { mesh->RemoveExtraPoint(idx); mesh->GetActor()->OnChanged(); });
 		}
 	}
 
@@ -125,7 +125,7 @@ namespace Editor
 
 				textureSprite.SetImageAsset(obj->GetImage());
 				textureSprite.SetBasis(Basis(obj->GetMappingFrame())
-									   *Basis::Translated(obj->GetOwnerActor()->transform->GetWorldPosition())
+									   *Basis::Translated(obj->GetActor()->transform->GetWorldPosition())
 									   *o2EditorSceneScreen.GetLocalToScreenTransform());
 				textureSprite.SetTransparency(0.5f);
 				textureSprite.Draw();

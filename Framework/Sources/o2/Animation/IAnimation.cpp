@@ -285,7 +285,12 @@ namespace o2
         return mTime/(mEndTime - mBeginTime);
     }
 
-    void IAnimation::GoToBegin()
+	float IAnimation::GetInDurationTime() const
+	{
+		return mInDurationTime;
+	}
+
+	void IAnimation::GoToBegin()
     {
         SetTime(mBeginTime);
     }

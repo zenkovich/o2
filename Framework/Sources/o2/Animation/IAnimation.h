@@ -118,6 +118,9 @@ namespace o2
         // Returns relative time: 0 - is start of animation, 1 - time at duration
         virtual float GetRelativeTime() const;
 
+		// Returns in duration time. When animtions is looped, in duration time is time from 0 to duration
+		virtual float GetInDurationTime() const;
+
         // Sets animation time to begin
         virtual void GoToBegin();
 
@@ -259,6 +262,7 @@ CLASS_METHODS_META(o2::IAnimation)
     FUNCTION().PUBLIC().SIGNATURE(float, GetDuration);
     FUNCTION().PUBLIC().SIGNATURE(void, SetRelTime, float);
     FUNCTION().PUBLIC().SIGNATURE(float, GetRelativeTime);
+    FUNCTION().PUBLIC().SIGNATURE(float, GetInDurationTime);
     FUNCTION().PUBLIC().SIGNATURE(void, GoToBegin);
     FUNCTION().PUBLIC().SIGNATURE(void, GoToEnd);
     FUNCTION().PUBLIC().SIGNATURE(void, PlayForward);

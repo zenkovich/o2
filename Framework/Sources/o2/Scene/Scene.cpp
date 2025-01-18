@@ -140,7 +140,7 @@ namespace o2
 
         for (auto& component : destroyComponents)
         {
-            if (auto owner = component->GetOwnerActor())
+            if (auto owner = component->GetActor())
                 owner->RemoveComponent(component);
         }
 

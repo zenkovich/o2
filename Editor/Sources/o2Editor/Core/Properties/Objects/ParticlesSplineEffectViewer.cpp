@@ -55,7 +55,7 @@ namespace Editor
 			mSplineTool->SetSpline(mSplineEffect->spline, getOrigin);
 			mSplineTool->onChanged = [=]() { 
 				auto emitter = mSplineEffect->GetEmitter();
-				DynamicCast<ParticlesEmitterComponent>(emitter)->GetOwnerActor()->OnChanged();
+				DynamicCast<ParticlesEmitterComponent>(emitter)->GetActor()->OnChanged();
 			};
 		}
 	}

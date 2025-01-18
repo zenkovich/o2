@@ -29,7 +29,7 @@ namespace o2
         AnimationComponent();
 
         // Copy-constructor
-        AnimationComponent(const AnimationComponent& other);
+        AnimationComponent(RefCounter* refCounter, const AnimationComponent& other);
 
         // Destructor
         ~AnimationComponent();
@@ -371,7 +371,7 @@ CLASS_METHODS_META(o2::AnimationComponent)
     typedef Map<String, Ref<IAnimationState>> _tmp1;
 
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationComponent&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const AnimationComponent&);
     FUNCTION().PUBLIC().SIGNATURE(void, OnUpdate, float);
     FUNCTION().PUBLIC().SIGNATURE(Ref<IAnimationState>, AddState, const Ref<IAnimationState>&);
     FUNCTION().PUBLIC().SIGNATURE(Ref<IAnimationState>, AddState, const String&, const Ref<AnimationClip>&, const AnimationMask&, float);

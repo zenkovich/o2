@@ -13,7 +13,7 @@ namespace o2 {
     {
     public:
         PROPERTIES(Component);
-        GETTER(Ref<Actor>, actor, GetOwnerActor);               // Owner actor getter
+        GETTER(Ref<Actor>, actor, GetActor);               // Owner actor getter
         PROPERTY(bool, enabled, SetEnabled, IsEnabled);         // Enabling property @EDITOR_IGNORE
         GETTER(bool, enabledInHierarchy, IsEnabledInHierarchy); // Is enabled in hierarchy property
 
@@ -21,8 +21,14 @@ namespace o2 {
         // Default constructor
         Component();
 
+		// Default constructor with ref counter
+		explicit Component(RefCounter* refCounter);
+
         // Copy-constructor
         Component(const Component& other);
+
+		// Copy-constructor with ref counter
+		Component(RefCounter* refCounter, const Component& other);
 
         // Virtual destructor
         virtual ~Component();
@@ -58,7 +64,7 @@ namespace o2 {
         bool IsLinkedToComponent(const Ref<Component>& component) const;
 
         // Returns owner actor
-        Ref<Actor> GetOwnerActor() const;
+        Ref<Actor> GetActor() const;
 
         // Returns component with type
         template<typename _type>
@@ -252,7 +258,9 @@ CLASS_METHODS_META(o2::Component)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().CONSTRUCTOR(const Component&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Component&);
     FUNCTION().PUBLIC().SIGNATURE(SceneUID, GetID);
     FUNCTION().PUBLIC().SIGNATURE(void, GenerateNewID);
     FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
@@ -262,7 +270,7 @@ CLASS_METHODS_META(o2::Component)
     FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabledInHierarchy);
     FUNCTION().PUBLIC().SIGNATURE(const WeakRef<Component>&, GetPrototypeLink);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsLinkedToComponent, const Ref<Component>&);
-    FUNCTION().PUBLIC().SIGNATURE(Ref<Actor>, GetOwnerActor);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Actor>, GetActor);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetName);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetIcon);

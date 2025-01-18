@@ -60,7 +60,7 @@ namespace o2
 	{
 		IAnimationState::Register(owner);
 
-		player->SetTarget(mOwner.Lock()->GetOwnerActor().Get());
+		player->SetTarget(mOwner.Lock()->GetActor().Get());
 		player->SetPlaying(autoPlay);
 		player->mAnimationState = Ref(this);
 
