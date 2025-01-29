@@ -259,7 +259,7 @@
                                     "meta": {
                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                         "Value": {
-                                            "mId": "561f643a51c16893477e69c67b091bad"
+                                            "mId": "0152696504aa7c7a510a77d72f9f6b73"
                                         }
                                     }
                                 }
@@ -412,7 +412,7 @@
                                             "Type": "o2::EditBox",
                                             "Data": {
                                                 "Prototype": {
-                                                    "id": "22822d053084659d47a8565a142527ff",
+                                                    "id": "16d653330c707da860404d0e2db413b2",
                                                     "path": "Editor UI styles/O2  Edit Box singleline.proto"
                                                 },
                                                 "PrototypeLink": 18361699463735310704,
@@ -695,7 +695,7 @@
                     "Type": "o2::HorizontalScrollBar",
                     "Value": {
                         "Prototype": {
-                            "id": "0692262812827c0756ab79b2151f10d0",
+                            "id": "518b7eb209542ef3090d05171c170f9a",
                             "path": "Editor UI styles/O2  Horizontal Scroll Bar standard.proto"
                         },
                         "PrototypeLink": 2396346607982954160,
@@ -714,6 +714,7 @@
                                 "y": 15.0
                             }
                         },
+                        "mInheritDrawingDepthFromParent": false,
                         "mName": "horScrollBar",
                         "mMaxValue": 0.0,
                         "Layers": [
@@ -858,7 +859,7 @@
                     "Type": "o2::VerticalScrollBar",
                     "Value": {
                         "Prototype": {
-                            "id": "2d5360a62b9b390a672d11f65d144766",
+                            "id": "079c53832d46433104bb6b397eaa2652",
                             "path": "Editor UI styles/O2  Vertical Scroll Bar standard.proto"
                         },
                         "PrototypeLink": 8311025582170325613,
@@ -881,6 +882,7 @@
                                 "y": -5.0
                             }
                         },
+                        "mInheritDrawingDepthFromParent": false,
                         "mName": "verScrollBar",
                         "mMaxValue": 0.0,
                         "Layers": [
@@ -1111,7 +1113,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "187823d473fa0999575a3ab61a41679b"
+                                    "mId": "1e951d5f7dde50a32aac3ead697c039b"
                                 }
                             }
                         }
@@ -1164,7 +1166,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "51d342080a900ea34c125ae14de806c0"
+                                    "mId": "220e2225004645db60b36e3a36e9587f"
                                 }
                             }
                         }
@@ -1217,7 +1219,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "61b22a401dec326f26e9398834c24ed9"
+                                    "mId": "78f33820309f6b9f6c4a15467f8b3880"
                                 }
                             }
                         }
@@ -1269,7 +1271,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "54b75ef007b9131b36d02daf7d485713"
+                                    "mId": "04ce7ad024b9015279cb76607a854294"
                                 }
                             }
                         }

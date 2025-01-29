@@ -321,6 +321,8 @@ namespace o2
     void DragHandle::OnCursorEnter(const Input::Cursor& cursor)
     {
         mIsHovered = true;
+		onHoverEnter();
+
         if (!cursor.isPressed)
             o2Application.SetCursor(cursorType);
     }
@@ -328,6 +330,8 @@ namespace o2
     void DragHandle::OnCursorExit(const Input::Cursor& cursor)
     {
         mIsHovered = false;
+		onHoverExit();
+
         if (!IsPressed() && !cursor.isPressed)
             o2Application.SetCursor(CursorType::Arrow);
     }

@@ -119,7 +119,7 @@ namespace Editor
         Refresh();
     }
 
-    void VectorProperty::Refresh()
+    void VectorProperty::Refresh(bool forcible /*= false*/)
     {
         PushEditorScopeOnStack scope;
 
@@ -175,7 +175,7 @@ namespace Editor
                 }
             }
         }
-        else if (lastDifferent || mValueProperties.Count() != mCountOfElements)
+        else if (lastDifferent || mValueProperties.Count() != mCountOfElements || forcible)
         {
             mCountProperty->SetValue(mCountOfElements);
 
@@ -357,7 +357,9 @@ namespace Editor
 
         auto res = o2EditorProperties.CreateFieldProperty(mVectorType->GetElementType(), "Element", 
                                                           onChangeCompleted, onChanged);
-        res->SetParentContext(mParentContext.Lock());
+
+        if (mParentContext)
+            res->SetParentContext(mParentContext.Lock());
 
         res->AddLayer("drag", mmake<Sprite>("ui/UI4_drag_handle.png"), Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-18, 0)));
 

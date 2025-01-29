@@ -22,7 +22,7 @@ namespace o2
 
     bool CursorAreaEventsListener::IsUnderPoint(const Vec2F& point)
     {
-        return false;
+        return true;
     }
 
     bool CursorAreaEventsListener::IsScrollable() const

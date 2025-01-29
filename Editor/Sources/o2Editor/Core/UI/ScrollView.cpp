@@ -137,7 +137,7 @@ namespace Editor
         mRenderTargetSprite->SetTransparency(mResTransparency);
     }
 
-    void ScrollView::UpdateCamera(float dt)
+	void ScrollView::UpdateCamera(float dt)
     {
         bool transformed = false;
 

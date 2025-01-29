@@ -35,6 +35,8 @@ namespace o2
         Function<void()>             onPressed;         // Pressed cursor on handle event
         Function<void()>             onDblClicked;      // Double clicked cursor on handle event
         Function<void()>             onReleased;        // Released cursor event
+		Function<void()>             onHoverEnter;      // Hovered cursor enter event
+		Function<void()>             onHoverExit;       // Hovered cursor exit event
         Function<void()>             onBeganDragging;   // Drag begin event
         Function<void()>             onChangeCompleted; // Change completed event
 
@@ -505,6 +507,8 @@ CLASS_FIELDS_META(o2::DragHandle)
     FIELD().PUBLIC().NAME(onPressed);
     FIELD().PUBLIC().NAME(onDblClicked);
     FIELD().PUBLIC().NAME(onReleased);
+    FIELD().PUBLIC().NAME(onHoverEnter);
+    FIELD().PUBLIC().NAME(onHoverExit);
     FIELD().PUBLIC().NAME(onBeganDragging);
     FIELD().PUBLIC().NAME(onChangeCompleted);
     FIELD().PUBLIC().NAME(isPointInside);

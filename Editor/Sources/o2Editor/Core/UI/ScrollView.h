@@ -103,11 +103,11 @@ namespace Editor
         float  mViewCameraScaleSence = 0.1f / 120.0f;  // Camera scale sense
         float  mViewCameraScaleElasticyCoef = 30.0f;   // Scale smoothing coefficient
         Vec2F  mViewCameraTargetPos;                   // Target camera position
-        Vec2F  mViewCameraVelocity;                       // Camera velocity
-        float  mViewCameraPosElasticyCoef = 30.0f;       // Camera dragging smoothing coefficient
+        Vec2F  mViewCameraVelocity;                    // Camera velocity
+        float  mViewCameraPosElasticyCoef = 30.0f;     // Camera dragging smoothing coefficient
         float  mViewCameraVelocityDampingCoef = 10.0f; // Camera velocity damping coefficient
         float  mViewCameraMinScale = 0.001f;           // Minimal camera scale
-        float  mViewCameraMaxScale = 10000.0f;           // Maximal camera scale
+        float  mViewCameraMaxScale = 10000.0f;         // Maximal camera scale
                    
         Basis mLocalToScreenTransform; // Local to screen transformation
         Basis mScreenToLocalTransform; // Screen to local transformation
@@ -117,7 +117,7 @@ namespace Editor
         void OnTransformUpdated() override;
 
         // Updates transparency for this and children widgets
-        void UpdateTransparency() override;
+		void UpdateTransparency() override;
 
         // Updates camera
         void UpdateCamera(float dt);

@@ -3,7 +3,7 @@
         "Type": "Editor::ColorGradientProperty",
         "Value": {
             "Prototype": {
-                "id": "5bae3b53249b65d73a5f33c449e206f7",
+                "id": "5644316643b7494d11893098076f0426",
                 "path": "Editor UI styles/Editor  Color Gradient Property standard.proto"
             },
             "PrototypeLink": 259971357646495465,
@@ -20,7 +20,7 @@
                     "Type": "o2::Label",
                     "Data": {
                         "Prototype": {
-                            "id": "52422d7940b0288b7d092c7254f87e60",
+                            "id": "5c8f27f95b2d41de37f67c3f3cac3639",
                             "path": "Editor UI styles/O2  Label standard.proto"
                         },
                         "PrototypeLink": 9613259363390956959,
@@ -86,7 +86,7 @@
                                                         "Type": "o2::ContextMenu",
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "424e4a506d696eb0763d62d43c2447b6",
+                                                                "id": "3a9c2ee672b94932259e76fc47386da6",
                                                                 "path": "Editor UI styles/O2  Context Menu standard.proto"
                                                             },
                                                             "PrototypeLink": 13673723803847221809,
@@ -325,7 +325,7 @@
                                                                                     "meta": {
                                                                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                                         "Value": {
-                                                                                            "mId": "61314c8a090e6bd5340f752477b94276"
+                                                                                            "mId": "157f71714f4b1f874844051b5ed07529"
                                                                                         }
                                                                                     }
                                                                                 }
@@ -447,7 +447,7 @@
                                                                                             "Type": "o2::EditBox",
                                                                                             "Data": {
                                                                                                 "Prototype": {
-                                                                                                    "id": "22822d053084659d47a8565a142527ff",
+                                                                                                    "id": "16d653330c707da860404d0e2db413b2",
                                                                                                     "path": "Editor UI styles/O2  Edit Box singleline.proto"
                                                                                                 },
                                                                                                 "PrototypeLink": 15992041256513684999,
@@ -667,7 +667,7 @@
                                                                     "Type": "o2::HorizontalScrollBar",
                                                                     "Data": {
                                                                         "Prototype": {
-                                                                            "id": "0692262812827c0756ab79b2151f10d0",
+                                                                            "id": "518b7eb209542ef3090d05171c170f9a",
                                                                             "path": "Editor UI styles/O2  Horizontal Scroll Bar standard.proto"
                                                                         },
                                                                         "PrototypeLink": 2396346607982954160,
@@ -686,6 +686,7 @@
                                                                                 "y": 15.0
                                                                             }
                                                                         },
+                                                                        "mInheritDrawingDepthFromParent": false,
                                                                         "mName": "horScrollBar",
                                                                         "mTransparency": 0.0,
                                                                         "mMaxValue": 0.0,
@@ -951,7 +952,7 @@
                                                                     "Type": "o2::VerticalScrollBar",
                                                                     "Data": {
                                                                         "Prototype": {
-                                                                            "id": "2d5360a62b9b390a672d11f65d144766",
+                                                                            "id": "079c53832d46433104bb6b397eaa2652",
                                                                             "path": "Editor UI styles/O2  Vertical Scroll Bar standard.proto"
                                                                         },
                                                                         "PrototypeLink": 8311025582170325613,
@@ -974,6 +975,7 @@
                                                                                 "y": -5.0
                                                                             }
                                                                         },
+                                                                        "mInheritDrawingDepthFromParent": false,
                                                                         "mName": "verScrollBar",
                                                                         "mTransparency": 0.0,
                                                                         "mMaxValue": 0.0,
@@ -1294,7 +1296,7 @@
                                                         "Type": "o2::ContextMenu",
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "424e4a506d696eb0763d62d43c2447b6",
+                                                                "id": "3a9c2ee672b94932259e76fc47386da6",
                                                                 "path": "Editor UI styles/O2  Context Menu standard.proto"
                                                             },
                                                             "PrototypeLink": 13673723803847221809,
@@ -1533,7 +1535,7 @@
                                                                                     "meta": {
                                                                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                                         "Value": {
-                                                                                            "mId": "3b7f5b3b7c0a324c2143758c7d85401c"
+                                                                                            "mId": "2e644dc4686767bf25b464f348a46a72"
                                                                                         }
                                                                                     }
                                                                                 }
@@ -1655,7 +1657,7 @@
                                                                                             "Type": "o2::EditBox",
                                                                                             "Data": {
                                                                                                 "Prototype": {
-                                                                                                    "id": "22822d053084659d47a8565a142527ff",
+                                                                                                    "id": "16d653330c707da860404d0e2db413b2",
                                                                                                     "path": "Editor UI styles/O2  Edit Box singleline.proto"
                                                                                                 },
                                                                                                 "PrototypeLink": 15992041256513684999,
@@ -1875,7 +1877,7 @@
                                                                     "Type": "o2::HorizontalScrollBar",
                                                                     "Data": {
                                                                         "Prototype": {
-                                                                            "id": "0692262812827c0756ab79b2151f10d0",
+                                                                            "id": "518b7eb209542ef3090d05171c170f9a",
                                                                             "path": "Editor UI styles/O2  Horizontal Scroll Bar standard.proto"
                                                                         },
                                                                         "PrototypeLink": 2396346607982954160,
@@ -1894,6 +1896,7 @@
                                                                                 "y": 15.0
                                                                             }
                                                                         },
+                                                                        "mInheritDrawingDepthFromParent": false,
                                                                         "mName": "horScrollBar",
                                                                         "mTransparency": 0.0,
                                                                         "mMaxValue": 0.0,
@@ -2159,7 +2162,7 @@
                                                                     "Type": "o2::VerticalScrollBar",
                                                                     "Data": {
                                                                         "Prototype": {
-                                                                            "id": "2d5360a62b9b390a672d11f65d144766",
+                                                                            "id": "079c53832d46433104bb6b397eaa2652",
                                                                             "path": "Editor UI styles/O2  Vertical Scroll Bar standard.proto"
                                                                         },
                                                                         "PrototypeLink": 8311025582170325613,
@@ -2182,6 +2185,7 @@
                                                                                 "y": -5.0
                                                                             }
                                                                         },
+                                                                        "mInheritDrawingDepthFromParent": false,
                                                                         "mName": "verScrollBar",
                                                                         "mTransparency": 0.0,
                                                                         "mMaxValue": 0.0,
