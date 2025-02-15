@@ -16,7 +16,7 @@
                     "Type": "o2::Spoiler",
                     "Data": {
                         "Prototype": {
-                            "id": "4e9a204560e3106f7753785f40c44a69",
+                            "id": "014e34505071452216bf64900e7f4280",
                             "path": "Editor UI styles/O2  Spoiler expand with caption.proto"
                         },
                         "PrototypeLink": 16856642250299733553,
@@ -37,7 +37,7 @@
                                 "Type": "o2::Button",
                                 "Data": {
                                     "Prototype": {
-                                        "id": "58681ff02da4329a4acf22531e3855f1",
+                                        "id": "16bc090c409a6bf659c018272fa12223",
                                         "path": "Editor UI styles/O2  Button expand.proto"
                                     },
                                     "PrototypeLink": 12815916003396062931,
@@ -475,7 +475,7 @@
                                                                                         "meta": {
                                                                                             "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                                             "Value": {
-                                                                                                "mId": "124e3a2f6ec5127b632e20273f5856c9"
+                                                                                                "mId": "571928095a5c20601a1c5f5f4d972486"
                                                                                             }
                                                                                         }
                                                                                     }
@@ -528,7 +528,7 @@
                                                                                         "meta": {
                                                                                             "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                                             "Value": {
-                                                                                                "mId": "139211ce4f800b4b6dc5597627073874"
+                                                                                                "mId": "160b4ea942a8641378cc6d510a3b57e2"
                                                                                             }
                                                                                         }
                                                                                     }
@@ -607,7 +607,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "60ec7c6b782050a9738e726578991a58"
+                                    "mId": "552f7d5322591e3e2cb9449f7d9a379a"
                                 }
                             }
                         }

@@ -1,4 +1,5 @@
 extern void __RegisterClass__Editor__AnimationStateGraphEditor();
+extern void __RegisterClass__Editor__GraphAnimationStateViewer();
 extern void __RegisterClass__Editor__AnimationStateGraphEditor__StateAnimation();
 extern void __RegisterClass__Editor__AnimationStateGraphWindow();
 extern void __RegisterClass__Editor__AnimationAddKeysAction();
@@ -155,6 +156,7 @@ extern void __RegisterClass__Editor__TreeWindow();
 extern void InitializeTypeso2Editor()
 {
     __RegisterClass__Editor__AnimationStateGraphEditor();
+    __RegisterClass__Editor__GraphAnimationStateViewer();
     __RegisterClass__Editor__AnimationStateGraphEditor__StateAnimation();
     __RegisterClass__Editor__AnimationStateGraphWindow();
     __RegisterClass__Editor__AnimationAddKeysAction();

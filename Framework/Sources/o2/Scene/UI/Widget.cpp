@@ -545,18 +545,14 @@ namespace o2
     void Widget::OnEnabled()
     {
         Actor::OnEnabled();
-        ISceneDrawable::OnEnabled();
 
         layout->SetDirty(false);
         onShow();
     }
 
     void Widget::OnDisabled()
-    {
-        Actor::OnDisabled();
-        ISceneDrawable::OnDisabled();
-
-        //layout->SetDirty(false);
+	{
+		Actor::OnDisabled();
         onHide();
     }
 

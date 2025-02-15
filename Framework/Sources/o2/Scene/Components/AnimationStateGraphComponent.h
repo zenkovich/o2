@@ -19,6 +19,13 @@ namespace o2
         PROPERTY(String, State, GoToState, GetCurrentStateName);                 // Current state property
 
     public:
+		Function<void(const Ref<AnimationGraphState>& state)> onStateStarted;  // Event, called when state started
+		Function<void(const Ref<AnimationGraphState>& state)> onStateFinished; // Event, called when state finished
+
+		Function<void(const Ref<AnimationGraphTransition>& transition)> onTransitionStarted;  // Event, called when transition started
+		Function<void(const Ref<AnimationGraphTransition>& transition)> onTransitionFinished; // Event, called when transition finished
+
+    public:
         // Default constructor @SCRIPTABLE
         AnimationStateGraphComponent();
 
@@ -38,7 +45,10 @@ namespace o2
         void SetGraph(const AssetRef<AnimationStateGraphAsset>& graph);
 
         // Returns animation state graph asset
-        const AssetRef<AnimationStateGraphAsset>& GetGraph() const;
+		const AssetRef<AnimationStateGraphAsset>& GetGraph() const;
+
+		// Resets graph to initial state
+		void Reset();
 
         // Starts transition to state
         void GoToState(const String& name);
@@ -86,11 +96,15 @@ namespace o2
         struct StatePlayer
         {
             Vector<Pair<Ref<AnimationGraphState::Animation>, Ref<IAnimationState>>> players;
+
             Ref<AnimationGraphState> state;
+
+			WeakRef<AnimationStateGraphComponent> owner;
 
         public:
             // Setup state player. Initializes animation players
-            void Setup(const Ref<AnimationComponent>& animationComponent, const Ref<AnimationGraphState>& state);
+            void Setup(const Ref<AnimationComponent>& animationComponent, const Ref<AnimationGraphState>& state, 
+                       const Ref<AnimationStateGraphComponent>& owner);
 
             // Play state
             void Play();
@@ -120,16 +134,13 @@ namespace o2
         StatePlayer              mNextStatePlayer; // Next state player
 
         Ref<AnimationGraphTransition> mCurrentTransition;            // Current transition
-        float mCurrentTransitionTime = 0.0f; // Current transition time
+        float                         mCurrentTransitionTime = 0.0f; // Current transition time
 
         Vector<Ref<AnimationGraphTransition>> mNextTransitions;   // Next transitions
 
     protected:
         // Called when actor initialized, reattaches animation states
         void OnInitialized() override;
-
-        // Resets graph to initial state
-        void Reset();
 
         // Checks if current transition is finished and starts next transition
         void CheckStartNextTransition();
@@ -152,6 +163,10 @@ CLASS_FIELDS_META(o2::AnimationStateGraphComponent)
 {
     FIELD().PUBLIC().NAME(graph);
     FIELD().PUBLIC().NAME(State);
+    FIELD().PUBLIC().NAME(onStateStarted);
+    FIELD().PUBLIC().NAME(onStateFinished);
+    FIELD().PUBLIC().NAME(onTransitionStarted);
+    FIELD().PUBLIC().NAME(onTransitionFinished);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mStateGraph);
     FIELD().PROTECTED().NAME(mAnimationComponent);
     FIELD().PROTECTED().NAME(mCurrentState);
@@ -171,6 +186,7 @@ CLASS_METHODS_META(o2::AnimationStateGraphComponent)
     FUNCTION().PUBLIC().SIGNATURE(void, OnUpdate, float);
     FUNCTION().PUBLIC().SIGNATURE(void, SetGraph, const AssetRef<AnimationStateGraphAsset>&);
     FUNCTION().PUBLIC().SIGNATURE(const AssetRef<AnimationStateGraphAsset>&, GetGraph);
+    FUNCTION().PUBLIC().SIGNATURE(void, Reset);
     FUNCTION().PUBLIC().SIGNATURE(void, GoToState, const String&);
     FUNCTION().PUBLIC().SIGNATURE(void, GoToState, const Ref<AnimationGraphState>&);
     FUNCTION().PUBLIC().SIGNATURE(void, ForcePlayState, const String&);
@@ -185,7 +201,6 @@ CLASS_METHODS_META(o2::AnimationStateGraphComponent)
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetIcon);
     FUNCTION().PROTECTED().SIGNATURE(void, OnInitialized);
-    FUNCTION().PROTECTED().SIGNATURE(void, Reset);
     FUNCTION().PROTECTED().SIGNATURE(void, CheckStartNextTransition);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateCurrentTransition, float);
     FUNCTION().PROTECTED().SIGNATURE(Ref<AnimationComponent>, GetAnimationComponent);

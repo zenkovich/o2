@@ -3,7 +3,7 @@
         "Type": "Editor::StringProperty",
         "Value": {
             "Prototype": {
-                "id": "70171aff0b3c6ffb4d365f5e78597127",
+                "id": "5d02100f219732384b795ce33a9d283a",
                 "path": "Editor UI styles/Editor  String Property standard.proto"
             },
             "PrototypeLink": 16683340417802061457,
@@ -20,7 +20,7 @@
                     "Type": "o2::Label",
                     "Data": {
                         "Prototype": {
-                            "id": "5c8f27f95b2d41de37f67c3f3cac3639",
+                            "id": "047318127fa57cf72398035e105414ad",
                             "path": "Editor UI styles/O2  Label standard.proto"
                         },
                         "PrototypeLink": 9613259363390956959,
@@ -73,7 +73,7 @@
                                             "Type": "o2::EditBox",
                                             "Data": {
                                                 "Prototype": {
-                                                    "id": "16d653330c707da860404d0e2db413b2",
+                                                    "id": "3866729c5ef346e8714f628a397d4253",
                                                     "path": "Editor UI styles/O2  Edit Box singleline.proto"
                                                 },
                                                 "PrototypeLink": 12589121913592147605,

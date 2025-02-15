@@ -3,7 +3,7 @@
         "Type": "Editor::FloatProperty",
         "Value": {
             "Prototype": {
-                "id": "0092170054846d0a6d1b5e2136b738eb",
+                "id": "56f242985ad07bc62c6d3b9060d73a6d",
                 "path": "Editor UI styles/Editor  Float Property standard.proto"
             },
             "PrototypeLink": 8335615307801933253,
@@ -20,7 +20,7 @@
                     "Type": "o2::Label",
                     "Data": {
                         "Prototype": {
-                            "id": "5c8f27f95b2d41de37f67c3f3cac3639",
+                            "id": "047318127fa57cf72398035e105414ad",
                             "path": "Editor UI styles/O2  Label standard.proto"
                         },
                         "PrototypeLink": 9613259363390956959,
@@ -73,7 +73,7 @@
                                             "Type": "o2::HorizontalProgress",
                                             "Data": {
                                                 "Prototype": {
-                                                    "id": "410f3cd850433a851d240b5773f036d3",
+                                                    "id": "3ca7340851a005940cb74b75620f229f",
                                                     "path": "Editor UI styles/O2  Horizontal Progress standard.proto"
                                                 },
                                                 "PrototypeLink": 6794873802875439462,
@@ -215,7 +215,7 @@
                                             "Type": "o2::EditBox",
                                             "Data": {
                                                 "Prototype": {
-                                                    "id": "712d63a77396400a657525371237378e",
+                                                    "id": "29ec36bf44e3370c529d002b0215765a",
                                                     "path": "Editor UI styles/O2  Edit Box singleline with arrows.proto"
                                                 },
                                                 "PrototypeLink": 16188381784564775579,

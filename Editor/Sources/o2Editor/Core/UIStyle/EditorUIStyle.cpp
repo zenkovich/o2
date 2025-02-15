@@ -3680,6 +3680,12 @@ namespace Editor
 		auto hover = sample->AddLayer("hover", mmake<Sprite>("ui/UI4_animation_state_hover.png"), Layout::BothStretch(-6, -10, -6, -8));
 		auto pressed = sample->AddLayer("pressed", mmake<Sprite>("ui/UI4_animation_state_pressed.png"), Layout::BothStretch(-6, -10, -6, -8));
 		auto focus = sample->AddLayer("focus", mmake<Sprite>("ui/UI4_animation_state_frame.png"), Layout::BothStretch(-6, -10, -6, -8));
+		auto borderFinished = sample->AddLayer("borderFinished", mmake<Sprite>("ui/UI4_animation_state_frame.png"), Layout::BothStretch(-6, -10, -6, -8));
+		auto borderPlanned = sample->AddLayer("borderPlanned", mmake<Sprite>("ui/UI4_animation_state_frame.png"), Layout::BothStretch(-6, -10, -6, -8));
+
+		focus->GetDrawable()->color = Color4(0, 150, 136, 255);
+		borderFinished->GetDrawable()->color = Color4(249, 93, 72, 255);
+        borderPlanned->GetDrawable()->color = Color4(159, 190, 254, 255);
 
         sample->AddState("hover", AnimationClip::EaseInOut("layer/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
@@ -3687,7 +3693,13 @@ namespace Editor
         sample->AddState("pressed", AnimationClip::EaseInOut("layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-        sample->AddState("focused", AnimationClip::EaseInOut("layer/focus/transparency", 0.0f, 1.0f, 0.05f))
+		sample->AddState("focused", AnimationClip::EaseInOut("layer/focus/transparency", 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("finished", AnimationClip::EaseInOut("layer/borderFinished/transparency", 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("planned", AnimationClip::EaseInOut("layer/borderPlanned/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "ASG state");

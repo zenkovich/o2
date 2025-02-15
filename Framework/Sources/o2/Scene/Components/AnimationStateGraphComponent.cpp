@@ -82,7 +82,7 @@ namespace o2
 
         mCurrentState = state;
 
-        mCurrentStatePlayer.Setup(GetAnimationComponent(), mCurrentState);
+        mCurrentStatePlayer.Setup(GetAnimationComponent(), mCurrentState, Ref(this));
         mCurrentStatePlayer.Play();
     }
 
@@ -144,10 +144,12 @@ namespace o2
         mNextTransitions.RemoveAt(0);
 
         mNextState = mCurrentTransition->GetDestinationState();
-        mNextStatePlayer.Setup(GetAnimationComponent(), mNextState);
+        mNextStatePlayer.Setup(GetAnimationComponent(), mNextState, Ref(this));
         mNextStatePlayer.Play();
 
         mCurrentTransitionTime = 0.0f;
+
+		onTransitionStarted(mCurrentTransition);
     }
 
     void AnimationStateGraphComponent::UpdateCurrentTransition(float dt)
@@ -171,6 +173,9 @@ namespace o2
         if (isFinished)
         {
             mCurrentStatePlayer.Stop();
+
+			onTransitionFinished(mCurrentTransition);
+
             mCurrentState = mNextState;
             mCurrentStatePlayer = mNextStatePlayer;
 
@@ -188,11 +193,13 @@ namespace o2
         return mAnimationComponent.Lock();
     }
 
-    void AnimationStateGraphComponent::StatePlayer::Setup(const Ref<AnimationComponent>& animationComponent,
-                                                          const Ref<AnimationGraphState>& state)
+	void AnimationStateGraphComponent::StatePlayer::Setup(const Ref<AnimationComponent>& animationComponent, 
+                                                          const Ref<AnimationGraphState>& state,
+														  const Ref<AnimationStateGraphComponent>& owner)
     {
         players.Clear();
         this->state = state;
+        this->owner = owner;
         
         if (!state)
             return;
@@ -211,12 +218,18 @@ namespace o2
     {
         for (auto& player : players)
             player.second->GetPlayer().Play();
+
+		if (auto ownerRef = owner.Lock())
+			ownerRef->onStateStarted(state);
     }
 
     void AnimationStateGraphComponent::StatePlayer::Stop()
     {
         for (auto& player : players)
             player.second->GetPlayer().Stop();
+
+		if (auto ownerRef = owner.Lock())
+			ownerRef->onStateFinished(state);
     }
 
     void AnimationStateGraphComponent::StatePlayer::SetWeight(float weight)

@@ -23,6 +23,9 @@ namespace o2
 
         Ref<Curve> curve; // Curve of transition @SERIALIZABLE
 
+        PROPERTIES(AnimationGraphTransition);
+        PROPERTY(Ref<AnimationGraphState>, destinationState, SetDestinationState, GetDestinationState); // Destination state property
+
     public:
         // Sets destination state
         void SetDestinationState(const Ref<AnimationGraphState>& state);
@@ -143,6 +146,7 @@ CLASS_FIELDS_META(o2::AnimationGraphTransition)
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(endTimeRange);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(backwardAvailable);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(curve);
+    FIELD().PUBLIC().NAME(destinationState);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mDestinationState);
     FIELD().PROTECTED().NAME(mSourceStateRef);
     FIELD().PROTECTED().NAME(mDestinationStateRef);
