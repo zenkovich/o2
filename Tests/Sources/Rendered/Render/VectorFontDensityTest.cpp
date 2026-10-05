@@ -2,7 +2,9 @@
 #include <gtest/gtest.h>
 
 #include "o2/Assets/Assets.h"
+#include "o2/Render/Camera.h"
 #include "o2/Render/FontStyle.h"
+#include "o2/Render/Render.h"
 #include "o2/Render/Text.h"
 #include "o2/Render/VectorFont.h"
 #include "o2/Render/VectorFontEffects.h"
@@ -84,4 +86,47 @@ TEST(VectorFontDensity, TextSizeDoesNotNeedPreparedGlyphs)
 
     font->CheckCharacters("Wide", 14, nullptr, 2.0f);
     EXPECT_GT(Text::GetTextSize("Wide", font, 14).x, 10.0f) << "glyphs rendered only for the dense screen are measured too";
+}
+
+TEST(VectorFontDensity, ZoomedCameraTakesGlyphsOfTheViewScale)
+{
+    auto font = LoadTestFont();
+    ASSERT_FALSE(font->GetFileName().IsEmpty());
+
+    Text text(font);
+    text.SetHeight(17);
+    text.SetText("Zoom");
+    text.SetRect(RectF(-50, -20, 50, 20));
+
+    auto draw = [&](float zoom)
+    {
+        float density = 0.0f;
+
+        o2Render.Begin();
+
+        Camera camera;
+        camera.SetScale(Vec2F(1.0f/zoom, 1.0f/zoom));
+        o2Render.SetCamera(camera);
+        density = o2Render.GetViewPixelScale().x;
+        text.Draw();
+
+        o2Render.SetCamera(Camera());
+        o2Render.End();
+
+        return density;
+    };
+
+    float plain = draw(1.0f);
+    float zoomed = draw(2.0f);
+    ASSERT_FLOAT_EQ(zoomed, plain*2.0f);
+
+    auto glyph = font->GetCharacter('Z', 17, nullptr, zoomed);
+    ASSERT_GT(glyph.mSize.x, 0.0f) << "glyphs of the zoomed view are rendered";
+    EXPECT_FLOAT_EQ(glyph.mPixelDensity, zoomed);
+    EXPECT_NEAR(TexturePixels(font, glyph.mTexSrc).x, glyph.mSize.x*zoomed, 0.01f);
+
+    float farView = draw(0.5f);
+    EXPECT_GT(font->GetCharacter('Z', 17, nullptr, farView).mSize.x, 0.0f) << "a far view takes smaller glyphs";
+
+    EXPECT_FLOAT_EQ(font->GetCharacter('Z', 17, nullptr, zoomed).mAdvance, font->GetCharacter('Z', 17, nullptr).mAdvance);
 }

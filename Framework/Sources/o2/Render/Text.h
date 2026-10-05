@@ -280,7 +280,7 @@ namespace o2
         // Transforming meshes by basis
         void TransformMesh(const Basis& bas);
 
-        // Returns pixel density rounded to the steps the glyphs are rendered for
+        // Returns pixel density rounded up to the steps the glyphs are rendered for: half of octave, from 0.5 to 4
         static float QuantizePixelDensity(float pixelDensity);
 
         // Returns pixel density of the mesh glyphs: the screen one until the text is drawn

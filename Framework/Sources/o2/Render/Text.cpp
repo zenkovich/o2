@@ -1,6 +1,8 @@
 #include "o2/stdafx.h"
 #include "Text.h"
 
+#include <cmath>
+
 #include "o2/Application/Input.h"
 #include "o2/Assets/Assets.h"
 #include "o2/Integration.h"
@@ -119,7 +121,9 @@ namespace o2
         if (!mEnabled)
             return;
 
-        float pixelDensity = QuantizePixelDensity(o2Render.GetTargetPixelDensity());
+        // The view scale has the camera zoom and the screen density: glyphs are rendered for the pixels they cover
+        Vec2F viewPixelScale = o2Render.GetViewPixelScale();
+        float pixelDensity = QuantizePixelDensity(Math::Max(Math::Abs(viewPixelScale.x), Math::Abs(viewPixelScale.y)));
         if (pixelDensity != GetPixelDensity())
         {
             mPixelDensity = pixelDensity;
@@ -453,7 +457,16 @@ namespace o2
 
     float Text::QuantizePixelDensity(float pixelDensity)
     {
-        return Math::Clamp(Math::Round(pixelDensity*4.0f)/4.0f, 1.0f, 4.0f);
+        const float minDensity = 0.5f, maxDensity = 4.0f, stepsPerOctave = 2.0f;
+
+        if (!(pixelDensity > minDensity))
+            return minDensity;
+
+        if (pixelDensity > maxDensity)
+            return maxDensity;
+
+        // The nearest step up: glyphs are shown a bit smaller than rendered, never stretched
+        return std::pow(2.0f, Math::Ceil(std::log2(pixelDensity)*stepsPerOctave - 0.01f)/stepsPerOctave);
     }
 
     float Text::GetPixelDensity() const

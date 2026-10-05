@@ -12,7 +12,7 @@ It is important to know that textures and ImageAssets are separate entities. Tex
 
 A texture can be created on its own, a bitmap can be loaded into it, and it can be loaded from disk in a specific format.
 
-A texture can be a render target; for that it is created with the corresponding flag.
+A texture can be a render target; for that it is created with the corresponding flag. A render target has a pixel density (`Texture::SetPixelDensity`, 1 by default): pixels of the texture per resolution unit. Drawing into it goes in the resolution `GetTargetResolution()` = size / density, as drawing to a retina screen does, so a target shown on such a screen can have all its pixels while line widths, clipping and layout inside stay the same. The scroll views of the editor (pipeline canvas, curves) create their targets with the density of the screen.
 
 ### Camera, o2::Camera
 Defines the transformation through which the scene is rendered at the current moment. The position is set through the `o2::Transform` interface. In effect, the camera transformation can be thought of as a window through which we look at the scene
@@ -129,7 +129,7 @@ A bitmap font is defined by pre-made, pre-rendered characters in an atlas and th
 
 A vector font is generated at runtime, rendering and packing the needed glyphs into a special atlas.
 
-Glyphs are rendered for the pixel density of the target the text is drawn to: the screen graphics scale (2 on retina), 1 in a render texture. Sizes, origins and advances stay in resolution units and the advances are the ones of density 1, so text layout does not depend on the screen. `Text` rebuilds its mesh when it is drawn to a target of another density. Glyphs with style effects are always rendered at density 1: effects work in pixels of the glyph bitmap.
+Glyphs are rendered for the pixels they cover: the view scale of the camera times the pixel density of the target (the screen graphics scale, 2 on retina, or the density of a render texture), rounded up to a step of half an octave between 0.5 and 4. So text stays sharp when a view is zoomed in and is not shimmering when zoomed out. Sizes, origins and advances stay in resolution units and the advances are the ones of density 1, so text layout does not depend on the screen. `Text` rebuilds its mesh when the step changes. Glyphs with style effects are always rendered at density 1: effects work in pixels of the glyph bitmap.
 
 Graphic effects can be applied to a vector font — stroke, gradient, shadow and custom ones. Effects are defined by the font style `o2::FontStyle` (`o2::FontStyleAsset`) and applied per character, during glyph rendering into the atlas, on the CPU. Glyphs of different styles and sizes are packed into the font's shared atlas, cached by the style+size key; styles with identical content share the same glyphs.
 
