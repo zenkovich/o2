@@ -190,7 +190,7 @@ namespace o2
 		// Returns how many pixels of the current target one camera space unit covers, with the screen graphics scale
 		Vec2F GetViewPixelScale() const;
 
-		// Returns pixels of the current target per resolution unit: the screen graphics scale, 1 in a render texture
+		// Returns pixels of the current target per resolution unit: the screen graphics scale or the density of the texture
 		float GetTargetPixelDensity() const;
 
 		// Draws polygon

@@ -122,11 +122,16 @@ namespace Editor
         size.x = Math::Max(size.x, 32);
         size.y = Math::Max(size.y, 32);
 
+        // The texture has the pixels of the screen, the camera keeps the size of the view
+        float graphicsScale = o2Application.GetGraphicsScale();
+        Vec2I targetSize(Math::RoundToInt((float)size.x*graphicsScale), Math::RoundToInt((float)size.y*graphicsScale));
+
         // The transform updates every frame while a dock splitter is dragged; only a new size needs a new texture
-        if (!mRenderTarget.Get() || mRenderTarget.Get()->GetSize() != size)
+        if (!mRenderTarget.Get() || mRenderTarget.Get()->GetSize() != targetSize)
         {
-            mRenderTarget = TextureRef(size, TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
-            *mRenderTargetSprite = Sprite(mRenderTarget, RectI(Vec2I(), size));
+            mRenderTarget = TextureRef(targetSize, TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
+            mRenderTarget->SetPixelDensity(graphicsScale);
+            *mRenderTargetSprite = Sprite(mRenderTarget, RectI(Vec2I(), targetSize));
         }
 
         mRenderTargetSprite->SetRect(layout->worldRect);

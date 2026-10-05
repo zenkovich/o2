@@ -119,6 +119,15 @@ namespace o2
         // Returns size of texture
         Vec2I GetSize() const;
 
+        // Sets pixels of the texture per resolution unit when it is drawn into as a render target, 1 by default
+        void SetPixelDensity(float density);
+
+        // Returns pixels of the texture per resolution unit when it is a render target
+        float GetPixelDensity() const;
+
+        // Returns resolution of drawing into the texture as a render target: its size by the pixel density
+        Vec2I GetTargetResolution() const;
+
         // Returns format
         TextureFormat GetFormat() const;
 
@@ -162,6 +171,8 @@ namespace o2
 
     protected:
         Vec2I mSize; // Size of texture
+
+        float mPixelDensity = 1.0f; // Pixels per resolution unit when the texture is a render target
 
         Filter        mFilter = Filter::Linear;      // Min/Mag filter
         Wrap          mWrap = Wrap::ClampToEdge;     // S/T wrap mode

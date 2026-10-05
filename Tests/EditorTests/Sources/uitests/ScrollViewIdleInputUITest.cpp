@@ -246,3 +246,14 @@ TEST_F(IdleViewInputFixture, TransformUpdateKeepsTheRenderTargetWhileSizeHoldsSt
     EXPECT_NE(view->RenderTarget().Get(), before.Get()) << "текстура не пересоздана под новый размер";
     EXPECT_EQ(view->CameraSize(), Vec2F(640, 480));
 }
+
+// The view content is drawn into a texture: it has the pixels of the screen, or a retina screen shows it stretched
+TEST_F(IdleViewInputFixture, RenderTargetHasScreenPixelsOfTheView)
+{
+    float scale = o2Application.GetGraphicsScale();
+    Vec2I expected(Math::RoundToInt(800.0f*scale), Math::RoundToInt(600.0f*scale));
+
+    EXPECT_EQ(view->RenderTarget()->GetSize(), expected);
+    EXPECT_EQ(view->CameraSize(), Vec2F(800, 600)) << "the camera keeps the size of the view in resolution units";
+    EXPECT_TRUE(view->SpriteRect() == view->layout->GetWorldRect());
+}

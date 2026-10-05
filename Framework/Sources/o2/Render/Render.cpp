@@ -1170,7 +1170,7 @@ namespace o2
 
 	void Render::EnableScissorTest(const RectI& rect)
 	{
-		float scale = mCurrentRenderTarget ? 1.0f : o2Integration.GetGraphicsScale();
+		float scale = GetTargetPixelDensity();
 		Vec2I resolution = Vec2I(Vec2F(mCurrentResolution) * scale);
 		RectI invRect(rect.left * 2, -rect.top * 2, rect.right * 2, -rect.bottom * 2);
 
@@ -1305,7 +1305,7 @@ namespace o2
 		mExtraRenderTargets.Clear();
 
 		PlatformBindRenderTarget(renderTarget);
-		SetupViewMatrix(renderTarget->GetSize());
+		SetupViewMatrix(renderTarget->GetTargetResolution());
 	}
 
 	void Render::UnbindRenderTexture()
@@ -1391,7 +1391,7 @@ namespace o2
 		mExtraRenderTargets.Clear();
 
 		PlatformBindRenderTarget(previousTarget);
-		SetupViewMatrix(previousTarget->GetSize());
+		SetupViewMatrix(previousTarget->GetTargetResolution());
 
 		RestoreScissorStateFromStack();
 	}
@@ -1465,7 +1465,7 @@ namespace o2
 
 	float Render::GetTargetPixelDensity() const
 	{
-		return mCurrentRenderTarget ? 1.0f : o2Integration.GetGraphicsScale();
+		return mCurrentRenderTarget ? mCurrentRenderTarget->GetPixelDensity() : o2Integration.GetGraphicsScale();
 	}
 
 	void Render::DrawFilledPolygon(const Vertex* verticies, int vertexCount)

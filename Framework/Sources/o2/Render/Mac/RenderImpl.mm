@@ -462,7 +462,7 @@ namespace o2
 
             id<MTLRenderCommandEncoder> renderEncoder = RenderDevice::renderEncoder;
 
-            float scale = mCurrentRenderTarget ? 1.0f : o2Application.GetGraphicsScale();
+            float scale = mCurrentRenderTarget ? mCurrentRenderTarget->GetPixelDensity() : o2Application.GetGraphicsScale();
             [renderEncoder setViewport:(MTLViewport){0.0, 0.0, (double)(mCurrentResolution.x * scale), (double)(mCurrentResolution.y * scale), 0.0, 1.0 }];
             
             if (mScissorEnabled)
@@ -807,7 +807,7 @@ namespace o2
 
             id<MTLRenderCommandEncoder> renderEncoder = RenderDevice::threadEncoder;
 
-            float scale = command.renderTarget ? 1.0f : RenderDevice::threadGraphicsScale;
+            float scale = command.renderTarget ? command.renderTarget->GetPixelDensity() : RenderDevice::threadGraphicsScale;
             [renderEncoder setViewport:(MTLViewport){0.0, 0.0, (double)(command.resolution.x * scale), (double)(command.resolution.y * scale), 0.0, 1.0 }];
 
             if (command.scissorEnabled)

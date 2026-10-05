@@ -341,6 +341,21 @@ namespace o2
         return mSize;
     }
 
+    void Texture::SetPixelDensity(float density)
+    {
+        mPixelDensity = density > 0.0f ? density : 1.0f;
+    }
+
+    float Texture::GetPixelDensity() const
+    {
+        return mPixelDensity;
+    }
+
+    Vec2I Texture::GetTargetResolution() const
+    {
+        return Vec2I(Math::RoundToInt((float)mSize.x/mPixelDensity), Math::RoundToInt((float)mSize.y/mPixelDensity));
+    }
+
     TextureFormat Texture::GetFormat() const
     {
         return mFormat;
