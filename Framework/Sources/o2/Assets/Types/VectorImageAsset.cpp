@@ -41,6 +41,7 @@ namespace o2
 
     UInt VectorImageAsset::mTessellationsCount = 0;
     double VectorImageAsset::mTessellationTime = 0.0;
+    bool VectorImageAsset::mScalableMeshes = false;
 
     VectorImageAsset::VectorImageAsset():
         Asset(mmake<Meta>())
@@ -164,13 +165,15 @@ namespace o2
     bool VectorImageAsset::IsMeshBuilt(const Vec2F& pixelScale, const BorderF& slices /*= BorderF()*/,
                                        bool pixelSnapped /*= true*/) const
     {
-        Vec2F scale = QuantizePixelScale(pixelScale);
+        Vec2F scale = mScalableMeshes ? Vec2F(1, 1) : QuantizePixelScale(pixelScale);
         bool sliced = slices != BorderF();
+        pixelSnapped = pixelSnapped && !mScalableMeshes;
 
         for (auto& cached : mMeshes)
         {
             if (cached->mesh.pixelScale.x == scale.x && cached->mesh.pixelScale.y == scale.y &&
-                cached->sliced == sliced && (!sliced || cached->slices == slices) && cached->pixelSnapped == pixelSnapped)
+                cached->sliced == sliced && (!sliced || cached->slices == slices) &&
+                cached->pixelSnapped == pixelSnapped && cached->mesh.IsScalable() == mScalableMeshes)
             {
                 return true;
             }
@@ -205,6 +208,16 @@ namespace o2
     double VectorImageAsset::GetTessellationTime()
     {
         return mTessellationTime;
+    }
+
+    void VectorImageAsset::SetScalableMeshes(bool scalable)
+    {
+        mScalableMeshes = scalable;
+    }
+
+    bool VectorImageAsset::IsScalableMeshes()
+    {
+        return mScalableMeshes;
     }
 
     UInt VectorImageAsset::GetVersion() const
@@ -250,12 +263,15 @@ namespace o2
         if (!mValid || mImage.shapes.IsEmpty())
             return nullptr;
 
-        Vec2F scale = QuantizePixelScale(pixelScale);
+        // A scalable mesh is one for all the scales, it is kept for the scale 1
+        Vec2F scale = mScalableMeshes ? Vec2F(1, 1) : QuantizePixelScale(pixelScale);
+        pixelSnapped = pixelSnapped && !mScalableMeshes;
 
         for (auto& cached : mMeshes)
         {
             if (cached->mesh.pixelScale.x == scale.x && cached->mesh.pixelScale.y == scale.y &&
-                cached->sliced == sliced && (!sliced || cached->slices == slices) && cached->pixelSnapped == pixelSnapped)
+                cached->sliced == sliced && (!sliced || cached->slices == slices) &&
+                cached->pixelSnapped == pixelSnapped && cached->mesh.IsScalable() == mScalableMeshes)
             {
                 return cached;
             }
@@ -286,6 +302,7 @@ namespace o2
             VectorTessellationParams params;
             params.pixelScale = scale;
             params.pixelSnapped = pixelSnapped;
+            params.scalable = mScalableMeshes;
 
             auto start = std::chrono::steady_clock::now();
             VectorTessellator::Tessellate(mImage, res->mesh, params);

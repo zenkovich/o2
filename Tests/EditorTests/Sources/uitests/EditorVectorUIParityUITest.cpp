@@ -48,7 +48,9 @@ namespace
         raster.bitmap->Save(shotsFolder + name + "_raster.png", Bitmap::ImageType::Png);
         vector.bitmap->Save(shotsFolder + name + "_vector.png", Bitmap::ImageType::Png);
 
-        EXPECT_LE(raster.vectorTriangles*30, vector.vectorTriangles)
+        // The sprites without a raster twin have more triangles in the meshes built once for any scale
+        UInt64 minTrianglesRatio = VectorImageAsset::IsScalableMeshes() ? 20 : 30;
+        EXPECT_LE(raster.vectorTriangles*minTrianglesRatio, vector.vectorTriangles)
             << name.Data() << ": the raster pass has drawn " << raster.vectorTriangles << " vector triangles";
         EXPECT_GT(vector.vectorTriangles, (UInt64)minVectorTriangles) << name.Data() << ": the vector pass has drawn too few";
         EXPECT_GT(CountDistinctColors(*raster.bitmap), 64) << name.Data() << ": the raster frame is blank";

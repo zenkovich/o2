@@ -3,6 +3,7 @@
 
 #include "o2/Application/Application.h"
 #include "o2/Assets/Assets.h"
+#include "o2/Assets/Types/VectorImageAsset.h"
 #include "o2/Scene/Scene.h"
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/Widgets/Button.h"
@@ -148,6 +149,8 @@ namespace Editor
         });
 
         mMenuPanel->AddToggleItem("Debug/View editor UI tree", false, [&](bool x) { o2EditorTree.GetSceneTree()->SetEditorWatching(x); });
+        mMenuPanel->AddToggleItem("Debug/Scalable vector meshes", VectorImageAsset::IsScalableMeshes(),
+                                  [](bool x) { VectorImageAsset::SetScalableMeshes(x); });
 
         mMenuPanel->AddItem("Debug/Dump memory", [&]() { o2Memory.DumpInfo(); });
 

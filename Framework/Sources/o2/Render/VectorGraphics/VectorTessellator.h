@@ -15,6 +15,7 @@ namespace o2
         bool  antialiasing = true;      // Builds alpha fringe along edges; hard edges otherwise
         bool  pixelSnapped = true;      // Image is drawn from a whole screen pixel: edges on pixel bounds stay hard
         float simplification = 0.5f;    // Color levels the triangles may be off the removed vertices; 0 keeps them all
+        bool  scalable = false;         // Builds the mesh once for any scale: pixelScale is the one of curves flattening
     };
 
     // Converter of vector image into triangles with per-vertex colors, anti-aliased by alpha fringe geometry

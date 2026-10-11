@@ -22,6 +22,12 @@ namespace o2
         Vec2F               size;                     // Image size
         Vec2F               pixelScale = Vec2F(1, 1); // Screen pixels per image unit the fringe is built for
 
+        // Data of a mesh that is tessellated once for any scale, one per position; empty in a mesh built for a scale
+        Vector<Vec2F>       anchors;    // Points of the shape outline the vertices are put off from
+        Vector<Vec2F>       normals;    // Shifts of the vertices per half of the fringe width, zero for the static ones
+        Vector<float>       limits;     // Halves of the fringe width the vertices are shifted by at most
+        Vector<Color32Bit>  baseColors; // Colors of the vertices shifted without the limit
+
     public:
         // Removes all geometry
         void Clear();
@@ -30,6 +36,15 @@ namespace o2
 
         // Returns bounds of positions, the fringe goes out of the image rectangle; false when mesh is empty
         bool GetBounds(Vec2F& min, Vec2F& max) const;
+
+        // Returns is the mesh tessellated once for any scale: Rescale puts its fringe for a scale
+        bool IsScalable() const;
+
+        // Puts positions and colors of a scalable mesh for the scale: the fringe gets a screen pixel wide
+        void Rescale(const Vec2F& scale);
+
+        // Fills positions and colors of a scalable mesh for the scale, one per vertex
+        void FillScaled(const Vec2F& scale, Vec2F* scaledPositions, Color32Bit* scaledColors) const;
 
         // Splits triangles along the vertical or horizontal line, interpolating colors
         void SplitByLine(bool vertical, float coordinate);

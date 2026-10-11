@@ -28,6 +28,12 @@ namespace o2
 
         // Shifts add up the rounding of float positions, the vertices are rebuilt from the image after this count
         const int maxMeshShifts = 32;
+
+        // Part of the scale the fringe of a scalable mesh is kept within
+        const float fringeScaleTolerance = 0.01f;
+
+        // Positions of a scalable mesh at the fringe scale, for the vertices being built
+        Vector<Vec2F> scaledPositions;
     }
 
     VectorSprite::Statistics VectorSprite::mStatistics;
@@ -133,7 +139,8 @@ namespace o2
             }
 
             if (mMeshDirty || mBasisDirty || mMeshPostponed || mMeshImageVersion != mImageAsset->GetVersion() ||
-                viewPixelScale.x != mMeshViewScale.x || viewPixelScale.y != mMeshViewScale.y)
+                viewPixelScale.x != mMeshViewScale.x || viewPixelScale.y != mMeshViewScale.y ||
+                (mSourceMesh && mSourceMesh->mesh.IsScalable() != VectorImageAsset::IsScalableMeshes()))
             {
                 UpdateMesh(viewPixelScale);
             }
@@ -319,9 +326,11 @@ namespace o2
         Basis basis = GetImageBasis(slicedSize);
         float z = mTransform.origin.z;
 
+        bool sameKind = !mSourceMesh || mSourceMesh->mesh.IsScalable() == VectorImageAsset::IsScalableMeshes();
+
         // A layout update sets the same basis again: nothing to rebuild
-        if (!mMeshDirty && sameImage && sameView && mGeometry && basis == mMeshBasis && slicedSize == mMeshSlicedSize &&
-            z == mMeshDepth)
+        if (!mMeshDirty && sameImage && sameView && sameKind && mGeometry && basis == mMeshBasis &&
+            slicedSize == mMeshSlicedSize && z == mMeshDepth)
         {
             mBasisDirty = false;
 
@@ -377,12 +386,22 @@ namespace o2
         Vec2F pixelScale(basis.xv.Length()/drawSize.x*viewPixelScale.x, basis.yv.Length()/drawSize.y*viewPixelScale.y);
 
         // The view scale changes continuously when zooming, the cached mesh changes by steps
-        Vec2F meshScale = VectorImageAsset::QuantizePixelScale(pixelScale);
-        bool pixelSnapped = IsOnWholePixels(basis, viewPixelScale);
+        bool scalable = VectorImageAsset::IsScalableMeshes();
+        Vec2F meshScale = scalable ? Vec2F(1, 1) : VectorImageAsset::QuantizePixelScale(pixelScale);
+        bool pixelSnapped = !scalable && IsOnWholePixels(basis, viewPixelScale);
 
         bool sameMesh = sameImage && mSourceMesh && mSourceMesh->mesh.pixelScale.x == meshScale.x &&
             mSourceMesh->mesh.pixelScale.y == meshScale.y && mSourceMesh->sliced == (sliced && slices != BorderF()) &&
-            (!mSourceMesh->sliced || mSourceMesh->slices == slices) && mSourceMesh->pixelSnapped == pixelSnapped;
+            (!mSourceMesh->sliced || mSourceMesh->slices == slices) && mSourceMesh->pixelSnapped == pixelSnapped &&
+            mSourceMesh->mesh.IsScalable() == scalable;
+
+        // A scalable mesh stays, only its fringe is put for the new scale
+        bool sameFringe = !scalable ||
+            (Math::Abs(pixelScale.x - mMeshFringeScale.x) <= mMeshFringeScale.x*fringeScaleTolerance &&
+             Math::Abs(pixelScale.y - mMeshFringeScale.y) <= mMeshFringeScale.y*fringeScaleTolerance);
+
+        if (!sameFringe)
+            mMeshDirty = true;
 
         // Zoom asks new meshes for all sprites at once: they are built by few a frame, the previous ones are drawn so far
         bool sameSlices = mSourceMesh && mSourceMesh->sliced == (sliced && slices != BorderF()) &&
@@ -405,7 +424,7 @@ namespace o2
         mMeshDirty = false;
 
         // Scrolling only moves the basis: the vertices are shifted
-        if (sameMesh && mGeometry && basis.xv == mMeshBasis.xv && basis.yv == mMeshBasis.yv &&
+        if (sameMesh && sameFringe && mGeometry && basis.xv == mMeshBasis.xv && basis.yv == mMeshBasis.yv &&
             slicedSize == mMeshSlicedSize && z == mMeshDepth)
         {
             Vec2F shift = basis.origin - mMeshBasis.origin;
@@ -455,17 +474,36 @@ namespace o2
         Vertex* vertices = geometry.vertices.Data();
         int count = geometry.vertices.Count();
 
+        const Vec2F* positions = mesh.positions.Data();
+        if (mesh.IsScalable())
+        {
+            scaledPositions.resize(count);
+            mScaledColors.resize(count);
+            mesh.FillScaled(pixelScale, scaledPositions.Data(), mScaledColors.Data());
+
+            positions = scaledPositions.Data();
+            mMeshFringeScale = pixelScale;
+        }
+        else
+            mScaledColors.Clear();
+
         if (sliced)
         {
-            mesh.FillSlicedVertices(vertices, basis, slices, slicedSize);
+            // Same mapping as VectorMesh::FillSlicedVertices
+            Vec2F xv = basis.xv/slicedSize.x, yv = basis.yv/slicedSize.y;
+            Vec2F origin = basis.origin + basis.yv;
+            bool mapped = slices != BorderF() || slicedSize != mesh.size;
 
             for (int i = 0; i < count; i++)
+            {
+                Vec2F point = mapped ? VectorMesh::MapSlicedPoint(positions[i], mesh.size, slices, slicedSize) : positions[i];
+                vertices[i].Set(origin + xv*point.x - yv*point.y, 0, 0.0f, 0.0f);
                 vertices[i].z = z;
+            }
         }
         else
         {
             // Same mapping as VectorMesh::FillVertices, without calls per vertex
-            const Vec2F* positions = mesh.positions.Data();
             float xvx = basis.xv.x/imageSize.x, xvy = basis.xv.y/imageSize.x;
             float yvx = basis.yv.x/imageSize.y, yvy = basis.yv.y/imageSize.y;
             float originX = basis.origin.x + basis.yv.x, originY = basis.origin.y + basis.yv.y;
@@ -562,7 +600,7 @@ namespace o2
         const UInt multipliers[4] = { (UInt)mResultColor.r, (UInt)mResultColor.g, (UInt)mResultColor.b,
                                       (UInt)mResultColor.a };
 
-        const Color32Bit* colors = mSourceMesh->mesh.colors.Data();
+        const Color32Bit* colors = mScaledColors.IsEmpty() ? mSourceMesh->mesh.colors.Data() : mScaledColors.Data();
         Vertex* vertices = geometry.vertices.Data();
         int count = geometry.vertices.Count();
 

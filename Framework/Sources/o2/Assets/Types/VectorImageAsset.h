@@ -116,6 +116,12 @@ namespace o2
         // Returns seconds all vector images have spent in tessellation since the start
         static double GetTessellationTime();
 
+        // Sets are the meshes tessellated once for any scale, their fringe is put for the scale by the drawables
+        static void SetScalableMeshes(bool scalable);
+
+        // Returns are the meshes tessellated once for any scale
+        static bool IsScalableMeshes();
+
         // Returns image version: changes on every load of the image, never equal for two loaded assets
         UInt GetVersion() const;
 
@@ -168,6 +174,7 @@ namespace o2
 
         static UInt   mTessellationsCount; // Meshes tessellated by all vector images
         static double mTessellationTime;   // Seconds spent in tessellation by all vector images
+        static bool   mScalableMeshes;     // Are the meshes tessellated once for any scale
 
     protected:
         // Loads and parses SVG file
@@ -236,6 +243,8 @@ CLASS_METHODS_META(o2::VectorImageAsset)
     FUNCTION().PUBLIC().SIGNATURE(void, ClearMeshCache);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(UInt, GetTessellationsCount);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(double, GetTessellationTime);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(void, SetScalableMeshes, bool);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsScalableMeshes);
     FUNCTION().PUBLIC().SIGNATURE(UInt, GetVersion);
     FUNCTION().PUBLIC().SIGNATURE(Ref<Meta>, GetMeta);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(Vector<String>, GetFileExtensions);

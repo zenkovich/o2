@@ -18,6 +18,7 @@ namespace o2
     namespace
     {
         const double kPi = 3.14159265358979323846;
+        const float kNoShiftLimit = 1e6f;      // Limit of the shift of a scalable mesh vertex that is not limited
         const double kGrid = 4096.0;           // All geometry is snapped to 1/kGrid of a pixel
         const double kSliverWidth = 0.002;     // Cells narrower than this are snapping noise
         const double kSmoothCornerCos = 0.966; // Corners up to 15 degrees turn share mitered fringe points
@@ -90,7 +91,37 @@ namespace o2
             double x, y;
             float  coverage;
             float  offset;
+
+            // Of a scalable mesh: the vertex is at anchor + shift*min(half of the fringe width, limit), in pixels
+            double anchorX = 0, anchorY = 0;
+            float  shiftX = 0, shiftY = 0;
+            float  limit = kNoShiftLimit;
+
+            bool IsStatic() const
+            {
+                return shiftX == 0.0f && shiftY == 0.0f;
+            }
         };
+
+        CoverageVertex LerpVertex(const CoverageVertex& a, const CoverageVertex& b, double coef)
+        {
+            CoverageVertex res = { a.x + (b.x - a.x)*coef, a.y + (b.y - a.y)*coef,
+                                   (float)(a.coverage + (b.coverage - a.coverage)*coef),
+                                   (float)(a.offset + (b.offset - a.offset)*coef) };
+
+            if (a.IsStatic() && b.IsStatic())
+                return res;
+
+            double anchorAX = a.IsStatic() ? a.x : a.anchorX, anchorAY = a.IsStatic() ? a.y : a.anchorY;
+            double anchorBX = b.IsStatic() ? b.x : b.anchorX, anchorBY = b.IsStatic() ? b.y : b.anchorY;
+
+            res.anchorX = anchorAX + (anchorBX - anchorAX)*coef;
+            res.anchorY = anchorAY + (anchorBY - anchorAY)*coef;
+            res.shiftX = (float)(a.shiftX + (b.shiftX - a.shiftX)*coef);
+            res.shiftY = (float)(a.shiftY + (b.shiftY - a.shiftY)*coef);
+            res.limit = (float)(a.limit + (b.limit - a.limit)*coef);
+            return res;
+        }
 
         typedef std::vector<CoverageVertex> TriangleSoup;
         typedef std::vector<Point> Polyline;
@@ -518,7 +549,7 @@ namespace o2
 
         // Fills loops with the boundary of the area filled by rule, filled side on the left; or hardTriangles
         void Resolve(const std::vector<Polyline>& polygons, VectorFillRule rule, std::vector<Polyline>* loops,
-                     TriangleSoup* hardTriangles)
+                     TriangleSoup* hardTriangles, int windingSign = 0)
         {
             const double minEdgeLength = 1.0/32.0;
 
@@ -547,6 +578,10 @@ namespace o2
 
             auto inside = [&](int winding)
             {
+                // The area wound in one direction only: the turned inside out parts of an offset outline are empty
+                if (windingSign != 0)
+                    return winding*windingSign > 0;
+
                 return rule == VectorFillRule::NonZero ? winding != 0 : (winding & 1) != 0;
             };
 
@@ -2298,8 +2333,8 @@ namespace o2
         class MeshBuilder
         {
         public:
-            MeshBuilder(VectorMesh& mesh, const Point& pixelScale):
-                mMesh(mesh), mPixelScale(pixelScale)
+            MeshBuilder(VectorMesh& mesh, const Point& pixelScale, bool scalable = false):
+                mMesh(mesh), mPixelScale(pixelScale), mScalable(scalable)
             {}
 
             // Triangles added after it overlap the previous ones
@@ -2311,6 +2346,13 @@ namespace o2
             // Removes the vertices that the triangles of their layer draw the same without
             void Simplify(float colorTolerance)
             {
+                // Vertices of a scalable mesh move, the triangles around them draw different at another scale
+                if (mScalable)
+                {
+                    mMesh.Rescale(Vec2F(1, 1));
+                    return;
+                }
+
                 if (colorTolerance > 0.0f)
                     VectorMeshSimplifier::Simplify(mMesh, mLayers, colorTolerance);
             }
@@ -2322,7 +2364,7 @@ namespace o2
 
                 double area = (vertices[1].x - vertices[0].x)*(vertices[2].y - vertices[0].y) -
                     (vertices[1].y - vertices[0].y)*(vertices[2].x - vertices[0].x);
-                if (fabs(area) < 1e-9)
+                if (fabs(area) < 1e-9 && !mScalable)
                     return;
 
                 for (int i = 0; i < 3; i++)
@@ -2333,11 +2375,13 @@ namespace o2
             struct Key
             {
                 long long  x, y;
+                long long  anchor, shift;
                 Color32Bit color;
 
                 bool operator==(const Key& other) const
                 {
-                    return x == other.x && y == other.y && color == other.color;
+                    return x == other.x && y == other.y && color == other.color && anchor == other.anchor &&
+                        shift == other.shift;
                 }
             };
 
@@ -2348,6 +2392,8 @@ namespace o2
                     unsigned long long hash = (unsigned long long)key.x*0x9E3779B97F4A7C15ull;
                     hash ^= (unsigned long long)key.y*0xC2B2AE3D27D4EB4Full + (hash << 6) + (hash >> 2);
                     hash ^= (unsigned long long)key.color*0x165667B19E3779F9ull + (hash << 6) + (hash >> 2);
+                    hash ^= (unsigned long long)key.anchor*0x9E3779B97F4A7C15ull + (hash << 6) + (hash >> 2);
+                    hash ^= (unsigned long long)key.shift*0xC2B2AE3D27D4EB4Full + (hash << 6) + (hash >> 2);
                     return (size_t)hash;
                 }
             };
@@ -2355,21 +2401,40 @@ namespace o2
         private:
             VectorMesh& mMesh;
             Point       mPixelScale;
-            Vector<int> mLayers; // First indexes of the triangles of each paint
+            Vector<int> mLayers;           // First indexes of the triangles of each paint
+            bool        mScalable = false; // Is the mesh built once for any scale
 
             std::unordered_map<Key, VertexIndex, KeyHash> mWelded;
 
         private:
             VertexIndex GetVertexIndex(const CoverageVertex& vertex, Color32Bit color)
             {
-                Key key = { llround(vertex.x*kGrid), llround(vertex.y*kGrid), color };
+                Key key = { llround(vertex.x*kGrid), llround(vertex.y*kGrid), 0, 0, color };
+                bool moving = mScalable && !vertex.IsStatic();
+                if (moving)
+                {
+                    key.anchor = llround((double)vertex.anchorX*kGrid)*0x1F1F1F1F + llround((double)vertex.anchorY*kGrid);
+                    key.shift = llround((double)vertex.shiftX*1024.0)*0x10001 + llround((double)vertex.shiftY*1024.0);
+                }
+
                 auto found = mWelded.find(key);
                 if (found != mWelded.end())
                     return found->second;
 
                 VertexIndex idx = (VertexIndex)mMesh.positions.Count();
-                mMesh.positions.Add(Vec2F((float)(vertex.x/mPixelScale.x), (float)(vertex.y/mPixelScale.y)));
+                Vec2F position((float)(vertex.x/mPixelScale.x), (float)(vertex.y/mPixelScale.y));
+                mMesh.positions.Add(position);
                 mMesh.colors.Add(color);
+
+                if (mScalable)
+                {
+                    mMesh.anchors.Add(moving ? Vec2F((float)(vertex.anchorX/mPixelScale.x),
+                                                     (float)(vertex.anchorY/mPixelScale.y)) : position);
+                    mMesh.normals.Add(moving ? Vec2F(vertex.shiftX, vertex.shiftY) : Vec2F());
+                    mMesh.limits.Add(moving ? vertex.limit/(float)mPixelScale.x : kNoShiftLimit);
+                    mMesh.baseColors.Add(color);
+                }
+
                 mWelded[key] = idx;
                 return idx;
             }
@@ -2416,7 +2481,8 @@ namespace o2
                         break;
 
                     CoverageVertex a = soup[i + longest], b = soup[i + (longest + 1)%3], c = soup[i + (longest + 2)%3];
-                    CoverageVertex middle = { (a.x + b.x)*0.5, (a.y + b.y)*0.5, (a.coverage + b.coverage)*0.5f, 0.0f };
+                    CoverageVertex middle = LerpVertex(a, b, 0.5);
+                    middle.offset = 0.0f;
 
                     soup[i] = a;
                     soup[i + 1] = middle;
@@ -2434,8 +2500,8 @@ namespace o2
                                   [&](const CoverageVertex& vertex) { return vertical ? vertex.x : vertex.y; },
                                   [&](const CoverageVertex& a, const CoverageVertex& b, double coef)
             {
-                CoverageVertex res = { a.x + (b.x - a.x)*coef, a.y + (b.y - a.y)*coef,
-                                       (float)(a.coverage + (b.coverage - a.coverage)*coef), 0.0f };
+                CoverageVertex res = LerpVertex(a, b, coef);
+                res.offset = 0.0f;
                 (vertical ? res.x : res.y) = coordinate;
                 return res;
             });
@@ -2485,9 +2551,7 @@ namespace o2
 
             auto lerp = [](const CoverageVertex& a, const CoverageVertex& b, double coef)
             {
-                return CoverageVertex{ a.x + (b.x - a.x)*coef, a.y + (b.y - a.y)*coef,
-                                       (float)(a.coverage + (b.coverage - a.coverage)*coef),
-                                       (float)(a.offset + (b.offset - a.offset)*coef) };
+                return LerpVertex(a, b, coef);
             };
 
             double determinant = fabs(Cross(axisX, axisY));
@@ -2710,8 +2774,9 @@ namespace o2
                                           [](const CoverageVertex& vertex) { return vertex.offset; },
                                           [&](const CoverageVertex& a, const CoverageVertex& b, double coef)
                     {
-                        return CoverageVertex{ a.x + (b.x - a.x)*coef, a.y + (b.y - a.y)*coef,
-                                               (float)(a.coverage + (b.coverage - a.coverage)*coef), threshold };
+                        CoverageVertex res = LerpVertex(a, b, coef);
+                        res.offset = threshold;
+                        return res;
                     }, epsilon);
                 }
             }
@@ -2801,8 +2866,237 @@ namespace o2
             }
         }
 
+        // Sign of the winding inside of the loops that Resolve returns
+        int GetLoopsWindingSign()
+        {
+            static const int sign = []
+            {
+                std::vector<Polyline> square = { { Point(0, 0), Point(8, 0), Point(8, 8), Point(0, 8) } }, loops;
+                Resolve(square, VectorFillRule::NonZero, &loops, nullptr);
+
+                TriangleSoup soup;
+                Resolve(loops, VectorFillRule::NonZero, nullptr, &soup, 1);
+                return soup.empty() ? -1 : 1;
+            }();
+
+            return sign;
+        }
+
+        Point ClampLength(const Point& vector, double maxLength)
+        {
+            double length = Length(vector);
+            return length > maxLength ? vector*(maxLength/length) : vector;
+        }
+
+        // Builds the area inside of the loops for any scale. The core deeper than skinDepth is static; the skin from
+        // it to the fringe and the fringe across the loops are put for the fringe of referenceWidth, their vertices
+        // keep the point of the loop and the shift from it
+        void BuildScalableCoverage(const std::vector<Polyline>& loops, double skinDepth, double referenceWidth,
+                                   TriangleSoup& soup)
+        {
+            const double maxSpike = 2.0, maxMiter = 8.0;
+            const double epsilon = 4.0/kGrid;
+
+            struct RailPoint
+            {
+                Point  anchor, innerShift, outerShift, core;
+                double depth;
+            };
+
+            struct Edge
+            {
+                Point from, to;
+            };
+
+            double area = 0;
+            std::vector<Edge> edges;
+            for (const Polyline& loop : loops)
+            {
+                for (size_t i = 0; i < loop.size(); i++)
+                {
+                    const Point& next = loop[(i + 1)%loop.size()];
+                    area += Cross(loop[i], next);
+                    edges.push_back({ loop[i], next });
+                }
+            }
+
+            double side = area >= 0 ? 1.0 : -1.0;
+
+            std::vector<std::vector<RailPoint>> rails(loops.size());
+            std::vector<Polyline> coreLoops;
+            for (size_t l = 0; l < loops.size(); l++)
+            {
+                const Polyline& loop = loops[l];
+                size_t count = loop.size();
+                if (count < 3)
+                    continue;
+
+                rails[l].resize(count);
+                Polyline coreLoop(count);
+                for (size_t i = 0; i < count; i++)
+                {
+                    const Point& point = loop[i];
+                    Point directionIn = Normalized(point - loop[(i + count - 1)%count]);
+                    Point directionOut = Normalized(loop[(i + 1)%count] - point);
+                    Point first = Point(directionIn.y, -directionIn.x)*side;
+                    Point second = Point(directionOut.y, -directionOut.x)*side;
+
+                    double cosine = Dot(first, second);
+                    Point miter = cosine > -0.98 ? (first + second)*(1.0/(1.0 + cosine)) : first;
+                    bool convex = Cross(directionIn, directionOut)*side > 0;
+
+                    RailPoint& rail = rails[l][i];
+                    rail.anchor = point;
+                    rail.innerShift = ClampLength(miter, convex ? maxMiter : maxSpike)*-1.0;
+                    rail.outerShift = ClampLength(miter, convex ? maxSpike : maxMiter);
+
+                    // Skins of the opposite sides of a part thinner than two of them meet at its middle
+                    double innerLength = Math::Max(Length(rail.innerShift), 1e-9);
+                    Point ray = rail.innerShift*(1.0/innerLength);
+                    double nearest = skinDepth*innerLength*2.0;
+                    for (const Edge& edge : edges)
+                    {
+                        if (edge.from == point || edge.to == point)
+                            continue;
+
+                        Point along = edge.to - edge.from, toFrom = edge.from - point;
+                        double denominator = Cross(ray, along);
+                        if (fabs(denominator) < 1e-12)
+                            continue;
+
+                        double distance = Cross(toFrom, along)/denominator;
+                        double position = Cross(toFrom, ray)/denominator;
+                        if (distance > 1e-6 && distance < nearest && position >= 0.0 && position <= 1.0)
+                            nearest = distance;
+                    }
+
+                    rail.depth = Math::Min(skinDepth, nearest*0.5/innerLength);
+                    rail.core = Snap(point + rail.innerShift*rail.depth);
+                    coreLoop[i] = rail.core;
+                }
+
+                coreLoops.push_back(coreLoop);
+            }
+
+            // The sweep leaves vertices along the straight edges of the core, each would split the skin
+            TriangleSoup core;
+            Resolve(coreLoops, VectorFillRule::NonZero, nullptr, &core, GetLoopsWindingSign());
+
+            VectorMesh coreMesh;
+            std::map<PointKey, VertexIndex> coreIndexes;
+            for (const CoverageVertex& vertex : core)
+            {
+                auto found = coreIndexes.find(KeyOf(Point(vertex.x, vertex.y)));
+                if (found == coreIndexes.end())
+                {
+                    found = coreIndexes.insert({ KeyOf(Point(vertex.x, vertex.y)), (VertexIndex)coreMesh.positions.Count() }).first;
+                    coreMesh.positions.Add(Vec2F((float)vertex.x, (float)vertex.y));
+                    coreMesh.colors.Add(0xFFFFFFFF);
+                }
+
+                coreMesh.indexes.Add(found->second);
+            }
+
+            Vector<int> coreLayers;
+            coreLayers.Add(0);
+            VectorMeshSimplifier::Simplify(coreMesh, coreLayers, 0.5f);
+
+            size_t coreBegin = soup.size();
+            for (VertexIndex idx : coreMesh.indexes)
+                soup.push_back({ Snap((double)coreMesh.positions[idx].x), Snap((double)coreMesh.positions[idx].y), 1.0f, 0.0f });
+
+            // Vertices of the core inside of an edge of its outline split the skin along it: no gaps between them
+            std::vector<Point> corePoints;
+            for (size_t i = coreBegin; i < soup.size(); i++)
+                corePoints.push_back(Point(soup[i].x, soup[i].y));
+
+            std::sort(corePoints.begin(), corePoints.end(), [](const Point& a, const Point& b)
+            {
+                return a.x < b.x || (a.x == b.x && a.y < b.y);
+            });
+
+            corePoints.erase(std::unique(corePoints.begin(), corePoints.end()), corePoints.end());
+
+            struct RailVertices
+            {
+                CoverageVertex core, inner, outer;
+            };
+
+            std::vector<std::pair<double, Point>> splits;
+            for (const std::vector<RailPoint>& rail : rails)
+            {
+                for (size_t i = 0; i < rail.size(); i++)
+                {
+                    const RailPoint& a = rail[i];
+                    const RailPoint& b = rail[(i + 1)%rail.size()];
+
+                    auto getVertices = [&](double coef, const Point& core)
+                    {
+                        Point anchor = a.anchor + (b.anchor - a.anchor)*coef;
+                        double depth = a.depth + (b.depth - a.depth)*coef;
+                        Point innerShift = depth > 1e-9 ? (core - anchor)*(1.0/depth) :
+                            a.innerShift + (b.innerShift - a.innerShift)*coef;
+                        Point outerShift = a.outerShift + (b.outerShift - a.outerShift)*coef;
+                        Point inner = anchor + innerShift*Math::Min(referenceWidth, depth);
+                        Point outer = anchor + outerShift*referenceWidth;
+
+                        RailVertices res;
+                        res.core = { core.x, core.y, 1.0f, 0.0f };
+                        res.inner = { inner.x, inner.y, 1.0f, 0.0f, anchor.x, anchor.y, (float)innerShift.x,
+                                      (float)innerShift.y, (float)depth };
+                        res.outer = { outer.x, outer.y, 0.0f, 0.0f, anchor.x, anchor.y, (float)outerShift.x,
+                                      (float)outerShift.y, kNoShiftLimit };
+                        return res;
+                    };
+
+                    splits.clear();
+                    splits.push_back({ 0.0, a.core });
+
+                    Point along = b.core - a.core;
+                    double length = Length(along);
+                    if (length > epsilon*2.0)
+                    {
+                        Point direction = along*(1.0/length);
+                        double left = Math::Min(a.core.x, b.core.x) - epsilon;
+                        double right = Math::Max(a.core.x, b.core.x) + epsilon;
+
+                        auto candidate = std::lower_bound(corePoints.begin(), corePoints.end(), left,
+                                                          [](const Point& point, double x) { return point.x < x; });
+
+                        for (; candidate != corePoints.end() && candidate->x <= right; ++candidate)
+                        {
+                            Point offset = *candidate - a.core;
+                            double distance = Dot(offset, direction);
+                            if (distance > epsilon && distance < length - epsilon && fabs(Cross(offset, direction)) <= epsilon)
+                                splits.push_back({ distance/length, *candidate });
+                        }
+
+                        std::sort(splits.begin(), splits.end(), [](const auto& x, const auto& y) { return x.first < y.first; });
+                    }
+
+                    splits.push_back({ 1.0, b.core });
+
+                    RailVertices from = getVertices(splits[0].first, splits[0].second);
+                    for (size_t k = 1; k < splits.size(); k++)
+                    {
+                        RailVertices to = getVertices(splits[k].first, splits[k].second);
+                        for (const CoverageVertex& vertex : { from.core, to.core, to.inner, from.core, to.inner, from.inner,
+                                                              from.inner, to.inner, to.outer, from.inner, to.outer,
+                                                              from.outer })
+                        {
+                            soup.push_back(vertex);
+                        }
+
+                        from = to;
+                    }
+                }
+            }
+
+        }
+
         void BuildCoverage(const std::vector<Polyline>& polygons, VectorFillRule rule, bool antialiasing,
-                           bool hardAligned, const SmoothPoints& smoothPoints, TriangleSoup& soup)
+                           bool hardAligned, const SmoothPoints& smoothPoints, TriangleSoup& soup,
+                           double scalableSkin = 0.0)
         {
             if (!antialiasing)
             {
@@ -2812,6 +3106,12 @@ namespace o2
 
             std::vector<Polyline> loops;
             Resolve(polygons, rule, &loops, nullptr);
+
+            if (scalableSkin > 0.0)
+            {
+                BuildScalableCoverage(loops, scalableSkin, scalableSkin/16.0, soup);
+                return;
+            }
             BuildFringedCoverage(loops, smoothPoints, hardAligned, nullptr, soup);
         }
 
@@ -2820,6 +3120,9 @@ namespace o2
             // A strongly anisotropic scale splits geometry into slivers and takes seconds to tessellate
             const float maxAxesRatio = 16.0f;
             float maxScale = Math::Max(Math::Max(params.pixelScale.x, params.pixelScale.y), 1e-4f);
+
+            if (params.scalable)
+                return Point(maxScale, maxScale);
 
             return Point(Math::Max(params.pixelScale.x, maxScale/maxAxesRatio),
                          Math::Max(params.pixelScale.y, maxScale/maxAxesRatio));
@@ -2861,6 +3164,9 @@ namespace o2
         {
             Point pixelScale = GetPixelScale(params);
             double tolerance = Math::Max(params.curveTolerance, 0.01f);
+
+            // Skin of a scalable mesh is an image unit deep: the fringe is exact from the half scale up
+            double skin = params.scalable ? pixelScale.x : 0.0;
 
             TriangleSoup soup;
             PathPolyline points;
@@ -2939,16 +3245,16 @@ namespace o2
                     smoothPoints.insert(strokeSmoothPoints.begin(), strokeSmoothPoints.end());
 
                     BuildCoverage(loops, VectorFillRule::NonZero, params.antialiasing, params.pixelSnapped,
-                                  smoothPoints, soup);
+                                  smoothPoints, soup, skin);
                     ApplyPaint(soup, shape.fill, fillOpacity, pixelScale, builder);
                     return;
                 }
 
                 // Fringes of the fill and of an opaque stroke blended one over another leave the outline translucent.
                 // Stroke of a pixel width hides the edge of the fill, a thinner one or of an open path does not
-                if (opaqueStroke && params.antialiasing && strokeWidth >= 1.0 && IsClosed(shape))
+                if (opaqueStroke && params.antialiasing && strokeWidth >= Math::Max(1.0, skin) && IsClosed(shape))
                     BuildCoverage(polygons, shape.fillRule, false, false, smoothPoints, soup);
-                else if (opaqueStroke && params.antialiasing)
+                else if (opaqueStroke && params.antialiasing && !params.scalable)
                 {
                     std::vector<Polyline> fillLoops, strokeLoops, unitedLoops;
                     Resolve(polygons, shape.fillRule, &fillLoops, nullptr);
@@ -2965,7 +3271,7 @@ namespace o2
                 else
                 {
                     BuildCoverage(polygons, shape.fillRule, params.antialiasing, params.pixelSnapped, smoothPoints,
-                                  soup);
+                                  soup, skin);
                 }
 
                 ApplyPaint(soup, shape.fill, fillOpacity, pixelScale, builder);
@@ -2975,7 +3281,7 @@ namespace o2
             {
                 soup.clear();
                 BuildCoverage(outlines, VectorFillRule::NonZero, params.antialiasing, params.pixelSnapped,
-                              strokeSmoothPoints, soup);
+                              strokeSmoothPoints, soup, skin);
                 ApplyPaint(soup, shape.stroke, strokeOpacity, pixelScale, builder);
             }
         }
@@ -2989,7 +3295,7 @@ namespace o2
         Point pixelScale = GetPixelScale(params);
         mesh.pixelScale = Vec2F((float)pixelScale.x, (float)pixelScale.y);
 
-        MeshBuilder builder(mesh, pixelScale);
+        MeshBuilder builder(mesh, pixelScale, params.scalable);
         for (const VectorShape& shape : image.shapes)
             o2::TessellateShape(shape, params, builder);
 
@@ -3002,7 +3308,7 @@ namespace o2
         Point pixelScale = GetPixelScale(params);
         mesh.pixelScale = Vec2F((float)pixelScale.x, (float)pixelScale.y);
 
-        MeshBuilder builder(mesh, pixelScale);
+        MeshBuilder builder(mesh, pixelScale, params.scalable);
         o2::TessellateShape(shape, params, builder);
         builder.Simplify(params.simplification);
     }

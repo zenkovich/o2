@@ -9,6 +9,20 @@ namespace o2
 {
     namespace
     {
+        Color32Bit LerpColor(Color32Bit a, Color32Bit b, double coef)
+        {
+            Color32Bit color = 0;
+            for (int channel = 0; channel < 4; channel++)
+            {
+                double from = (double)((a >> (channel*8)) & 0xFF);
+                double to = (double)((b >> (channel*8)) & 0xFF);
+                int value = Math::Clamp(Math::RoundToInt((float)(from + (to - from)*coef)), 0, 255);
+                color |= (Color32Bit)value << (channel*8);
+            }
+
+            return color;
+        }
+
         float MapSlicedCoordinate(float value, float imageSize, float nearBorder, float farBorder, float targetSize)
         {
             float excess = nearBorder + farBorder - targetSize;
@@ -48,6 +62,10 @@ namespace o2
         positions.Clear();
         colors.Clear();
         indexes.Clear();
+        anchors.Clear();
+        normals.Clear();
+        limits.Clear();
+        baseColors.Clear();
     }
 
     UInt VectorMesh::GetTrianglesCount() const
@@ -72,11 +90,69 @@ namespace o2
         return true;
     }
 
+    bool VectorMesh::IsScalable() const
+    {
+        return !anchors.IsEmpty();
+    }
+
+    void VectorMesh::Rescale(const Vec2F& scale)
+    {
+        if (!IsScalable())
+            return;
+
+        pixelScale = scale;
+        FillScaled(scale, positions.Data(), colors.Data());
+    }
+
+    void VectorMesh::FillScaled(const Vec2F& scale, Vec2F* scaledPositions, Color32Bit* scaledColors) const
+    {
+        Vec2F halfPixel(0.5f/Math::Max(scale.x, 1e-4f), 0.5f/Math::Max(scale.y, 1e-4f));
+        float halfWidth = Math::Sqrt(halfPixel.x*halfPixel.y);
+
+        const Vec2F* anchor = anchors.Data();
+        const Vec2F* normal = normals.Data();
+        const float* limit = limits.Data();
+        const Color32Bit* baseColor = baseColors.Data();
+
+        for (int i = 0, count = anchors.Count(); i < count; i++)
+        {
+            if (normal[i].x == 0.0f && normal[i].y == 0.0f)
+            {
+                scaledPositions[i] = anchor[i];
+                scaledColors[i] = baseColor[i];
+                continue;
+            }
+
+            if (limit[i] >= halfWidth)
+            {
+                scaledPositions[i].x = anchor[i].x + normal[i].x*halfPixel.x;
+                scaledPositions[i].y = anchor[i].y + normal[i].y*halfPixel.y;
+                scaledColors[i] = baseColor[i];
+                continue;
+            }
+
+            // The fringe that has no room for its inner half keeps the coverage of the whole one
+            float depth = limit[i]/halfWidth;
+            scaledPositions[i].x = anchor[i].x + normal[i].x*halfPixel.x*depth;
+            scaledPositions[i].y = anchor[i].y + normal[i].y*halfPixel.y*depth;
+
+            Color32Bit color = baseColor[i];
+            UInt alpha = (UInt)((float)(color >> 24)*2.0f*depth/(1.0f + depth) + 0.5f);
+            scaledColors[i] = (color & 0x00FFFFFF) | (alpha << 24);
+        }
+    }
+
     void VectorMesh::SplitByLine(bool vertical, float coordinate)
     {
         const double epsilon = 1e-7;
+        bool scalable = IsScalable();
 
-        auto getValue = [&](VertexIndex idx) { return vertical ? positions[idx].x : positions[idx].y; };
+        // A scalable mesh is cut where its outline is: the cut holds at any scale
+        auto getValue = [&](VertexIndex idx)
+        {
+            const Vec2F& point = scalable ? anchors[idx] : positions[idx];
+            return vertical ? point.x : point.y;
+        };
         auto getSide = [&](VertexIndex idx)
         {
             double delta = (double)getValue(idx) - coordinate;
@@ -104,19 +180,24 @@ namespace o2
             Vec2F position(vertical ? coordinate : (float)(first.x + (second.x - first.x)*coef),
                            vertical ? (float)(first.y + (second.y - first.y)*coef) : coordinate);
 
-            Color32Bit color = 0;
-            for (int channel = 0; channel < 4; channel++)
-            {
-                double from = (double)((colors[a] >> (channel*8)) & 0xFF);
-                double to = (double)((colors[b] >> (channel*8)) & 0xFF);
-                int value = Math::Clamp(Math::RoundToInt((float)(from + (to - from)*coef)), 0, 255);
-                color |= (Color32Bit)value << (channel*8);
-            }
+            Color32Bit color = LerpColor(colors[a], colors[b], coef);
 
             VertexIndex idx = (VertexIndex)positions.Count();
             positions.Add(position);
             colors.Add(color);
             cuts[key] = idx;
+
+            if (scalable)
+            {
+                float coefficient = (float)coef;
+                Vec2F anchor = anchors[a] + (anchors[b] - anchors[a])*coefficient;
+                (vertical ? anchor.x : anchor.y) = coordinate;
+
+                anchors.Add(anchor);
+                normals.Add(normals[a] + (normals[b] - normals[a])*coefficient);
+                limits.Add(limits[a] + (limits[b] - limits[a])*coefficient);
+                baseColors.Add(LerpColor(baseColors[a], baseColors[b], coef));
+            }
 
             return idx;
         };

@@ -1141,3 +1141,92 @@ TEST_F(VectorSpriteRender, StillSpriteIsDrawnFromGpuCopyWithoutRenderThread)
     DrawAndCapture([&]() { sprite.Draw(); statistics = o2Render.GetBatchStatistics(); });
     EXPECT_EQ(statistics.retainedVertices, 0u) << "moved sprite rebuilds the batch";
 }
+
+namespace
+{
+    // Turns on the meshes built once for any scale while it lives
+    struct ScalableMeshesGuard
+    {
+        ScalableMeshesGuard() { VectorImageAsset::SetScalableMeshes(true); }
+        ~ScalableMeshesGuard() { VectorImageAsset::SetScalableMeshes(false); }
+    };
+}
+
+TEST_F(VectorSpriteRender, ScalableMeshIsDrawnAsTheMeshOfTheScale)
+{
+    auto asset = GetAsset("shapes");
+
+    for (int scale : { 1, 2, 4 })
+    {
+        RectI rect(-100, -60, -100 + 64*scale, -60 + 40*scale);
+        auto expected = VectorRasterizer::Rasterize(asset->GetMesh(Vec2F((float)scale, (float)scale), false)->mesh,
+                                                    (float)scale, background);
+
+        ScalableMeshesGuard scalable;
+        VectorSprite sprite(asset);
+        sprite.SetRect(rect);
+
+        auto frame = DrawAndCapture([&]() { sprite.Draw(); });
+        ASSERT_TRUE(frame);
+
+        // The fringe of a scalable mesh is one linear ramp, the mesh of the scale follows the pixels coverage
+        BitmapCompareResult result = BitmapCompare::Compare(*Crop(frame, rect), *expected, 32, background);
+        ASSERT_TRUE(result.comparable);
+        EXPECT_GE(result.similarity, 0.999f) << "scale " << scale << ": max difference " << result.maxDifference;
+        EXPECT_LE(result.meanDifference, 1.0f) << "scale " << scale;
+    }
+}
+
+TEST_F(VectorSpriteRender, ScalableMeshIsTessellatedOnceForAnyZoom)
+{
+    ScalableMeshesGuard scalable;
+
+    Vector<Ref<VectorSprite>> sprites;
+    for (const char* name : { "shapes", "circle", "wide" })
+    {
+        auto sprite = mmake<VectorSprite>(GetAsset(name));
+        sprite->SetPosition(Vec2F((float)sprites.Count()*3.0f - 6.0f, 0.5f));
+        sprites.Add(sprite);
+    }
+
+    auto drawFrame = [&](float zoom)
+    {
+        o2Render.Begin();
+
+        Camera camera;
+        camera.SetScale(Vec2F(1.0f/zoom, 1.0f/zoom));
+        o2Render.SetCamera(camera);
+
+        for (auto& sprite : sprites)
+            sprite->Draw();
+
+        o2Render.SetCamera(Camera());
+        o2Render.End();
+    };
+
+    drawFrame(1.0f);
+
+    UInt before = VectorImageAsset::GetTessellationsCount();
+    for (int i = 1; i <= 48; i++)
+        drawFrame(std::pow(2.0f, (float)i/16.0f));
+
+    EXPECT_EQ(VectorImageAsset::GetTessellationsCount(), before) << "zoom puts the fringe of the same mesh";
+
+    // The fringe follows the zoom: the edge of the circle stays a pixel wide
+    auto circle = sprites[1];
+    circle->SetRect(RectF(-10, -10, 10, 10));
+    auto frame = DrawAndCapture([&]() { circle->Draw(); }, 0.125f);
+    ASSERT_TRUE(frame);
+
+    int intermediate = 0;
+    for (int x = -80; x < 0; x++)
+    {
+        int value = PixelAt(frame, x, 0).r;
+        if (value > background.r + 8 && value < 247)
+            intermediate++;
+    }
+
+    EXPECT_GE(intermediate, 1);
+    EXPECT_LE(intermediate, 2);
+    EXPECT_EQ(VectorImageAsset::GetTessellationsCount(), before);
+}

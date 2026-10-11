@@ -154,6 +154,9 @@ namespace o2
         bool  mBasisDirty = false;    // Was the basis set since the last drawing: vertices are rebuilt if it has changed
         bool  mColorDirty = false;    // Are only colors of vertices required to update before drawing
         Vec2F mMeshViewScale;         // Render view pixel scale the vertices are built for
+        Vec2F mMeshFringeScale;       // Screen pixels per image unit the fringe of a scalable mesh is put for
+
+        Vector<Color32Bit> mScaledColors; // Colors of a scalable mesh at the fringe scale, empty for the other meshes
         Basis mMeshBasis;             // Basis of the image rectangle the vertices are built for
         Vec2F mMeshSlicedSize;        // Size of the sliced image the vertices are built for
         float mMeshDepth = 0.0f;      // Depth the vertices are built for
@@ -214,6 +217,8 @@ CLASS_FIELDS_META(o2::VectorSprite)
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mBasisDirty);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mColorDirty);
     FIELD().PROTECTED().NAME(mMeshViewScale);
+    FIELD().PROTECTED().NAME(mMeshFringeScale);
+    FIELD().PROTECTED().NAME(mScaledColors);
     FIELD().PROTECTED().NAME(mMeshBasis);
     FIELD().PROTECTED().NAME(mMeshSlicedSize);
     FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mMeshDepth);

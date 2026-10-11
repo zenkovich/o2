@@ -465,6 +465,10 @@ namespace EditorVectorUITest
 
         void SetUp() override
         {
+            // O2_VECTOR_SCALABLE runs the suites on the meshes tessellated once for any scale
+            const char* scalable = getenv("O2_VECTOR_SCALABLE");
+            VectorImageAsset::SetScalableMeshes(scalable && scalable[0] == '1');
+
             if (!UIRoot::IsSingletonInitialzed())
             {
                 PushEditorScopeOnStack scope;
@@ -484,6 +488,7 @@ namespace EditorVectorUITest
         {
             EditorUIRoot.RemoveAllWidgets();
             BuildStyle(false);
+            VectorImageAsset::SetScalableMeshes(false);
 
             o2Application.SetContentSize(previousSize);
             AppTestDriver::PumpFrames(3);

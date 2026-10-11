@@ -94,6 +94,26 @@ namespace
         return parsed;
     }
 
+    VectorTessellationParams ScalableParams()
+    {
+        VectorTessellationParams params;
+        params.scalable = true;
+        params.pixelScale = Vec2F(1, 1);
+        return params;
+    }
+
+    // Sprites whose mesh built once for any scale is off the mesh of the scale by more than the common criterion:
+    // translucent shapes one over another and parts thinner than a pixel
+    const std::set<std::string> scalableDeviations =
+    {
+        "CurveHandle", "CurveHandleHover", "CurveHandlePressed", "CurveHandleSelected", "CurveSupportHandle",
+        "UI4_keys_select border", "UI4_keys_select border_hover", "UI4_keys_select border_pressed", "UI4_map_key",
+        "UI4_map_key_hover", "UI4_save_gray", "UI4_scene_icon", "UI4_shadow_separator", "pipeline/btn_region",
+        "pipeline/menu_node_effect", "pipeline/menu_node_video",
+    };
+
+    const Limits scalableDeviationLimits = { 0.8f, 9.0f };
+
     // Worst similarity and mean difference of the sprite over the backgrounds, as fit_check.py measures them
     bool Measure(const std::string& name, Limits& measured)
     {
@@ -163,6 +183,61 @@ namespace
 
         return res;
     }
+}
+
+TEST(EditorVectorSprites, ScalableMeshIsBuiltOnceForAnyScale)
+{
+    auto names = CollectPairs();
+    ASSERT_GT(names.size(), 400u) << "no editor sprites at " << UiFolder();
+
+    typedef std::chrono::steady_clock Clock;
+
+    UInt64 exactTriangles[2] = { 0, 0 }, scalableTriangles = 0;
+    double exactTime = 0, scalableTime = 0;
+    float worstSimilarity = 1.0f;
+    for (const std::string& name : names)
+    {
+        VectorImage image;
+        ASSERT_TRUE(LoadVectorImage(name, image)) << name;
+
+        auto start = Clock::now();
+        VectorMesh scalable;
+        VectorTessellator::Tessellate(image, scalable, ScalableParams());
+        scalableTime += std::chrono::duration<double>(Clock::now() - start).count();
+        scalableTriangles += scalable.GetTrianglesCount();
+
+        int step = 0;
+        for (float scale : { 1.0f, 2.0f })
+        {
+            VectorTessellationParams params;
+            params.pixelScale = Vec2F(scale, scale);
+
+            start = Clock::now();
+            VectorMesh exact;
+            VectorTessellator::Tessellate(image, exact, params);
+            exactTime += std::chrono::duration<double>(Clock::now() - start).count();
+            exactTriangles[step++] += exact.GetTrianglesCount();
+
+            scalable.Rescale(Vec2F(scale, scale));
+
+            Ref<Bitmap> expected = VectorRasterizer::Rasterize(exact, scale);
+            Ref<Bitmap> actual = VectorRasterizer::Rasterize(scalable, scale);
+            BitmapCompareResult result = BitmapCompare::Compare(*expected, *actual, tolerance);
+            worstSimilarity = Math::Min(worstSimilarity, result.similarity);
+
+            Limits limits = scalableDeviations.count(name) ? scalableDeviationLimits : Limits{ minSimilarity, maxMeanDifference };
+            EXPECT_TRUE(result.similarity >= limits.similarity && result.meanDifference <= limits.meanDifference)
+                << name << " at scale " << scale << ": similarity " << result.similarity << ", mean difference "
+                << result.meanDifference;
+        }
+    }
+
+    EXPECT_LT(scalableTriangles, exactTriangles[0]*3) << "a mesh for any scale must not cost much more than the one of a scale";
+
+    printf("[   INFO   ] %d sprites: scalable %llu triangles in %.0f ms; exact %llu at 1x + %llu at 2x in %.0f ms; "
+           "worst similarity %.4f\n", (int)names.size(), (unsigned long long)scalableTriangles, scalableTime*1000.0,
+           (unsigned long long)exactTriangles[0], (unsigned long long)exactTriangles[1], exactTime*1000.0,
+           worstSimilarity);
 }
 
 TEST(EditorVectorSprites, EverySpriteMatchesItsRasterOriginal)
