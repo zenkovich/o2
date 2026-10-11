@@ -469,6 +469,10 @@ namespace EditorVectorUITest
             const char* scalable = getenv("O2_VECTOR_SCALABLE");
             VectorImageAsset::SetScalableMeshes(scalable && scalable[0] == '1');
 
+            // O2_TEXT_GLYPH_MESHES draws the texts by the meshes of the glyph outlines
+            const char* glyphMeshes = getenv("O2_TEXT_GLYPH_MESHES");
+            Text::SetGlyphMeshesEnabled(glyphMeshes && glyphMeshes[0] == '1');
+
             if (!UIRoot::IsSingletonInitialzed())
             {
                 PushEditorScopeOnStack scope;
@@ -489,6 +493,7 @@ namespace EditorVectorUITest
             EditorUIRoot.RemoveAllWidgets();
             BuildStyle(false);
             VectorImageAsset::SetScalableMeshes(false);
+            Text::SetGlyphMeshesEnabled(false);
 
             o2Application.SetContentSize(previousSize);
             AppTestDriver::PumpFrames(3);

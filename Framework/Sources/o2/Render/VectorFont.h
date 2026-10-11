@@ -4,6 +4,7 @@
 #include FT_FREETYPE_H
 
 #include "o2/Render/Font.h"
+#include "o2/Render/VectorGraphics/VectorMesh.h"
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Serialization/Serializable.h"
 #include "o2/Utils/Tools/RectPacker.h"
@@ -65,6 +66,9 @@ namespace o2
         // Returns line height in pixels for font with size
         float GetLineHeightPx(int height) const;
 
+        // Returns triangles of the glyph outline, built once for any size and scale
+        const VectorMesh* GetGlyphMesh(UInt16 id) override;
+
         using Font::CheckCharacters;
 
         // Checks characters for preloading, rendered with style for the pixel density of the screen
@@ -120,6 +124,8 @@ namespace o2
         int              mNextStyleId = 1; // Next free style id, 0 is reserved for empty style
 
         mutable Map<int, float> mHeights; // Cached line heights
+
+        Map<UInt16, VectorMesh> mGlyphMeshes; // Meshes of the glyph outlines by character id
 
     protected:
         // Initializes glyphs texture

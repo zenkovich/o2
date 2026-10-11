@@ -16,6 +16,7 @@ namespace o2
 {
     class Mesh;
     class Render;
+    struct VectorMesh;
     class FontStyle;
 
     // -----------------------------------------------------------
@@ -60,6 +61,10 @@ namespace o2
         virtual void CheckCharacters(const WString& needChararacters, int height, const Ref<FontStyle>& style,
                                      float pixelDensity = 1.0f);
 
+        // Returns triangles of the glyph outline, built once for any size and scale: in pixels of the font of
+        // glyphMeshHeight, origin at the pen point, Y is up. Null when the font has no outlines
+        virtual const VectorMesh* GetGlyphMesh(UInt16 id);
+
         // Returns font file name
         virtual String GetFileName() const;
 
@@ -68,6 +73,9 @@ namespace o2
 
         // Returns texture source rectangle
         const RectI& GetTextureSrcRect() const;
+
+    public:
+        static constexpr int glyphMeshHeight = 16; // Font height the glyph meshes are built in
 
     protected:
         // --------------------

@@ -7,6 +7,7 @@
 #include "o2/Render/Font.h"
 #include "o2/Render/FontStyle.h"
 #include "o2/Render/IRectDrawable.h"
+#include "o2/Render/RenderGeometry.h"
 #include "o2/Utils/Types/String.h"
 
 namespace o2
@@ -156,6 +157,12 @@ namespace o2
         RectF GetRealRect();
 
         // Returns text size
+        // Sets are the texts of the fonts with outlines drawn by the glyph meshes, built once for any size and scale
+        static void SetGlyphMeshesEnabled(bool enabled);
+
+        // Returns are the texts of the fonts with outlines drawn by the glyph meshes
+        static bool IsGlyphMeshesEnabled();
+
         static Vec2F GetTextSize(const WString& text, const Ref<Font>& font, int height = 11,
                                  const Vec2F& areaSize = Vec2F(),
                                  HorAlign horAlign = HorAlign::Left, VerAlign verAlign = VerAlign::Top,
@@ -268,6 +275,15 @@ namespace o2
 
         float mPixelDensity = 0.0f; // Pixels per unit the glyphs of the mesh are rendered for, 0 until the first draw
 
+        bool  mGlyphsMesh = false;        // Is the text drawn by the glyph outlines, not from the font texture
+
+        Ref<RenderGeometry> mGlyphsGeometry; // Triangles of the glyph outlines, kept by render between the frames
+        Vector<UInt8>       mGlyphsCoverage; // Coverage of the glyphs at the vertices of the geometry
+        Color4              mGlyphsColor;    // Color the vertices of the geometry are filled with
+        float mGlyphsFringeScale = 0.0f;  // Screen pixels per unit of the glyph meshes their fringe is put for
+
+        static bool mGlyphMeshesEnabled; // Are the texts of the fonts with outlines drawn by the glyph meshes
+
         bool mUpdatingMesh; // True, when mesh is already updating
 
     protected:
@@ -288,6 +304,19 @@ namespace o2
 
         // Preparing meshes for characters count
         void PrepareMesh(int charactersCount);
+
+        // Returns is the text drawn by the meshes of the glyph outlines: they are enabled, the font has them and
+        // the style has no effects
+        bool IsDrawnByGlyphMeshes() const;
+
+        // Returns screen pixels per unit of the glyph meshes for the view scale
+        float GetGlyphsFringeScale(const Vec2F& viewPixelScale) const;
+
+        // Fills the geometry with the glyph outlines of the laid out symbols
+        void UpdateGlyphsMesh(const Basis& transform);
+
+        // Returns the geometry of the glyph outlines to change: another one when render has the current queued
+        RenderGeometry& GetChangingGlyphsGeometry();
 
         // Calculates and returns text basis
         Basis CalculateTextBasis() const;
@@ -343,6 +372,11 @@ CLASS_FIELDS_META(o2::Text)
     FIELD().PROTECTED().NAME(mLastTransform);
     FIELD().PROTECTED().NAME(mSymbolsSet);
     FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mPixelDensity);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mGlyphsMesh);
+    FIELD().PROTECTED().NAME(mGlyphsGeometry);
+    FIELD().PROTECTED().NAME(mGlyphsCoverage);
+    FIELD().PROTECTED().NAME(mGlyphsColor);
+    FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mGlyphsFringeScale);
     FIELD().PROTECTED().NAME(mUpdatingMesh);
 }
 END_META;
@@ -384,6 +418,8 @@ CLASS_METHODS_META(o2::Text)
     FUNCTION().PUBLIC().SIGNATURE(SymbolsSet&, GetSymbolsSet);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetRealSize);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(RectF, GetRealRect);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(void, SetGlyphMeshesEnabled, bool);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsGlyphMeshesEnabled);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(Vec2F, GetTextSize, const WString&, const Ref<Font>&, int, const Vec2F&, HorAlign, VerAlign, bool, bool, float, float, const Ref<FontStyle>&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateMesh);
     FUNCTION().PROTECTED().SIGNATURE(void, CheckCharactersAndRebuildMesh);
@@ -391,6 +427,10 @@ CLASS_METHODS_META(o2::Text)
     FUNCTION().PROTECTED().SIGNATURE_STATIC(float, QuantizePixelDensity, float);
     FUNCTION().PROTECTED().SIGNATURE(float, GetPixelDensity);
     FUNCTION().PROTECTED().SIGNATURE(void, PrepareMesh, int);
+    FUNCTION().PROTECTED().SIGNATURE(bool, IsDrawnByGlyphMeshes);
+    FUNCTION().PROTECTED().SIGNATURE(float, GetGlyphsFringeScale, const Vec2F&);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateGlyphsMesh, const Basis&);
+    FUNCTION().PROTECTED().SIGNATURE(RenderGeometry&, GetChangingGlyphsGeometry);
     FUNCTION().PROTECTED().SIGNATURE(Basis, CalculateTextBasis);
     FUNCTION().PROTECTED().SIGNATURE(void, BasisChanged);
     FUNCTION().PROTECTED().SIGNATURE(void, OnColorChanged);

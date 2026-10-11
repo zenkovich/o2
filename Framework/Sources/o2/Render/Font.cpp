@@ -82,6 +82,11 @@ namespace o2
         return String();
     }
 
+    const VectorMesh* Font::GetGlyphMesh(UInt16 id)
+    {
+        return nullptr;
+    }
+
     const TextureRef& Font::GetTexture() const
     {
         return mTexture;

@@ -351,7 +351,8 @@ TEST_F(EditorVectorUIPerf, VectorFrameCostsNotMoreThanRaster)
         EXPECT_EQ(vectorScene.rebuiltVertices, 0u) << name << ": a still frame rebuilds vertices";
         EXPECT_EQ(vectorScene.relaidRebuiltVertices, 0u) << name << ": a layout update in place rebuilds vertices";
 
-        if (o2Render.IsMultithreadedRenderEnabled())
+        // Texts drawn by the glyph meshes are retained too
+        if (o2Render.IsMultithreadedRenderEnabled() && !Text::IsGlyphMeshesEnabled())
         {
             EXPECT_EQ(vectorScene.batches.retainedVertices, (UInt)vectorScene.vectorVertices)
                 << name << ": a still frame copies vertices of vector sprites";

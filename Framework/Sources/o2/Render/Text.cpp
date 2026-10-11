@@ -6,11 +6,31 @@
 #include "o2/Application/Input.h"
 #include "o2/Assets/Assets.h"
 #include "o2/Integration.h"
+#include "o2/Render/FontStyle.h"
 #include "o2/Render/Mesh.h"
 #include "o2/Render/Render.h"
+#include "o2/Render/VectorGraphics/VectorMesh.h"
 
 namespace o2
 {
+    namespace
+    {
+        // Part of the scale the fringe of the glyph meshes is kept within
+        const float glyphsFringeScaleTolerance = 0.01f;
+
+        // Vertices of a glyph mesh at the fringe scale, for the text geometry being built
+        Vector<Vec2F> scaledGlyphPositions;
+        Vector<Color32Bit> scaledGlyphColors;
+
+        // Triangles of the glyphs of a text
+        struct GlyphsIndexes: public RefCounterable
+        {
+            Vector<VertexIndex> indexes;
+        };
+    }
+
+    bool Text::mGlyphMeshesEnabled = false;
+
     Text::Text():
         mFont(nullptr), mSymbolsDistCoef(1), mLinesDistanceCoef(1), mVerAlign(VerAlign::Top),
         mHorAlign(HorAlign::Left), mWordWrap(false), IRectDrawable(), mUpdatingMesh(false), mFontAssetId(0),
@@ -123,12 +143,28 @@ namespace o2
 
         // The view scale has the camera zoom and the screen density: glyphs are rendered for the pixels they cover
         Vec2F viewPixelScale = o2Render.GetViewPixelScale();
-        float pixelDensity = QuantizePixelDensity(Math::Max(Math::Abs(viewPixelScale.x), Math::Abs(viewPixelScale.y)));
-        if (pixelDensity != GetPixelDensity())
+        if (IsDrawnByGlyphMeshes())
         {
-            mPixelDensity = pixelDensity;
-            CheckCharactersAndRebuildMesh();
+            // The glyph meshes stay, only their fringe is put for the new scale
+            float fringeScale = GetGlyphsFringeScale(viewPixelScale);
+            if (!mGlyphsMesh || Math::Abs(fringeScale - mGlyphsFringeScale) > mGlyphsFringeScale*glyphsFringeScaleTolerance)
+            {
+                mGlyphsFringeScale = fringeScale;
+                UpdateMesh();
+            }
         }
+        else
+        {
+            float pixelDensity = QuantizePixelDensity(Math::Max(Math::Abs(viewPixelScale.x), Math::Abs(viewPixelScale.y)));
+            if (pixelDensity != GetPixelDensity() || mGlyphsMesh)
+            {
+                mPixelDensity = pixelDensity;
+                CheckCharactersAndRebuildMesh();
+            }
+        }
+
+        if (mGlyphsMesh && mGlyphsGeometry && mResultColor.a != 0)
+            o2Render.DrawGeometry(mGlyphsGeometry, GetMaterial());
 
         for (auto& mesh : mMeshes)
         {
@@ -361,16 +397,37 @@ namespace o2
                 mesh->polyCount = 0;
             }
 
+            mGlyphsGeometry = nullptr;
             mUpdatingMesh = false;
 
             return;
         }
 
         int textLen = mText.Length();
-        if (mMeshes.Count() == 0 && textLen == 0)
+        if (mMeshes.Count() == 0 && textLen == 0 && !mGlyphsMesh)
         {
             mUpdatingMesh = false;
             return;
+        }
+
+        if (IsDrawnByGlyphMeshes())
+        {
+            // Glyph bitmaps of the single density give the layout only
+            mSymbolsSet.Initialize(mFont, mFontStyle, mText, mHeight, mTransform.origin.XY(), mSize.XY(), mHorAlign,
+                                   mVerAlign, mWordWrap, mDotsEndings, mSymbolsDistCoef, mLinesDistanceCoef, 1.0f);
+
+            mLastTransform = CalculateTextBasis();
+            UpdateGlyphsMesh(mLastTransform);
+
+            mUpdatingMesh = false;
+            return;
+        }
+
+        if (mGlyphsMesh)
+        {
+            mGlyphsGeometry = nullptr;
+            mGlyphsCoverage.Clear();
+            mGlyphsMesh = false;
         }
 
         PrepareMesh(textLen);
@@ -442,6 +499,131 @@ namespace o2
         }
 
         mUpdatingMesh = false;
+    }
+
+    void Text::SetGlyphMeshesEnabled(bool enabled)
+    {
+        mGlyphMeshesEnabled = enabled;
+    }
+
+    bool Text::IsGlyphMeshesEnabled()
+    {
+        return mGlyphMeshesEnabled;
+    }
+
+    bool Text::IsDrawnByGlyphMeshes() const
+    {
+        return mGlyphMeshesEnabled && mFont && (!mFontStyle || mFontStyle->GetEffects().IsEmpty()) &&
+            mFont->GetGlyphMesh(L' ') != nullptr;
+    }
+
+    float Text::GetGlyphsFringeScale(const Vec2F& viewPixelScale) const
+    {
+        Basis transform = CalculateTextBasis();
+        float textScale = Math::Sqrt(Math::Abs(transform.xv.x*transform.yv.y - transform.xv.y*transform.yv.x));
+        float viewScale = Math::Max(Math::Abs(viewPixelScale.x), Math::Abs(viewPixelScale.y));
+
+        // A text of no size has no scale of its own
+        float scale = viewScale*textScale*(float)mHeight/(float)Font::glyphMeshHeight;
+        if (!std::isfinite(scale) || textScale <= 0.0f)
+            scale = viewScale*(float)mHeight/(float)Font::glyphMeshHeight;
+
+        return std::isfinite(scale) ? Math::Max(scale, 1e-3f) : 1.0f;
+    }
+
+    void Text::UpdateGlyphsMesh(const Basis& transform)
+    {
+        if (mGlyphsFringeScale <= 0.0f)
+        {
+            float graphicsScale = Integration::IsSingletonInitialzed() ? o2Integration.GetGraphicsScale() : 1.0f;
+            mGlyphsFringeScale = GetGlyphsFringeScale(Vec2F(graphicsScale, graphicsScale));
+        }
+
+        UInt verticesCount = 0, indexesCount = 0;
+        for (auto& line : mSymbolsSet.mLines)
+        {
+            for (auto& symbol : line.mSymbols)
+            {
+                const VectorMesh* glyph = mFont->GetGlyphMesh(symbol.mCharId);
+                verticesCount += (UInt)glyph->positions.Count();
+                indexesCount += (UInt)glyph->indexes.Count();
+            }
+        }
+
+        mMeshes.Clear();
+        mGlyphsMesh = true;
+
+        auto glyphsIndexes = mmake<GlyphsIndexes>();
+        glyphsIndexes->indexes.resize(indexesCount);
+
+        RenderGeometry& geometry = GetChangingGlyphsGeometry();
+        geometry.vertices.resize(verticesCount);
+        mGlyphsCoverage.resize(verticesCount);
+        geometry.indexes = glyphsIndexes->indexes.Data();
+        geometry.trianglesCount = indexesCount/3;
+        geometry.indexesOwner = glyphsIndexes;
+
+        float unit = (float)mHeight/(float)Font::glyphMeshHeight;
+        Vec2F fringeScale(mGlyphsFringeScale, mGlyphsFringeScale);
+        Vec2F tangent = mTransform.xv.XY().Normalized();
+        float z = mTransform.origin.z;
+
+        UInt textAlpha = (UInt)mResultColor.a;
+        Color32Bit opaqueColor = mResultColor.ABGR() & 0x00FFFFFF;
+        mGlyphsColor = mResultColor;
+
+        Vertex* vertices = geometry.vertices.Data();
+        VertexIndex* indexes = glyphsIndexes->indexes.Data();
+        UInt vertexIdx = 0, indexIdx = 0;
+
+        for (auto& line : mSymbolsSet.mLines)
+        {
+            for (auto& symbol : line.mSymbols)
+            {
+                const VectorMesh& glyph = *mFont->GetGlyphMesh(symbol.mCharId);
+                int count = glyph.positions.Count();
+                if (count == 0)
+                    continue;
+
+                scaledGlyphPositions.resize(count);
+                scaledGlyphColors.resize(count);
+                glyph.FillScaled(fringeScale, scaledGlyphPositions.Data(), scaledGlyphColors.Data());
+
+                Vec2F pen = symbol.mFrame.LeftBottom() + symbol.mOrigin - mSymbolsSet.mPosition;
+                UInt base = vertexIdx;
+                for (int i = 0; i < count; i++)
+                {
+                    UInt coverage = scaledGlyphColors[i] >> 24;
+                    UInt alpha = coverage*textAlpha/255;
+                    mGlyphsCoverage[vertexIdx] = (UInt8)coverage;
+                    Vertex& vertex = vertices[vertexIdx++];
+                    vertex.Set(transform.Transform(pen + scaledGlyphPositions[i]*unit), opaqueColor | (alpha << 24), 0.0f, 0.0f);
+                    vertex.SetNormal(tangent);
+                    vertex.z = z;
+                }
+
+                for (int i = 0; i < glyph.indexes.Count(); i++)
+                    indexes[indexIdx++] = base + glyph.indexes[i];
+            }
+        }
+    }
+
+    RenderGeometry& Text::GetChangingGlyphsGeometry()
+    {
+        if (!mGlyphsGeometry)
+            mGlyphsGeometry = mmake<RenderGeometry>();
+        else if (mGlyphsGeometry->IsQueued())
+        {
+            auto geometry = mmake<RenderGeometry>();
+            geometry->vertices = mGlyphsGeometry->vertices;
+            geometry->indexes = mGlyphsGeometry->indexes;
+            geometry->trianglesCount = mGlyphsGeometry->trianglesCount;
+            geometry->indexesOwner = mGlyphsGeometry->indexesOwner;
+            mGlyphsGeometry = geometry;
+        }
+
+        mGlyphsGeometry->OnChanged();
+        return *mGlyphsGeometry;
     }
 
     void Text::CheckCharactersAndRebuildMesh()
@@ -521,6 +703,25 @@ namespace o2
 
     void Text::OnColorChanged()
     {
+        // Vertices of the glyph meshes have the coverage in their alpha
+        if (mGlyphsMesh)
+        {
+            if (!mGlyphsGeometry || mGlyphsGeometry->vertices.IsEmpty() || mResultColor == mGlyphsColor)
+                return;
+
+            mGlyphsColor = mResultColor;
+
+            // Alpha of the vertices is the coverage of the glyph by the alpha of the text
+            UInt textAlpha = (UInt)mResultColor.a;
+            Color32Bit opaqueColor = mResultColor.ABGR() & 0x00FFFFFF;
+
+            Vertex* vertices = GetChangingGlyphsGeometry().vertices.Data();
+            for (int i = 0; i < mGlyphsCoverage.Count(); i++)
+                vertices[i].color = opaqueColor | (((UInt)mGlyphsCoverage[i]*textAlpha/255) << 24);
+
+            return;
+        }
+
         ULong dcolor = mResultColor.ABGR();
         for (auto& mesh : mMeshes)
         {
@@ -561,6 +762,13 @@ namespace o2
                 for (UInt i = 0; i < mesh->vertexCount; i++)
                     verts[i].z = z;
             }
+
+            if (mGlyphsMesh && mGlyphsGeometry && !mGlyphsGeometry->vertices.IsEmpty() &&
+                mGlyphsGeometry->vertices[0].z != z)
+            {
+                for (Vertex& vertex : GetChangingGlyphsGeometry().vertices)
+                    vertex.z = z;
+            }
         }
     }
 
@@ -584,6 +792,12 @@ namespace o2
                 Vertex* vx = &verts[i];
                 bas.Transform(vx->x, vx->y);
             }
+        }
+
+        if (mGlyphsMesh && mGlyphsGeometry)
+        {
+            for (Vertex& vertex : GetChangingGlyphsGeometry().vertices)
+                bas.Transform(vertex.x, vertex.y);
         }
 
         mSymbolsSet.Move(bas.origin);

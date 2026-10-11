@@ -10,13 +10,79 @@
 #include "o2/Application/Application.h"
 #include "o2/Render/FontStyle.h"
 #include "o2/Render/Render.h"
+#include "o2/Render/VectorGraphics/VectorTessellator.h"
 #include "o2/Utils/Bitmap/Bitmap.h"
 #include "o2/Utils/Debug/Log/LogStream.h"
 #include "o2/Utils/FileSystem/File.h"
 #include "o2/Utils/System/Time/Timer.h"
 
+#include FT_OUTLINE_H
+
 namespace o2
 {
+    namespace
+    {
+        Vec2F GetOutlinePoint(const FT_Vector* point)
+        {
+            return Vec2F((float)point->x/64.0f, (float)point->y/64.0f);
+        }
+
+        int MoveOutlineTo(const FT_Vector* to, void* user)
+        {
+            VectorShape& shape = *(VectorShape*)user;
+            shape.subPaths.Add(VectorSubPath());
+            shape.subPaths.Last().start = GetOutlinePoint(to);
+            shape.subPaths.Last().closed = true;
+            return 0;
+        }
+
+        int LineOutlineTo(const FT_Vector* to, void* user)
+        {
+            VectorShape& shape = *(VectorShape*)user;
+            if (shape.subPaths.IsEmpty())
+                return 1;
+
+            VectorSegment segment;
+            segment.end = GetOutlinePoint(to);
+            shape.subPaths.Last().segments.Add(segment);
+            return 0;
+        }
+
+        int CubicOutlineTo(const FT_Vector* control1, const FT_Vector* control2, const FT_Vector* to, void* user)
+        {
+            VectorShape& shape = *(VectorShape*)user;
+            if (shape.subPaths.IsEmpty())
+                return 1;
+
+            VectorSegment segment;
+            segment.cubic = true;
+            segment.control1 = GetOutlinePoint(control1);
+            segment.control2 = GetOutlinePoint(control2);
+            segment.end = GetOutlinePoint(to);
+            shape.subPaths.Last().segments.Add(segment);
+            return 0;
+        }
+
+        int ConicOutlineTo(const FT_Vector* control, const FT_Vector* to, void* user)
+        {
+            VectorShape& shape = *(VectorShape*)user;
+            if (shape.subPaths.IsEmpty())
+                return 1;
+
+            const VectorSubPath& path = shape.subPaths.Last();
+            Vec2F from = path.segments.IsEmpty() ? path.start : path.segments.Last().end;
+            Vec2F middle = GetOutlinePoint(control), end = GetOutlinePoint(to);
+
+            VectorSegment segment;
+            segment.cubic = true;
+            segment.control1 = from + (middle - from)*(2.0f/3.0f);
+            segment.control2 = end + (middle - end)*(2.0f/3.0f);
+            segment.end = end;
+            shape.subPaths.Last().segments.Add(segment);
+            return 0;
+        }
+    }
+
     // NO_AUTOHINT: FreeType 2.5.5's autofitter calls through mismatched function pointers,
     // which traps on WebAssembly (strict call_indirect signature check)
     static const FT_Int32 kGlyphLoadFlags = FT_LOAD_RENDER | FT_LOAD_NO_AUTOHINT;
@@ -191,6 +257,38 @@ namespace o2
         mStyleIds.Add(cacheKey, id);
 
         return id;
+    }
+
+    const VectorMesh* VectorFont::GetGlyphMesh(UInt16 id)
+    {
+        auto found = mGlyphMeshes.find(id);
+        if (found != mGlyphMeshes.end())
+            return &found->second;
+
+        VectorMesh& mesh = mGlyphMeshes[id];
+        if (!mFreeTypeFace)
+            return &mesh;
+
+        // Not hinted outline is the same at any size
+        FT_Set_Char_Size(mFreeTypeFace, 0, glyphMeshHeight*64, mResolution, mResolution);
+        if (FT_Load_Char(mFreeTypeFace, id, FT_LOAD_NO_BITMAP | FT_LOAD_NO_HINTING) != 0 ||
+            mFreeTypeFace->glyph->format != FT_GLYPH_FORMAT_OUTLINE)
+        {
+            return &mesh;
+        }
+
+        VectorShape shape;
+        shape.fill = VectorPaint::Solid(Color4::White());
+
+        FT_Outline_Funcs functions = { MoveOutlineTo, LineOutlineTo, ConicOutlineTo, CubicOutlineTo, 0, 0 };
+        if (FT_Outline_Decompose(&mFreeTypeFace->glyph->outline, &functions, &shape) != 0)
+            return &mesh;
+
+        VectorTessellationParams params;
+        params.scalable = true;
+        VectorTessellator::TessellateShape(shape, mesh, params);
+
+        return &mesh;
     }
 
     void VectorFont::Reset()
