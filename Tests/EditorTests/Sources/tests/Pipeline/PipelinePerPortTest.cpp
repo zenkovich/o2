@@ -18,7 +18,8 @@ namespace
 
         WorkDirGuard()
         {
-            String relative = "./pipeline-perport-work-" + (String)(int)Math::Random(0, 1000000);
+            // rand() gives every test process the same number, the suites run in parallel from one folder
+            String relative = "./pipeline-perport-work-" + (String)(int)(Math::Random()%1000000);
             o2FileSystem.FolderCreate(relative, true);
             path = o2FileSystem.CanonicalizePath(relative) + "/";
             PipelineUtils::SetWorkPathOverride(path);
