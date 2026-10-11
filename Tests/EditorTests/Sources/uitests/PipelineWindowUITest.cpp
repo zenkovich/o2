@@ -800,10 +800,10 @@ TEST_F(PipelineUiFixture, LinksFollowTheZoomButStayAtLeastOnePixel)
         return rows;
     };
 
-    int far = paintedRows(12.0f);
+    int farRows = paintedRows(12.0f);
     int normal = paintedRows(1.0f);
     int close = paintedRows(0.5f);
-    EXPECT_GE(far, 1);
+    EXPECT_GE(farRows, 1);
     EXPECT_GE(normal, 1);
     EXPECT_LE(normal, 3);
     EXPECT_GT(close, normal);

@@ -369,16 +369,16 @@ TEST_F(VectorSpriteRender, SlicedKeepsCornersAndStretchesCenter)
     auto asset = GetAsset("frame");
     BorderI slices = asset->GetSliceBorder();
 
-    VectorSprite small(asset);
+    VectorSprite smallSprite(asset);
     RectI smallRect(-200, 100, -176, 124);
-    small.SetRect(smallRect);
+    smallSprite.SetRect(smallRect);
 
     VectorSprite sliced(asset);
     RectI slicedRect(-100, 0, -4, 60);
     sliced.SetRect(slicedRect);
     ASSERT_EQ(sliced.GetMode(), SpriteMode::Sliced);
 
-    auto frame = DrawAndCapture([&]() { small.Draw(); sliced.Draw(); });
+    auto frame = DrawAndCapture([&]() { smallSprite.Draw(); sliced.Draw(); });
     ASSERT_TRUE(frame);
     EXPECT_EQ(sliced.GetMeshPixelScale(), Vec2F(1, 1)) << "sliced image keeps the scale of the view";
 

@@ -86,8 +86,8 @@ TEST(VectorTessellator, CircleAreaWithinOnePercent)
     EXPECT_EQ(Alpha(bitmap, 25, 25), 255);
     EXPECT_EQ(Alpha(bitmap, 2, 2), 0);
 
-    Ref<Bitmap> small = RenderSvg(Svg(12, 12, "<circle cx=\"6.3\" cy=\"5.6\" r=\"4\"/>"));
-    EXPECT_NEAR(AlphaSum(small), 3.14159265*16.0, 3.14159265*16.0*0.02);
+    Ref<Bitmap> smallCircle = RenderSvg(Svg(12, 12, "<circle cx=\"6.3\" cy=\"5.6\" r=\"4\"/>"));
+    EXPECT_NEAR(AlphaSum(smallCircle), 3.14159265*16.0, 3.14159265*16.0*0.02);
 }
 
 TEST(VectorTessellator, RingUnderNonZeroAndEvenOdd)

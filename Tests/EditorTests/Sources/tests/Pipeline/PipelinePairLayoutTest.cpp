@@ -244,9 +244,9 @@ TEST(PipelinePairLayout, TheDividerGripIsScreenSized)
         EXPECT_NEAR(grip.Center().y, 50.0f, 0.01f);
     }
 
-    RectF far = PipelinePairDraw::GripRect(box, 50.0f, 3.0f);
-    EXPECT_NEAR(far.Width(), 7.5f, 0.01f) << "never more than 1.5x on the canvas";
-    EXPECT_NEAR(far.Height(), 27.0f, 0.01f);
+    RectF farGrip = PipelinePairDraw::GripRect(box, 50.0f, 3.0f);
+    EXPECT_NEAR(farGrip.Width(), 7.5f, 0.01f) << "never more than 1.5x on the canvas";
+    EXPECT_NEAR(farGrip.Height(), 27.0f, 0.01f);
     EXPECT_FLOAT_EQ(PipelinePairDraw::BadgeScale(0.5f), 0.5f);
     EXPECT_FLOAT_EQ(PipelinePairDraw::BadgeScale(3.0f), 1.5f);
 }

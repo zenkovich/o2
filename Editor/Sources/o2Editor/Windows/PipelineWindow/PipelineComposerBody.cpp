@@ -347,7 +347,7 @@ namespace Editor
             mColumn->AddChild(mControls);
 
             auto fixed = [](const Ref<Widget>& widget, float width) { widget->layout->minWidth = width; widget->layout->maxWidth = width; return widget; };
-            auto small = [&](const String& text, float width)
+            auto smallLabel = [&](const String& text, float width)
             {
                 auto label = MakeLabel(text, false);
                 label->horOverflow = Label::HorOverflow::None;
@@ -356,13 +356,13 @@ namespace Editor
 
             float width = 0.0f;
             auto canvas = MakeGroup("Canvas", {
-                small("W", 12),
+                smallLabel("W", 12),
                 fixed(MakeNumberEdit(GetNumber("canvasW", 1024), 54, [weakThis](float v)
                 {
                     if (auto self = weakThis.Lock()) self->SetNumber("canvasW", Math::Clamp(Math::Round(v), 16.0f, 8192.0f), true);
                 }), 54),
-                small("x", 8),
-                small("H", 12),
+                smallLabel("x", 8),
+                smallLabel("H", 12),
                 fixed(MakeNumberEdit(GetNumber("canvasH", 1024), 54, [weakThis](float v)
                 {
                     if (auto self = weakThis.Lock()) self->SetNumber("canvasH", Math::Clamp(Math::Round(v), 16.0f, 8192.0f), true);

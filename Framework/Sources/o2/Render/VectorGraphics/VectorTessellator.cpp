@@ -1371,8 +1371,8 @@ namespace o2
                 {
                     Point direction = directions[edge]*sign;
                     double along = Dot(direction, hardDirection), across = fabs(Cross(direction, hardDirection));
-                    size_t far = sign > 0 ? (edge + 1)%count : edge;
-                    if (hard[edge] || along <= 0 || across < 1e-9 || (sharp[far] && lengths[edge] <= kMaxPatchEdge))
+                    size_t farVertex = sign > 0 ? (edge + 1)%count : edge;
+                    if (hard[edge] || along <= 0 || across < 1e-9 || (sharp[farVertex] && lengths[edge] <= kMaxPatchEdge))
                         return 0.5;
 
                     double outer = edgeProfiles[edge].Outer();
@@ -2152,9 +2152,9 @@ namespace o2
                 Point chord = Normalized(end - neighbor);
                 Point normal = Point(chord.y, -chord.x)*halfWidth;
                 double overrun = halfWidth*fabs(Cross(chord, tangent))/Math::Max(Dot(chord, tangent), 0.1);
-                Point far = end + chord*(overrun + kCurveEndStub);
+                Point stubEnd = end + chord*(overrun + kCurveEndStub);
 
-                Point corners[4] = { neighbor + normal, far + normal, far - normal, neighbor - normal };
+                Point corners[4] = { neighbor + normal, stubEnd + normal, stubEnd - normal, neighbor - normal };
                 Polyline piece;
                 for (int i = 0; i < 4; i++)
                 {

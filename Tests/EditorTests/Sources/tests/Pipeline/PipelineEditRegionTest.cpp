@@ -109,9 +109,9 @@ TEST(PipelineEditRegion, TheContextBoxGrowsTheRegionByItsMargin)
     EXPECT_EQ(b.box.right, 175);
     EXPECT_EQ(b.box.bottom, 100);
 
-    PipelineImageOps::CropRect small;
-    small.x = 0.5f; small.y = 0.5f; small.w = 0.05f; small.h = 0.05f;
-    auto s = PipelineEditRegion::PixelBoxes(Vec2I(400, 400), small);
+    PipelineImageOps::CropRect smallRegion;
+    smallRegion.x = 0.5f; smallRegion.y = 0.5f; smallRegion.w = 0.05f; smallRegion.h = 0.05f;
+    auto s = PipelineEditRegion::PixelBoxes(Vec2I(400, 400), smallRegion);
     EXPECT_EQ(s.box.left, s.region.left - 16) << "never less than 16 px";
 }
 
