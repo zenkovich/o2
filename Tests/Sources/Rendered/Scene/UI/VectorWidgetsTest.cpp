@@ -711,7 +711,7 @@ TEST_F(VectorWidgets, SpriteFieldsAreWrittenInTheOldFormat)
 
     auto field = data.FindMember("Value")->FindMember("mSelectionDrawable");
     ASSERT_TRUE(field);
-    EXPECT_EQ((String)*field->FindMember("Type"), String("o2::Sprite"));
+    EXPECT_STREQ(field->FindMember("Type")->GetString(), "o2::Sprite");
     EXPECT_EQ((int)(*field->FindMember("Value"))["mColor"]["g"], 20);
 
     DataDocument itemData;
