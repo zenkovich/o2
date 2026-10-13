@@ -437,7 +437,7 @@ TEST(VectorSpriteHeadless, SerializationRoundTrip)
 
     DataDocument data;
     data = source;
-    EXPECT_EQ((String)data["Type"], "o2::VectorSprite") << "drawables are serialized polymorphically by type name";
+    EXPECT_STREQ(data["Type"].GetString(), "o2::VectorSprite") << "drawables are serialized polymorphically by type name";
 
     Ref<IRectDrawable> loaded;
     data.Get(loaded);

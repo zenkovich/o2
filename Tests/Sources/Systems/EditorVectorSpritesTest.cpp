@@ -144,6 +144,14 @@ namespace
         return true;
     }
 
+    // A cast of a data value to String is ambiguous for MSVC
+    String AsString(const DataValue& value)
+    {
+        String res;
+        value.Get(res);
+        return res;
+    }
+
     DataDocument LoadMeta(const std::string& path)
     {
         DataDocument meta;
@@ -366,7 +374,7 @@ TEST(EditorVectorSprites, MetaRepeatsSlicesAndModeOfRasterOriginal)
             continue;
 
         DataDocument meta = LoadMeta(entry.path().string());
-        std::string id = ((String)meta["Value"]["mId"]).Data();
+        std::string id = AsString(meta["Value"]["mId"]).Data();
         if (id.empty())
             continue;
 
@@ -380,8 +388,8 @@ TEST(EditorVectorSprites, MetaRepeatsSlicesAndModeOfRasterOriginal)
         DataDocument vectorMeta = LoadMeta(UiFolder() + "/" + name + ".svg.meta");
         DataDocument rasterMeta = LoadMeta(UiFolder() + "/" + name + ".png.meta");
 
-        EXPECT_EQ((String)vectorMeta["Type"], String("o2::VectorImageAsset::Meta")) << name;
-        EXPECT_EQ(((String)vectorMeta["Value"]["mId"]).Length(), 32) << name;
+        EXPECT_EQ(AsString(vectorMeta["Type"]), String("o2::VectorImageAsset::Meta")) << name;
+        EXPECT_EQ(AsString(vectorMeta["Value"]["mId"]).Length(), 32) << name;
         EXPECT_FALSE(vectorMeta["Value"].FindMember("atlasId")) << name;
 
         BorderI vectorSlices, rasterSlices;
